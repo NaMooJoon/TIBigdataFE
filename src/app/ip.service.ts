@@ -49,6 +49,7 @@ export class IpService {
   FLASK_PORT = "5000";
   ES_PORT = "9200";
   ES_INDEX = "/frontend_test";
+  ANGULAR_PORT = "4200";
   
 
 
@@ -69,6 +70,10 @@ export class IpService {
     else{
       return whichServerIp;
     }
+  }
+
+  get_FE_Ip(){
+    return this.FrontEnd_SERVER_IP + this.ANGULAR_PORT;
   }
 
   get_FE_DB_ServerIp(){

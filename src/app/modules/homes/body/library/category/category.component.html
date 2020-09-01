@@ -2,7 +2,8 @@
 <!-- 하단부 -->
 <div uk-grid>
   <div class="uk-width-1-2" style="text-align : left ; ">
-    자료열람
+    <span style="font-weight: bold; font-size: 27px; color: #3d3d3d;">자료열람</span>
+    
   </div>
 
 
@@ -23,10 +24,10 @@
   <div class="uk-width-5-6 uk-flex" style="padding : 0; ">
     <div class="uk-margin-auto uk-padding-remove" *ngFor="let cat of categories; index as idx">
       <div *ngIf='idx < 8; else bt_num_many'>
-        <button (click)="getTopic($event)" class="uk-button uk-button-default ">{{cat}}</button>
+        <button (click)="getCategory($event)" id="topic" class="uk-button uk-button-default ">{{cat}}</button>
       </div>
       <ng-template #bt_num_many>
-        <button (click)="getTopic($event)" class="uk-button uk-button-default">{{cat}}</button>
+        <button (click)="getCategory($event)" id="topic" class="uk-button uk-button-default">{{cat}}</button>
       </ng-template>
     </div>
   </div>
@@ -42,14 +43,14 @@
   <div class="uk-width-5-6" style=" padding : 0; ">
     <div class="uk-flex ">
       <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_1">
-        <button (click)="getTopic($event)" class="uk-button uk-button-default"
+        <button (click)="getCategory($event)" class="uk-button uk-button-default"
           style="width: 90px; margin-right:5px;">{{cat}}</button>
       </div>
     </div>
 
     <div class="uk-flex uk-margin-small-top">
       <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_2">
-        <button (click)="getTopic($event)" class="uk-button uk-button-default"
+        <button (click)="getCategory($event)" id="dict" class="uk-button uk-button-default"
           style="width: 90px; margin-right:5px;">{{cat}}</button>
       </div>
     </div>
@@ -66,7 +67,7 @@
   </div>
   <div class="uk-width-expand uk-flex">
     <div *ngFor="let cat of institutions">
-      <button (click)="getTopic($event)" class="uk-button uk-button-default" style="margin-right:5px;">{{cat}}</button>
+      <button (click)="getCategory($event)" id="inst" class="uk-button uk-button-default" style="margin-right:5px;">{{cat}}</button>
     </div>
   </div>
 </div>
@@ -79,6 +80,6 @@
 
 
   <div class="uk-width-3-4">
-    <app-search-result-document-list [cat_button_choice]="cat_button_choice"></app-search-result-document-list>
+    <app-search-result-document-list [is_lib_first]="is_lib_first" [cat_button_choice]="cat_button_choice"></app-search-result-document-list>
   </div>
 </div>

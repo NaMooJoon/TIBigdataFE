@@ -106,7 +106,7 @@ export class SearchResultComponent implements OnInit {
     }   
     this.es.fullTextSearch("post_body", queryText); //검색 후 articlesource에 저장되어 있다.
 
-    this.getUserSearchHistory()
+    // this.getUserSearchHistory()
     //검색한 결과 호출하는 함수를 따로 만들어도 괜찮을 듯.
     await this.loadSearchResult();
     this.createIdTable();
@@ -225,10 +225,10 @@ export class SearchResultComponent implements OnInit {
     }
   }
 
-  async getUserSearchHistory(){
-    this.userSearchHistory = await this.auth.showSrchHst();
-    console.log("userSearch history" + this.userSearchHistory)
-  }
+  // async getUserSearchHistory(){
+  //   this.userSearchHistory = await this.auth.showSrchHst();
+  //   console.log("userSearch history" + this.userSearchHistory)
+  // }
 
 
 }

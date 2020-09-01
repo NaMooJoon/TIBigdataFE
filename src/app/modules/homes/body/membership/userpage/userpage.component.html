@@ -3,30 +3,30 @@
 <!-- 하단부 -->
 <div class="uk-container" uk-grid>
     <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design-->
-    <div class="uk-width-1-4 left-wing">
+    <div class="uk-width-1-4 left-wing" >
         <!-- border-radius round outline -->
-        마이페이지
-        <div class="outline">
-            <div>
-                <a (click)="user_menu_set('my_keep')">내가 찜한 문서 보관함</a>
+        <span style="font-weight: bold; font-size: 27px; color: #3d3d3d;">마이페이지</span>
+        <div class="outline uk-padding-remove-left" style="text-align:center">
+            <div style="background-color: bisque;">
+                <a class="menu_header uk-padding-small" (click)="user_menu_set('my_keep')">내가 찜한 문서 보관함</a>
             </div>
             <div>
-                <a (click)="user_menu_set('my_analysis')">
+                <a class="menu_header uk-padding-small" (click)="user_menu_set('my_analysis')">
                     내 분석함
                 </a>
             </div>
             <div>
-                <a (click)="user_menu_set('my_history')">
+                <a class="menu_header uk-padding-small" (click)="user_menu_set('my_history')">
                     내 검색기록
                 </a>
             </div>
             <div>
-                <a (click)="user_menu_set('my_account')">
+                <a class="menu_header uk-padding-small" (click)="user_menu_set('my_account')">
                     회원정보관리
                 </a>
             </div>
             <div>
-                <a (click)="user_menu_set('sign_out')">
+                <a class="menu_header uk-padding-small" (click)="user_menu_set('sign_out')">
                     회원탈퇴
                 </a>
             </div>
@@ -48,34 +48,95 @@
         </div>
     </div>
 
+    <div class="uk-width-3-4 ">
 
-    <!-- 중앙 검색 결과 -->
-    <div class="uk-width-3-4 middle-result-area">
-        내보관함 새폴더생성 폴더편집
+        <div uk-grid>
+
+
+            <!-- 검색 결과 수 -->
+            <div class="uk-width-expand menu_header"
+                style="text-align:left;padding-bottom : 0; font-weight : Regular; font-size : 20px; color : #3d3d3d;">
+                내 보관함
+            </div>
+
+            <!-- 최신순 10건씩 보기 -->
+            <div class="uk-width-medium" style="padding : 0;text-align:right;">
+                <button class="uk-button button-blue button-outline"
+                    style="font-weight : regular; font-size:18px; color : #ffffff;">
+                    새폴더생성
+                </button>
+
+                <button class="uk-button button-blue button-outline uk-margin-small-left"
+                    style="font-weight : regular; font-size:21px; color : #ffffff;">
+                    폴더편집
+                </button>
+            </div>
+        </div>
+
+        <!-- 중앙 검색 결과 -->
+        <!-- 내보관함 새폴더생성 폴더편집 -->
         <div>
-            폴더1 폴더2 폴더3
+            <div class="uk-flex">
+                <a class="uk-margin-left">
+                    폴더1
+                </a>
+                <a class="uk-margin-left">
+                    폴더2
+                </a>
+                <a class="uk-margin-left">
+                    폴더3
+                </a>
+
+            </div>
             <div class="outline">
-                <div *ngIf='user_menu == "my_keep"'>
-                    <div *ngFor="let doc of myDocs; index as d">
-                        <a>{{ doc }} </a>
+
+                <div style="padding-left : 30px; background-color: aqua;" uk-grid>
+                    <div class="menu_header uk-width-expand"
+                        style=" font-weight : Regular; font-size : 20px; color : #3d3d3d; ">
+                        <input class="uk-checkbox custom-check" type="checkbox"
+                            style="border-radius: 3px; border: 1px solid #3d3d3d; font-size: 18pt; color:#3d3d3d; font-weight: regular;"
+                            (change)="this.boxChange(i)" />
+                        전체선택
                     </div>
-                    <div *ngIf="!isDocEmpty">
-                        <button (click)="deleteAllMyDocs()">나의 문서 모두 지우기</button>
+                    <div *ngIf="!isDocEmpty" class="uk-width-large">
+                            <button class="uk-button button-blue button-outline uk-align-right"
+                                style="font-weight : medium;background-color: #606060; font-size:18px; color : #ffffff;">
+                                선택삭제
+                            </button>
+
+                            <button (click)="deleteAllMyDocs()"
+                                class="uk-button button-blue button-outline uk-margin-small-left  uk-align-right"
+                                style="font-weight : medium;background-color: #606060; font-size:21px; color : #ffffff;">
+                                전체삭제
+                            </button>
                     </div>
                 </div>
 
+                <div class="uk-margin-remove-top"style="padding-left : 30px;" uk-grid>
+                    <div *ngIf='user_menu == "my_keep"' style="background-color :aquamarine ;">
+                        <div *ngFor="let doc of myDocs; index as d">
+                            <input class="uk-checkbox custom-check" type="checkbox"
+                                style="border-radius: 3px; border: 1px solid #8a8d8e;" (change)="this.boxChange(i)" />
+                            <a style="font-size:21px; color : #606060;">{{ doc }} </a>
+                        </div>
+
+                    </div>
 
 
-                <div *ngIf='user_menu == "my_history"'>
-                    <div *ngFor="let doc of myHst; index as d">
-                        <a>{{ doc }} </a>
+
+                    <div *ngIf='user_menu == "my_history"'>
+                        <div *ngFor="let doc of myHst; index as d">
+                            <input class="uk-checkbox custom-check" type="checkbox"
+                                style="border-radius: 3px; border: 1px solid #8a8d8e;" (change)="this.boxChange(i)" />
+                            <a>{{ doc }} </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+
 </div>
 
 

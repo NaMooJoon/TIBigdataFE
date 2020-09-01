@@ -52,9 +52,8 @@ export class ArticleDetailsComponent implements OnInit {
     private keywords: any[] = [];
 
     loadKeywords() {
-      // console.log("loadKeywords : " ,this.searchResultIdList)
       this.db.getTfidfValue(this.docId).then(res => {
-        // console.log(res)
+        console.log(res)
         let data = res as []
         // console.log("loadkeywords : ", data)
         
