@@ -1,17 +1,10 @@
 <div class="uk-container-center margin">
-
-    <h1>커뮤니티 광장</h1>
-
-
-    <div class="uk-align-right" uk-grid>
-        <input class="uk-margin" (keyup)="updateSearchKey($event)" placeholder="문서 검색" />
+    <div class="uk-flex uk-flex-right uk-margin-bottom">
+        <input class="uk-padding button-gray" style="border-radius:30px; width:250px; height:40px;" (keyup)="updateSearchKey($event)" placeholder="검색"/>
     </div>
-
-
 
     <div uk-grid>
         <table class="uk-table uk-table-striped">
-            <caption>커뮤니티 페이지</caption>
             <thead>
                 <tr style="border-top: 2px solid #606060; border-bottom: 1px solid #606060">
                     <th>글 번호</th>
@@ -24,7 +17,6 @@
             <tbody>
                 <tr style="border-top: 0.75px solid #c6c6c6; border-bottom: 0.75px solid #c6c6c6;"
                     *ngFor="let d of docList; let i = index">
-
                     <td (click)="navToReadThisDoc(i)">{{ d["id"] }}</td>
                     <td (click)="navToReadThisDoc(i)">{{ d["user"] }}</td>
                     <td (click)="navToReadThisDoc(i)">{{ d["title"] }}</td>
@@ -35,7 +27,6 @@
     </div>
 
     <div class="uk-flex-center" uk-grid>
-
         <button class="uk-button uk-button-text " (click)="pressPriorBloc()">
             < </button>
                 <button class="uk-margin-left uk-button button-blue" style="width : 40px; height : 40px"
@@ -46,7 +37,4 @@
                 <button *ngIf="isLogStat" class="uk-button uk-button-text " (click)="navToWriteNewDoc()"> 새 글 쓰기
                 </button>
     </div>
-
-
-
 </div>
