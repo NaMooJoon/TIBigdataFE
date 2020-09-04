@@ -50,8 +50,9 @@ export class SearchBarComponent implements OnInit {
     private es: ElasticsearchService // private cd: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
-    this.queryText = this.es.getKeyword();
+  async ngOnInit() {
+    this.queryText = await this.es.getKeyword() as string;
+    // console.log("bar : query text", this.queryText)
   }
 
   updateKeyword($event) {
@@ -63,11 +64,11 @@ export class SearchBarComponent implements OnInit {
     // this.eventSvs.addSrchHst(this.queryText);
     
     this.es.setKeyword(this.queryText);
-    this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
-    this.searched.emit();
+    // this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
+    // this.searched.emit();
     this.auth.addSrchHst(this.queryText);
     // console.log("emitted!")
     // console.log("search bar : fulltextsearch done with " + this.queryText);
-    this._router.navigateByUrl("body/search");
+    this._router.navigateByUrl("body/search/result");
   }
 }

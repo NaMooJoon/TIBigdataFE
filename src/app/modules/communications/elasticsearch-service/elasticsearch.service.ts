@@ -23,9 +23,8 @@ import { IpService } from 'src/app/ip.service'
 export class ElasticsearchService {
   private client: Client;
   articleSource = new Subject<ArticleSource[]>();
-  // articleSource = new Observable<ArticleSource[]>();
   articleInfo$ = this.articleSource.asObservable();
-  private searchKeyword: string = undefined;
+  private searchKeyword = new Subject<string>();
 
   constructor(private ipSvc : IpService) {
     if (!this.client) {
@@ -36,15 +35,19 @@ export class ElasticsearchService {
   /**
    * @function setKeyword
    * 키워드를 이 서비스에 저장한다. 저장한 이후에 검색 가능.
-   * @param keyword
    * 저장할 키워드 string
    */
   setKeyword(keyword: string) {
-    this.searchKeyword = keyword;
+    this.searchKeyword.next(keyword);
   }
 
   getKeyword() {
-    return this.searchKeyword;
+    // console.log("es : getkey")
+    return new Promise(resolve=>{
+      this.searchKeyword.subscribe(res=>{
+        resolve(res);
+      })
+    })
   }
 
   private queryalldocs = {

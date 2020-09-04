@@ -39,9 +39,9 @@ export class AnalysisDatabaseService {
 
   async getOneTopicDocs(tp : string){
     let body = {topic : tp}
-    console.log(body);
+    // console.log(body);
     let res = await this.http.post<any>(this.GET_ONE_TOPIC_DOCS_URL, body).toPromise();
-    console.log("in db getOneTopicDocs", res);
+    // console.log("in db getOneTopicDocs", res);
     // for(var data in res){
     //   data["_id"]
     // }
@@ -89,10 +89,10 @@ export class AnalysisDatabaseService {
    */
   async getRelatedDocs(id: string) {
     let _rcmdIdsRes = await this.getRcmdTable(id)
-    // console.log("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
+    console.log("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
     let rcmdIds = _rcmdIdsRes[0]["rcmd"];
     let _titlesRes = await this.docControl.convertID2Title(rcmdIds as string[])
-    // console.log("in db : rcmdRes:", _titlesRes)
+    console.log("in db : rcmdRes:", _titlesRes)
 
     let titles = _titlesRes as []
 
@@ -102,7 +102,7 @@ export class AnalysisDatabaseService {
       return { "id": rcmdIds[i], "title": t };
     })
 
-    // console.log("relatedDocs:", relatedDocs);
+    console.log("relatedDocs:", relatedDocs);
     return relatedDocs;
   }
 

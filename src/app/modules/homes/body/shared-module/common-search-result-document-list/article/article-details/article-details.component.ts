@@ -18,7 +18,7 @@ export class ArticleDetailsComponent implements OnInit {
 
 
   ngOnInit() {
-    // console.log(this.article)
+    console.log(this.article)
     this.docId = this.article._id
     this.article = this.article._source;
     this.loadKeywords();
@@ -53,7 +53,7 @@ export class ArticleDetailsComponent implements OnInit {
 
     loadKeywords() {
       this.db.getTfidfValue(this.docId).then(res => {
-        console.log(res)
+        // console.log(res)
         let data = res as []
         // console.log("loadkeywords : ", data)
         

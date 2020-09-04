@@ -1,18 +1,8 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  // ChangeDetectorRef,
-  // Input,
-  // Inject,
-  // Output
-} from "@angular/core";
+import { Component,OnInit,Input,OnChanges, Output, EventEmitter,} from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
 import { Subscription } from "rxjs";
-// import { Observable, of } from "rxjㄹs";
 import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
@@ -21,15 +11,20 @@ import { RecomandationService } from "../../../search/service/recommandation-ser
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
+
+
 @Component({
   selector: 'app-search-result-document-list',
   templateUrl: './search-result-document-list.component.html',
   styleUrls: ['./search-result-document-list.component.less']
 })
-export class SearchResultDocumentListComponent implements OnInit,OnChanges {
+
+export class SearchResultDocumentListComponent implements OnInit {
 
   @Input() cat_button_choice : string;
   @Input() is_lib_first : boolean;
+  @Input () isKeyLoaded : boolean;
+  @Output() resultReady = new EventEmitter<string[]>();
   // @Input() is_lib_first : boolean;
   public relatedKeywords = [];
   private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
@@ -39,7 +34,6 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
   // private userSearchHistory: string[];
   private isSearchLoaded: boolean = false;
   private isRelatedLoaded: boolean = true;//going to be removed
-  private isKeyLoaded: boolean = false;
   private headers: HttpHeaders = new HttpHeaders({
     "Content-Type": "application/json"
   });
@@ -49,7 +43,7 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
   // private isToggleRelated: boolean
   private relateToggle: Array<boolean>;
   private isLogStat: Number = 0;
-
+  private isQueryTextLoaded : boolean = false;
   queryText: string;
 
   constructor(
@@ -63,6 +57,7 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
     private es: ElasticsearchService, //private cd: ChangeDetectorRef.
     private db: AnalysisDatabaseService,
     private docControl : DocumentService
+    
   ) {
     // this.isConnected = false;
     this.subscription = this.es.articleInfo$.subscribe(info => {
@@ -70,32 +65,102 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
       // //console.log(info)
     });
   }
-  ngOnChanges(){
+  // ngOnChanges(){
     // let category = this.get_chosen_category();
     // console.log(category)
     // console.log("search-result-doc-list", this.cat_button_choice);
     // this.get_category()
-    this.discovery_search();
-    console.log("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
+    // this.discovery_search();
+    // console.log("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
     // this.is_lib_first = false;
 
-  }
+  // }
 
   ngOnInit() {
-    console.log("search resultdoc list compo : ngoninit: this.is_all_docs : ", this.is_lib_first)
-
+    console.log("0 : start init")
+    // console.log("search resultdoc list compo : ngoninit: this.is_all_docs : ", this.is_lib_first)
+    this.isQueryTextLoaded = false;
     // console.log("search result compo")
     // this.idControl.clearAll();
-    //console.log(this.evtSvs.getSrchHst());
+    // console.log("is_lib : ",this.is_lib_first);
 
-    if(this.is_lib_first)//처음 result-compo에 진입하는 경우라면 true. 아니면 keyword search compo
-      this.initLib()
-    else
+    // if(this.is_lib_first)//처음 result-compo에 진입하는 경우라면 true. 아니면 keyword search compo
+    //   this.initLib()
+    // else
       this.keyword_search();
     
     // this.isLogStat = this.auth.getLogInStat()
   }
 
+
+
+
+
+
+
+  /**
+   * 
+   * 
+   * 
+   * 
+   * 
+   * @description 키워드 입력해서 검색하는 함수들
+   */
+
+
+  /**
+   * @description 유저가 키워드로 검색했을 때 검색 결과 load
+   */
+  async keyword_search() {
+    console.log("0")
+    this.initialize_search();//검색 결과 초기화
+    console.log("1")
+    await this.keyword_search_process();//실제 검색한 뒤 결과 받아오는 프로세스 실행 + 데이터 분석 결과도 함께 load
+    
+  }
+
+
+  /**
+   * @description 실제 검색한 뒤 결과 받아오는 프로세스 실행 + 데이터 분석 결과도 함께 load
+   */
+  //키워드 검색으로 문서 호출하는 경우
+  async keyword_search_process(){
+    console.log("3")
+    await this.trans_key_and_search();//키워드를 ES에 전달
+    // console.log("search result compoenent : loadResultPage working..." , this.isQueryTextLoaded)
+    console.log("5")
+    await this.combine_search_result();//검색 결과 호출, 데이터 분석 호출 등등 작은 기능을 묶은 함수.
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /**
+   * @description 유저가 입력한 키워드를 es service으로 전달해서 검색 쿼리 수행
+   */
+  async trans_key_and_search(){
+    this.queryText = await this.es.getKeyword() as string;//현재 선택된 검색어 받아옴
+    // console.log("queryText : ", this.queryText)
+
+    //debugging 혹은 검색 페이지로 곧바로 들어왔을 때 샘플 키워드로 검색. 없으면 개발할 때 불편해질 수 있음...
+    if ( this.queryText== undefined) 
+      this.queryText = "북한산"
+      // this.alternateSearchKeyword();
+      // console.log("queryText : ", this.queryText)
+
+    this.es.fullTextSearch("post_body", this.queryText); //es.service에서 검색 후  결과를 articlesource에 저장한다.
+    this.isQueryTextLoaded = true;//검색 키워드 로드된 이후에 검색어 대한 검색 결과는 몇개입니다 문구를 업데이트 한다.
+    console.log("4: trans_key_and_search done")
+  }
+
+  
 
 
 
@@ -152,7 +217,7 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
 
     
     await this.discovery_search_process();
-    await this._common_process();
+    await this.combine_search_result();
     // this.create_result_doc_id_table();//검색 결과에서 id table 생성
     // this.additional_saerch_feature();
     // this.create_topic_id_table();
@@ -172,12 +237,20 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
     
   }
 
+
+  /**
+   * @description 자료 열람에 처음 들어갈 때 모든 검색 결과를 로드한다. 실제 검색 쿼리를 보내는 search_all 함수와 
+   */
   async initLib(){
     await this.search_all();
     console.log("all search")
-    this._common_process();
+    this.combine_search_result();
   }
 
+
+  /**
+   * @description 모든 검색 결과 
+   */
   async search_all(){
       console.log("search result docs list compo : sarch_all init");
       this.es.allSearch();
@@ -213,90 +286,6 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
 
 
 
-  /**
-   * 
-   * 
-   * 
-   * 
-   * 
-   * @description 키워드 입력해서 검색하는 함수들
-   */
-
-
-  async keyword_search() {
-    // console.log("search result compoenent : loadResultPage working...")
-
-
-    this.initialize_search();
-    await this.keyword_search_process();
-    
-  }
-
-
-
-  async _common_process(){
-
-    await this.load_search_result();//검색 결과 es.service에서 받아옴
-    this.create_result_doc_id_table();//검색 결과에서 id table 생성
-    this.additional_saerch_feature();
-  }
-
-
-  //키워드 검색으로 문서 호출하는 경우
-  async keyword_search_process(){
-    this.trans_key_and_search();//키워드를 ES에 전달
-    await this._common_process();
-  }
-
-
-
-  /**
-   * @description 유저가 입력한 키워드를 es service으로 전달해서 검색 쿼리 수행
-   */
-  trans_key_and_search(){
-    let queryText = this.es.getKeyword();//현재 선택된 검색어 받아옴
-    //debugging 혹은 검색 페이지로 곧바로 들어왔을 때 샘플 키워드로 검색
-    if (this.ipService.get_FE_DB_ServerIp() == this.ipService.getDevIp()) {
-      if (this.es.getKeyword() == undefined) {
-        this.es.setKeyword("북한산");//다른 컴포넌트 혹은 서비스에서 사용할 수 있기 때문에 새로 등록
-        this.queryText = this.es.getKeyword();
-      }
-    }   
-    this.es.fullTextSearch("post_body", queryText); //검색 후 es.service에서 articlesource에 저장되어 있다.
-  }
-
-  
-
-
-
-  /**
-   * @description 현재 검색 키워드의 검색 결과를 es.service에서 불러온다.
-   */
-  load_search_result() {
-
-    return new Promise(resolve => {
-      this.es.articleInfo$.subscribe(articles => {
-        // console.log("search result doc list compo : ", articles)
-        this.articleSources = articles;
-        this.isSearchLoaded = true;
-        resolve();
-      });
-    });
-  }
-
-  /**
-   * @description 현재 검색 결과 문서 리스트의 id table을 만든다.
-   */
-  create_result_doc_id_table() {
-    // let temp = this.articleSources as []; //검색된 데이터들을 받음
-    this.relateToggle = []; //연관 문서 여닫는 버튼 토글 초기화
-    for (var i in this.articleSources) {
-      this.searchResultIdList[i] = this.articleSources[i]["_id"];
-      this.relateToggle.push(false);
-    }
-
-    // console.log("create_result_doc_id table : ", this.searchResultIdList )
-  }
 
 
 
@@ -319,8 +308,17 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
    */
 
 
-  additional_saerch_feature(){
-    this.loadKeywords();//검색 결과에서 연관 문서 및 키워드 호출
+   /**
+    * 
+    *유저 로그인 관련 
+    * 
+    * 
+    * 
+    */
+  /**
+   * @description 현재 유저의 로그인 상태를 확인한다.
+   */
+  updateLoginStat(){
     this.auth.getLogInObs().subscribe(stat=>{//로그인 확인해서 부가기능 활성화
       this.isLogStat = stat;
     })
@@ -329,7 +327,17 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
 
 
 
+  /**
+   * 
+   * 검색 결과 관련 함수들
+   * 
+   * 
+   */
 
+
+  /**
+   * @description 새로운 검색을 하기 앞서서 검색 결과 초기화
+   */
   initialize_search(){
     this.isSearchLoaded = false;//로딩 안되어있을 때 로딩 중 표시
     this.isKeyLoaded = false;//연관검색어 로딩 안되어있을 때 로딩 중 표시
@@ -343,28 +351,50 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
   }
 
 
-  /***
-   * 문서 찜하는 기능
+
+
+  /**
+   * @description 검색 결과를 불러오고, 검색 결과에서 id table을 만들고, 키워드 분석 결과를 불러오고, 유저 로그인 상태를 업데이트한다. 키워드로 검색할 때와 자료 열람으로 검색할 때 재사용하기 때문에 따로 분리.
    */
-  boxChange(i){
-    let idx = this.keepIdList.indexOf(this.searchResultIdList[i]);
-    idx != undefined ? 
-      this.keepIdList.push(this.searchResultIdList[i]) : 
-      this.keepIdList.splice(idx,1);
+  async combine_search_result(){
+    await this.load_search_data();//검색 결과 es.service에서 받아옴
+    this.isSearchLoaded = true;
+    console.log("6: is search loaded : ", this.isSearchLoaded)
+    // console.log("debug1", this.isSearchLoaded)
+    this.create_result_doc_id_table();//검색 결과에서 id table 생성
+    this.loadKeywords();//검색 결과에서 연관 문서 및 키워드 호출
+    this.updateLoginStat()//로그인 상태를 업데이트한다. 유저 로그인 할 때 문서 담는 기능을 활성화하기 위해서 확인해야 한다.
+    console.log("8 :combine_search_result done")
   }
 
-  keepMyDoc() {
-    ////console.log("id lists: ", this.searchResultIdList);
-    this.auth.addMyDoc(this.keepIdList).then(()=>{
-      alert("문서가 나의 문서함에 저장되었어요.")
+  /**
+   * @description 현재 검색 키워드의 검색 결과를 es.service에서 불러온다.
+   */
+  load_search_data() {
+    return new Promise(resolve => {
+      this.es.articleInfo$.subscribe(articles => {
+        console.log("2: search result doc list compo : ", articles)
+        this.articleSources = articles;
+        
+        console.log("3: load_search_data done")
+        resolve();
+      });
     });
-    // this.idControl.clearAll();
-
   }
 
+  /**
+   * @description 현재 검색 결과 문서 리스트의 id table을 만든다.
+   */
+  create_result_doc_id_table() {
+    // let temp = this.articleSources as []; //검색된 데이터들을 받음
+    this.relateToggle = []; //연관 문서 여닫는 버튼 토글 초기화
+    for (var i in this.articleSources) {
+      this.searchResultIdList[i] = this.articleSources[i]["_id"];
+      this.relateToggle.push(false);
+    }
 
-  navToDocDetail() {
-    this._router.navigateByUrl("search/DocDetail");
+    console.log("7 create_result_doc_id table : ", this.searchResultIdList )
+    
   }
 
 
@@ -372,7 +402,7 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
    * @function setThisDoc
    * @param article_source_idx 
    * @param related_doc_idx 
-   * @description 개별 문서 선택할 때 해당 문서 자세히 보는 페이지로 이동
+   * @description 개별 문서 선택할 때 해당 문서의 아이디를 저장해둔다. 그리고 자세히 보는 페이지로 이동한다. 이동한 뒤 docDetail component에서 저장한 id에 해당하는 문서를 다시 검색하여 호출
    */
   setThisDoc(article_source_idx : number, related_doc_idx: number) {
     // console.log("set this doc : ", article_source_idx);
@@ -380,8 +410,11 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
     this.navToDocDetail();
   }
 
-  tgglRelated(i: number) {
-    //console.log("tgglRelated")
+  /**
+   * @description 각 문서의 연관문서 보기를 선택할 때 해당 문서의 index을 열린 문서 상태로 update
+   */
+  toggle_update(i: number) {
+    console.log("tgglRelated")
     this.loadRelatedDocs(i); //load from flask
     this.relateToggle[i] = !this.relateToggle[i];
   }
@@ -389,10 +422,13 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
   /**
    *
    * @param idx 
-   * @description 검색 결과에서 해당 idx번째 문서의 연관 문서를 reference table에서 불러온다.
+   * @description 연간문서를 실제로 호출해서 보여준다. 검색 결과에서 해당 idx번째 문서의 연관 문서를 reference table에서 불러온다.
    */
   loadRelatedDocs(idx: number) {
     // this.relatedDocs[idx]=[];
+    console.log("load related docs : " , this.searchResultIdList);
+
+    console.log("load related docs : " , this.searchResultIdList[idx]);
     this.db.getRelatedDocs(this.searchResultIdList[idx]).then(res => {
       // console.log("from db : ",res)
       this.relatedDocs[idx] = res as [];
@@ -408,8 +444,12 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
   }
 
 
-  //각 문서마다 들어갈 상위 키워드를 저장할 array
-  private keywords: any[] = [];
+  
+    /**
+     * @description 각 문서의 핵심 키워드를 불러온다. 그리고 현재 검색어와 유사한 검색어 array으로 담는다. 추후 word2vec알고리즘으로 변경하는 것을 생각 중...
+     */
+  
+  private keywords: any[] = [];//각 문서마다 들어갈 상위 키워드를 저장할 array
 
   loadKeywords() {
     // console.log("loadKeywords : " ,this.searchResultIdList)
@@ -426,11 +466,59 @@ export class SearchResultDocumentListComponent implements OnInit,OnChanges {
         if(this.relatedKeywords.length < 10)
           this.relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
       }
+
+      this.resultReady.emit(this.relatedKeywords);
     })
     // //console.log("keywords : ",this.keywords)
     this.isKeyLoaded = true;  
   }
 
+
+
+
+
+
+  /***
+   * 문서 찜하는 기능
+   */
+
+  /**
+   * @description 문서 찜하기 기능 : 체크 박스누를 때마다 상태 업데이트
+   */
+  checkBoxUpdate(i){
+    let idx = this.keepIdList.indexOf(this.searchResultIdList[i]);
+    idx != undefined ? 
+      this.keepIdList.push(this.searchResultIdList[i]) : 
+      this.keepIdList.splice(idx,1);
+  }
+
+
+  /**
+   * @description 문서 체크한 뒤 담기 버튼 누르면 실제로 담는 함수.
+   */
+  keepMyDoc() {
+    ////console.log("id lists: ", this.searchResultIdList);
+    this.auth.addMyDoc(this.keepIdList).then(()=>{
+      alert("문서가 나의 문서함에 저장되었어요.")
+    });
+    // this.idControl.clearAll();
+
+  }
+
+
+
+
+
+  /**
+   * 네비게이션 함수
+   */
+
+  /**
+   * @description 개별 문서 선택했을 때 해당 문서 더 자세히 보기 페이지로 이동
+   */
+  navToDocDetail() {
+    this._router.navigateByUrl("search/DocDetail");
+  }
 
 
 
