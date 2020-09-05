@@ -3,7 +3,7 @@ import { Client } from "elasticsearch-browser";
 import * as elasticsearch from "elasticsearch-browser";
 //import { InheritDefinitionFeature } from '@angular/core/src/render3';
 import { ArticleSource } from "src/app/modules/homes/body/shared-module/common-search-result-document-list/article/article.interface";
-import { Subject, Observable } from "rxjs";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
 
 
@@ -24,7 +24,9 @@ export class ElasticsearchService {
   private client: Client;
   articleSource = new Subject<ArticleSource[]>();
   articleInfo$ = this.articleSource.asObservable();
-  private searchKeyword = new Subject<string>();
+  // private searchKeyword = new BehaviorSubject<string>();
+  // private isLogInObs$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
+  private searchKeyword : BehaviorSubject<string> = new BehaviorSubject("");//to stream to subscribers
 
   constructor(private ipSvc : IpService) {
     if (!this.client) {
@@ -38,6 +40,7 @@ export class ElasticsearchService {
    * 저장할 키워드 string
    */
   setKeyword(keyword: string) {
+    console.log("keyword update to ", keyword);
     this.searchKeyword.next(keyword);
   }
 

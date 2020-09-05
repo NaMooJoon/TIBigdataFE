@@ -21,10 +21,10 @@ import { AnalysisDatabaseService } from "../../../../../communications/fe-backen
 
 export class SearchResultDocumentListComponent implements OnInit {
 
-  @Input() cat_button_choice : string;
-  @Input() is_lib_first : boolean;
-  @Input () isKeyLoaded : boolean;
-  @Output() resultReady = new EventEmitter<string[]>();
+  @Input() cat_button_choice : string;//자료열람 : 주제 버튼 변경 되었을 때
+  @Input() is_lib_first : boolean;//자료 열람 : 처음 자료 열람으로 진입할 때
+  @Input () isKeyLoaded : boolean;//키워드 검색으로 진입할 때
+  @Output() related_keywords_ready = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
   // @Input() is_lib_first : boolean;
   public relatedKeywords = [];
   private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
@@ -65,19 +65,36 @@ export class SearchResultDocumentListComponent implements OnInit {
       // //console.log(info)
     });
   }
-  // ngOnChanges(){
-    // let category = this.get_chosen_category();
-    // console.log(category)
-    // console.log("search-result-doc-list", this.cat_button_choice);
-    // this.get_category()
-    // this.discovery_search();
-    // console.log("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
-    // this.is_lib_first = false;
+  ngOnChanges(){
+    console.log("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
 
-  // }
+    this.isQueryTextLoaded = false;
+    this.keyword_search();
+
+  //   let category = this.get_chosen_category();
+  //   console.log(category)
+  //   console.log("search-result-doc-list", this.cat_button_choice);
+  //   this.get_category()
+  //   this.discovery_search();
+  //   console.log("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
+  //   this.is_lib_first = false;
+
+  }
 
   ngOnInit() {
-    console.log("0 : start init")
+    /**
+     * 시나리오 1 : 유저가 메인 검색창에서 검색 키워드로 입력한 뒤 검색 결과 창으로 진입 : ngInit. 
+     * 시나이로 2 : 다른 페이지에서 뒤로보기로 검색 결과페이지로 돌아옴 : ngInit
+     * 시나리오 3 : 유저가 검색 결과 창에서 새로운 키워드 입력 : ngInit 동작하지 않음. ngOnChange을 사용하기 쉽지 않은 환경이다. 
+     * 검색 결과 창과 search-result-doc-list compo와는 거리가 좀 멀다. 
+     * body-root 위에 search-bar + body module
+     *  body module 안에 search-result 
+     *    그리고 그 compo 안에 search-search-result-doc-list이 있음. input, output decorative을 사용하기에는 너무 많은 다른 컴포넌트에 의존하게 됨.
+     *    
+     */
+
+
+    console.log("0 : start init : 외부 컴포넌트에서 search-result-document-list으로 진입")
     // console.log("search resultdoc list compo : ngoninit: this.is_all_docs : ", this.is_lib_first)
     this.isQueryTextLoaded = false;
     // console.log("search result compo")
@@ -126,7 +143,8 @@ export class SearchResultDocumentListComponent implements OnInit {
   //키워드 검색으로 문서 호출하는 경우
   async keyword_search_process(){
     console.log("3")
-    await this.trans_key_and_search();//키워드를 ES에 전달
+    this.trans_key_and_search();//키워드를 ES에 전달
+    this.isQueryTextLoaded = true;
     // console.log("search result compoenent : loadResultPage working..." , this.isQueryTextLoaded)
     console.log("5")
     await this.combine_search_result();//검색 결과 호출, 데이터 분석 호출 등등 작은 기능을 묶은 함수.
@@ -146,7 +164,7 @@ export class SearchResultDocumentListComponent implements OnInit {
    * @description 유저가 입력한 키워드를 es service으로 전달해서 검색 쿼리 수행
    */
   async trans_key_and_search(){
-    this.queryText = await this.es.getKeyword() as string;//현재 선택된 검색어 받아옴
+    this.queryText = await this.es.getKeywordChange() as string;//현재 선택된 검색어 받아옴
     // console.log("queryText : ", this.queryText)
 
     //debugging 혹은 검색 페이지로 곧바로 들어왔을 때 샘플 키워드로 검색. 없으면 개발할 때 불편해질 수 있음...
@@ -163,124 +181,6 @@ export class SearchResultDocumentListComponent implements OnInit {
   
 
 
-
-
-
-  /**
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * 
-   * @desciption 자료열람에서 검색
-   * 
-   * 일반적인 키워드 검색으로 하는 과정 : this.keyword_search_process()
-   * 1. 유저가 입력한 키워드를 파악해서 키워드를 es에 전달해서 검색한 다음에 article source에 저장 : this.trans_key_and_search();
-   * 2. 저장된 문서들을 불러옴 : load_search_result
-   * 
-   * 
-   * 
-   * 카테고리 검색에서 구분해야 하는 것.
-   * 1. 맨 처음 lib에 진입
-   *    이미 카테고리가 전체로 선택되어 있다.
-   *    전체 문서 검색한다 : es.service.allSearch()
-   *    해당 문서들을 article source에 저장한다.
-   *    
-   * 2. 카테고리 선택
-   *    선택한 종류를 파악한다.
-   *    해당 종류에 대해 fe-backend에서 문서들의 id을 받는다.
-   *    받은 id을 가지고 multIdSearch을 사용해서 article source에 저장한다.
-   * 
-   *    
-   * 
-   * 공통으로 사용하는 함수 : article source에 저장되기만 하면 그 이후로는 동일한 함수 사용한다.
-   * 
-   * 실제 keyword search을 기준으로 하면
-   * this.initialize_search();//공통
-    await this.keyword_search_process();//only keywordSearch
-      여기서 article source에서 받아오는 함수는 load_search_result이다.
-    this.create_result_doc_id_table();//검색 결과에서 id table 생성. 공통
-    this.additional_saerch_feature();//공통
-   * 
-   */
-
-
-
-  async discovery_search(){
-
-    this.initialize_search();
-
-
-
-    
-    await this.discovery_search_process();
-    await this.combine_search_result();
-    // this.create_result_doc_id_table();//검색 결과에서 id table 생성
-    // this.additional_saerch_feature();
-    // this.create_topic_id_table();
-    // console.log(await );
-    // this.create_topic_id_table(docs);
-  }
-
-  async discovery_search_process(){
-    // console.log("search resultdoc list compo : this.is_all_docs : ", this.is_all_docs)
-    // if(this.is_all_docs){
-    //   this.search_all();
-    // }
-    // else{
-      this.search_category();
-    // }
-
-    
-  }
-
-
-  /**
-   * @description 자료 열람에 처음 들어갈 때 모든 검색 결과를 로드한다. 실제 검색 쿼리를 보내는 search_all 함수와 
-   */
-  async initLib(){
-    await this.search_all();
-    console.log("all search")
-    this.combine_search_result();
-  }
-
-
-  /**
-   * @description 모든 검색 결과 
-   */
-  async search_all(){
-      console.log("search result docs list compo : sarch_all init");
-      this.es.allSearch();
-      // await this.load_search_result();//검색 결과 es.service에서 받아옴
-  }
-
-  async search_category(){
-    let category = this.get_chosen_category();
-    let docs_id = await this.load_topic_docs_id(category)//현재 토픽에 해당하는 내용을 불러온다.
-    this.es.MultIdSearch(docs_id);
-  }
-
-
-  get_chosen_category(){
-    return this.cat_button_choice;
-  }
-
-  async load_topic_docs_id(category){
-    // console.log(category)
-    return await this.db.getOneTopicDocs(category) as [];
-  }
-
-
-
-  // create_topic_id_table(raw_result : any){
-  //   for(var i = 0 ; i < raw_result.length; i++){
-  //     this.searchResultIdList[i] = raw_result[i];
-  //   }
-    
-  // }
 
 
 
@@ -348,6 +248,7 @@ export class SearchResultDocumentListComponent implements OnInit {
     this.relatedKeywords = [];//연관검색어 담을 array
     this.searchResultIdList = [];//ES에서 받은 결과 리스트의 id을 담을 array
     this.keepIdList = [];//유저가 keep 선택한 문서 id을 담을 array
+    console.log("init done!")
   }
 
 
@@ -365,6 +266,8 @@ export class SearchResultDocumentListComponent implements OnInit {
     this.loadKeywords();//검색 결과에서 연관 문서 및 키워드 호출
     this.updateLoginStat()//로그인 상태를 업데이트한다. 유저 로그인 할 때 문서 담는 기능을 활성화하기 위해서 확인해야 한다.
     console.log("8 :combine_search_result done")
+    console.log("combine_search_result id list check : " , this.searchResultIdList);
+
   }
 
   /**
@@ -415,6 +318,8 @@ export class SearchResultDocumentListComponent implements OnInit {
    */
   toggle_update(i: number) {
     console.log("tgglRelated")
+    console.log("toggle_update id list check : " , this.searchResultIdList);
+
     this.loadRelatedDocs(i); //load from flask
     this.relateToggle[i] = !this.relateToggle[i];
   }
@@ -452,7 +357,7 @@ export class SearchResultDocumentListComponent implements OnInit {
   private keywords: any[] = [];//각 문서마다 들어갈 상위 키워드를 저장할 array
 
   loadKeywords() {
-    // console.log("loadKeywords : " ,this.searchResultIdList)
+    console.log("loadKeywords : " ,this.searchResultIdList)
     this.db.getTfidfValue(this.searchResultIdList).then(res => {
       // console.log(res)
       let data = res as []
@@ -467,7 +372,7 @@ export class SearchResultDocumentListComponent implements OnInit {
           this.relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
       }
 
-      this.resultReady.emit(this.relatedKeywords);
+      this.related_keywords_ready.emit(this.relatedKeywords);
     })
     // //console.log("keywords : ",this.keywords)
     this.isKeyLoaded = true;  

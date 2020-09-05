@@ -30,7 +30,7 @@ export class SearchBarComponent implements OnInit {
   // private static readonly TYPE = 'nkdboard';
 
   @Input() queryText: string = "";
-  @Output() searched = new EventEmitter<any>();
+  @Output() searchStart = new EventEmitter<any>();
 
   private lastKeypress = 0;
 
@@ -51,7 +51,7 @@ export class SearchBarComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.queryText = await this.es.getKeyword() as string;
+    this.queryText =  await this.es.getKeywordChange().toPromise();
     // console.log("bar : query text", this.queryText)
   }
 
@@ -64,9 +64,10 @@ export class SearchBarComponent implements OnInit {
     // this.eventSvs.addSrchHst(this.queryText);
     
     this.es.setKeyword(this.queryText);
-    // this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
-    // this.searched.emit();
+    this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
+    // this.searchStart.emit();
     this.auth.addSrchHst(this.queryText);
+    // this.queryText = "기본값";
     // console.log("emitted!")
     // console.log("search bar : fulltextsearch done with " + this.queryText);
     this._router.navigateByUrl("body/search/result");

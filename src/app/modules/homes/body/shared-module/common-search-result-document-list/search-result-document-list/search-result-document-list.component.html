@@ -2,12 +2,8 @@
     <!-- middle-result-area -->
 
 <div uk-grid>
-    
-    child compo keyLoaded {{isKeyLoaded}}
-    <div *ngFor="let articleSource of articleSources; index as i">
-        {{i}}
-    </div>
     <!-- 검색 결과 수 -->
+    <!-- 키워드 검색이 아니라 자료열람인 경우 띄우지 않는 메시지 -->
     <div *ngIf="isQueryTextLoaded"class="num-result uk-width-expand" style="text-align:left;padding-bottom : 0; font-weight : Regular; font-size : 20px; color : #3d3d3d;" >
         {{queryText}}에 대한 검색 결과는 몇개 입니다.
     </div>
@@ -29,15 +25,12 @@
         <input class="uk-checkbox custom-check" type="checkbox" style="padding : 0; margin : 0; border-radius: 3px; border: 1px solid #3d3d3d; font-size: 18pt; color:#3d3d3d; font-weight: regular;" (change)="checkBoxUpdate(i)" />
         전체선택
     </div>
-
-    isSearchLoaded : {{isSearchLoaded}}
     <div class="search-result">
         <!-- search-result -->
         <!-- <span uk-spinner="ratio: 4.5 " *ngIf="isSearchLoaded == false; else loadFin">
             Loading...
         </span> -->
         <!-- <ng-template #loadFin> -->
-            가나다라마
             <div *ngFor="let articleSource of articleSources; index as i">
                 <div class="uk-child-width-expand " uk-grid>
 
@@ -57,11 +50,11 @@
                             <button class="uk-button button-outline button-white uk-margin-remove" style="margin-left : 0; font-weight : regular; font-size:21px; color : #606060;" (click)="toggle_update(i)">
                                 연관문서
                             </button>
-                            <!-- <div *ngIf="relateToggle[i] == true">
+                            <div *ngIf="relateToggle[i] == true">
                                 <div *ngFor="let rcmd of relatedDocs[i]; index as r">
                                     <a (click)="setThisDoc(i, r)" style = "font-size: 17px; color : #3d3d3d; font-weight: Regular;">{{rcmd["title"]}}</a>
                                 </div>
-                            </div> -->
+                            </div>
                         <!-- </div> -->
                     </div>
                 </div>

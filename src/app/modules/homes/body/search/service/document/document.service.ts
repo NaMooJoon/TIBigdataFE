@@ -26,8 +26,6 @@ export class DocumentService {
         console.log("in document : articies : ", articles)
         console.log("article len" + articles.length);
         try {
-
-
           for (let i = 0; i < articles.length; i++) {
             console.log("i = ", i);
             var id = articles[i]["_id"];
