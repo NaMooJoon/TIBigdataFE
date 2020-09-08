@@ -66,15 +66,20 @@ export class SearchResultComponent implements OnInit {
     // this.isConnected = false;
     // this.subscription = this.es.articleInfo$.subscribe(info => {
       // this.articleSources = info;
-      // //console.log(info)
+      // //this.debug(info)
     // });
   }
+  readonly DEBUG : boolean = false;
 
+  debug(...arg:any[]){
+    if(this.DEBUG)
+      console.log(arg);
+  }
   ngOnInit() {
 
-    // console.log("search result compo")
+    // this.debug("search result compo")
     // this.idControl.clearAll();
-    //console.log(this.evtSvs.getSrchHst());
+    //this.debug(this.evtSvs.getSrchHst());
     // this.auth.getLogInObs().subscribe(stat=>{
     //   this.isLogStat = stat;
     // })
@@ -84,15 +89,25 @@ export class SearchResultComponent implements OnInit {
 
   loadRealtedKeywords(keys : string[]){
     this.relatedKeywords = keys;
-    console.log("load related keywords : ", this.relatedKeywords);
+    this.debug("load related keywords : ", this.relatedKeywords);
   }
   
 
   
   //Get result from flask
   async freqAnalysis() {
-    this.searchKeyword = await this.es.getKeyword() as string;
+    this.es.getKeyword().subscribe(res => {
+      this.searchKeyword = res;
+    })
     this._router.navigateByUrl("search/freqAnalysis");
+  }
+
+  relatedSearch(keyword: string) {
+    this.es.setKeyword(keyword);
+    // this.queryText = keyword;
+    this.auth.addSrchHst(this.queryText);
+
+    // this.loadResultPage();
   }
 
   

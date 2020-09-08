@@ -1,11 +1,12 @@
 <!-- <p>search-result-document-list works!</p> -->
     <!-- middle-result-area -->
 
+
 <div uk-grid>
     <!-- 검색 결과 수 -->
     <!-- 키워드 검색이 아니라 자료열람인 경우 띄우지 않는 메시지 -->
     <div *ngIf="isQueryTextLoaded"class="num-result uk-width-expand" style="text-align:left;padding-bottom : 0; font-weight : Regular; font-size : 20px; color : #3d3d3d;" >
-        {{queryText}}에 대한 검색 결과는 몇개 입니다.
+        {{queryText}}에 대한 검색 결과는 {{ searchResultNum }} 개 입니다.
     </div>
     
     <!-- 최신순 10건씩 보기 -->

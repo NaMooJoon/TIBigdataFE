@@ -32,16 +32,16 @@ export class SearchDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadPage();
+    this.load_new_document();
 
 
   }
   goToDoc(r) {
     this.idControl.setIdChosen(this.rcmdList[r]["id"]);
-    this.loadPage();
+    this.load_new_document();
   }
 
-  loadPage() {
+  load_new_document() {
     // this.isLoaded = 0;
     this.isRelatedLoaded = 0;
     this.isCloudLoaded = 0;
@@ -49,7 +49,7 @@ export class SearchDetailComponent implements OnInit {
 
     let id = this.idControl.getIdChosen();
 
-    this.db.getRelatedDocs(id).then(res => {
+    this.db.load_related_docs(id).then(res => {
       this.rcmdList = res as [];
       this.isRelatedLoaded ++;
     });

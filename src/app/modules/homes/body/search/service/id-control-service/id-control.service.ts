@@ -15,6 +15,10 @@ export class IdControlService {
 
   constructor() { }
 
+
+  /**
+   * @description 
+   */
   clearAll() {
     this.oneID = "";
     this.idList = [];

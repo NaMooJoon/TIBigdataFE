@@ -2,18 +2,14 @@ import {
   Component,
   OnInit,
   EventEmitter,
-  ChangeDetectorRef,
   Input,
   Output
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
-import { ArticleSource } from "../../../../containers/shared/article.interface";
-import { Subscription } from "rxjs";
-import { Observable, of } from "rxjs";
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
+import { AnalysisDatabaseService } from '../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
 
 @Component({
   selector: "app-search-bar",
@@ -30,7 +26,7 @@ export class SearchBarComponent implements OnInit {
   // private static readonly TYPE = 'nkdboard';
 
   @Input() queryText: string = "";
-  @Output() searchStart = new EventEmitter<any>();
+  // @Output() searchStart = new EventEmitter<any>();
 
   private lastKeypress = 0;
 
@@ -43,6 +39,7 @@ export class SearchBarComponent implements OnInit {
   // searchKeyword: string;
 
   constructor(
+    private db : AnalysisDatabaseService,
     private auth : EPAuthService,
     private eventSvs : EventService,
     public _router: Router,
@@ -51,10 +48,16 @@ export class SearchBarComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.queryText =  await this.es.getKeywordChange().toPromise();
+    // console.log("search bar on init")
+    // this.es.getKeyword().subscribe(res=>{
+    //   this.queryText = res;
+    // })
     // console.log("bar : query text", this.queryText)
   }
-
+  test(){
+    console.log("abcde");
+    // this._router.navigateByUrl("body/search/result");
+  }
   updateKeyword($event) {
     this.queryText = $event.target.value;
     // console.log("bar comp : keyword accepted : " + this.queryText);
@@ -62,11 +65,13 @@ export class SearchBarComponent implements OnInit {
 
   search() {
     // this.eventSvs.addSrchHst(this.queryText);
-    
+    // console.log("search function : ", this.queryText)
+    // this.auth.test();
+    // this.db.test();
     this.es.setKeyword(this.queryText);
-    this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
+    // this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
     // this.searchStart.emit();
-    this.auth.addSrchHst(this.queryText);
+    // this.auth.addSrchHst(this.queryText);
     // this.queryText = "기본값";
     // console.log("emitted!")
     // console.log("search bar : fulltextsearch done with " + this.queryText);

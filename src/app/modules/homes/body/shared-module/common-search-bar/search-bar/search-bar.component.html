@@ -1,10 +1,10 @@
 <div class="uk-container uk-container-center search-bar-area">
   <div class="uk-align-center uk-margin-small uk-width-2-3" uk-grid>
     <input class="search-bar uk-input  uk-form-width-large" type="text" (keyup)="updateKeyword($event)"
-      value="{{ queryText }}" (keydown.enter)="search()"
+      value="{{ queryText }}" (keyup.enter)="search()"
       style="     background-image: url(assets/search.png);"
       placeholder="기본 검색어를 입력하세요" />
-    <a (click)="sendResult()"></a>
+    <a (click)="search()">검색</a>
 
 
 

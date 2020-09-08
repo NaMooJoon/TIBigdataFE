@@ -6,6 +6,13 @@ import { ArticleSource } from "src/app/modules/homes/body/shared-module/common-s
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
 
+class searchOption{
+  static readonly  title = "post_title";
+  static readonly date = "post_date";
+  static readonly inst = "published_institution_url";
+  static readonly author = "post_writer";
+  static readonly body = "post_body";
+}
 
 /**
  * 
@@ -22,16 +29,24 @@ import { IpService } from 'src/app/ip.service'
 })
 export class ElasticsearchService {
   private client: Client;
-  articleSource = new Subject<ArticleSource[]>();
-  articleInfo$ = this.articleSource.asObservable();
+  private articleSource : Subject<ArticleSource[]> = new Subject<ArticleSource[]>();
+  // articleSource = this.articleSource.asObservable();
+
   // private searchKeyword = new BehaviorSubject<string>();
   // private isLogInObs$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
-  private searchKeyword : BehaviorSubject<string> = new BehaviorSubject("");//to stream to subscribers
+  private searchKeyword$ : BehaviorSubject<string> = new BehaviorSubject("");//to stream to subscribers
+  private keyword : string;
+  private readonly  DOC_NUM_PER_EACH_PAGE : number = 10;
 
   constructor(private ipSvc : IpService) {
     if (!this.client) {
       this._connect();
     }
+  }
+
+
+  getArticleChange(){
+    return this.articleSource;
   }
 
   /**
@@ -41,16 +56,19 @@ export class ElasticsearchService {
    */
   setKeyword(keyword: string) {
     console.log("keyword update to ", keyword);
-    this.searchKeyword.next(keyword);
+    this.keyword = keyword;
+    this.searchKeyword$.next(this.keyword);
+
   }
+
 
   getKeyword() {
     // console.log("es : getkey")
-    return new Promise(resolve=>{
-      this.searchKeyword.subscribe(res=>{
-        resolve(res);
-      })
-    })
+    // return new Promise(resolve=>{
+      return this.searchKeyword$;
+        // resolve(res);
+      // })
+    // })
   }
 
   private queryalldocs = {
@@ -76,7 +94,7 @@ export class ElasticsearchService {
    * @function allSearch 
    * @description 모든 문서를 검색하는 함수를 실행한 뒤 article source까지 저장
    */
-  allSearch(){
+  allSearchComplete(){
     this.save_search_result_from_hook(this.search_all_docs());
   }
 
@@ -90,20 +108,30 @@ export class ElasticsearchService {
    * @param _queryText
    * es에서 검색할 키워드 텍스트
    */
-  fullTextSearch(_field, _queryText) {
-    this. save_search_result_from_hook(this.searchByText(_field, _queryText));
+  fullTextSearchComplete(_field, _queryText, startIndex? : number, docSize? : number) {
+    this. save_search_result_from_hook(this.searchByText(_field, _queryText, startIndex, docSize));
   }
+
+
+
+  
 
 
   /**
    * @function searchByText
    * @description search by keyword text matching
    */
-  searchByText(_field, _queryText) {
+  searchByText(_field, _queryText, startIndex? : number, docSize? : number) {
+    if(!startIndex)
+      startIndex = 0;
+    if(!docSize)
+      docSize = this.DOC_NUM_PER_EACH_PAGE;
+
+
     return this.client
       .search({
-        from:0,
-        size: 10,
+        from: startIndex,
+        size: docSize,
         filterPath: [
           "hits.hits._source",
           "hits.hits._id",
@@ -126,6 +154,24 @@ export class ElasticsearchService {
         ]
       })
   }
+
+
+  countByText(_field, _queryText){
+    return this.client.count({
+      body: {
+        query: {
+          match_phrase_prefix: {
+            [_field]: _queryText
+          }
+        }
+      },
+    }).then(
+      res=>{
+        return res.count;
+      },
+      err=> console.error(err)
+    )
+  }
   
 
   /**
@@ -133,7 +179,7 @@ export class ElasticsearchService {
    * @param id : string
    * @description ES에서 검색하고자 하는 문서의 id을 검색해서 article source에 저장까지 완료
    */
-  IdSearch(id : string){
+  IdSearchComplete(id : string){
     this.save_search_result_from_hook(this.searchById(id));
   }
 
@@ -170,7 +216,7 @@ export class ElasticsearchService {
    * @param id : string array
    * @description ES에서 검색하고자 하는 문서의 id array을 검색해서 article source에 저장까지 완료
    */
-  MultIdSearch(ids : string[]){
+  MultIdSearchComplete(ids : string[]){
     this.save_search_result_from_hook(this.searchByManyId(ids));
   }
 
@@ -185,8 +231,8 @@ export class ElasticsearchService {
     return this.client.search({
       // filterPath: ["hits.hits"],
       // index: "nkdb",
-      from:0,//not work. github KUBiC issue # 34
-      size: 10,//not work.
+      // from:0,//not work. github KUBiC issue # 34
+      // size: 10,//not work.
       body: {
         query: {
           terms: {
@@ -225,6 +271,83 @@ export class ElasticsearchService {
     this.articleSource.next(info);
     // console.log("saved : ", this.articleSource);
   }
+
+
+  /**
+   * page Algo
+   */
+
+
+  getDefaultNumDocsPerPage(){
+    return this.DOC_NUM_PER_EACH_PAGE;
+  }
+
+
+   /**
+   * pseudo code 
+      number of docs per page ← N
+      number of pages ← number of total docs / N
+      if number of total docs % N > 0:
+        then number of pages ++
+      number of pages per bloc ← M
+      number of bloc ← number of pages / M
+      if number of pages % M > 0:
+        then number of bloc ++
+
+   * 
+   * 
+   */
+
+  /**
+   * 
+   * @param res 
+   * 처음에 numPagePerBloc만큼만 보여준다.
+   * pageIdx % numPagePerBloc = 0이 되면 다음 bloc으로 이동. bloc idx update. bloc idx의 최대값은 numBloc이다.
+   * pageIdx 의 최대값ㅂ은 numPage이다.
+   * @return numPagePerBloc
+   * @return numPage
+   * @return numBloc
+   */
+  async pagingAlgo(){
+    //number of docs per page ← N
+    // use predefined this.DOC_NUM_PER_EACH_PAGE;
+    //number of pages ← number of total docs / N
+    let numTotalDocs = await this.countByText("post_body", this.keyword);
+    // let numTotalDocs = res.payload.data;
+    // console.log("community service numTotalDocs : ", res.payload.data);
+
+    let numPage = Math.floor(numTotalDocs / this.DOC_NUM_PER_EACH_PAGE);
+    //if number of total docs % N > 0:
+    if (numTotalDocs % this.DOC_NUM_PER_EACH_PAGE > 0)
+    //  then number of pages ++
+      numPage++;  
+    //number of pages per bloc ← M
+    // let numPagePerBloc = this.DOC_NUM_PER_EACH_PAGE;
+    let numPagePerBloc = 10;
+    //number of bloc ← number of pages / M
+    let numBloc = Math.floor(numPage / numPagePerBloc);
+    //if number of pages % M > 0:
+    if(numPage % numPagePerBloc > 0)
+    //  then number of bloc ++
+      numBloc++;
+    return { numPage : numPage, numPagePerBloc : numPagePerBloc, numBloc : numBloc};
+  }
+
+
+
+  /**
+   * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
+   */
+  async loadListByPageIdx(start_idx: number) {
+    // let body = { cur_start_idx: start_idx };
+    this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
+    // let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();
+    // return this.saveResponse(res);
+  }
+
+
+
+
 
   
 

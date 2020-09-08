@@ -42,7 +42,7 @@ export class UserpageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._auth.getLogInObs().subscribe((logstat) => {
+    this._auth.getLoginStatChange().subscribe((logstat) => {
       this.getKeepDocs();
       this.getMyHst()
       // console.log(logstat)
