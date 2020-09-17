@@ -43,38 +43,24 @@ export class SearchBarComponent implements OnInit {
     private auth : EPAuthService,
     private eventSvs : EventService,
     public _router: Router,
-    // private http:HttpClient,
     private es: ElasticsearchService // private cd: ChangeDetectorRef
   ) {}
 
-  async ngOnInit() {
-    // console.log("search bar on init")
-    // this.es.getKeyword().subscribe(res=>{
-    //   this.queryText = res;
-    // })
-    // console.log("bar : query text", this.queryText)
-  }
-  test(){
-    console.log("abcde");
-    // this._router.navigateByUrl("body/search/result");
-  }
-  updateKeyword($event) {
-    this.queryText = $event.target.value;
-    // console.log("bar comp : keyword accepted : " + this.queryText);
+  ngOnInit() {
+    // console.log("search bar ng on init")  
   }
 
-  search() {
-    // this.eventSvs.addSrchHst(this.queryText);
-    // console.log("search function : ", this.queryText)
-    // this.auth.test();
-    // this.db.test();
-    this.es.setKeyword(this.queryText);
-    // this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
-    // this.searchStart.emit();
-    // this.auth.addSrchHst(this.queryText);
-    // this.queryText = "기본값";
-    // console.log("emitted!")
-    // console.log("search bar : fulltextsearch done with " + this.queryText);
-    this._router.navigateByUrl("body/search/result");
+  updateKeyword($event) {
+    this.queryText = $event.target.value;
+  }
+
+   search() {
+     this.es.searchKeyword(this.queryText);
+      //  this.es.setKeyword(this.queryText);
+      // resolve()
+    // }).then(() =>{
+      this._router.navigateByUrl("body/search/result");
+    // }
+    // )
   }
 }

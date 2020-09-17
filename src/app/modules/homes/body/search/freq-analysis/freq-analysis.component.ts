@@ -19,8 +19,8 @@ export class FreqAnalysisComponent implements OnInit {
   });
   constructor(private ipService : IpService, private http: HttpClient, private es: ElasticsearchService) {}
 
-  async ngOnInit() {
-    this.searchKeyword = await this.es.getKeyword();
+  ngOnInit() {
+    this.searchKeyword = this.es.getKeyword();
     console.log("search keyword : "+this.searchKeyword);
 
     let body = { keyword: this.searchKeyword };

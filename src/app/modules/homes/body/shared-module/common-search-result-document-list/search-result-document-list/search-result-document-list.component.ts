@@ -2,7 +2,9 @@ import { Component,OnInit,Input,OnChanges, Output, EventEmitter, OnDestroy,} fro
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
-import { Subscription, BehaviorSubject, Subject, Observable } from "rxjs";
+import { Subscription, BehaviorSubject, Subject, Observable, of, zip, concat, } from "rxjs";
+import { flatMap, mergeMap } from 'rxjs/operators';
+
 import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
@@ -33,14 +35,18 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   private search_result_doc_id_list: string[] = [];
   private keepIdList : string [] = [];
   private relatedDocs: ArticleSource[][] = [];
-  readonly DEFUALT_KEYWROD : string = "북한산"
-  ;
-  private keywordChange$ : BehaviorSubject<string> = this.es.getKeyword();
+  readonly DEFUALT_KEYWROD : string = "북한산";
+
+
+  private keywordChange$ : Observable<string> = this.es.getKeywordChange();
+  private countNumChange$ : Observable<any> = this.es.getCountNumChange();
   private loginStatChage$  = this.auth.getLoginStatChange();
   private articleChange$:  Observable<ArticleSource[]> = this.es.getArticleChange();
-  private articleChangePrms : Promise<any> = this.es.getArticleChange().toPromise();
-  private articleSubscription$ : Subscription;
-  
+  // private articleChangePrms : Promise<any> = this.es.getArticleChange().toPromise();
+  // private articleSubscription$ : Subscription;
+  // private countKeywordChange$ : Observable<number>;
+
+
   // private userSearchHistory: string[];
   private isSearchLoaded: boolean = false;
   private isRelatedLoaded: boolean = true;//going to be removed
@@ -52,16 +58,17 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   // private isToggleRelated: boolean
   private relateToggle: Array<boolean>;
   private isLogStat: Number = 0;
-  private isQueryTextLoaded : boolean = false;
-  private searchResultNum : Number = 0;
+  private isQueryFin : boolean = false;
+  private searchResultNum : number = 0;
   private pageIndex : number = 0;
   private numDocsPerPages : number = this.es.getDefaultNumDocsPerPage();
 
-  queryText: string;
-  numPagePerBloc: number;
-  numPage: number;
-  numBloc: number;
-  pages: any;
+  private numPagePerBloc: number = 0;
+  private numPage: number = 0;
+  private numBloc: number = 0;
+  private pages : number[] = [];
+
+  private queryText: string;
 
   constructor(
     private auth: EPAuthService,
@@ -90,14 +97,14 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.keywordChange$.unsubscribe();
+    // this.keywordChange$.unsubscribe();
     // this.loginStatChage$.unsubscribe();
     // this.articleChange$.unsubscribe();
   }
   ngOnChanges(){
     this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
 
-    this.isQueryTextLoaded = false;
+    this.isQueryFin = false;
     // this.keyword_search();
 
   //   let category = this.get_chosen_category();
@@ -124,24 +131,13 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
      * search component 에서 behavioral subject으로 해결.
      */
 
-
-
+    if(this.es.getKeyword()=="")
+      this.es.searchKeyword("북한");
 
 
     this.debug("0 : start init : 외부 컴포넌트에서 search-result-document-list으로 진입")
-    // this.debug("search resultdoc list compo : ngoninit: this.is_all_docs : ", this.is_lib_first)
-    this.isQueryTextLoaded = false;
-    // this.debug("search result compo")
-    // this.idControl.clearAll();
-    // this.debug("is_lib : ",this.is_lib_first);
-
-    // if(this.is_lib_first)//처음 result-compo에 진입하는 경우라면 true. 아니면 keyword search compo
-    //   this.initLib()
-    // else
-    
-      this.keyword_search();
-    
-    // this.isLogStat = this.auth.getLogInStat()
+    this.isQueryFin = false;
+    this.keyword_search();
   }
 
 
@@ -166,9 +162,9 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       * 1. 상위 시나리오에서 넘어온 모든 경우에 
       * 2. property initialize
       * 3. 키워드 업데이트 rxjs subscribe
-      * 4.해당 키워드의 수 파악. rxjs subscribe
-      * 5. es service에서 search 후 결과 articleSource에 저장
-      * 6. articleSource로부터 결과를 이 component으로 가져고 옴
+      * 4.해당 키워드의 수 파악. rxjs subscribe : es.countByTest
+      * 5. es service에서 search 후 결과 articleSource에 저장 : textSearchComplete
+      * 6. articleSource로부터 결과를 이 component으로 가져고 옴 : loadSearchResult : subscribe
       * 7. id table만들기
       * 8. 연관검색어 추출
       * 9. 로그인 상태 업데이트
@@ -179,85 +175,32 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     
     this.debug("0")
     this.initialize_search();//검색 결과 초기화
-    this.debug("1")
-    await this.keywordUpdate().then(()=>{
-      console.log("promise test ok")
-
+    this.debug("1");
+    
+    this.articleChange$.subscribe(articles => {
+      // this.debug("article loaded")
+      this.articleSources = articles
+      this.create_result_doc_id_table();
+      this.load_related_keywords();//검색 결과에서 연관 문서 및 키워드 호출
+      
     });
 
-    // await this.keyword_search_process();//실제 검색한 뒤 결과 받아오는 프로세스 실행 + 데이터 분석 결과도 함께 load
-    
-  }
-
-
-  keywordUpdate(){
-
-    return new Promise(resolve=>{
-      this.keywordChange$.subscribe( async (keyword)=>{
-        console.log("new keyword")
-        if(keyword == ""){
-          keyword = this.DEFUALT_KEYWROD;
-          this.es.setKeyword(this.DEFUALT_KEYWROD);     
-        }
-        this.queryText = keyword;
-        resolve();
-      })
-
+    this.countNumChange$.subscribe(num=> {
+      this.debug("keyword search count num change result : ", num);
+      this.searchResultNum = num.count;
     })
-  }
-      
 
+    this.update_login_stat();
+    this.keywordChange$.subscribe(()=>{
+      this.queryText = this.es.getKeyword();
 
-  /**
-   * @description 실제 검색한 뒤 결과 받아오는 프로세스 실행 + 데이터 분석 결과도 함께 load
-   */
-  //키워드 검색으로 문서 호출하는 경우
-  async keyword_search_process(){
-    this.debug("3")
-    // this.trans_key_and_search();//키워드를 ES에 전달
-
-    // let keyword = this.DEFUALT_KEYWROD;
-    // this.articleChangePrms.then(res => {
-    //   console.log("promise : ", res);
-    // })
-
-
-
-    this.keywordChange$.subscribe( async (keyword)=>{
-      console.log("queryText : ", keyword)
-
-      // this.queryText = ;
-
-        //debugging 혹은 검색 페이지로 곧바로 들어왔을 때 샘플 키워드로 검색. 없으면 개발할 때 불편해질 수 있음...
-      // if (keyword== this.es.DEFUALT_KEYWROD) 
-        // keyword  = "북한산";
-      // this.alternateSearchKeyword();
-      if(keyword == ""){
-        // alert("default value으로 검색했습니다.");
-        keyword = this.DEFUALT_KEYWROD;
-        this.es.setKeyword(this.DEFUALT_KEYWROD);
-        
-      }
-      // this.debug(this);
-      // this.debug(this)
-
-      this.queryText = keyword;
-
-      await this.request_search_then_combine(keyword);
-  
-  })
-
-
-    // this.debug("after transkey?");
-    // this.isQueryTextLoaded = true;
+      this.loadPagesNumbers();
+    })
     
-    // this.debug("search result compoenent : loadResultPage working..." , this.isQueryTextLoaded)
-    // this.debug("5")
+    
+
+    
   }
-
-
-
-
 
 
     /**
@@ -266,12 +209,9 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
 
   async loadPagesNumbers(){
+    this.pages = []; //initlize
     let pageInfo = await this.es.pagingAlgo();
-    console.log("community compo : load pages : pageInfo : ", pageInfo)
-  //  * @return numPagePerBloc
-  //  * @return numPage
-  //  * @return numBloc  
-  //  *
+    console.log("community compo : load pages : pageInfo : ", pageInfo);
     this.numPagePerBloc = pageInfo.numPagePerBloc;
     this.numPage = pageInfo.numPage;
     this.numBloc = pageInfo.numBloc;
@@ -304,29 +244,17 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.es.loadListByPageIdx(this.pageIndex);
   }
 
-
-
-  /**
-   * @description 유저가 입력한 키워드를 es service으로 전달해서 검색 쿼리 수행
+    /**
+   * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
+   * @param i 
    */
-  async request_search_then_combine(keyword : string){
-    this.es.countByText("post_body", keyword).then(
-      count=>{
-        this.searchResultNum = count;
-        // this.test();
-      },
-      err=> console.error(err)
-    )
-    this.es.fullTextSearchComplete("post_body", keyword); //es.service에서 검색 후  결과를 articlesource에 저장한다.
-    this.isQueryTextLoaded = true;//검색 키워드 로드된 이후에 검색어 대한 검색 결과는 몇개입니다 문구를 업데이트 한다.
-    this.debug("trans key and search : search done")
-    
-    await this.combine_search_result();//검색 결과 호출, 데이터 분석 호출 등등 작은 기능을 묶은 함수.
-    
-
-    
-    this.debug("4: trans_key_and_search done")
+  async choosePageNum(i : number){
+    this.es.loadListByPageIdx(i * this.numDocsPerPages);
+    // window.location.reload();
+    window.scroll(0,0);//맨 위로 스크롤
   }
+
+
 
   
 
@@ -407,48 +335,6 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
 
   /**
-   * @description 검색 결과를 불러오고, 검색 결과에서 id table을 만들고, 키워드 분석 결과를 불러오고, 유저 로그인 상태를 업데이트한다. 키워드로 검색할 때와 자료 열람으로 검색할 때 재사용하기 때문에 따로 분리.
-   */
-  async combine_search_result(){
-    this.load_search_data();//검색 결과 es.service에서 받아옴
-    this.isSearchLoaded = true;
-    console.log("await done")
-    this.debug("6: is search loaded : ", this.isSearchLoaded)
-
-
-    this.create_result_doc_id_table();//검색 결과에서 id table 생성
-    this.load_related_keywords();//검색 결과에서 연관 문서 및 키워드 호출
-    this.update_login_stat()//로그인 상태를 업데이트한다. 유저 로그인 할 때 문서 담는 기능을 활성화하기 위해서 확인해야 한다.
-    this.debug("8 :combine_search_result done")
-    // this.debug("9 : combine_search_result id list check : " , this.searchResultIdList);
-
-  }
-
-  /**
-   * @description 현재 검색 키워드의 검색 결과를 es.service에서 불러온다.
-   */
-  async load_search_data() {
-    // console.log("load search data")
-    // let prms = this.articleChange$.toPromise()
-    // console.log("prms")
-    // return await prms.then(articles =>{
-    //   this.articleSources = articles;
-    //     console.log("3: load_search_data done : ", this.articleSources)
-    //     return;
-    //   // resolve();
-    // })
-    this.articleSubscription$ = this.articleChange$.subscribe(articles => {
-      this.debug("2: search result doc list compo : ", articles)
-      this.articleSources = articles;
-              console.log("3: load_search_data done : ", this.articleSources)
-
-      // resolve();
-    });
-    // return new Promise(resolve => {
-    // });
-  }
-
-  /**
    * @description 현재 검색 결과 문서 리스트의 id table을 만든다.
    */
   create_result_doc_id_table() {
@@ -496,13 +382,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.db.load_related_docs(this.search_result_doc_id_list[idx]).then(res => {
       // this.debug("from db : ",res)
       this.relatedDocs[idx] = res as [];
-    
-      // this.es.searchById("5de1105f4b79a29a5f9880f8").then(res=>{
-      //   this.debug(res)
-      // })
-      // this.es.searchById("5de111abb53863d63aa5522a").then(res=>{
-      //   this.debug(res);
-      // })
+  
     });
    
   }
@@ -524,23 +404,19 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
 
     this.db.get_tfidf_value(this.search_result_doc_id_list).then(res => {
-      // this.debug(res)
       let data = res as []
-      // this.debug("loadkeywords : ", data)
       
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];
-        // this.debug(tfVal[0])
-        // this.keywords.push(tfVal)//각 문서에 상위 키워드 배열을 담는다.
-
+        
         if(relatedKeywords.length < 10)
-          relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
+        relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
       }
-
+      
       this.output_realted_keywords(relatedKeywords)
+      // this.debug("loadkeywords : ", data);
 
     })
-    // //this.debug("keywords : ",this.keywords)
     this.isKeyLoaded = true;  
   }
 
@@ -571,11 +447,9 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @description 문서 체크한 뒤 담기 버튼 누르면 실제로 담는 함수.
    */
   keepMyDoc() {
-    ////this.debug("id lists: ", this.searchResultIdList);
     this.auth.addMyDoc(this.keepIdList).then(()=>{
       alert("문서가 나의 문서함에 저장되었어요.")
     });
-    // this.idControl.clearAll();
 
   }
 

@@ -5,6 +5,7 @@ import * as elasticsearch from "elasticsearch-browser";
 import { ArticleSource } from "src/app/modules/homes/body/shared-module/common-search-result-document-list/article/article.interface";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
+import { query } from '@angular/animations';
 
 class searchOption{
   static readonly  title = "post_title";
@@ -29,13 +30,18 @@ class searchOption{
 })
 export class ElasticsearchService {
   private client: Client;
-  private articleSource : Subject<ArticleSource[]> = new Subject<ArticleSource[]>();
+  private articleSource : BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
+  private countNum : BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  readonly DEFUALT_KEYWROD : string = "";
+  private keywordChange : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
+
   // articleSource = this.articleSource.asObservable();
 
   // private searchKeyword = new BehaviorSubject<string>();
   // private isLogInObs$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
-  private searchKeyword$ : BehaviorSubject<string> = new BehaviorSubject("");//to stream to subscribers
-  private keyword : string;
+
+  // private searchKeyword$ : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
+  private keyword : string = this.DEFUALT_KEYWROD;
   private readonly  DOC_NUM_PER_EACH_PAGE : number = 10;
 
   constructor(private ipSvc : IpService) {
@@ -44,6 +50,18 @@ export class ElasticsearchService {
     }
   }
 
+  searchKeyword(keyword : string){
+    console.log("key update : ", keyword)
+    this.keyword = keyword;
+    this.keywordChange.next(keyword);
+    this.fullTextSearchComplete("post_body", keyword);
+    this.countByTextComplete("post_body", keyword);
+  }
+
+  
+  getCountNumChange() : Observable<any> {
+    return this.countNum.asObservable();
+  }
 
   getArticleChange(){
     return this.articleSource;
@@ -54,21 +72,31 @@ export class ElasticsearchService {
    * 키워드를 이 서비스에 저장한다. 저장한 이후에 검색 가능.
    * 저장할 키워드 string
    */
-  setKeyword(keyword: string) {
-    console.log("keyword update to ", keyword);
-    this.keyword = keyword;
-    this.searchKeyword$.next(this.keyword);
+  setKeyword(keyword: string) :void {
+    
+    // return new Promise(resolve => {
+    //   console.log("keyword update to ", keyword);
+    //   resolve()
+    // })
+    if(keyword != this.keyword){
+      this.keyword = keyword;
+      // this.searchKeyword$.next(this.keyword);
+    }
 
   }
 
 
-  getKeyword() {
+  getKeyword() : string{
     // console.log("es : getkey")
     // return new Promise(resolve=>{
-      return this.searchKeyword$;
+      return this.keyword;
         // resolve(res);
       // })
     // })
+  }
+
+  getKeywordChange() {
+    return this.keywordChange;
   }
 
   private queryalldocs = {
@@ -94,7 +122,7 @@ export class ElasticsearchService {
    * @function allSearch 
    * @description 모든 문서를 검색하는 함수를 실행한 뒤 article source까지 저장
    */
-  allSearchComplete(){
+  allSearchComplete() : void{
     this.save_search_result_from_hook(this.search_all_docs());
   }
 
@@ -108,7 +136,11 @@ export class ElasticsearchService {
    * @param _queryText
    * es에서 검색할 키워드 텍스트
    */
-  fullTextSearchComplete(_field, _queryText, startIndex? : number, docSize? : number) {
+  fullTextSearchComplete(_field  : string, _queryText : string, startIndex? : number, docSize? : number) : void{
+    if(!_field)
+      _field = searchOption.body;
+    if(!_queryText)
+      _queryText = this.keyword;
     this. save_search_result_from_hook(this.searchByText(_field, _queryText, startIndex, docSize));
   }
 
@@ -121,7 +153,7 @@ export class ElasticsearchService {
    * @function searchByText
    * @description search by keyword text matching
    */
-  searchByText(_field, _queryText, startIndex? : number, docSize? : number) {
+  searchByText(_field, _queryText, startIndex? : number, docSize? : number) : Promise<any> {
     if(!startIndex)
       startIndex = 0;
     if(!docSize)
@@ -156,7 +188,11 @@ export class ElasticsearchService {
   }
 
 
-  countByText(_field, _queryText){
+  countByText(_field  : string, _queryText : string) : Promise<any>{
+    if(!_field)
+      _field = searchOption.body;
+    if(!_queryText)
+      _queryText = this.keyword;
     return this.client.count({
       body: {
         query: {
@@ -165,7 +201,17 @@ export class ElasticsearchService {
           }
         }
       },
-    }).then(
+    })
+  }
+
+  countByTextComplete(field : string, queryText : string) : void{
+    this.countByText(field, queryText).then( countNum =>
+      this.countNum.next(countNum)
+    )
+  }
+
+  getCountNumber(field, queryText) : Promise<number>{
+    return this.countByText(field, queryText).then(
       res=>{
         return res.count;
       },
@@ -179,7 +225,7 @@ export class ElasticsearchService {
    * @param id : string
    * @description ES에서 검색하고자 하는 문서의 id을 검색해서 article source에 저장까지 완료
    */
-  IdSearchComplete(id : string){
+  IdSearchComplete(id : string) : void {
     this.save_search_result_from_hook(this.searchById(id));
   }
 
@@ -189,7 +235,7 @@ export class ElasticsearchService {
    * 
    * @param id : 검색할 id string
    */
-  searchById(id: string) {
+  searchById(id: string)  : Promise<any>{
 
     return this.client.search({
       filterPath: ["hits.hits"],
@@ -216,7 +262,7 @@ export class ElasticsearchService {
    * @param id : string array
    * @description ES에서 검색하고자 하는 문서의 id array을 검색해서 article source에 저장까지 완료
    */
-  MultIdSearchComplete(ids : string[]){
+  MultIdSearchComplete(ids : string[]) : void {
     this.save_search_result_from_hook(this.searchByManyId(ids));
   }
 
@@ -250,7 +296,7 @@ export class ElasticsearchService {
     });
   }
 
-  save_search_result_from_hook(hookFunc){
+  save_search_result_from_hook(hookFunc) : void{
     hookFunc.then(response => {
       //검색 후 observable에 저장
       // console.log(response)
@@ -267,7 +313,7 @@ export class ElasticsearchService {
    * 저장할 article array
    *
    */
-  transfer_docs_to_article_source(info: ArticleSource[]) {
+  transfer_docs_to_article_source(info: ArticleSource[]) : void {
     this.articleSource.next(info);
     // console.log("saved : ", this.articleSource);
   }
@@ -278,7 +324,7 @@ export class ElasticsearchService {
    */
 
 
-  getDefaultNumDocsPerPage(){
+  getDefaultNumDocsPerPage() : number{
     return this.DOC_NUM_PER_EACH_PAGE;
   }
 
@@ -308,11 +354,11 @@ export class ElasticsearchService {
    * @return numPage
    * @return numBloc
    */
-  async pagingAlgo(){
+  async pagingAlgo() : Promise<any>{
     //number of docs per page ← N
     // use predefined this.DOC_NUM_PER_EACH_PAGE;
     //number of pages ← number of total docs / N
-    let numTotalDocs = await this.countByText("post_body", this.keyword);
+    let numTotalDocs = await this.getCountNumber("post_body", this.keyword);
     // let numTotalDocs = res.payload.data;
     // console.log("community service numTotalDocs : ", res.payload.data);
 
@@ -338,7 +384,7 @@ export class ElasticsearchService {
   /**
    * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
    */
-  async loadListByPageIdx(start_idx: number) {
+  loadListByPageIdx(start_idx: number) : void {
     // let body = { cur_start_idx: start_idx };
     this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
     // let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();

@@ -96,9 +96,7 @@ export class SearchResultComponent implements OnInit {
   
   //Get result from flask
   async freqAnalysis() {
-    this.es.getKeyword().subscribe(res => {
-      this.searchKeyword = res;
-    })
+   
     this._router.navigateByUrl("search/freqAnalysis");
   }
 

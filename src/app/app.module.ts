@@ -16,7 +16,7 @@ import { LibraryModule } from './modules/homes/body/library/library.module';
 import { WordcloudService } from './modules/homes/graphs/wordcloud/wordcloud.service';
 // import { SearchBarComponent } from "./modules/homes/body/search/search-bar/search-bar.component";
 import { EPAuthService } from './modules/communications/fe-backend-db/membership/auth.service';
-import { ElasticsearchService } from './modules/communications/elasticsearch-service/elasticsearch.service';
+// import { ElasticsearchService } from './modules/communications/elasticsearch-service/elasticsearch.service';
 import { SearchHistoryComponent } from './modules/homes/body/main-home-container/search-history/search-history.component';
 import { AnalysisDatabaseService } from './modules/communications/fe-backend-db/analysis-db/analysisDatabase.service';
 import { CommunicationModule } from './modules/communications/communication.module';
@@ -51,7 +51,7 @@ import { CommonSearchResultDocumentListModule } from './modules/homes/body/share
     CommonSearchResultDocumentListModule
 
   ],
-  providers: [WordcloudService, EPAuthService, AnalysisDatabaseService, ElasticsearchService],
+  providers: [WordcloudService, EPAuthService, AnalysisDatabaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
