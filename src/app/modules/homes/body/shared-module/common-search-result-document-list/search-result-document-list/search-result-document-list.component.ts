@@ -1,6 +1,6 @@
 import { Component,OnInit,Input,OnChanges, Output, EventEmitter, OnDestroy,} from "@angular/core";
 import { Router } from "@angular/router";
-import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
+import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, BehaviorSubject, Subject, Observable, of, zip, concat, } from "rxjs";
 import { flatMap, mergeMap } from 'rxjs/operators';
@@ -24,8 +24,8 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
 
 
-  @Input() cat_button_choice : string[];//자료열람 : 주제 버튼 변경 되었을 때
-  @Input() is_lib_first : boolean;//자료 열람 : 처음 자료 열람으로 진입할 때
+  // @Input() cat_button_choice : string[];//자료열람 : 주제 버튼 변경 되었을 때
+  // @Input() searchMode : string;//자료 열람 : 처음 자료 열람으로 진입할 때
   @Input () isKeyLoaded : boolean;//키워드 검색으로 진입할 때
   @Output() related_keywords_ready = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
   // @Input() is_lib_first : boolean;
@@ -109,14 +109,14 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.countNumSubs.unsubscribe();
   }
   ngOnChanges(){
-    this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
+    // this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
 
-    this.isQueryFin = false;
+    // this.isQueryFin = false;
     // this.keyword_search();
 
     // let category = this.get_chosen_category();
   //   this.debug(category)
-    this.debug("search-result-doc-list", this.cat_button_choice);
+    // this.debug("search-result-doc-list", this.cat_button_choice);
     // this.get_category()
   //   this.discovery_search();
   //   this.debug("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
@@ -137,13 +137,13 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
      * 
      * search component 에서 behavioral subject으로 해결.
      */
-    if(this.is_lib_first){
-      this.queryText = "전체문서"
-      this.es.allCountComplete();
-      this.es.allSearchComplete();
-    }
+    // if(this.searchMode){
+    //   this.queryText = "전체문서"
+    //   this.es.allCountComplete();
+    //   this.es.allSearchComplete();
+    // }
 
-    else if(this.es.getKeyword()==""){
+    if(this.es.getCurrSearchMode() == SEARCHMODE.INIT){
       this.es.searchKeyword("북한");
     }
 
@@ -201,7 +201,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       this.queryText = this.es.getKeyword();
 
       this.debug("keyword search count num change result : ", num);
-      this.searchResultNum = num.count;
+      this.searchResultNum = num;
       this.loadPagesNumbers();
 
     })
@@ -217,7 +217,6 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
     
   }
-
 
     /**
    * 
@@ -251,13 +250,13 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
   async loadNextPage() {
     this.pageIndex += this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex,this.is_lib_first);
+    this.es.loadListByPageIdx(this.pageIndex);
   }
 
 
   async loadPriorPage() {
     this.pageIndex -= this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex,this.is_lib_first);
+    this.es.loadListByPageIdx(this.pageIndex);
   }
 
     /**
@@ -265,7 +264,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @param i 
    */
   async choosePageNum(i : number){
-    this.es.loadListByPageIdx(i * this.numDocsPerPages,this.is_lib_first);
+    this.es.loadListByPageIdx(i * this.numDocsPerPages);
     // window.location.reload();
     window.scroll(0,0);//맨 위로 스크롤
   }
@@ -286,7 +285,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.blocIdx++;
     this.pages = [];
     let newStartIdx = this.blocIdx * this.numPagePerBloc;
-    this.es.loadListByPageIdx(newStartIdx,this.is_lib_first);
+    this.es.loadListByPageIdx(newStartIdx);
 
 
 
@@ -313,7 +312,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.blocIdx--;
     this.pages = [];
     let newStartIdx = this.blocIdx * this.numPagePerBloc;
-    this.es.loadListByPageIdx(newStartIdx, this.is_lib_first);
+    this.es.loadListByPageIdx( newStartIdx);
     if(this.blocIdx < this.numBloc -1 ){//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
       for(let i = 0; i < this.numPagePerBloc ; i++ ){
         this.pages.push(newStartIdx + i);
@@ -395,7 +394,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.isKeyLoaded = false;//연관검색어 로딩 안되어있을 때 로딩 중 표시
     this.isRelatedLoaded = true;//plan to be removed//연관 검색어 로딩 안되었을 때 로딩 중 표시
 
-    this.idControl.clearIdList();
+    this.idControl.clearIDList();
     // this.userSearchHistory = [];//유저 검색 기록 표시. depreciated.
     // relatedKeywords = [];//연관검색어 담을 array
     this.search_result_doc_id_list = [];//ES에서 받은 결과 리스트의 id을 담을 array
@@ -432,7 +431,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
   select_this_doc(article_source_idx : number, related_doc_idx: number) {
     // this.debug("set this doc : ", article_source_idx);
-    this.idControl.setIdChosen(this.relatedDocs[article_source_idx][related_doc_idx]["id"]);
+    this.idControl.selecOneID(this.relatedDocs[article_source_idx][related_doc_idx]["id"]);
     this.navToDocDetail();
   }
 

@@ -6,6 +6,8 @@ import { ArticleSource } from "src/app/modules/homes/body/shared-module/common-s
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
 import { query } from '@angular/animations';
+import { IdControlService } from "src/app/modules/homes/body/search/service/id-control-service/id-control.service";
+
 
 class searchOption{
   static readonly  title = "post_title";
@@ -13,6 +15,14 @@ class searchOption{
   static readonly inst = "published_institution_url";
   static readonly author = "post_writer";
   static readonly body = "post_body";
+}
+
+
+export enum SEARCHMODE{
+  INIT,//굳이 INIT이 있는 이유 ; 디버깅 편하게 하려고. 아무것도 없이 search result doc list page에 오면 디버깅으로 인식해서 초기값 검색
+  ALL,
+  ID,
+  KEY
 }
 
 /**
@@ -31,7 +41,7 @@ class searchOption{
 export class ElasticsearchService {
   private client: Client;
   private articleSource : BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
-  private countNum : BehaviorSubject<any> = new BehaviorSubject<any>(0);
+  private countNum : BehaviorSubject<number> = new BehaviorSubject<any>(0);
   readonly DEFUALT_KEYWROD : string = "";
   // private keywordChange : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
 
@@ -44,17 +54,27 @@ export class ElasticsearchService {
   private keyword : string = this.DEFUALT_KEYWROD;
   private readonly  DOC_NUM_PER_EACH_PAGE : number = 10;
 
-  constructor(private ipSvc : IpService) {
+  currentSearchMode : SEARCHMODE = SEARCHMODE.INIT;
+
+  constructor(private ipSvc : IpService, private idCtrSvc : IdControlService) {
     if (!this.client) {
       this._connect();
     }
   }
-  readonly DEBUG : boolean = false;
+  readonly DEBUG : boolean = true;
 
 
   debug(...arg:any[]){
     if(this.DEBUG)
       console.log(arg);
+  }
+
+  setSearchMode(mode : SEARCHMODE){
+    this.currentSearchMode = mode;
+  }
+
+  getCurrSearchMode(){
+    return this.currentSearchMode;
   }
 
   searchKeyword(keyword : string){
@@ -68,6 +88,10 @@ export class ElasticsearchService {
   
   getCountNumChange() : Observable<any> {
     return this.countNum.asObservable();
+  }
+
+  setCountNumChange(num : number) {
+    this.countNum.next(num);
   }
 
   getArticleChange(){
@@ -151,8 +175,8 @@ export class ElasticsearchService {
    * @function allSearch 
    * @description 모든 문서를 검색하는 함수를 실행한 뒤 article source까지 저장
    */
-  allSearchComplete(start_idx? : number) : void{
-    this.save_search_result_from_hook(this.searchAllDocs(start_idx));
+  allSearchComplete(startIndex? : number) : void{
+    this.save_search_result_from_hook(this.searchAllDocs(startIndex));
   }
 
   /**
@@ -232,7 +256,7 @@ export class ElasticsearchService {
     this.countAllDocs().then( countNum =>
       {
         this.debug("all count complete : num", countNum);
-        this.countNum.next(countNum);
+        this.countNum.next(countNum.count);
       }
     )
   }
@@ -256,7 +280,7 @@ export class ElasticsearchService {
 
   countByTextComplete(field : string, queryText : string) : void{
     this.countByText(field, queryText).then( countNum =>
-      this.countNum.next(countNum)
+      this.countNum.next(countNum.count)
     )
   }
 
@@ -322,13 +346,13 @@ export class ElasticsearchService {
    * 
    * @param id : 검색할 id string
    */
-  searchByManyId(ids: string[]) {
+  searchByManyId(ids: string[],startIndex? : number, docSize? : number) {
     // console.log("es ts: the num of ids : "+ids.length);
     return this.client.search({
       // filterPath: ["hits.hits"],
       // index: "nkdb",
-      // from:0,//not work. github KUBiC issue # 34
-      // size: 10,//not work.
+      from:startIndex,
+      size: docSize,
       body: {
         query: {
           terms: {
@@ -415,7 +439,7 @@ export class ElasticsearchService {
     this.countNum.subscribe(num => {
 
       this.debug("community service numTotalDocs : ", num);
-      let numTotalDocs = num.count;
+      let numTotalDocs = num;
       // let numTotalDocs = res.payload.data;
 
       let numPage = Math.floor(numTotalDocs / this.DOC_NUM_PER_EACH_PAGE);
@@ -439,8 +463,8 @@ export class ElasticsearchService {
   }
 
 
-  nextSearch(start_idx: number, ){
-    return this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
+  nextSearch(startIndex: number, ){
+    return this.fullTextSearchComplete(searchOption.body, this.keyword, startIndex)
   }
 
 
@@ -448,15 +472,24 @@ export class ElasticsearchService {
   /**
    * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
    */
-  loadListByPageIdx(start_idx: number, isAllSearch? : boolean) : void {
-    // let body = { cur_start_idx: start_idx };
-    if(isAllSearch){
-      this.allSearchComplete(start_idx);
-      this.debug("load list by page index : isAllSearch", isAllSearch)
+  loadListByPageIdx(startIndex: number, docSize? : number ) : void {
+    // let body = { cur_start_idx: startIndex };
+    if(this.currentSearchMode == SEARCHMODE.ALL){
+      this.allSearchComplete(startIndex);
+      this.debug("load list by page index : isAllSearch", this.currentSearchMode)
     }
     // else if(isAllSearch == undefined)
+    else if(this.currentSearchMode == SEARCHMODE.KEY)
+      this.fullTextSearchComplete(searchOption.body, this.keyword, startIndex)
+    else if(this.currentSearchMode == SEARCHMODE.ID){
+      let partialIDs = this.idCtrSvc.getIDList().slice(startIndex,this.getDefaultNumDocsPerPage());
+
+      // let idList = this.idCtrSvc.getIDList();
+      // let partialList = idList.slice(startIndex,startIndex + 10)
+      // this.MultIdSearchComplete(partialList);
+    }
     else
-      this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
+      console.error("elasticsearch.service.ts : loadListByPageIdx parameter error.")
     // else
     //   console.error("elasticsearch.service.ts loadListByPageIdx: wrong syntax error");
     // let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();
