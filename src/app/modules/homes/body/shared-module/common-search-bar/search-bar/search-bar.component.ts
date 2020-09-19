@@ -6,7 +6,7 @@ import {
   Output
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
+import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { AnalysisDatabaseService } from '../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
@@ -55,6 +55,7 @@ export class SearchBarComponent implements OnInit {
   }
 
    search() {
+     this.es.setSearchMode(SEARCHMODE.KEY);
      this.es.searchKeyword(this.queryText);
       //  this.es.setKeyword(this.queryText);
       // resolve()

@@ -37,7 +37,7 @@ export class SearchDetailComponent implements OnInit {
 
   }
   goToDoc(r) {
-    this.idControl.setIdChosen(this.rcmdList[r]["id"]);
+    this.idControl.selecOneID(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 
@@ -47,7 +47,7 @@ export class SearchDetailComponent implements OnInit {
     this.isCloudLoaded = 0;
     this.isDocInfoLoaded = 0;
 
-    let id = this.idControl.getIdChosen();
+    let id = this.idControl.getOneID();
 
     this.db.load_related_docs(id).then(res => {
       this.rcmdList = res as [];
