@@ -24,7 +24,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
 
 
-  @Input() cat_button_choice : string;//자료열람 : 주제 버튼 변경 되었을 때
+  @Input() cat_button_choice : string[];//자료열람 : 주제 버튼 변경 되었을 때
   @Input() is_lib_first : boolean;//자료 열람 : 처음 자료 열람으로 진입할 때
   @Input () isKeyLoaded : boolean;//키워드 검색으로 진입할 때
   @Output() related_keywords_ready = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
@@ -114,10 +114,10 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.isQueryFin = false;
     // this.keyword_search();
 
-  //   let category = this.get_chosen_category();
+    // let category = this.get_chosen_category();
   //   this.debug(category)
-  //   this.debug("search-result-doc-list", this.cat_button_choice);
-  //   this.get_category()
+    this.debug("search-result-doc-list", this.cat_button_choice);
+    // this.get_category()
   //   this.discovery_search();
   //   this.debug("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
   //   this.is_lib_first = false;
