@@ -37,12 +37,12 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   readonly DEFUALT_KEYWROD : string = "북한산";
 
 
-  private keywordChange$ : Observable<string> = this.es.getKeywordChange();
+  // private keywordChange$ : Observable<string> = this.es.getKeywordChange();
   private countNumChange$ : Observable<any> = this.es.getCountNumChange();
   private articleChange$:  Observable<ArticleSource[]> = this.es.getArticleChange();
   private loginStatChage$  = this.auth.getLoginStatChange();
 
-  private keywordSubs : Subscription;
+  // private keywordSubs : Subscription;
   private countNumSubs : Subscription;
   private articleSubs : Subscription;
   private loginStatSubs : Subscription;
@@ -103,7 +103,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.keywordSubs.unsubscribe();
+    // this.keywordSubs.unsubscribe();
     this.loginStatSubs.unsubscribe();
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();

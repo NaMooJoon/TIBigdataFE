@@ -33,7 +33,7 @@ export class ElasticsearchService {
   private articleSource : BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
   private countNum : BehaviorSubject<any> = new BehaviorSubject<any>(0);
   readonly DEFUALT_KEYWROD : string = "";
-  private keywordChange : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
+  // private keywordChange : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
 
   // articleSource = this.articleSource.asObservable();
 
@@ -60,7 +60,7 @@ export class ElasticsearchService {
   searchKeyword(keyword : string){
     this.debug("key update : ", keyword)
     this.keyword = keyword;
-    this.keywordChange.next(keyword);
+    // this.keywordChange.next(keyword);
     this.fullTextSearchComplete("post_body", keyword);
     this.countByTextComplete("post_body", keyword);
   }
@@ -102,9 +102,9 @@ export class ElasticsearchService {
     // })
   }
 
-  getKeywordChange() {
-    return this.keywordChange;
-  }
+  // getKeywordChange() {
+  //   return this.keywordChange;
+  // }
 
   private queryalldocs = {
     query: {
