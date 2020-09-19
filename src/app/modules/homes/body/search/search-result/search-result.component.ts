@@ -101,7 +101,8 @@ export class SearchResultComponent implements OnInit {
   }
 
   relatedSearch(keyword: string) {
-    this.es.setKeyword(keyword);
+    console.log("hey?")
+    this.es.searchKeyword(keyword);
     // this.queryText = keyword;
     this.auth.addSrchHst(this.queryText);
 

@@ -4,7 +4,6 @@ import { ElasticsearchService } from 'src/app/modules/communications/elasticsear
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, BehaviorSubject, Subject, Observable, of, zip, concat, } from "rxjs";
 import { flatMap, mergeMap } from 'rxjs/operators';
-
 import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
@@ -40,8 +39,15 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
   private keywordChange$ : Observable<string> = this.es.getKeywordChange();
   private countNumChange$ : Observable<any> = this.es.getCountNumChange();
-  private loginStatChage$  = this.auth.getLoginStatChange();
   private articleChange$:  Observable<ArticleSource[]> = this.es.getArticleChange();
+  private loginStatChage$  = this.auth.getLoginStatChange();
+
+  private keywordSubs : Subscription;
+  private countNumSubs : Subscription;
+  private articleSubs : Subscription;
+  private loginStatSubs : Subscription;
+
+
   // private articleChangePrms : Promise<any> = this.es.getArticleChange().toPromise();
   // private articleSubscription$ : Subscription;
   // private countKeywordChange$ : Observable<number>;
@@ -89,17 +95,18 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     //   // //debug(info)
     // });
   }
-  readonly DEBUG : boolean = false;
+  readonly DEBUG : boolean = true;
 
   debug(...arg:any[]){
     if(this.DEBUG)
       console.log(arg);
   }
 
-  ngOnDestroy(): void {
-    // this.keywordChange$.unsubscribe();
-    // this.loginStatChage$.unsubscribe();
-    // this.articleChange$.unsubscribe();
+  ngOnDestroy() {
+    this.keywordSubs.unsubscribe();
+    this.loginStatSubs.unsubscribe();
+    this.articleSubs.unsubscribe();
+    this.countNumSubs.unsubscribe();
   }
   ngOnChanges(){
     this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
@@ -130,14 +137,20 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
      * 
      * search component 에서 behavioral subject으로 해결.
      */
+    if(this.is_lib_first){
+      this.queryText = "전체문서"
+      this.es.allCountComplete();
+      this.es.allSearchComplete();
+    }
 
-    if(this.es.getKeyword()=="")
+    else if(this.es.getKeyword()==""){
       this.es.searchKeyword("북한");
+    }
 
 
     this.debug("0 : start init : 외부 컴포넌트에서 search-result-document-list으로 진입")
     this.isQueryFin = false;
-    this.keyword_search();
+    this.loadingSearchResult();
   }
 
 
@@ -171,31 +184,34 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       * 
       * 
   */
-  async keyword_search() {
-    
+  async loadingSearchResult() {
     this.debug("0")
     this.initialize_search();//검색 결과 초기화
     this.debug("1");
     
-    this.articleChange$.subscribe(articles => {
-      // this.debug("article loaded")
+    this.articleSubs = this.articleChange$.subscribe(articles => {
+      this.debug("article loaded", articles)
       this.articleSources = articles
       this.create_result_doc_id_table();
       this.load_related_keywords();//검색 결과에서 연관 문서 및 키워드 호출
       
     });
 
-    this.countNumChange$.subscribe(num=> {
+    this.countNumSubs = this.countNumChange$.subscribe(num=> {
+      this.queryText = this.es.getKeyword();
+
       this.debug("keyword search count num change result : ", num);
       this.searchResultNum = num.count;
+      this.loadPagesNumbers();
+
     })
 
     this.update_login_stat();
-    this.keywordChange$.subscribe(()=>{
-      this.queryText = this.es.getKeyword();
+    // this.keywordSubs = this.keywordChange$.subscribe((key)=>{
+    //   this.debug("new keyword : ", key)
 
-      this.loadPagesNumbers();
-    })
+    //   this.loadPagesNumbers();
+    // })
     
     
 
@@ -211,7 +227,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   async loadPagesNumbers(){
     this.pages = []; //initlize
     let pageInfo = await this.es.pagingAlgo();
-    console.log("community compo : load pages : pageInfo : ", pageInfo);
+    this.debug("community compo : load pages : pageInfo : ", pageInfo);
     this.numPagePerBloc = pageInfo.numPagePerBloc;
     this.numPage = pageInfo.numPage;
     this.numBloc = pageInfo.numBloc;
@@ -235,13 +251,13 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
   async loadNextPage() {
     this.pageIndex += this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex);
+    this.es.loadListByPageIdx(this.pageIndex,this.is_lib_first);
   }
 
 
   async loadPriorPage() {
     this.pageIndex -= this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex);
+    this.es.loadListByPageIdx(this.pageIndex,this.is_lib_first);
   }
 
     /**
@@ -249,9 +265,67 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @param i 
    */
   async choosePageNum(i : number){
-    this.es.loadListByPageIdx(i * this.numDocsPerPages);
+    this.es.loadListByPageIdx(i * this.numDocsPerPages,this.is_lib_first);
     // window.location.reload();
     window.scroll(0,0);//맨 위로 스크롤
+  }
+
+
+  /**
+   * 다음 블록 버튼 눌렀을 때
+   */
+
+  private docList : {}[] = [];
+  private cur_start_idx : number = 0;
+  private blocIdx : number = 0;
+  private pageIdx : number = 0;
+
+
+  async pressNextBloc(){
+    this.docList = [];
+    this.blocIdx++;
+    this.pages = [];
+    let newStartIdx = this.blocIdx * this.numPagePerBloc;
+    this.es.loadListByPageIdx(newStartIdx,this.is_lib_first);
+
+
+
+    // this.docList = await this.cm_svc.loadListByPageIdx(newStartIdx);
+    // this.debug(this.docList);
+    if(this.blocIdx < this.numBloc -1 ){
+      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+        this.pages.push(newStartIdx + i);
+      }
+
+    }
+    else{
+      let redundentNumPages = this.numPage % this.numPagePerBloc;
+      for(let i = 0 ; i < redundentNumPages; i++){
+        this.pages.push(newStartIdx + i);
+      }
+    }
+
+  }
+
+  async pressPriorBloc(){
+    this.docList = [];
+
+    this.blocIdx--;
+    this.pages = [];
+    let newStartIdx = this.blocIdx * this.numPagePerBloc;
+    this.es.loadListByPageIdx(newStartIdx, this.is_lib_first);
+    if(this.blocIdx < this.numBloc -1 ){//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
+      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+        this.pages.push(newStartIdx + i);
+      }
+
+    }
+    else{
+      let redundentNumPages = this.numPage % this.numPagePerBloc;
+      for(let i = 0 ; i < redundentNumPages; i++){
+        this.pages.push(newStartIdx + i);
+      }
+    }
   }
 
 
@@ -297,7 +371,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @description 현재 유저의 로그인 상태를 확인한다.
    */
   update_login_stat(){
-    this.loginStatChage$.subscribe(stat=>{//로그인 확인해서 부가기능 활성화
+    this.loginStatSubs = this.loginStatChage$.subscribe(stat=>{//로그인 확인해서 부가기능 활성화
       this.isLogStat = stat;
     })
   }

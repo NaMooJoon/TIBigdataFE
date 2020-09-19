@@ -81,11 +81,11 @@
 </div>
 
 <div class="uk-flex-center" uk-grid>
-    <button class="uk-button uk-button-text " (click)="pressPriorBloc()">
+    <button *ngIf="blocIdx > 0" class="uk-button uk-button-text " (click)="pressPriorBloc()">
         < </button>
             <button class="uk-padding-remove uk-margin-left uk-button button-blue uk-button-small" style="width : 40px; height : 40px"
                 (click)="choosePageNum(i)" *ngFor="let i of pages"> {{  i  }} </button>
             <span>&nbsp;</span>
-            <button class="uk-button uk-button-text " (click)="pressNextBloc()"> > </button>
+            <button *ngIf="numBloc-1 > blocIdx"class="uk-button uk-button-text " (click)="pressNextBloc()"> > </button>
             <br>
 </div>

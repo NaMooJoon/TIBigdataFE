@@ -16,7 +16,12 @@ export class ArticleDetailsComponent implements OnInit {
   docId : string;
   constructor(    private db: AnalysisDatabaseService, public _router: Router ,    private idControl: IdControlService,
     ) { }
+    readonly DEBUG : boolean = false;
 
+    debug(...arg:any[]){
+      if(this.DEBUG)
+        console.log(arg);
+    }
 
   ngOnInit() {
     // console.log(this.article)
@@ -55,7 +60,7 @@ export class ArticleDetailsComponent implements OnInit {
     load_top_keywords() {
       // console.log("article detail load top keyword start : doc_id", this.docId, " source : ", this.article)
       this.db.get_tfidf_value(this.docId).then(res => {
-        // console.log("article detail res : ", res)
+        this.debug("article detail res : ", res)
         let data = res as []
         
         for (let n = 0; n < data.length; n++) {

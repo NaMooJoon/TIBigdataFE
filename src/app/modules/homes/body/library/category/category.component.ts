@@ -79,6 +79,13 @@ export class CategoryComponent implements OnInit {
   }
 
 
+
+  /**
+   * 
+   * 현재 진입이 첫번째 자료열람 페이지 진입인지 확인한다.
+   * ngOnchange lifecycle 사용해서 값 업데이트하는데, 처음 들어온 경우 전체 문서 로드해야 한다.
+   * 
+   */
   check_is_all_docs(){
     this.is_lib_first = this.cat_button_choice == this.cat_choice_init ? true : false;
     console.log("cat compo : check is all docs : ", this.is_lib_first);

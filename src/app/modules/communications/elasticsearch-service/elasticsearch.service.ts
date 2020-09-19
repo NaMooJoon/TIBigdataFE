@@ -31,7 +31,7 @@ class searchOption{
 export class ElasticsearchService {
   private client: Client;
   private articleSource : BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
-  private countNum : BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private countNum : BehaviorSubject<any> = new BehaviorSubject<any>(0);
   readonly DEFUALT_KEYWROD : string = "";
   private keywordChange : BehaviorSubject<string> = new BehaviorSubject(this.DEFUALT_KEYWROD);//to stream to subscribers
 
@@ -49,9 +49,16 @@ export class ElasticsearchService {
       this._connect();
     }
   }
+  readonly DEBUG : boolean = false;
+
+
+  debug(...arg:any[]){
+    if(this.DEBUG)
+      console.log(arg);
+  }
 
   searchKeyword(keyword : string){
-    console.log("key update : ", keyword)
+    this.debug("key update : ", keyword)
     this.keyword = keyword;
     this.keywordChange.next(keyword);
     this.fullTextSearchComplete("post_body", keyword);
@@ -110,10 +117,32 @@ export class ElasticsearchService {
    * @function search_all_docs
    * @description 모든 문서를 반환
    */
-  search_all_docs(): any {
+  searchAllDocs(startIndex? : number, docSize? : number): any {
+    this.debug("search all docs init")
+
+    if(!startIndex)
+      startIndex = 0;
+    if(!docSize)
+      docSize = this.DOC_NUM_PER_EACH_PAGE;
+   
     return this.client.search({
-      body: this.queryalldocs,
-      filterPath: ["hits.hits._source"]
+        body: this.queryalldocs,
+        from: startIndex,
+        size: docSize,
+        filterPath: [
+          "hits.hits._source",
+          "hits.hits._id",
+          "hits.total",
+          "_scroll_id"
+        ],
+     
+        _source: [
+          "post_title",
+          "post_date",
+          "published_institution_url",
+          "post_writer",
+          "post_body"
+        ]
     })
   }
 
@@ -122,8 +151,8 @@ export class ElasticsearchService {
    * @function allSearch 
    * @description 모든 문서를 검색하는 함수를 실행한 뒤 article source까지 저장
    */
-  allSearchComplete() : void{
-    this.save_search_result_from_hook(this.search_all_docs());
+  allSearchComplete(start_idx? : number) : void{
+    this.save_search_result_from_hook(this.searchAllDocs(start_idx));
   }
 
   /**
@@ -185,6 +214,27 @@ export class ElasticsearchService {
           "post_body"
         ]
       })
+  }
+
+
+  countAllDocs(){
+    return this.client.count({
+      body: this.queryalldocs,
+      // filterPath: ["hits.hits._source"]
+    })
+  }
+
+    /**
+   * @function allCountComplete 
+   * @description 모든 문서 수 검색하는 함수를 실행한 뒤 article source까지 저장
+   */
+  allCountComplete() : void{
+    this.countAllDocs().then( countNum =>
+      {
+        this.debug("all count complete : num", countNum);
+        this.countNum.next(countNum);
+      }
+    )
   }
 
 
@@ -299,7 +349,7 @@ export class ElasticsearchService {
   save_search_result_from_hook(hookFunc) : void{
     hookFunc.then(response => {
       //검색 후 observable에 저장
-      // console.log(response)
+      this.debug("save search result from hook",response)
       this.transfer_docs_to_article_source(response.hits.hits);
     });
   }
@@ -317,6 +367,8 @@ export class ElasticsearchService {
     this.articleSource.next(info);
     // console.log("saved : ", this.articleSource);
   }
+
+
 
 
   /**
@@ -358,25 +410,37 @@ export class ElasticsearchService {
     //number of docs per page ← N
     // use predefined this.DOC_NUM_PER_EACH_PAGE;
     //number of pages ← number of total docs / N
-    let numTotalDocs = await this.getCountNumber("post_body", this.keyword);
-    // let numTotalDocs = res.payload.data;
-    // console.log("community service numTotalDocs : ", res.payload.data);
+    return new Promise(resolve => {
 
-    let numPage = Math.floor(numTotalDocs / this.DOC_NUM_PER_EACH_PAGE);
-    //if number of total docs % N > 0:
-    if (numTotalDocs % this.DOC_NUM_PER_EACH_PAGE > 0)
-    //  then number of pages ++
-      numPage++;  
-    //number of pages per bloc ← M
-    // let numPagePerBloc = this.DOC_NUM_PER_EACH_PAGE;
-    let numPagePerBloc = 10;
-    //number of bloc ← number of pages / M
-    let numBloc = Math.floor(numPage / numPagePerBloc);
-    //if number of pages % M > 0:
-    if(numPage % numPagePerBloc > 0)
-    //  then number of bloc ++
-      numBloc++;
-    return { numPage : numPage, numPagePerBloc : numPagePerBloc, numBloc : numBloc};
+    this.countNum.subscribe(num => {
+
+      this.debug("community service numTotalDocs : ", num);
+      let numTotalDocs = num.count;
+      // let numTotalDocs = res.payload.data;
+
+      let numPage = Math.floor(numTotalDocs / this.DOC_NUM_PER_EACH_PAGE);
+      //if number of total docs % N > 0:
+      if (numTotalDocs % this.DOC_NUM_PER_EACH_PAGE > 0)
+      //  then number of pages ++
+        numPage++;  
+      //number of pages per bloc ← M
+      // let numPagePerBloc = this.DOC_NUM_PER_EACH_PAGE;
+      let numPagePerBloc = 10;
+      //number of bloc ← number of pages / M
+      let numBloc = Math.floor(numPage / numPagePerBloc);
+      //if number of pages % M > 0:
+      if(numPage % numPagePerBloc > 0)
+      //  then number of bloc ++
+        numBloc++;
+      this.debug("page result : ",{ numPage : numPage, numPagePerBloc : numPagePerBloc, numBloc : numBloc})
+      resolve( { numPage : numPage, numPagePerBloc : numPagePerBloc, numBloc : numBloc});
+    })
+  })
+  }
+
+
+  nextSearch(start_idx: number, ){
+    return this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
   }
 
 
@@ -384,9 +448,17 @@ export class ElasticsearchService {
   /**
    * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
    */
-  loadListByPageIdx(start_idx: number) : void {
+  loadListByPageIdx(start_idx: number, isAllSearch? : boolean) : void {
     // let body = { cur_start_idx: start_idx };
-    this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
+    if(isAllSearch){
+      this.allSearchComplete(start_idx);
+      this.debug("load list by page index : isAllSearch", isAllSearch)
+    }
+    // else if(isAllSearch == undefined)
+    else
+      this.fullTextSearchComplete(searchOption.body, this.keyword, start_idx)
+    // else
+    //   console.error("elasticsearch.service.ts loadListByPageIdx: wrong syntax error");
     // let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();
     // return this.saveResponse(res);
   }
@@ -403,7 +475,7 @@ export class ElasticsearchService {
     this.client = new elasticsearch.Client({
       host: es_url,
       headers: {
-        'Access-Control-Allow-Origin': this.ipSvc.get_FE_Ip()
+        'Access-Control-Allow-Origin': this.ipSvc.adaptIp(this.ipSvc.get_FE_Ip())+this.ipSvc.getAngularPort()
       }
       // log: "trace"//to log the query and response in stdout
     });

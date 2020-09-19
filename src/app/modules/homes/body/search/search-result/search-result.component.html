@@ -15,7 +15,7 @@
         <ng-template #infoLoadFin>
             <ul class="keyword-list" *ngFor="let keyword of relatedKeywords">
                 <li>
-                    <a (click)="search_realted_keyword(keyword)" style="font : 17pt; color: #3d3d3d;">{{ keyword }}</a>
+                    <a (click)="relatedSearch(keyword)" style="font : 17pt; color: #3d3d3d;">{{ keyword }}</a>
                 </li>
             </ul>
         </ng-template>
