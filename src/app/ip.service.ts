@@ -48,7 +48,7 @@ export class IpService {
   USER_BE_PORT = "4000";
   FLASK_PORT = "5000";
   ES_PORT = "9200";
-  ES_INDEX = "/frontend_test";
+  ES_INDEX = "/nkdb09192";
   ANGULAR_PORT = "4200";
   
 
