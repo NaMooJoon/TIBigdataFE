@@ -61,7 +61,7 @@ export class ElasticsearchService {
       this._connect();
     }
   }
-  readonly DEBUG : boolean = true;
+  readonly DEBUG : boolean = false;
 
 
   debug(...arg:any[]){

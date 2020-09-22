@@ -20,7 +20,7 @@ export class AnalysisDatabaseService {
     private http: HttpClient,
     private docControl: DocumentService
   ) { }
-  readonly DEBUG : boolean = false;
+  readonly DEBUG : boolean = true;
 
   debug(...arg:any[]){
     if(this.DEBUG)
@@ -59,12 +59,15 @@ export class AnalysisDatabaseService {
     * @Param sim : if request cosine similarity of document
   */
   async get_related_docs_table(ids: string | string[], num?: number, sim? : boolean) {
-    this.debug("in db getRcmdTable, input ids : ", ids);
+    this.debug("rcmd 1 : in db getRcmdTable, input ids : ", ids);
     let res = await this.http.post<any>(this.GET_RCMD_URL, { "id": ids, "num": num, "sim" : sim }).toPromise()
     if(res.succ){
 
       // this.debug("in db rcmdTable : ",res);
       return res.payload;
+    }
+    else{
+      console.error("get related docs table error")
     }
   }
 
@@ -79,7 +82,7 @@ export class AnalysisDatabaseService {
   */
 
   async get_tfidf_value(ids: string | string[] , num?: number, isVal? : boolean) {
-    this.debug("in db : getTFIDF ids:", ids);
+    this.debug("keyword1 : in db : getTFIDF ids:", ids);
     // this.http.get<any>(this.URL + "/keyword/test").subscribe(
     //   res=>{
     //     this.debug("get test" ,res)
@@ -94,7 +97,7 @@ export class AnalysisDatabaseService {
     return new Promise(resolve=>{
       this.http.post<any>(this.GET_KEYWORDS_URL, { "id": ids, "num": num, "isVal": isVal }).subscribe(
         res=>{
-          this.debug(res)
+          this.debug("keyword 2 : in db : keyword result : ", res)
           resolve(res);
         },
         err => this.debug(err),
@@ -114,10 +117,10 @@ export class AnalysisDatabaseService {
    */
   async load_related_docs(id: string) {
     let _rcmdIdsRes = await this.get_related_docs_table(id)
-    this.debug("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
+    this.debug("rcmd 2 : in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
     let rcmdIds = _rcmdIdsRes[0]["rcmd"];
     let _titlesRes = await this.docControl.convert_id_to_doc_title(rcmdIds as string[])
-    this.debug("in db : rcmdRes:", _titlesRes)
+    this.debug("rcmd 3 : in db : rcmdRes:", _titlesRes)
 
     let titles = _titlesRes as []
 
@@ -127,7 +130,7 @@ export class AnalysisDatabaseService {
       return { "id": rcmdIds[i], "title": t };
     })
 
-    this.debug("relatedDocs:", relatedDocs);
+    this.debug("rcmd 4 : relatedDocs:", relatedDocs);
     return relatedDocs;
   }
 

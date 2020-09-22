@@ -94,7 +94,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     //   // //debug(info)
     // });
   }
-  readonly DEBUG : boolean = true;
+  readonly DEBUG : boolean = false;
 
   debug(...arg:any[]){
     if(this.DEBUG)

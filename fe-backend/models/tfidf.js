@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const tfidfSchema = new Schema({
     docID : String,
     docTitle : String,
-    tfidf : [],
+    TFIDF : [],
     lastUpdate : Date
 })  
 
