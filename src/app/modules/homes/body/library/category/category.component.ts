@@ -145,31 +145,31 @@ async search_category(){
   this.idControl.clearIDList();
   let category = this.get_chosen_category();
 
-  switch (category){
-    case "정치":
-        category = "pol";
-        break;
-    case "경제":
-        category = "eco";
-        break;
-    case "사회":
-        category = "soc";
-        break;
-    case "문화":
-        category = "cul";
-        break;
-    case "국제":
-        category = "int";
-        break;
-    case "IT":
-        category = "it";
-        break;
-    case "스포츠":
-        category = "spo";
-        break;
+  // switch (category){
+  //   case "정치":
+  //       category = "pol";
+  //       break;
+  //   case "경제":
+  //       category = "eco";
+  //       break;
+  //   case "사회":
+  //       category = "soc";
+  //       break;
+  //   case "문화":
+  //       category = "cul";
+  //       break;
+  //   case "국제":
+  //       category = "int";
+  //       break;
+  //   case "IT":
+  //       category = "it";
+  //       break;
+  //   case "스포츠":
+  //       category = "spo";
+  //       break;
 
 
-  }
+  // }
      
   // if(category == "전체 
   
