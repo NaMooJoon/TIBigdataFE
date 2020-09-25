@@ -11,7 +11,7 @@ const routes: Routes = [
     component: SearchRootComponent,
     children: [
       {
-        path: "result",
+        path: "",
         component: SearchResultComponent
       },
       {

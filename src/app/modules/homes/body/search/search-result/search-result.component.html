@@ -6,7 +6,7 @@
 
     <!-- 연관검색어 -->
     <div class="uk-flex-center" uk-grid>
-        <button class="uk-button uk-button-text" style="font-weight : bold; font:18 pt; color : #52b9ff">
+        <button class="uk-button uk-button-text">
             연관검색어&nbsp;&nbsp;<span uk-icon="icon: info; ratio:0.8"></span>
         </button>
         <div uk-spinner="ratio: 2.5 " *ngIf="isKeyLoaded == false; else infoLoadFin">
@@ -15,40 +15,53 @@
         <ng-template #infoLoadFin>
             <ul class="keyword-list" *ngFor="let keyword of relatedKeywords">
                 <li>
-                    <a (click)="relatedSearch(keyword)" style="font : 17pt; color: #3d3d3d;">{{ keyword }}</a>
+                    <a (click)="relatedSearch(keyword)">{{ keyword }}</a>
                 </li>
             </ul>
         </ng-template>
     </div>
 
-    <!-- 하단부 -->
     <!-- 수평선 긋기 -->
-    <hr style="border : 0; height : 0.5pt; ; background :  #606060">
+    <hr />
+
+    <!-- 세부메뉴 : 키워드분석, 검색 결과는 몇개 입니다, 최신순, 10건 씩 보기 -->
+    <!-- 키워드분석 -->
+    <div uk-grid>
+        <div class="uk-width-expand">
+
+            <button (click)="freqAnalysis()" class="uk-button uk-button-primary uk-align-center">
+                키워드분석
+            </button>
+        </div>
+
+        <div class="uk-width-expand">
+            검색 키워드에 대한 검색 결과는 몇개 입니다.
+        </div>
+
+        <div class="uk-width-medium">
+
+            <button class="uk-button uk-button-primary bt-color">
+                최신순
+            </button>
+
+            <button class="uk-button uk-button-primary">
+                10개 씩 보기
+            </button>
+        </div>
+    </div>
 
 
 
 
 
 
-
+    <!-- 하단부 -->
     <div class="uk-container" uk-grid>
-        <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design -->
+        <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design-->
         <div class="uk-width-1-4 left-wing">
-
-            <!-- 세부메뉴 : 키워드분석-->
-            <div calss="uk-container">
-                <!-- 키워드분석 -->
-                <div class="keyword-anls uk-width-1-1">
-                    <button (click)="freqAnalysis()" class="uk-button button-blue" style="font-size:21px;">
-                        키워드분석
-                    </button>
-                </div>
-            </div>
-
             <!-- border-radius round outline -->
-            <div class="left-outline">
+            <div class="outline">
                 <!-- 문서 저장 KEEP -->
-         
                 <div class="uk-margin-small" uk-grid>
                     <div class="uk-align-center" *ngIf="isLogStat">
                         <button (click)="keepMyDoc()" class="uk-button uk-button-primary">
@@ -60,20 +73,32 @@
                 <!-- 좌측 검색 필터 -->
                 <div class="filter-in-result">
                     <div>
-                        filter-in-result
+                        <!-- filter-in-result -->
                     </div>
                     <app-search-result-filter></app-search-result-filter>
                 </div>
             </div>
         </div>
-        <!-- parent keyLoaded {{child.isKeyLoaded}} -->
 
         <!-- 중앙 검색 결과 -->
         <div class="uk-width-3-4 middle-result-area">
             <!-- middle-result-area -->
-            <app-search-result-document-list (related_keywords_ready)="loadRealtedKeywords($event)" #child></app-search-result-document-list>
+            <app-search-result-document-list></app-search-result-document-list>
         </div>
 
+        <!-- 우측 검색 기록 -->
+        <div class="uk-width-small">
+            <div *ngIf="isLogStat">
 
+                검색 기록
+                <div class="uk-card uk-card-body uk-card-default">
+                    <div *ngFor="let hst of userSearchHistory; index as i">
+                        <div uk-grid>
+                            <a (click)="relatedSearch(hst)">{{ hst }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
