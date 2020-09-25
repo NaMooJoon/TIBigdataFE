@@ -28,7 +28,7 @@ export class UserpageComponent implements OnInit {
   // private myDocsNum : Number;
   private myHst: string[] = [];
   private isDocEmpty: boolean = false;
-  private user_menu : string = "my_keep";
+  private user_menu : string = "";
 
 
   constructor(
@@ -42,7 +42,7 @@ export class UserpageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._auth.getLoginStatChange().subscribe((logstat) => {
+    this._auth.getLogInObs().subscribe((logstat) => {
       this.getKeepDocs();
       this.getMyHst()
       // console.log(logstat)
@@ -55,7 +55,6 @@ export class UserpageComponent implements OnInit {
   }
 
   user_menu_set(event : string){
-      console.log("menu : ",event)
       this.user_menu = event;
   }
 
