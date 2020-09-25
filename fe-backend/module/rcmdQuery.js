@@ -32,7 +32,7 @@ function getRcmdTbl(req, res) {
     let ids = req.body["id"];
 
     // console.log("post getRcmdTbl")
-    // console.log(ids)
+    console.log(ids)
     // console.log(typeof(ids))
     //연관문서의 수를 몇개까지 반환해줄지 결정한다. 전달받은게 없으면 default으로 5개 반환한다.
     let num = req.body["num"]; //could be undefined if does not request specific num.
@@ -53,7 +53,7 @@ function getRcmdTbl(req, res) {
         matchQuery = { docID: { $in: ids } }
     
     // console.log("right b4 equey")
-    // console.log(matchQuery)
+    console.log(matchQuery)
    
     Keywords.aggregate(
         [

@@ -13,7 +13,7 @@ router.get("/test", (req, res) => {
         if (error) {
             console.log(error);
         }
-        // console.log(val)
+        console.log(val)
         res.json(val);
     });
 });
@@ -22,8 +22,9 @@ router.get("/test", (req, res) => {
  * @description 받은 id 혹은 id list에 대해 그 문서의 tfidf 값을 반환해준다.
  */
 function getKeyVal(req, res) {
-    // console.log(req.body);
+    console.log("tfidf/getKeyVal");
     let ids = req.body["id"];
+    console.log("ids : ", ids)
 
     if (typeof (ids) == "string")//only send one string 
         matchQuery = { docID: ids }
@@ -82,7 +83,7 @@ function getKeyVal(req, res) {
 
         ],
         (err, docs) => {
-            // console.log("aggragation result: ")
+            console.log("getKeyVal result: ")
             if (err)
                 console.log(err)
             // console.log(docs)

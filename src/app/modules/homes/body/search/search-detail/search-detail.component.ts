@@ -32,59 +32,37 @@ export class SearchDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("loadpage : ngoninit");
-    this.loadPage();
+    this.load_new_document();
 
 
   }
   goToDoc(r) {
-    // console.log(r)
-    this.idControl.setIdChosen(this.rcmdList[r]["id"]);
-    // console.log("goToDoc : ", this.rcmdList[r]["id"])
-    this.loadPage();
-    // this.rcmd.goToDoc(r);
+    this.idControl.selecOneID(this.rcmdList[r]["id"]);
+    this.load_new_document();
   }
 
-  loadPage() {
+  load_new_document() {
     // this.isLoaded = 0;
     this.isRelatedLoaded = 0;
     this.isCloudLoaded = 0;
     this.isDocInfoLoaded = 0;
-    // this.relateToggle = false;
-    // this.article = this.idControl.getArticle()["_source"];
-    console.log("loadpage : loadpage")
-    let id = this.idControl.getIdChosen();
-    console.log("loadPage : id : " + id)
-    // this.es.idSearch(id).then((r) =>{
-    //   this.article = r;
-    // });
-    this.db.getRelatedDocs(id).then(res => {
+
+    let id = this.idControl.getOneID();
+
+    this.db.load_related_docs(id).then(res => {
       this.rcmdList = res as [];
-      // console.log("loadPage : from db : ", res)
-      // console.log("load page : get recommm ok")
       this.isRelatedLoaded ++;
     });
-    // this.rcmd.getRcmd([id]).then((data)=>{
-    //   // console.log(data);
-    //   this.rcmdList = data as [];
-    //   console.log("from rcmd : ", data)
-    // })
 
     this.es.searchById(id).then((res) => {
-      // this.article = res.hits.hits._source
       this.article = res["hits"]["hits"][0]["_source"];
-      console.log("loadPage : es response ok : ", this.article);
-      // console.log(this.article)
       this.isDocInfoLoaded ++;
 
     })
     this.wordcloud.createCloud(id)
       .then((data) => {
-        // console.log("load{age : wordcloud info responseo ok")
         this.cData = data as CloudData[]
         this.isCloudLoaded ++;
-        // console.log("cloud ok : ", true)
-        // console.log("detail comp data store test : " + this.cData);
       });
     // let id = this.idControl.getArticle()["_id"];
 
@@ -94,9 +72,12 @@ export class SearchDetailComponent implements OnInit {
   // cldData: CloudData;
   options: CloudOptions = {
     // if width is between 0 and 1 it will be set to the size of the upper element multiplied by the value
-    width: 600,
-    height: 300,
-    overflow: false
+    width: 1000,
+    height: 600,
+    // font : "bold",
+    // overflow: true,
+    // strict : true
+    // randomizeAngle : true
   };
 
 
