@@ -1,82 +1,87 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/uikit/src/less/uikit.theme.less";
+@import url("https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css");
 
 @color-default: #484848;
 @search-placeholder-color: @color-default;
 
-.uk-search-input::placeholder{
-    font-weight: bold;
+html {
+  height: 100%;
 }
 
-.uk-navbar-nav-item(){
-    text-transform: none;
-    color: @color-default;
-    font-weight: 500;
+.uk-search-input::placeholder {
+  font-weight: bold;
 }
 
-.hook-button(){
-    border-radius: 5px;
-    text-transform: none;
+.uk-navbar-nav-item() {
+  text-transform: none;
+  color: @color-default;
+  font-weight: 500;
+}
+
+.hook-button() {
+  border-radius: 5px;
+  text-transform: none;
 
 }
 
-.uk-button{
-    border-radius: 20px;
+.uk-button {
+  border-radius: 20px;
 }
 
-.button-gray{
-    background-color: #f0f2f2;
+.button-gray {
+  background-color: #f0f2f2;
 }
 
-.button-dark-gray{
-    background-color: #606060;
-}
-.button-blue{
-    background-color: #52b9ff;
-    color:white;
+.button-dark-gray {
+  background-color: #606060;
 }
 
-.button-white{
-    background-color: white;
-    
+.button-blue {
+  background-color: #52b9ff;
+  color: white;
 }
 
-.button-outline{
-    border: 1px solid #8a8d8e;
-    border-radius: 20px;
-    
+.button-white {
+  background-color: white;
+
 }
 
-.left-outline{
-    padding-bottom: 30px;
-    border-top: 0.5pt solid #606060;
-    border-right: 0.5pt solid #606060;
-    border-bottom: 0.5pt solid #606060;
-    border-radius: 0px 70px 70px 0px ;
+.button-outline {
+  border: 1px solid #8a8d8e;
+  border-radius: 20px;
+
 }
 
-.right-outline{
-    padding-bottom: 30px;
-    border-top: 0.5pt solid #606060;
-    border-left: 0.5pt solid #606060;
-    border-bottom: 0.5pt solid #606060;
-    border-radius: 70px 0px 0px 70px ;
+.left-outline {
+  padding-bottom: 30px;
+  border-top: 0.5pt solid #606060;
+  border-right: 0.5pt solid #606060;
+  border-bottom: 0.5pt solid #606060;
+  border-radius: 0px 70px 70px 0px;
 }
 
-.outline{
-    border: 1px solid black;
-    border-radius: 70px;
+.right-outline {
+  padding-bottom: 30px;
+  border-top: 0.5pt solid #606060;
+  border-left: 0.5pt solid #606060;
+  border-bottom: 0.5pt solid #606060;
+  border-radius: 70px 0px 0px 70px;
 }
 
-.required{
-    color: red;
+.outline {
+  border: 1px solid black;
+  border-radius: 70px;
 }
 
-.text-red{
-    color:red
+.required {
+  color: red;
+}
+
+.text-red {
+  color: red
 }
 
 
 
 // community module
-
