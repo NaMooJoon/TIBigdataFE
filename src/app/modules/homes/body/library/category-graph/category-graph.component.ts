@@ -39,7 +39,7 @@ export class CatGraphComponent implements OnInit {
     // console.log("started")
     this.db.getTopicTable().then(data => {
       // console.log("test");
-      // console.log(data);
+      console.log(data);
       // this.configService.getConfig().subscribe(data => {
       /**
        * 플라스크는 업데이트가 있을 때마다 static file을 업데이트 해서 asset 폴더에 넣어준다.

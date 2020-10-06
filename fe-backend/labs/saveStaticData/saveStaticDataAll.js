@@ -6,9 +6,9 @@ const Topic = require('../../models/topic');
 
 
 
-let modelArr = [rcmd];
+let modelArr = [keyword];
 
-let modelArr = [rcmd, keyword,Topic];
+// let modelArr = [rcmd, keyword,Topic];
 let numDataArr = [];
 
 
@@ -16,8 +16,8 @@ async function run() {
 
 
     console.log('Connected to mongodb');
-    await sendTopic();
-    await sendRcmd();
+    // await sendTopic();
+    // await sendRcmd();
     await sendTFIDF();
     console.log("plz wait a min...");
     let flag = 0;
@@ -112,7 +112,7 @@ async function sendRcmd() {
 
 async function sendTFIDF() {
     console.log("sending tfidf data started...")
-    let rawTfidfData = fs.readFileSync('./tfidfData.json')
+    let rawTfidfData = fs.readFileSync('./tfidfData0919.json')
     if (!rawTfidfData)
         throw "read file error in tfidf"
     let tfidfData = JSON.parse(rawTfidfData)

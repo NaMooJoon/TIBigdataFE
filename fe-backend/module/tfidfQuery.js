@@ -3,12 +3,15 @@ const router = express.Router();
 const Keywords = require("../models/tfidf");
 
 router.get("/", (req, res) => {
-    res.send("tfidfQuery");
+    Keywords.findOne().exec(res => {
+        res.send(res);
+        
+    })
 });
 
 router.get("/test", (req, res) => {
-    // console.log("work!");
-    let id = "5de1134ab53863d63aa55309";
+    console.log("work!");
+    let id = "5f65aececd17436ac6436f4a";
     Keywords.findOne({ docID: id }, (error, val) => {
         if (error) {
             console.log(error);
@@ -51,21 +54,21 @@ function getKeyVal(req, res) {
             // { $addFields : { keywords : }},
             {
                 $project: {
-                    tfidf: {
-                        $slice: ["$tfidf", num, num],//3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
+                    TFIDF: {
+                        $slice: ["$TFIDF", num, num],//3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
                     },
                 }
             },
             {
-                $unwind: "$tfidf"//array을 풀어서 하나의 array으로 만든다.
+                $unwind: "$TFIDF"//array을 풀어서 하나의 array으로 만든다.
             },
             {
                 $project: {
-                    tfidf: {
+                    TFIDF: {
                         $cond: {
                             if: isVal,
-                            then: "$tfidf",
-                            else: { $arrayElemAt: ["$tfidf", 0] }
+                            then: "$TFIDF",
+                            else: { $arrayElemAt: ["$TFIDF", 0] }
 
                         }
                     }
@@ -74,7 +77,7 @@ function getKeyVal(req, res) {
             {
                 $group: {
                     _id: "$_id",
-                    tfidf: { $addToSet: "$tfidf" }
+                    TFIDF: { $addToSet: "$tfidf" }
 
                 }
             }

@@ -224,10 +224,12 @@ export class ElasticsearchService {
           "_scroll_id"
         ],
         body: {
+          
           query: {
-            match_phrase_prefix: {
-              [_field]: _queryText
-            }
+            multi_match : {
+              query:    _queryText, 
+              fields: [ "file_extracted_content", "post_body" ] 
+            } 
           }
         },
         _source: [
@@ -270,8 +272,9 @@ export class ElasticsearchService {
     return this.client.count({
       body: {
         query: {
-          match_phrase_prefix: {
-            [_field]: _queryText
+          multi_match : {
+            query:    _queryText, 
+            fields: [ "file_extracted_content", "post_body" ] 
           }
         }
       },
