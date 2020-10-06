@@ -1,8 +1,9 @@
-import { Component,OnInit,Input, Output, EventEmitter, OnDestroy,} from "@angular/core";
+import { Component,OnInit,Input,OnChanges, Output, EventEmitter, OnDestroy,} from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
-import { Subscription, Observable, } from "rxjs";
+import { Subscription, BehaviorSubject, Subject, Observable, of, zip, concat, } from "rxjs";
+import { flatMap, mergeMap } from 'rxjs/operators';
 import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
@@ -94,7 +95,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     //   // //debug(info)
     // });
   }
-  readonly DEBUG : boolean = false;
+  readonly DEBUG : boolean = true;
 
   debug(...arg:any[]){
     if(this.DEBUG)
@@ -107,7 +108,21 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();
   }
- 
+  ngOnChanges(){
+    // this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
+
+    // this.isQueryFin = false;
+    // this.keyword_search();
+
+    // let category = this.get_chosen_category();
+  //   this.debug(category)
+    // this.debug("search-result-doc-list", this.cat_button_choice);
+    // this.get_category()
+  //   this.discovery_search();
+  //   this.debug("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
+  //   this.is_lib_first = false;
+
+  }
 
   ngOnInit() {
     /**
