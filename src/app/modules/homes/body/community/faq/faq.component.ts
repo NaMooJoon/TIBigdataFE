@@ -30,7 +30,7 @@ import { EPAuthService } from '../../../../communications/fe-backend-db/membersh
     ngOnInit() {
       this.loadFirstDocList();
       this.loadPages();
-      this.auth.getLoginStatChange().subscribe(stat=>{
+      this.auth.getLogInObs().subscribe(stat=>{
         this.isLogStat = stat;
         console.log("comm compo stat : ", stat)
       })

@@ -12,27 +12,21 @@ import { AnalysisDatabaseService } from "../../../../../../communications/fe-bac
 export class ArticleDetailsComponent implements OnInit {
 
   @Input() article: any;
-  // @Input() keywords : [];
   docId : string;
   constructor(    private db: AnalysisDatabaseService, public _router: Router ,    private idControl: IdControlService,
     ) { }
-    readonly DEBUG : boolean = false;
 
-    debug(...arg:any[]){
-      if(this.DEBUG)
-        console.log(arg);
-    }
 
   ngOnInit() {
     // console.log(this.article)
     this.docId = this.article._id
     this.article = this.article._source;
-    this.load_top_keywords();
+    this.loadKeywords();
   }
 
-  view_doc_detail(){
+  setThisDoc(){
     // console.log("article detail id: ", this.docId);
-    this.idControl.selecOneID(this.docId);
+    this.idControl.setIdChosen(this.docId);
     this.navToDocDetail();
 
     // this.docId = this.article["_id"];
@@ -57,15 +51,20 @@ export class ArticleDetailsComponent implements OnInit {
     //각 문서마다 들어갈 상위 키워드를 저장할 array
     private keywords: any[] = [];
 
-    load_top_keywords() {
-      // console.log("article detail load top keyword start : doc_id", this.docId, " source : ", this.article)
-      this.db.get_tfidf_value(this.docId).then(res => {
-        this.debug("article detail res : ", res)
+    loadKeywords() {
+      // console.log("loadKeywords : " ,this.searchResultIdList)
+      this.db.getTfidfValue(this.docId).then(res => {
+        // console.log(res)
         let data = res as []
+        // console.log("loadkeywords : ", data)
         
         for (let n = 0; n < data.length; n++) {
           let tfVal = data[n]["tfidf"];
+          // console.log(tfVal[0])
           this.keywords.push(tfVal)//각 문서에 상위 키워드 배열을 담는다.
+  
+          // if(this.relatedKeywords.length < 10)
+          //   this.relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
         }
       })
       // console.log("article detail : keywords : ",this.keywords)

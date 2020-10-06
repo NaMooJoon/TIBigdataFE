@@ -3,17 +3,20 @@ const router = express.Router();
 const Keywords = require("../models/tfidf");
 
 router.get("/", (req, res) => {
-    res.send("tfidfQuery");
+    Keywords.findOne().exec(res => {
+        res.send(res);
+        
+    })
 });
 
 router.get("/test", (req, res) => {
-    // console.log("work!");
-    let id = "5de1134ab53863d63aa55309";
+    console.log("work!");
+    let id = "5f65aececd17436ac6436f4a";
     Keywords.findOne({ docID: id }, (error, val) => {
         if (error) {
             console.log(error);
         }
-        console.log(val)
+        // console.log(val)
         res.json(val);
     });
 });
@@ -22,9 +25,8 @@ router.get("/test", (req, res) => {
  * @description 받은 id 혹은 id list에 대해 그 문서의 tfidf 값을 반환해준다.
  */
 function getKeyVal(req, res) {
-    console.log("tfidf/getKeyVal");
+    // console.log(req.body);
     let ids = req.body["id"];
-    console.log("ids : ", ids)
 
     if (typeof (ids) == "string")//only send one string 
         matchQuery = { docID: ids }
@@ -83,7 +85,7 @@ function getKeyVal(req, res) {
 
         ],
         (err, docs) => {
-            console.log("getKeyVal result: ")
+            // console.log("aggragation result: ")
             if (err)
                 console.log(err)
             // console.log(docs)

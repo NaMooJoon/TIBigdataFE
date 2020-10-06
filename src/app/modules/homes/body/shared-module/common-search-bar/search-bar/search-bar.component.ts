@@ -2,14 +2,18 @@ import {
   Component,
   OnInit,
   EventEmitter,
+  ChangeDetectorRef,
   Input,
   Output
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
+import { ArticleSource } from "../../../../containers/shared/article.interface";
+import { Subscription } from "rxjs";
+import { Observable, of } from "rxjs";
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
-import { AnalysisDatabaseService } from '../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
 
 @Component({
   selector: "app-search-bar",
@@ -26,7 +30,7 @@ export class SearchBarComponent implements OnInit {
   // private static readonly TYPE = 'nkdboard';
 
   @Input() queryText: string = "";
-  // @Output() searchStart = new EventEmitter<any>();
+  @Output() searched = new EventEmitter<any>();
 
   private lastKeypress = 0;
 
@@ -39,29 +43,31 @@ export class SearchBarComponent implements OnInit {
   // searchKeyword: string;
 
   constructor(
-    private db : AnalysisDatabaseService,
     private auth : EPAuthService,
     private eventSvs : EventService,
     public _router: Router,
+    // private http:HttpClient,
     private es: ElasticsearchService // private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // console.log("search bar ng on init")  
+    this.queryText = this.es.getKeyword();
   }
 
   updateKeyword($event) {
     this.queryText = $event.target.value;
+    // console.log("bar comp : keyword accepted : " + this.queryText);
   }
 
-   search() {
-     this.es.setSearchMode(SEARCHMODE.KEY);
-     this.es.searchKeyword(this.queryText);
-      //  this.es.setKeyword(this.queryText);
-      // resolve()
-    // }).then(() =>{
-      this._router.navigateByUrl("body/search/result");
-    // }
-    // )
+  search() {
+    // this.eventSvs.addSrchHst(this.queryText);
+    
+    this.es.setKeyword(this.queryText);
+    this.es.fullTextSearch("post_body", this.queryText); //검색 결과 창에서 새로운 검색어 입력할 때 필요.
+    this.searched.emit();
+    this.auth.addSrchHst(this.queryText);
+    // console.log("emitted!")
+    // console.log("search bar : fulltextsearch done with " + this.queryText);
+    this._router.navigateByUrl("body/search");
   }
 }
