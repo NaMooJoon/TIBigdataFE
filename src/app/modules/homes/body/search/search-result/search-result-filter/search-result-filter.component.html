@@ -3,42 +3,36 @@
   <div>
     <!-- search-filter-component -->
   </div>
-  <div style="font-weight:bold; font-size:23pt; color :  #3d3d3d;">
+  <div>
     검색필터&nbsp;&nbsp;<span uk-icon="icon: info; ratio:0.8"></span>
   </div>
 
+
   <div>
-    
+
+    결과내 재검색
   </div>
 
+  <div>
 
-  <!-- 결과내재검색 -->
-  <div class="re-search-area">
-    <span class="filter-header-font">
-      결과내 재검색
-    </span>
-    <div>
-      <input class="uk-input search-bar uk-form-width-small button-gray uk-button filter-button uk-width-4-5 uk-margin-small" type="text" (keyup)="updateKeyword($event)"
-        value="{{ queryText }}" (keydown.enter)="search()"
-        placeholder="키워드 포함" />
+    <input class="uk-input search-bar uk-form-width-small" type="text" (keyup)="updateKeyword($event)"
+      value="{{ queryText }}" (keydown.enter)="search()" style="border-radius:20px; background-color: red;"
+      placeholder="키워드 포함" />
 
-    </div>
+  </div>
 
-    <div>
+  <div>
 
-      <input class="uk-input search-bar uk-form-width-small button-gray uk-button filter-button uk-width-4-5 uk-margin-small" type="text" (keyup)="updateKeyword($event)"
-        value="{{ queryText }}" (keydown.enter)="search()"
-        placeholder="키워드 제외" />
-      <a (click)="sendResult()"></a>
-    </div>
-</div>
+    <input class="uk-input search-bar uk-form-width-small" type="text" (keyup)="updateKeyword($event)"
+      value="{{ queryText }}" (keydown.enter)="search()" style="border-radius:20px; background-color: white;"
+      placeholder="키워드 제외" />
+    <a (click)="sendResult()"></a>
+  </div>
 
   <!-- 기간 -->
 
-  <div class="period-area">
-    <span class="filter-header-font">
-      기간
-    </span>
+  기간
+  <div>
 
     <!-- 기간 토글 바 -->
     <div>
@@ -47,26 +41,26 @@
       <!-- 기간 버튼 -->
       <div class="uk-flex">
 
-        <button class="uk-button uk-button-default uk-button-small small-button-size   ">
+        <button class="uk-button uk-button-primary ">
           1일
         </button>
-        <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+        <button class="uk-button uk-button-primary">
           1주
         </button>
-        <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+        <button class="uk-button uk-button-primary">
           1개월
         </button>
 
       </div>
 
-      <div class="uk-flex uk-margin-top">
-        <button class="uk-button uk-button-default uk-button-small small-button-size  ">
+      <div class="uk-flex">
+        <button class="uk-button uk-button-primary">
           3개월
         </button>
-        <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+        <button class="uk-button uk-button-primary">
           6개월
         </button>
-        <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+        <button class="uk-button uk-button-primary">
           1년
         </button>
       </div>
@@ -76,32 +70,14 @@
 
       <!-- </div> -->
 
-      <button class="uk-button uk-button-default uk-width-1-1 uk-margin-top">
+      <button class="uk-button uk-width-1-1">
         전체
       </button>
 
-  
-      <div class="uk-margin-small" style="font-size:17pt;">
-        직접입력
-      </div>
-
-      <div>
-        <input class="uk-input search-bar uk-form-width-small button-gray uk-button filter-button uk-width-4-5 uk-margin-small" type="text" (keyup)="updateKeyword($event)"
-          value="{{ queryText }}" (keydown.enter)="search()"
-          placeholder="1990-07-17" />
-  
-      </div>
-  
-      <div>
-  
-        <input class="uk-input search-bar uk-form-width-small button-gray uk-button filter-button uk-width-4-5 uk-margin-small" type="text" (keyup)="updateKeyword($event)"
-          value="{{ queryText }}" (keydown.enter)="search()"
-          placeholder="2020-08-27" />
-        <a (click)="sendResult()"></a>
-      </div>
-      <!--     <button class="uk-button uk-button-default uk-width-1-1 uk-margin-top" uk-toggle="target: .filter_date">
-        직접 입력<span uk-icon="icon: triangle-down"></span>
+      <button class="uk-button uk-button-default uk-width-1-1" uk-toggle="target: .filter_date">
+        직접 설정<span uk-icon="icon: triangle-down"></span>
       </button>
+
       <div class="filter_date">
         <div class="uk-card uk-card-small uk-card-body">
           <div class="uk-margin" style="width : 80pt">
@@ -109,76 +85,71 @@
             To {{ sValue }}
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
 
 
   </div>
 
   <!-- 기관별 -->
-  <div class="inst-area">
+  <div>
 
-    <div>
-      <span class="filter-header-font">
-        기관별
-      </span>
-    </div>
-    
-    <button class="uk-button uk-button-default uk-button-default uk-width-4-5 uk-align-center uk-margin-small" style="background-color:#606060; color:white" uk-toggle="target: .filter_date">
-      기관 추가<span uk-icon="icon: triangle-down"></span>
+    기관별
+    <button class="uk-button uk-button-default uk-button-default uk-width-1-1" uk-toggle="target: .filter_date">
+      기관 설정<span uk-icon="icon: triangle-down"></span>
     </button>
-    <button class="uk-button uk-button-default uk-width-4-5 uk-align-center uk-margin-small">
+    <button class="uk-button uk-button-default uk-width-1-1">
       기관1
     </button>
-    <button class="uk-button uk-button-default uk-width-4-5 uk-align-center uk-margin-small">
+    <button class="uk-button uk-button-default uk-width-1-1">
       기관2
     </button>
-    <button class="uk-button uk-button-default uk-width-4-5 uk-align-center uk-margin-small">
+    <button class="uk-button uk-button-default uk-width-1-1">
       기관3
     </button>
-    <button class="uk-button uk-button-default uk-width-4-5 uk-align-center uk-margin-small">
+    <button class="uk-button uk-button-default uk-width-1-1">
       기관4
     </button>
   </div>
 
 
   <!-- 주제 -->
-  <div class="topic-area">
-    <span class="filter-header-font">
-      주제별
-    </span>
+  주제별
+  <div>
     <div class="uk-flex">
-      <button class="uk-button uk-button-default uk-button-small small-button-size ">
+      <button class="uk-button uk-button-primary">
         전체
+        
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+      <button class="uk-button uk-button-primary">
         정치
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size  uk-margin-left">
+      <button class="uk-button uk-button-primary">
         경제
       </button>
     </div>
 
-    <div class="uk-flex uk-margin-top">
-      <button class="uk-button uk-button-default uk-button-small small-button-size ">
+    <div class="uk-flex">
+      <button class="uk-button uk-button-primary">
+        
         사회
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size uk-margin-left ">
+      <button class="uk-button uk-button-primary">
         문화
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size uk-margin-left ">
+      <button class="uk-button uk-button-primary">
         국제
       </button>
     </div>
 
-    <div class="uk-flex uk-margin-top">
-      <button class="uk-button uk-button-default uk-button-small small-button-size">
-        지역
+    <div class="uk-flex">
+      <button class="uk-button uk-button-primary">
+        과학
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size uk-margin-left ">
+      <button class="uk-button uk-button-primary">
         스포츠
       </button>
-      <button class="uk-button uk-button-default uk-button-small small-button-size uk-margin-left ">
+      <button class="uk-button uk-button-primary">
         과학
       </button>
     </div>

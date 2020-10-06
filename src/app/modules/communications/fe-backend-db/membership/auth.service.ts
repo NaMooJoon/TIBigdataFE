@@ -92,7 +92,7 @@ export class EPAuthService {
   private SHOW_SEARCH_HISTORY_URL = this.URL + "/hst/showHistory";
 
   private isLogIn: logStat = logStat.unsigned;//for static, inactive, passive use
-  private loginStatChange$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
+  private isLogInObs$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
   private loginUserData = {};
   private socUser: SocialUser = null;//for social login
   private userProfile : UserProfile = undefined;
@@ -120,6 +120,7 @@ export class EPAuthService {
   }
 
 
+
   forceLogOut() {
     alert("강제로 로그아웃 합니다. 새로고침 해야 적용 됨.");
     localStorage.removeItem("token");
@@ -132,15 +133,15 @@ export class EPAuthService {
    * @description common login process for all login methods such as email, gmail, ...  
    */
   //check login state
-  getLoginStatChange(): Observable<logStat> {
-    return this.loginStatChange$.asObservable();
+  getLogInObs(): Observable<logStat> {
+    return this.isLogInObs$;
   }
 
   getLogInStat(): logStat {
     return this.isLogIn;
   }
   setLogStat(stat) {
-    this.loginStatChange$.next(stat as logStat)
+    this.isLogInObs$.next(stat as logStat)
     this.isLogIn = stat as logStat;
   }
 
@@ -374,7 +375,7 @@ export class EPAuthService {
 
     if (idRes) {
       if (isId) {//when request id list
-        let titles = await this.docSvc.convert_id_to_doc_title(idRes) as [];
+        let titles = await this.docSvc.convertID2Title(idRes) as [];
         let i = -1;
         return titles.map(t => {
           i++
@@ -383,7 +384,7 @@ export class EPAuthService {
         // return 
       }
       else//when only requset titles
-        return await this.docSvc.convert_id_to_doc_title(idRes)
+        return await this.docSvc.convertID2Title(idRes)
     }
     else if (idRes == null)//when null => when no keep doc. 
       return null
