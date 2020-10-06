@@ -21,18 +21,11 @@ export class RegisterComponent implements OnInit {
 
   // when input info(email and password), add data into object.
   registerUserData = new userProfile();
-  private pw1="";
-  private pw2="";
+  private pw1;
+  private pw2;
   constructor(private eAuth: AuthEmailService, private _router: Router) { }
 
   ngOnInit() {
-    this.initialize_data();
-  }
-
-  initialize_data(){
-    this.pw1 = "";
-    this.pw2 = "";
-    this.registerUserData = new userProfile();
   }
 
   checkIfValid(){
