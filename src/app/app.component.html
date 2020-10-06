@@ -1,17 +1,15 @@
-<div class="uk-container uk-container-center custom-size uk-padding-remove out-size most-parent">
+<div class="main-frame">
   <header>
     <div class="uk-background-default" uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
       <app-nav></app-nav>
     </div>
   </header>
 
-    <div class="body-outlet-area" >
-      <router-outlet></router-outlet>
-    </div>
-  
-  <div class="footer">
-    <app-footer></app-footer>
-  </div>
-  
+  <main>
+    <router-outlet></router-outlet>
+  </main>
 
+  <footer>
+    <app-footer></app-footer>
+  </footer>
 </div>
