@@ -1,41 +1,28 @@
-<div class="uk-container uk-container-center search-bar-area">
-  <div class="uk-align-center uk-margin-small uk-width-2-3" uk-grid>
-    <input class="search-bar uk-input  uk-form-width-large" type="text" (keyup)="updateKeyword($event)"
-      value="{{ queryText }}" (keydown.enter)="search()"
-      style="     background-image: url(assets/search.png);"
-      placeholder="기본 검색어를 입력하세요" />
-    <a (click)="sendResult()"></a>
+<div class="">
+  <input class="search-bar uk-input" type="text" (keyup)="updateKeyword($event)" value="{{ queryText }}"
+    (keyup.enter)="search()" style="background-image: url(assets/search.png);" placeholder="기본 검색어를 입력하세요" />
+  <div class="search-filter">
+    <span>검색조건</span>
+    <span uk-icon="icon: refresh; ratio:0.8"></span>
+    <button class="filter-font uk-button uk-button-default uk-margin-small-left button-width" type="button">
+      기간
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-active"><a href="#">전체</a></li>
+        <li><a href="#">1일</a></li>
+        <li><a href="#">1주일</a></li>
+        <li><a href="#">1달</a></li>
+        <li><a href="#">6개월</a></li>
 
 
-
-  <!-- <div class="uk-margin-small " uk-grid> -->
-    <div class="search-filter uk-width-1-1 uk-flex">
-      
-      <div class="uk-align-center">
-
-      <button class="filter-font uk-button uk-button-text" style="margin-left:0px; border : 0;">
-        검색조건&nbsp;&nbsp;<span uk-icon="icon: database; ratio:0.8"></span>
-      </button>
-
-      <button class="filter-font uk-button uk-button-default uk-margin-small-left button-width" type="button">
-        기간
-      </button>
-      <div uk-dropdown="pos: bottom-justify">
-        <ul class="uk-nav uk-dropdown-nav">
-          <li class="uk-active"><a href="#">전체</a></li>
-          <li><a href="#">1일</a></li>
-          <li><a href="#">1주일</a></li>
-          <li><a href="#">1달</a></li>
-          <li><a href="#">6개월</a></li>
-
-
-          <!-- <mat-form-field>
+        <!-- <mat-form-field>
               <mat-label>Choose a date</mat-label>
               <input matInput [matDatepicker]="picker">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker touchUi="true" #picker></mat-datepicker>
             </mat-form-field> -->
-          <!-- <li class="uk-nav-header">직접 입력:시작날짜</li>
+        <!-- <li class="uk-nav-header">직접 입력:시작날짜</li>
             <mat-form-field>
               <mat-label>Choose a date</mat-label>
               <input matInput [matDatepicker]="picker">
@@ -51,70 +38,68 @@
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field> -->
-          <!-- <button mat-raised-button (click)="picker.open()">Open</button> -->
+        <!-- <button mat-raised-button (click)="picker.open()">Open</button> -->
 
-
-          <li><a href="#">Item</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-divider"></li>
-          <li><a href="#">Item</a></li>
-        </ul>
-      </div>
-
-      <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
-        기관별
-      </button>
-      <div uk-dropdown="pos: bottom-justify">
-        <ul class="uk-nav uk-dropdown-nav">
-          <li class="uk-active"><a href="#">Active</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-header">Header</li>
-          <li><a href="#">Item</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-divider"></li>
-          <li><a href="#">Item</a></li>
-        </ul>
-      </div>
-
-      <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
-        주제별
-      </button>
-      <div uk-dropdown="pos: bottom-justify">
-        <ul class="uk-nav uk-dropdown-nav">
-          <li class="uk-active"><a href="#">Active</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-header">Header</li>
-          <li><a href="#">Item</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-divider"></li>
-          <li><a href="#">Item</a></li>
-        </ul>
-      </div>
-
-      <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
-        상세검색&nbsp;&nbsp;
-      </button>
-      <div uk-dropdown="pos: bottom-justify">
-        <ul class="uk-nav uk-dropdown-nav">
-          <li class="uk-active"><a href="#">Active</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-header">Header</li>
-          <li><a href="#">Item</a></li>
-          <li><a href="#">Item</a></li>
-          <li class="uk-nav-divider"></li>
-          <li><a href="#">Item</a></li>
-        </ul>
-      </div>
-
-      <button class="filter-font uk-button uk-button-text uk-margin-small-left" style="border:0; color:#606060">
-        검색도움말&nbsp;&nbsp;<span uk-icon="icon: info; ratio:0.8"></span>
-      </button>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="#">Item</a></li>
+      </ul>
     </div>
+
+    <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
+      기관별
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-active"><a href="#">Active</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-header">Header</li>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="#">Item</a></li>
+      </ul>
     </div>
-  <!-- </div> -->
+
+    <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
+      주제별
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-active"><a href="#">Active</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-header">Header</li>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="#">Item</a></li>
+      </ul>
+    </div>
+
+    <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
+      상세검색&nbsp;&nbsp;
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-active"><a href="#">Active</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-header">Header</li>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="#">Item</a></li>
+      </ul>
+    </div>
+
+    <button class="filter-font uk-button uk-button-text uk-margin-small-left" style="border:0; color:#606060">
+      검색도움말&nbsp;&nbsp;<span uk-icon="icon: info; ratio:0.8"></span>
+    </button>
+  </div>
+
 </div>
 
-  <!-- 
+<!-- 
 
   home search bar는 search bar을 포함하고 있다.
   home search bar에 ulkit search bar icon을 가지고 있음.

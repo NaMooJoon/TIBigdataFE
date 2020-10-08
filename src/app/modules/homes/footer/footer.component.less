@@ -1,23 +1,59 @@
-.foot-info {
-    display: inline;
-    text-align:right;
+.footer-contents {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.logo-width{
-    width: 12.5%;
-    // background-color: gray;//test
+.handong-logo {
+  display: flex;
+  align-items: center;
+  width: 130px;
+  height: 35px;
+  margin: 0 10px;
 }
 
-.info-width{
-    width: 37.5%;
+.policy {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-weight: 300;
+  font-size: 13px;
 }
 
-.who-we-are{
-    width:50%;
-    
+ul li {
+  display: inline;
+  list-style: none;
 }
 
-.footer-font{
-    font-size: 12pt;
-    color : #606060;
+.logo-width {
+  width: 200px;
+}
+
+ul li:nth-child(n+2)::before {
+  content: " | ";
+  margin: 0px 5px;
+  color: darkgray;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.contact-info {
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
 }

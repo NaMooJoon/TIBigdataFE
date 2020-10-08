@@ -20,8 +20,12 @@ export class AnalysisDatabaseService {
     private http: HttpClient,
     private docControl: DocumentService
   ) { }
+  readonly DEBUG : boolean = false;
 
-
+  debug(...arg:any[]){
+    if(this.DEBUG)
+      console.log(arg);
+  }
   /**
    * @description get requset to gain topic analysis LSTM table
    * @Param isPlain : if true, request plain text. without this, request pre-processed table.
@@ -32,16 +36,16 @@ export class AnalysisDatabaseService {
     if (isPlain)
       url = this.GET_TOPIC_plain_URL;
     let res = await this.http.get<any>(url).toPromise();
-    // console.log("in db getTopicTable: ",res)
+    // this.debug("in db getTopicTable: ",res)
     return res
   }
 
 
   async getOneTopicDocs(tp : string){
     let body = {topic : tp}
-    console.log(body);
+    // this.debug(body);
     let res = await this.http.post<any>(this.GET_ONE_TOPIC_DOCS_URL, body).toPromise();
-    console.log("in db getOneTopicDocs", res);
+    // this.debug("in db getOneTopicDocs", res);
     // for(var data in res){
     //   data["_id"]
     // }
@@ -54,12 +58,12 @@ export class AnalysisDatabaseService {
     * @Param num : how many related documetns per each document? defualt = 5 if undefined.
     * @Param sim : if request cosine similarity of document
   */
-  async getRcmdTable(ids: string | string[], num?: number, sim? : boolean) {
-    console.log("in db getRcmdTable, input ids : ", ids);
+  async get_related_docs_table(ids: string | string[], num?: number, sim? : boolean) {
+    this.debug("in db getRcmdTable, input ids : ", ids);
     let res = await this.http.post<any>(this.GET_RCMD_URL, { "id": ids, "num": num, "sim" : sim }).toPromise()
     if(res.succ){
 
-      // console.log("in db rcmdTable : ",res);
+      // this.debug("in db rcmdTable : ",res);
       return res.payload;
     }
   }
@@ -74,10 +78,31 @@ export class AnalysisDatabaseService {
 ]
   */
 
-  async getTfidfValue(ids: string | string[] , num?: number, isVal? : boolean) {
-    // console.log("in db : getTFIDF ids:", ids);
+  async get_tfidf_value(ids: string | string[] , num?: number, isVal? : boolean) {
+    this.debug("in db : getTFIDF ids:", ids);
+    // this.http.get<any>(this.URL + "/keyword/test").subscribe(
+    //   res=>{
+    //     this.debug("get test" ,res)
+    //   },
+    //   err=>{
+    //     this.debug("error!")
+    //   }
+    //   );
+        // this.debug(res)
+    
 
-    return await this.http.post<any>(this.GET_KEYWORDS_URL, { "id": ids, "num": num, "isVal": isVal }).toPromise()
+    return new Promise(resolve=>{
+      this.http.post<any>(this.GET_KEYWORDS_URL, { "id": ids, "num": num, "isVal": isVal }).subscribe(
+        res=>{
+          this.debug(res)
+          resolve(res);
+        },
+        err => this.debug(err),
+        // ()=>this.debug("ok!")
+      )
+
+    })
+    // return await this.http.post<any>(this.GET_KEYWORDS_URL, { "id": ids, "num": num, "isVal": isVal }).toPromise()
   }
 
 
@@ -87,12 +112,12 @@ export class AnalysisDatabaseService {
    * @param id document id
    * @returns [ {id : 12345, "title" : 연관문서 제목 1},...]
    */
-  async getRelatedDocs(id: string) {
-    let _rcmdIdsRes = await this.getRcmdTable(id)
-    // console.log("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
+  async load_related_docs(id: string) {
+    let _rcmdIdsRes = await this.get_related_docs_table(id)
+    this.debug("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
     let rcmdIds = _rcmdIdsRes[0]["rcmd"];
-    let _titlesRes = await this.docControl.convertID2Title(rcmdIds as string[])
-    // console.log("in db : rcmdRes:", _titlesRes)
+    let _titlesRes = await this.docControl.convert_id_to_doc_title(rcmdIds as string[])
+    this.debug("in db : rcmdRes:", _titlesRes)
 
     let titles = _titlesRes as []
 
@@ -102,7 +127,7 @@ export class AnalysisDatabaseService {
       return { "id": rcmdIds[i], "title": t };
     })
 
-    // console.log("relatedDocs:", relatedDocs);
+    this.debug("relatedDocs:", relatedDocs);
     return relatedDocs;
   }
 

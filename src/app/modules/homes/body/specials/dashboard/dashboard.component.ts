@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.auth.getLogInObs().subscribe((logInStat) => {
+    this.auth.getLoginStatChange().subscribe((logInStat) => {
 
       if (!logInStat)
         // console.log("wow");
@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit {
 
 
   async getKeywords(ids) {
-    return await this.db.getTfidfValue(ids, 5, true);
+    return await this.db.get_tfidf_value(ids, 5, true);
   }
 
   getMyKeepDoc() {
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
   private TfTable = [];
   async load_tfidf_for_keyword_anls() {
     // var docNum = this.idList.length;
-    let tfidf_table = await this.db.getTfidfValue(this.chosenList, this.userNumChoice, true);
+    let tfidf_table = await this.db.get_tfidf_value(this.chosenList, this.userNumChoice, true);
     // this.getKeywords(this.chosenList).then(tfidf_table => {
     // this.http.get(this.tfidfDir).subscribe(docData1 => {
     let oneDoc = tfidf_table as []
@@ -430,7 +430,7 @@ export class DashboardComponent implements OnInit {
 
   makeRelatedCloud() {
     console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
-    this.db.getRcmdTable(this.chosenList[0], 10, true).then(data1 => {
+    this.db.get_related_docs_table(this.chosenList[0], 10, true).then(data1 => {
       console.log("makeRelatedCloud : ",data1);
 
       data1 = data1[0]["rcmd"]
@@ -460,7 +460,7 @@ export class DashboardComponent implements OnInit {
       // for (let k = 0; k < graphData.length; k++) {
       //   idsArr.push(graphData[k][1])
       // }
-      this.docSvc.convertID2Title(idsArr).then(t => {
+      this.docSvc.convert_id_to_doc_title(idsArr).then(t => {
         console.log("ids arr :", idsArr);
         console.log("titles : ", t);
         let titles = t as [];

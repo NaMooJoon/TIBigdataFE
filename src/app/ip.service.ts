@@ -48,7 +48,7 @@ export class IpService {
   USER_BE_PORT = "4000";
   FLASK_PORT = "5000";
   ES_PORT = "9200";
-  ES_INDEX = "/frontend_test";
+  ES_INDEX = "/nkdb0919";
   ANGULAR_PORT = "4200";
   
 
@@ -60,10 +60,14 @@ export class IpService {
     return ipArr[0];
   }
 
+  getAngularPort(){
+    return this.ANGULAR_PORT;
+  }
+
   adaptIp(whichServerIp:string){
     let currIp = this.getCurrIp()
     // this.ES_INDEX = "/capstone";//REPLACE WITH nkdb after capstone
-    if (currIp != this.FrontEnd_SERVER_IP){
+    if (currIp != this.FrontEnd_SERVER_IP || currIp != this.BackEnd_SERVER_IP){
       return this.DEV_IP;
       //console.log(currIp);
     }
@@ -73,7 +77,7 @@ export class IpService {
   }
 
   get_FE_Ip(){
-    return this.FrontEnd_SERVER_IP + this.ANGULAR_PORT;
+    return this.FrontEnd_SERVER_IP;
   }
 
   get_FE_DB_ServerIp(){
@@ -87,10 +91,10 @@ export class IpService {
   }
 
   getBackEndServerIp(){
-    return this.BackEnd_SERVER_IP + ":"+this.ES_PORT + this.ES_INDEX;
+    // return this.BackEnd_SERVER_IP + ":"+this.ES_PORT + this.ES_INDEX;
 
     //use local elasticsearch
-    // return this.adaptIp(this.BackEnd_SERVER_IP) + ":"+this.ES_PORT + this.ES_INDEX;
+    return this.adaptIp(this.BackEnd_SERVER_IP) + ":"+this.ES_PORT + this.ES_INDEX;
   }
 
   getDevIp(){

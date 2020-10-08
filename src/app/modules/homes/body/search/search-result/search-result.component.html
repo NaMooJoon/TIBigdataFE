@@ -15,7 +15,7 @@
         <ng-template #infoLoadFin>
             <ul class="keyword-list" *ngFor="let keyword of relatedKeywords">
                 <li>
-                    <a (click)="search_realted_keyword(keyword)" style="font : 17pt; color: #3d3d3d;">{{ keyword }}</a>
+                    <a (click)="relatedSearch(keyword)" style="font : 17pt; color: #3d3d3d;">{{ keyword }}</a>
                 </li>
             </ul>
         </ng-template>
@@ -32,24 +32,23 @@
 
 
     <div class="uk-container" uk-grid>
-        <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design-->
+        <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design -->
         <div class="uk-width-1-4 left-wing">
 
-                <!-- 세부메뉴 : 키워드분석, 검색 결과는 몇개 입니다, 최신순, 10건 씩 보기 -->
-    <div calss="uk-container">
-        <!-- 키워드분석 -->
-        <div class="keyword-anls uk-width-1-1">
-               <button (click)="freqAnalysis()" class="uk-button button-blue" style="font-size:21px;">
-                   키워드분석
-               </button>
-       </div>
-
-       
-   </div>
+            <!-- 세부메뉴 : 키워드분석-->
+            <div calss="uk-container">
+                <!-- 키워드분석 -->
+                <div class="keyword-anls uk-width-1-1">
+                    <button (click)="freqAnalysis()" class="uk-button button-blue" style="font-size:21px;">
+                        키워드분석
+                    </button>
+                </div>
+            </div>
 
             <!-- border-radius round outline -->
             <div class="left-outline">
                 <!-- 문서 저장 KEEP -->
+         
                 <div class="uk-margin-small" uk-grid>
                     <div class="uk-align-center" *ngIf="isLogStat">
                         <button (click)="keepMyDoc()" class="uk-button uk-button-primary">
@@ -67,13 +66,14 @@
                 </div>
             </div>
         </div>
+        <!-- parent keyLoaded {{child.isKeyLoaded}} -->
 
         <!-- 중앙 검색 결과 -->
         <div class="uk-width-3-4 middle-result-area">
             <!-- middle-result-area -->
-            <app-search-result-document-list></app-search-result-document-list>
+            <app-search-result-document-list (related_keywords_ready)="loadRealtedKeywords($event)" #child></app-search-result-document-list>
         </div>
 
-        
+
     </div>
 </div>
