@@ -27,7 +27,7 @@ export class ChosenDocAnalysisComponent implements OnInit {
           찾으면 tf-idf값을 빼낸다.
           cData에 저장.
         */
-      let idList = this.idCont.getIdList(); // service에서 선택한 문서 id 받아온다.
+      let idList = this.idCont.getIDList(); // service에서 선택한 문서 id 받아온다.
       // console.log("idList contents : ");
       // console.log(idList);
       for (var i = 0; i <= idList.length; i++) {

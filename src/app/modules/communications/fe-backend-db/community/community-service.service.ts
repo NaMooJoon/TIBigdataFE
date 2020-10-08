@@ -42,6 +42,9 @@ export class CommunityServiceService {
     this.docList = [];
   }
 
+  /**
+   * @description 한 페이지 당 몇개의 문서 보여줄 것인지?
+   */
   getEachPageDocNum() {
     return this.DOC_NUM_PER_EACH_PAGE;
   }
@@ -126,7 +129,7 @@ export class CommunityServiceService {
    * @description response 받은 Object에서 문서 제목 유저 내용 등을 추출해서 저장
    * @param res 
    */
-  loadCommunityDocs(res){
+  saveResponse(res){
     this.clearDocList();
     if (res.succ) {
       // console.log(res);
@@ -161,13 +164,13 @@ export class CommunityServiceService {
   } 
 
   /**
-   * @description 가장 최근 게시판 글들 로드하는 함수
+   * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
    */
   async loadListByPageIdx(start_idx: number) {
     let body = { cur_start_idx: start_idx };
 
     let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();
-    return this.loadCommunityDocs(res);
+    return this.saveResponse(res);
   }
 
   
@@ -176,7 +179,7 @@ export class CommunityServiceService {
    */
   async loadFirstDocList() {
     let res = await this.http.get<any>(this.URL_LOAD_FIRST_DOC_LIST).toPromise();
-    return this.loadCommunityDocs(res);
+    return this.saveResponse(res);
   }
 
 
@@ -190,7 +193,7 @@ export class CommunityServiceService {
     // console.log("comnunity service load next doc list : before send" )
 
     let res = await this.http.post<any>(this.URL_LOAD_NEXT_DOC_LIST, body).toPromise();
-    return this.loadCommunityDocs(res);
+    return this.saveResponse(res);
 
   }
 
@@ -206,7 +209,7 @@ export class CommunityServiceService {
     // console.log("comnunity service load next doc list : before send" )
 
     let res = await this.http.post<any>(this.URL_LOAD_PRIOR_DOC_LIST, body).toPromise();
-    return this.loadCommunityDocs(res);
+    return this.saveResponse(res);
   }
 
 

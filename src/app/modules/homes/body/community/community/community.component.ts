@@ -26,8 +26,8 @@ export class CommunityComponent implements OnInit {
 
   ngOnInit() {
     this.loadFirstDocList();
-    this.loadPages();
-    this.auth.getLogInObs().subscribe(stat=>{
+    this.loadPagesNumbers();
+    this.auth.getLoginStatChange().subscribe(stat=>{
       this.isLogStat = stat;
       console.log("comm compo stat : ", stat)
     })
@@ -39,7 +39,7 @@ export class CommunityComponent implements OnInit {
    * 
    */
 
-  async loadPages(){
+  async loadPagesNumbers(){
     let pageInfo = await this.cm_svc.pagingAlgo();
     console.log("community compo : load pages : pageInfo : ", pageInfo)
   //  * @return numPagePerBloc
@@ -109,6 +109,11 @@ export class CommunityComponent implements OnInit {
 
   }
 
+
+  /**
+   * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
+   * @param i 
+   */
   async choosePageNum(i : number){
     // console.log("hello number ",i);
     this.docList = await this.cm_svc.loadListByPageIdx(i);
@@ -118,13 +123,7 @@ export class CommunityComponent implements OnInit {
   }
 
 
-  async loadNextDocList(){
 
-    this.docList = await this.cm_svc.loadNextDocList(this.cur_start_idx);
-    // console.log("pressNextList : ", this.docList)
-    // console.log("cur idx : ", this.cur_start_idx)
-    this.cur_start_idx = this.cm_svc.getNewStartIDx();
-  }
 
   /**
    * @function pressNextList
@@ -150,6 +149,9 @@ export class CommunityComponent implements OnInit {
   }
 
 
+  /**
+   * 다음 블록 버튼 눌렀을 때
+   */
   async pressNextBloc(){
     this.docList = [];
     this.blocIdx++;

@@ -1,105 +1,84 @@
 <hr>
 <!-- 하단부 -->
-자료열람 
-<a (click)="navToGraph()">통일연구동향그래프</a>
-
-<div class="uk-container" uk-grid>
-  <!-- 좌측 패널 responsive web 1/4 of container following 1/4 columns from design-->
-  <div class="uk-width-1-6 left-wing">
-      <!-- border-radius round outline -->
-      <div class="outline">
-          <div>
-              <a (click)="user_menu_set('my_analysis')">
-                  주제별
-              </a>
-          </div>
-          <div>
-              <a (click)="user_menu_set('my_history')">
-                  사전편찬별
-              </a>
-          </div>
-          <div>
-              <a (click)="user_menu_set('my_account')">
-                  기관별
-              </a>
-          </div>
-      </div>
+<div uk-grid>
+  <div class="uk-width-1-2" style="text-align : left ; ">
+    <span style="font-weight: bold; font-size: 27px; color: #3d3d3d;">자료열람</span>
+    
   </div>
 
-  <!-- 우측 -->
-  <div class="uk-width-5-6 left-wing">
-    <div class="outline">
-        <div class="uk-flex">
-          <div *ngFor="let cat of categories">
-            <button (click)="getTopic($event)" class="uk-button uk-button-primary">{{cat}}</button>
-          </div>
-        </div>
 
-        <div class="uk-flex">
-          <div *ngFor="let cat of dict_orders">
-            <button (click)="getTopic($event)" class="uk-button uk-button-primary">{{cat}}</button>
-          </div>
-        </div>
+  <div class="uk-width-1-2" style="text-align : right ; ">
+    <button (click)="navToGraph()" class="uk-button button-blue" style="font-size:21px;">
+      통일연구동향그래프
+    </button>
+  </div>
+</div>
 
-        <div class="uk-flex">
-          <div *ngFor="let cat of institutions">
-            <button (click)="getTopic($event)" class="uk-button uk-button-primary">{{cat}}</button>
-          </div>
-        </div>
+<hr>
+
+
+<div class="uk-container uk-margin-remove" uk-grid>
+  <div class="uk-width-1-6">
+    주제별
+  </div>
+  <div class="uk-width-5-6 uk-flex" style="padding : 0; ">
+    <div class="uk-margin-auto uk-padding-remove" *ngFor="let cat of categories; index as idx">
+      <div *ngIf='idx < 8; else bt_num_many'>
+        <button (click)="selectCategory($event)" id="topic" class="uk-button uk-button-default ">{{cat}}</button>
+      </div>
+      <ng-template #bt_num_many>
+        <button (click)="selectCategory($event)" id="topic" class="uk-button uk-button-default">{{cat}}</button>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="uk-container uk-margin-remove" uk-grid>
+  <div class="uk-width-1-6">
+    사전편찬순
+  </div>
+  <div class="uk-width-5-6" style=" padding : 0; ">
+    <div class="uk-flex ">
+      <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_1">
+        <button (click)="selectCategory($event)" class="uk-button uk-button-default"
+          style="width: 90px; margin-right:5px;">{{cat}}</button>
+      </div>
     </div>
 
-    <app-search-result-document-list [cat_button_choice]="cat_button_choice"></app-search-result-document-list>
-
-
-
-  <h2>
-    하단부 계획
-  </h2>
-  <p>
-    search-result component와 유사하므로, search-document-list component을 새로 생성해서 리스트 주루룩 나오는 부분 분류.
-    주제 버튼 누르면 제목 뿐만이 아니라 그냥 search query을 보내도록...
-  </p>
-  <p>
-    고려해볼 수 있는점: 현재 주제 분류 레퍼런스 테이블 결과 = [주제 : 정치, 문서 : [문서1 id, 문서2 id, ...]]
-    그러면 해당 주제를 선택하면, 레퍼런스 테이블에서 문서 id을 불러와서 ES에 쿼리 요청해서 리스트 불러옴. 10개 단위로 끊는다고 하면 limit 쿼리 사용 가능해보인다.
-  </p>
-    
-
+    <div class="uk-flex uk-margin-small-top">
+      <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_2">
+        <button (click)="selectCategory($event)" id="dict" class="uk-button uk-button-default"
+          style="width: 90px; margin-right:5px;">{{cat}}</button>
+      </div>
+    </div>
   </div>
 </div>
 
 
-<!-- <h1>주제 별 문서 분류</h1>
-<div class="row">
-  <div class="col">
-    <div class="uk-container">
-      <div *ngIf="isLoaded == false">문서 주제 목록 loading...</div>
-      <div *ngIf="isLoaded == true">
-        <div *ngFor="let topic of data; let i = index">
-          <div class="row">
-            <button
-              class="uk-button uk-button-primary uk-margin uk-width-1-4"
-              (click)="toggleTopic(i)"
-            >
-              토픽 : {{ topic["topic"] }}
-            </button>
-          </div>
+<hr>
 
-          <div *ngIf="toggleTopics[i] == true">
-            <div class="uk-card uk-card-body uk-card-default">
-              <div *ngFor="let doc of topic.doc;">
-                  <a (click) = "navToDetail(doc)" class="row">{{ doc["titles"] }}</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+<div class="uk-container" uk-grid>
+  <div class="uk-width-1-6">
+    기관별
+  </div>
+  <div class="uk-width-expand uk-flex">
+    <div *ngFor="let cat of institutions">
+      <button (click)="selectCategory($event)" id="inst" class="uk-button uk-button-default" style="margin-right:5px;">{{cat}}</button>
     </div>
   </div>
-  <div class="col">
-    <app-category-graph></app-category-graph>
-    <button (click)="navToGraph()" class="uk-button uk-button-primary">
-    Show Category Graph
-    </button>
+</div>
+
+<hr>
+<div uk-grid>
+  <div class="uk-width-1-4">
+
   </div>
-</div> -->
+
+
+  <div class="uk-width-3-4">
+    <app-search-result-document-list ></app-search-result-document-list>
+  </div>
+</div>
