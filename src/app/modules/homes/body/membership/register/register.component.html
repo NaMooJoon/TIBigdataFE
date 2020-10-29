@@ -1,63 +1,51 @@
-<div class="uk-container uk-container-center">
-
-
-  <div class="uk-align-center" uk-grid>
-    <div class="form-group" style="padding-left:400px; background-color:burlywood;">
-
-
-
-
-
-
-        <div class="input-group uk-margin-bottom">
-          <input [(ngModel)]="registerUserData.name" name="nickname" type="text" class="form-control rounded-0"
-          class="input-gray login-button-width" placeholder="이름" required="required">
-          <div class="required" *ngIf="!registerUserData.name">이름을 입력해주세요.</div>
-        </div>
-
-      <div class="input-group uk-margin-bottom">
-        <input [(ngModel)]="registerUserData.nickname" name="name" type="text" class="form-control rounded-0"
-          class="input-gray login-button-width" placeholder="닉네임" required="required">
-        <div class="required" *ngIf="!registerUserData.nickname">닉네임을 입력해주세요.</div>
-      </div>
-
-      <div class="input-group uk-margin-bottom">
-        <input class="input-gray login-button-width" placeholder="신분" required="required">
-        <div class="required" *ngIf="!input-gray">신분을 입력해주세요.</div>
-      </div>
-
-      <div class="input-group uk-margin-bottom">
-        <input [(ngModel)]="registerUserData.inst" name="inst" type="text" class="form-control rounded-0"
-          class="input-gray login-button-width" placeholder="기관" required="required">
-        <div class="required" *ngIf="!registerUserData.inst">기관을 입력해주세요.</div>
-      </div>
-
-      <div class="input-group uk-margin-bottom">
-        <input [(ngModel)]="registerUserData.email" name="email" type="text" class="form-control rounded-0"
-          class="input-gray login-button-width" placeholder="이메일 입력" required="required">
-        <div class="required" *ngIf="!registerUserData.email">이메일을 입력해주세요.</div>
-      </div>
-
-      <div class="input-group uk-margin-bottom">
-        <input [(ngModel)]="pw1" name="password1" type="password" class="form-control rounded-0"
-          class="input-gray login-button-width" placeholder="비밀번호를 비밀번호 입력" required="required">
-        <div class="required" *ngIf="!pw1">입력해주세요.</div>
-        </div>
-
-      <div class=" input-group uk-margin-bottom">
-          <input [(ngModel)]="pw2" name="password2" type="password" class="form-control rounded-0"
-            class="input-gray login-button-width" placeholder="비밀번호 재입력" required="required">
-          <div class="required" *ngIf="!checkIfValid()">입력한 비밀번호가 달라요.</div>
-        </div>
-
-
-        <button [disabled]="!checkIfValid()" (click)="registerUser()" type="button"
-          class="button-blue login-button-width">가입하기 </button>
-
-      </div>
-      <!-- when click button, registerUser function init. -->
+<div class="register">
+  <img src="assets/logo/logo_main.png" alt="kubic_logo" width="150px" />
+  <div class="form-field">
+    <div class="field name-field">
+      <input [(ngModel)]="registerUserData.name" [ngStyle]="{'border': registerUserData.name ? 'none' : '1px solid red'}" name="name" type="text" placeholder="이름" required="required" />
+      <div class="required" *ngIf="!registerUserData.name">이름을 입력해주세요.</div>
     </div>
 
+    <div class="field nickname-field">
+      <input [(ngModel)]="registerUserData.nickName" [ngStyle]="{'border': registerUserData.nickName ? 'none' : '1px solid red'}" name="nickname" type="text" placeholder="닉네임" required="required" />
+      <div class="required" *ngIf="!registerUserData.nickName">닉네임을 입력해주세요.</div>
+    </div>
+
+    <div class="field status-field">
+      <input [(ngModel)]="registerUserData.status" [ngStyle]="{'border': registerUserData.status ? 'none' : '1px solid red'}" name="status" type="text" list="status" placeholder="신분" required="required" />
+      <datalist id="status">
+        <option>대학생</option>
+        <option>석사/박사</option>
+        <option>연구원</option>
+        <option>기타</option>
+      </datalist>
+      <div class="required" *ngIf="!registerUserData.status">신분을 입력해주세요.</div>
+    </div>
+
+    <div class="field inst-field">
+      <input [(ngModel)]="registerUserData.inst" [ngStyle]="{'border': registerUserData.inst ? 'none' : '1px solid red'}" name="inst" type="text" placeholder="기관" required="required">
+      <div class="required" *ngIf="!registerUserData.inst">소속기관을 입력해주세요.</div>
+    </div>
+    
+    <div class="field email-field">
+      <input [(ngModel)]="registerUserData.email" [ngStyle]="{'border': registerUserData.email ? 'none' : '1px solid red'}" name="email" type="text" placeholder="이메일 입력" required="required">
+      <div class="required" *ngIf="!registerUserData.email">이메일을 입력해주세요.</div>
+    </div>
+    
+    <div class="field pwd-field">
+      <input [(ngModel)]="registerUserData.pw1" [ngStyle]="{'border': registerUserData.pw1 ? 'none' : '1px solid red'}" name="password" type="password" placeholder="비밀번호 입력" required="required">
+      <div class="required" *ngIf="!registerUserData.pw1">비밀번호를 입력해주세요.</div>
+    </div>
+    
+    <div class="field pwd-again-field">  
+      <input [(ngModel)]="registerUserData.pw2" [ngStyle]="{'border': registerUserData.pw1 != null && registerUserData.pw1 == registerUserData.pw2 ? 'none' : '1px solid red'}" name="password-again" type="password" placeholder="비밀번호 재입력" required="required">
+      <div class="required" [ngStyle]="{'display': registerUserData.pw1 != null && registerUserData.pw1 == registerUserData.pw2 ? 'none' : 'block'}">비빌번호가 일치하지 않습니다!</div>
+    </div>
+
+    <div class="buttons">
+      <button class="submit-button" [disabled]="!checkIfValid()" (click)="registerUser()" type="button">가입하기 </button>
+      <button class="social-login" (click)="toSocReg()" type="button">구글로 로그인 </button>
+    </div>
+  </div>
 </div>
 
- 
