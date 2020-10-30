@@ -3,12 +3,15 @@ const router = express.Router();
 const Keywords = require("../models/tfidf");
 
 router.get("/", (req, res) => {
-    res.send("tfidfQuery");
+    Keywords.findOne().exec(res => {
+        res.send(res);
+        
+    })
 });
 
 router.get("/test", (req, res) => {
-    // console.log("work!");
-    let id = "5de1134ab53863d63aa55309";
+    console.log("work!");
+    let id = "5f65aececd17436ac6436f4a";
     Keywords.findOne({ docID: id }, (error, val) => {
         if (error) {
             console.log(error);

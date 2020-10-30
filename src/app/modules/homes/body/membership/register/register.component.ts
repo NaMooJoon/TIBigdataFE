@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthEmailService } from '../../../../communications/fe-backend-db/membership/auth-email.service';//register user service
 import { Router } from '@angular/router'
-class userProfile{
-  nickName : String;
-  name : String;
-  inst : String;//institution
-  email : String;
-  password : String;
+
+class userProfile {
+  nickName: String;
+  name: String;
+  position: String;
+  inst: String;//institution
+  email: String;
+  password: String;
 }
-
-
 
 @Component({
   selector: 'app-register',
@@ -18,42 +18,42 @@ class userProfile{
 })
 
 export class RegisterComponent implements OnInit {
-
-  // when input info(email and password), add data into object.
-  registerUserData = new userProfile();
-  private pw1="";
-  private pw2="";
   constructor(private eAuth: AuthEmailService, private _router: Router) { }
+
+  registerUserData = new userProfile();
+  private pw1 = "";
+  private pw2 = "";
 
   ngOnInit() {
     this.initialize_data();
   }
 
-  initialize_data(){
+  initialize_data() {
     this.pw1 = "";
     this.pw2 = "";
     this.registerUserData = new userProfile();
   }
 
-  checkIfValid(){
-    // console.log(this.pw1)
-    // console.log(this.pw2)
+  checkIfValid() {
     return this.pw1 == this.pw2;
   }
 
-  // when button clicked, this func init.
-  async registerUser(){
-    if(this.pw1 == this.pw2)//check for sure
+  async registerUser() {
+    if (this.pw1 == this.pw2) //check for sure
       this.registerUserData.password = this.pw1;
-    console.log(this.registerUserData);
-    await this.eAuth.register(this.registerUserData) //_auth : register user service
-    this._router.navigate(['/homes'])
-    // console.log(this.registerUserData);
-    // this.eAuth.register(this.registerUserData) //_auth : register user service
+
+    let regResult = await this.eAuth.register(this.registerUserData); //_auth : register user service
+
+    if (regResult) {
+      this._router.navigate(['/register-ok'], { queryParams: { email: this.registerUserData.email } });
+    }
+    else {
+      window.location.reload();
+    }
   }
-  
-  toSocReg(){
-    this._router.navigateByUrl("/membership/socReg");
+
+  toSocReg() {
+    this._router.navigateByUrl("/socReg");
   }
 
 }
