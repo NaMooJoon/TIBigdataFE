@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 // import { FiltersComponent } from './componets/filters/filters.component';
 
 import { RegisterComponent } from '../homes/body/membership/register/register.component';
+import { RegisterOkComponent } from '../homes/body/membership/register/register-ok/register-ok.component';
 import { LoginComponent } from '../homes/body/membership/login/login.component';
 // import { EventsComponent} from '../homes/body/membership/events/events.component';
 import { AuthGuard } from './fe-backend-db/membership/auth.guard';
@@ -14,36 +15,44 @@ import { UserpageComponent } from '../homes/body/membership/userpage/userpage.co
 import { ControlComponent } from '../homes/body/membership/control/control.component';
 
 const routes: Routes = [
-    // {
-    //   path : '',
-    //   component : HeaderContainerComponent
-    // },add : redirect to main page
-    { path: 'register',
-      component: RegisterComponent,     
-      canActivate : [AuthGuard]
+  // {
+  //   path : '',
+  //   component : HeaderContainerComponent
+  // },add : redirect to main page
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [AuthGuard]
 
-    },
-    {
-      path: 'socReg',
-      component : SocialRegisterComponent,
-      canActivate : [AuthGuard]
-    },
-    { path: 'login',
-      component: LoginComponent,
-      canActivate : [AuthGuard]
-    },
-    // { path: 'event',
-    //   component: EventsComponent,
-    //   canActivate: [AuthGuard]
-    // },
-    { path : 'userpage',
-      component : UserpageComponent
-    },
-    {
-      path : 'control',
-      component : ControlComponent
-    }
- 
+  },
+  {
+    path: 'register-ok',
+    component: RegisterOkComponent,
+    canActivate: [AuthGuard]
+
+  }, {
+    path: 'socReg',
+    component: SocialRegisterComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
+  // { path: 'event',
+  //   component: EventsComponent,
+  //   canActivate: [AuthGuard]
+  // },
+  {
+    path: 'userpage',
+    component: UserpageComponent
+  },
+  {
+    path: 'control',
+    component: ControlComponent
+  }
+
 ];
 
 @NgModule({
