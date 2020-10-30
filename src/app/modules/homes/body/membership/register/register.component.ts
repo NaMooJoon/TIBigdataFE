@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthEmailService } from '../../../../communications/fe-backend-db/membership/auth-email.service';//register user service
 import { Router } from '@angular/router'
+
 class userProfile {
   nickName: String;
   name: String;
@@ -10,8 +11,6 @@ class userProfile {
   password: String;
 }
 
-
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -19,12 +18,11 @@ class userProfile {
 })
 
 export class RegisterComponent implements OnInit {
+  constructor(private eAuth: AuthEmailService, private _router: Router) { }
 
-  // when input info(email and password), add data into object.
   registerUserData = new userProfile();
   private pw1 = "";
   private pw2 = "";
-  constructor(private eAuth: AuthEmailService, private _router: Router) { }
 
   ngOnInit() {
     this.initialize_data();
@@ -40,17 +38,22 @@ export class RegisterComponent implements OnInit {
     return this.pw1 == this.pw2;
   }
 
-  // when button clicked, this func init.
   async registerUser() {
-    if (this.pw1 == this.pw2)//check for sure
+    if (this.pw1 == this.pw2) //check for sure
       this.registerUserData.password = this.pw1;
 
-    await this.eAuth.register(this.registerUserData) //_auth : register user service
-    this._router.navigate(['/homes'])
+    let regResult = await this.eAuth.register(this.registerUserData); //_auth : register user service
+
+    if (regResult) {
+      this._router.navigate(['/register-ok'], { queryParams: { email: this.registerUserData.email } });
+    }
+    else {
+      window.location.reload();
+    }
   }
 
   toSocReg() {
-    this._router.navigateByUrl("/membership/socReg");
+    this._router.navigateByUrl("/socReg");
   }
 
 }
