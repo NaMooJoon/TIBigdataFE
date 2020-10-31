@@ -21,10 +21,36 @@ input::placeholder {
   border: 1px solid #dddddd;
 }
 
+*:focus{
+  outline: none;
+}
+
+.btn-img {
+  height: 15px;
+  width: 15px;
+}
+
+.search-refresh {
+  display: inline;
+  // padding: 0px 10px;  //글자랑 새로고침 버튼 사이 띄우기? 
+}
+
 .search-filter {
   display: flex;
   justify-content: center;
   align-content: center;
 }
 
-.search-bar-area {}
+// .search-bar-area {}
+
+.date {
+  //border: none;
+  border-color: lightgray;
+  border-radius: 30px;
+}
+
+.direct-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
