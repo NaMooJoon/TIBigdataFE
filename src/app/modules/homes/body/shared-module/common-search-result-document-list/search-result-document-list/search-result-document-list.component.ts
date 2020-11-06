@@ -22,6 +22,8 @@ import { AnalysisDatabaseService } from "../../../../../communications/fe-backen
 
 export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
+  orders = ['최신순', '과거순'];
+  amounts = ['10건씩 보기', '30건씩 보기', '50건씩 보기'];
 
 
   // @Input() cat_button_choice : string[];//자료열람 : 주제 버튼 변경 되었을 때
