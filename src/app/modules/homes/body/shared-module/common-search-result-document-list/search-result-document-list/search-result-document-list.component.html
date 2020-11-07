@@ -12,15 +12,22 @@
 
     <!-- 최신순 10건씩 보기 -->
     <div class="uk-width-medium" style="padding : 0;text-align:right;">
-        <button class="uk-button button-white button-outline"
+        <!-- <button class="uk-button button-white button-outline"
             style="font-weight : regular; font-size:21px; color : #606060;">
             최신순
         </button>
-
         <button class="uk-button button-white button-outline uk-margin-small-left"
             style="font-weight : regular; font-size:21px; color : #606060;">
             10개 씩 보기
-        </button>
+        </button>-->
+        <select class="order-drop" id="order" name="order">
+            <option *ngFor="let ord of orders" [value]="ord">{{ord}}</option>
+        </select>
+        
+        <select class="amount-drop" id="amount" name="amount">
+            <option *ngFor="let amt of amounts" [value]="amt">{{amt}}</option>
+        </select>
+        
     </div>
 </div>
 
