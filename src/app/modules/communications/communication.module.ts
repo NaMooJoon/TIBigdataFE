@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 
@@ -30,6 +30,7 @@ import { TokenInterceptorService } from './fe-backend-db/membership/token-interc
 import { SocialRegisterComponent } from '../homes/body/membership/register/social-register/social-register.component';
 import { UserpageComponent } from '../homes/body/membership/userpage/userpage.component';
 import { ControlComponent } from '../homes/body/membership/control/control.component';
+
 import { RegisterOkComponent } from '../homes/body/membership/register/register-ok/register-ok.component';
 // import { QueryServiceComponent } fr
 // om './fe-backend-db/query-service/query-service.component';
@@ -70,6 +71,7 @@ let config = new AuthServiceConfig([
     MatTableModule,
     MatDividerModule,
     MatSnackBarModule,
+    ReactiveFormsModule,
     SocialLoginModule.initialize(config)//refer angularx-sicial-login.umd.js
   ],
   providers: [
