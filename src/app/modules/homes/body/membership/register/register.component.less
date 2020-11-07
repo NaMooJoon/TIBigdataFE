@@ -13,7 +13,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  //   align-items: center;
   width: 400px;
 }
 
@@ -29,12 +28,18 @@
 
 }
 
-.field>input {
+.field>input,
+select {
   border: none;
   background-color: #EFF2F2;
   width: 100%;
   height: 40px;
   padding-left: 50px;
+
+}
+
+.dropdown-default {
+  color: gray;
 }
 
 .name-field>input {
@@ -42,7 +47,7 @@
   border-top-right-radius: 35px;
 }
 
-.pwd-again-field>input {
+.password-confirm-field>input {
   border-bottom-left-radius: 35px;
   border-bottom-right-radius: 35px;
 }
