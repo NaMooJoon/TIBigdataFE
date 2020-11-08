@@ -36,7 +36,7 @@
       <div class="required" *ngIf="registerForm.get('passwordConfirm').touched && registerForm.get('passwordConfirm').errors?.mustMatch">입력한 비밀번호와 다릅니다.</div>
     </div>
     <div class="buttons">
-      <button class="submit-button" type="submit"> 가입하기 </button>
+      <button class="submit-button" [disabled]='!registerForm.valid' type="submit"> 가입하기 </button>
       <button class="social-login" (click)="toSocReg()" type="button">구글로 로그인 </button>
     </div>
   </form>
