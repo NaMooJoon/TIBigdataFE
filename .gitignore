@@ -9,8 +9,7 @@
 /node_modules
 # /Depreciated_UniCenter_backend
 /fe-backend/node_modules
-
-
+/src/app/ip.service.ts
 
 # IDEs and editors
 /.idea
