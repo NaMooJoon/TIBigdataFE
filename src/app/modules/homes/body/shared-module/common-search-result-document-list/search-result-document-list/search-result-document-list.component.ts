@@ -1,9 +1,8 @@
-import { Component,OnInit,Input,OnChanges, Output, EventEmitter, OnDestroy,} from "@angular/core";
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
-import { Subscription, BehaviorSubject, Subject, Observable, of, zip, concat, } from "rxjs";
-import { flatMap, mergeMap } from 'rxjs/operators';
+import { Subscription, Observable } from "rxjs";
 import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
@@ -23,31 +22,30 @@ import { AnalysisDatabaseService } from "../../../../../communications/fe-backen
 export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
   orders = ['최신순', '과거순'];
-  amounts = ['10건씩 보기', '30건씩 보기', '50건씩 보기'];
-
+  amounts = [10, 30, 50];
 
   // @Input() cat_button_choice : string[];//자료열람 : 주제 버튼 변경 되었을 때
   // @Input() searchMode : string;//자료 열람 : 처음 자료 열람으로 진입할 때
-  @Input () isKeyLoaded : boolean;//키워드 검색으로 진입할 때
+  @Input() isKeyLoaded: boolean;//키워드 검색으로 진입할 때
   @Output() related_keywords_ready = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
   // @Input() is_lib_first : boolean;
   // public relatedKeywords = [];
   private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
   private search_result_doc_id_list: string[] = [];
-  private keepIdList : string [] = [];
+  private keepIdList: string[] = [];
   private relatedDocs: ArticleSource[][] = [];
-  readonly DEFUALT_KEYWROD : string = "북한산";
+  readonly DEFUALT_KEYWROD: string = "북한산";
 
 
   // private keywordChange$ : Observable<string> = this.es.getKeywordChange();
-  private countNumChange$ : Observable<any> = this.es.getCountNumChange();
-  private articleChange$:  Observable<ArticleSource[]> = this.es.getArticleChange();
-  private loginStatChage$  = this.auth.getLoginStatChange();
+  private countNumChange$: Observable<any> = this.es.getCountNumChange();
+  private articleChange$: Observable<ArticleSource[]> = this.es.getArticleChange();
+  private loginStatChage$ = this.auth.getLoginStatChange();
 
   // private keywordSubs : Subscription;
-  private countNumSubs : Subscription;
-  private articleSubs : Subscription;
-  private loginStatSubs : Subscription;
+  private countNumSubs: Subscription;
+  private articleSubs: Subscription;
+  private loginStatSubs: Subscription;
 
 
   // private articleChangePrms : Promise<any> = this.es.getArticleChange().toPromise();
@@ -66,15 +64,15 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   // private isToggleRelated: boolean
   private relateToggle: Array<boolean>;
   private isLogStat: Number = 0;
-  private isQueryFin : boolean = false;
-  private searchResultNum : number = 0;
-  private pageIndex : number = 0;
-  private numDocsPerPages : number = this.es.getDefaultNumDocsPerPage();
+  private isQueryFin: boolean = false;
+  private searchResultNum: number = 0;
+  private pageIndex: number = 0;
+  private numDocsPerPages: number = this.es.getDefaultNumDocsPerPage();
 
   private numPagePerBloc: number = 0;
   private numPage: number = 0;
   private numBloc: number = 0;
-  private pages : number[] = [];
+  private pages: number[] = [];
 
   private queryText: string;
 
@@ -88,8 +86,8 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private es: ElasticsearchService, //private cd: ChangeDetectorRef.
     private db: AnalysisDatabaseService,
-    private docControl : DocumentService
-    
+    private docControl: DocumentService
+
   ) {
     // this.isConnected = false;
     // this.subscription = this.es.articleSource.subscribe(info => {
@@ -97,10 +95,10 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     //   // //debug(info)
     // });
   }
-  readonly DEBUG : boolean = true;
+  readonly DEBUG: boolean = true;
 
-  debug(...arg:any[]){
-    if(this.DEBUG)
+  debug(...arg: any[]) {
+    if (this.DEBUG)
       console.log(arg);
   }
 
@@ -110,66 +108,12 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();
   }
-  ngOnChanges(){
-    // this.debug("0 : start change : 외부 컴포넌트에서 search-result-document-list으로 진입")
 
-    // this.isQueryFin = false;
-    // this.keyword_search();
-
-    // let category = this.get_chosen_category();
-  //   this.debug(category)
-    // this.debug("search-result-doc-list", this.cat_button_choice);
-    // this.get_category()
-  //   this.discovery_search();
-  //   this.debug("search resultdoc list compo : ngonchagne : this.is_all_docs : ", this.is_lib_first)
-  //   this.is_lib_first = false;
-
-  }
 
   ngOnInit() {
-    /**
-     * 시나리오 1 : 유저가 메인 검색창에서 검색 키워드로 입력한 뒤 검색 결과 창으로 진입 : ngInit. 
-     * 시나이로 2 : 다른 페이지에서 뒤로보기로 검색 결과페이지로 돌아옴 : ngInit
-     * 시나리오 3 : 유저가 검색 결과 창에서 새로운 키워드 입력 : ngInit 동작하지 않음. ngOnChange을 사용하기 쉽지 않은 환경이다. 
-     * 검색 결과 창과 search-result-doc-list compo와는 거리가 좀 멀다. 
-     * body-root 위에 search-bar + body module
-     *  body module 안에 search-result 
-     *    그리고 그 compo 안에 search-search-result-doc-list이 있음. input, output decorative을 사용하기에는 너무 많은 다른 컴포넌트에 의존하게 됨.
-     *    
-     * 
-     * search component 에서 behavioral subject으로 해결.
-     */
-    // if(this.searchMode){
-    //   this.queryText = "전체문서"
-    //   this.es.allCountComplete();
-    //   this.es.allSearchComplete();
-    // }
-
-    if(this.es.getCurrSearchMode() == SEARCHMODE.INIT){
-      this.es.searchKeyword("북한");
-    }
-
-
-    this.debug("0 : start init : 외부 컴포넌트에서 search-result-document-list으로 진입")
     this.isQueryFin = false;
     this.loadingSearchResult();
   }
-
-
-
-
-
-
-
-  /**
-   * 
-   * 
-   * 
-   * 
-   * 
-   * @description 키워드 입력해서 검색하는 함수들
-   */
-
 
   /**
    * @description 유저가 키워드로 검색했을 때 검색 결과 load
@@ -187,19 +131,15 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       * 
   */
   async loadingSearchResult() {
-    this.debug("0")
     this.initialize_search();//검색 결과 초기화
-    this.debug("1");
-    
+
     this.articleSubs = this.articleChange$.subscribe(articles => {
-      this.debug("article loaded", articles)
       this.articleSources = articles
       this.create_result_doc_id_table();
       this.load_related_keywords();//검색 결과에서 연관 문서 및 키워드 호출
-      
     });
 
-    this.countNumSubs = this.countNumChange$.subscribe(num=> {
+    this.countNumSubs = this.countNumChange$.subscribe(num => {
       this.queryText = this.es.getKeyword();
 
       this.debug("keyword search count num change result : ", num);
@@ -209,23 +149,24 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     })
 
     this.update_login_stat();
-    // this.keywordSubs = this.keywordChange$.subscribe((key)=>{
-    //   this.debug("new keyword : ", key)
-
-    //   this.loadPagesNumbers();
-    // })
-    
-    
-
-    
   }
 
-    /**
-   * 
-   * 페이지 번호따오기
-   */
+  searchAgain(num: number) {
+    this.es.setNumDocsPerPage(num);
+    this.es.setSearchMode(SEARCHMODE.KEY);
+    this.es.searchKeyword(this.queryText);
 
-  async loadPagesNumbers(){
+    this.articleSubs.unsubscribe();
+    this.countNumSubs.unsubscribe();
+    this.ngOnInit();
+  }
+
+  /**
+ * 
+ * 페이지 번호따오기
+ */
+
+  async loadPagesNumbers() {
     this.pages = []; //initlize
     let pageInfo = await this.es.pagingAlgo();
     this.debug("community compo : load pages : pageInfo : ", pageInfo);
@@ -234,22 +175,22 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.numBloc = pageInfo.numBloc;
 
     // this.pageIdx = this.numBloc  * this.numPagePerBloc;
-    if(this.numBloc > 1){
-      for(let i = 0 ; i < this.numPagePerBloc; i++){
+    if (this.numBloc > 1) {
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(i);
       }
     }
-    else{
-      for(let i = 0 ; i < this.numPage; i++){
+    else {
+      for (let i = 0; i < this.numPage; i++) {
         this.pages.push(i);
       }
     }
   }
-      
 
-    /**
-   * @description 가장 우선순위 높은 게시판 글들 로드하는 함수
-   */
+
+  /**
+ * @description 가장 우선순위 높은 게시판 글들 로드하는 함수
+ */
   async loadNextPage() {
     this.pageIndex += this.numDocsPerPages;
     this.es.loadListByPageIdx(this.pageIndex);
@@ -261,14 +202,14 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.es.loadListByPageIdx(this.pageIndex);
   }
 
-    /**
-   * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
-   * @param i 
-   */
-  async choosePageNum(i : number){
+  /**
+ * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
+ * @param i 
+ */
+  async choosePageNum(i: number) {
     this.es.loadListByPageIdx(i * this.numDocsPerPages);
     // window.location.reload();
-    window.scroll(0,0);//맨 위로 스크롤
+    window.scroll(0, 0);//맨 위로 스크롤
   }
 
 
@@ -276,13 +217,13 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * 다음 블록 버튼 눌렀을 때
    */
 
-  private docList : {}[] = [];
-  private cur_start_idx : number = 0;
-  private blocIdx : number = 0;
-  private pageIdx : number = 0;
+  private docList: {}[] = [];
+  private cur_start_idx: number = 0;
+  private blocIdx: number = 0;
+  private pageIdx: number = 0;
 
 
-  async pressNextBloc(){
+  async pressNextBloc() {
     this.docList = [];
     this.blocIdx++;
     this.pages = [];
@@ -293,37 +234,37 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
     // this.docList = await this.cm_svc.loadListByPageIdx(newStartIdx);
     // this.debug(this.docList);
-    if(this.blocIdx < this.numBloc -1 ){
-      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+    if (this.blocIdx < this.numBloc - 1) {
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(newStartIdx + i);
       }
 
     }
-    else{
+    else {
       let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for(let i = 0 ; i < redundentNumPages; i++){
+      for (let i = 0; i < redundentNumPages; i++) {
         this.pages.push(newStartIdx + i);
       }
     }
 
   }
 
-  async pressPriorBloc(){
+  async pressPriorBloc() {
     this.docList = [];
 
     this.blocIdx--;
     this.pages = [];
     let newStartIdx = this.blocIdx * this.numPagePerBloc;
-    this.es.loadListByPageIdx( newStartIdx);
-    if(this.blocIdx < this.numBloc -1 ){//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
-      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+    this.es.loadListByPageIdx(newStartIdx);
+    if (this.blocIdx < this.numBloc - 1) {//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(newStartIdx + i);
       }
 
     }
-    else{
+    else {
       let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for(let i = 0 ; i < redundentNumPages; i++){
+      for (let i = 0; i < redundentNumPages; i++) {
         this.pages.push(newStartIdx + i);
       }
     }
@@ -331,7 +272,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
 
 
 
-  
+
 
 
 
@@ -361,18 +302,18 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
 
 
-   /**
-    * 
-    *유저 로그인 관련 
-    * 
-    * 
-    * 
-    */
+  /**
+   * 
+   *유저 로그인 관련 
+   * 
+   * 
+   * 
+   */
   /**
    * @description 현재 유저의 로그인 상태를 확인한다.
    */
-  update_login_stat(){
-    this.loginStatSubs = this.loginStatChage$.subscribe(stat=>{//로그인 확인해서 부가기능 활성화
+  update_login_stat() {
+    this.loginStatSubs = this.loginStatChage$.subscribe(stat => {//로그인 확인해서 부가기능 활성화
       this.isLogStat = stat;
     })
   }
@@ -391,7 +332,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   /**
    * @description 새로운 검색을 하기 앞서서 검색 결과 초기화
    */
-  initialize_search(){
+  initialize_search() {
     this.isSearchLoaded = false;//로딩 안되어있을 때 로딩 중 표시
     this.isKeyLoaded = false;//연관검색어 로딩 안되어있을 때 로딩 중 표시
     this.isRelatedLoaded = true;//plan to be removed//연관 검색어 로딩 안되었을 때 로딩 중 표시
@@ -420,8 +361,8 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       this.relateToggle.push(false);
     }
 
-    this.debug("7 create_result_doc_id table : ", this.search_result_doc_id_list )
-    
+    this.debug("7 create_result_doc_id table : ", this.search_result_doc_id_list)
+
   }
 
 
@@ -431,7 +372,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @param related_doc_idx 
    * @description 개별 문서 선택할 때 해당 문서의 아이디를 저장해둔다. 그리고 자세히 보는 페이지로 이동한다. 이동한 뒤 docDetail component에서 저장한 id에 해당하는 문서를 다시 검색하여 호출
    */
-  select_this_doc(article_source_idx : number, related_doc_idx: number) {
+  select_this_doc(article_source_idx: number, related_doc_idx: number) {
     // this.debug("set this doc : ", article_source_idx);
     this.idControl.selecOneID(this.relatedDocs[article_source_idx][related_doc_idx]["id"]);
     this.navToDocDetail();
@@ -442,7 +383,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
   toggle_update(i: number) {
     this.debug("tgglRelated")
-    this.debug("toggle_update id list check : " , this.search_result_doc_id_list);
+    this.debug("toggle_update id list check : ", this.search_result_doc_id_list);
 
     this.load_related_docs(i); //load from flask
     this.relateToggle[i] = !this.relateToggle[i];
@@ -457,45 +398,45 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.db.load_related_docs(this.search_result_doc_id_list[idx]).then(res => {
       // this.debug("from db : ",res)
       this.relatedDocs[idx] = res as [];
-  
+
     });
-   
+
   }
 
 
-  
-    /**
-     * @description tfidf 알고리즘으로 도출한 각 문서의 핵심 키워드를 불러온다. 
-     * 그리고 연관검색어를 생성하기 위해 맨 앞 단어들만 취합해서 유사한 검색어 array으로 담는다. 
-     * 추후 word2vec알고리즘으로 변경하는 것을 생각 중...
-     */
-  
+
+  /**
+   * @description tfidf 알고리즘으로 도출한 각 문서의 핵심 키워드를 불러온다. 
+   * 그리고 연관검색어를 생성하기 위해 맨 앞 단어들만 취합해서 유사한 검색어 array으로 담는다. 
+   * 추후 word2vec알고리즘으로 변경하는 것을 생각 중...
+   */
+
   // private keywords: any[] = [];//각 문서마다 들어갈 상위 키워드를 저장할 array
 
   load_related_keywords() {
     // this.debug("loadKeywords : " ,this.searchResultIdList)
 
-    let relatedKeywords : string[] = []; //연관검색어
+    let relatedKeywords: string[] = []; //연관검색어
 
 
     this.db.get_tfidf_value(this.search_result_doc_id_list).then(res => {
       let data = res as []
-      
+
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];
-        
-        if(relatedKeywords.length < 10)
-        relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
+
+        if (relatedKeywords.length < 10)
+          relatedKeywords.push(tfVal[0])//현재 검색어의 연관검색어를 각 문서의 상위 키워드로 저장
       }
-      
+
       this.output_realted_keywords(relatedKeywords)
       // this.debug("loadkeywords : ", data);
 
     })
-    this.isKeyLoaded = true;  
+    this.isKeyLoaded = true;
   }
 
-  output_realted_keywords(relatedKeywords : string[]){
+  output_realted_keywords(relatedKeywords: string[]) {
     this.related_keywords_ready.emit(relatedKeywords);
   }
 
@@ -510,11 +451,11 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   /**
    * @description 문서 찜하기 기능 : 체크 박스누를 때마다 상태 업데이트
    */
-  checkBoxUpdate(i){
+  checkBoxUpdate(i) {
     let idx = this.keepIdList.indexOf(this.search_result_doc_id_list[i]);
-    idx != undefined ? 
-      this.keepIdList.push(this.search_result_doc_id_list[i]) : 
-      this.keepIdList.splice(idx,1);
+    idx != undefined ?
+      this.keepIdList.push(this.search_result_doc_id_list[i]) :
+      this.keepIdList.splice(idx, 1);
   }
 
 
@@ -522,7 +463,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @description 문서 체크한 뒤 담기 버튼 누르면 실제로 담는 함수.
    */
   keepMyDoc() {
-    this.auth.addMyDoc(this.keepIdList).then(()=>{
+    this.auth.addMyDoc(this.keepIdList).then(() => {
       alert("문서가 나의 문서함에 저장되었어요.")
     });
 
