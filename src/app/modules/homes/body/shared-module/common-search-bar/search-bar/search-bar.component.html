@@ -1,19 +1,32 @@
 <div class="">
   <input class="search-bar uk-input" type="text" (keyup)="updateKeyword($event)" value="{{ queryText }}"
     (keyup.enter)="search()" style="background-image: url(assets/search.png);" placeholder="기본 검색어를 입력하세요" />
-  <div class="search-filter">
-    <span>검색조건</span>
-    <span uk-icon="icon: refresh; ratio:0.8"></span>
+    <br>
+    <div> <!--  class="search-filter" -->
+      <div class="search-refresh">
+        <span>검색조건</span>
+    <!-- <span uk-icon="icon: refresh; ratio:0.8"></span> -->
+        <!-- <input type="button" class="refresh"> -->
+        <button class="btn" id="btn" type="reset"><img class="btn-img" src="/assets/refresh.png"></button>
+      </div>
     <button class="filter-font uk-button uk-button-default uk-margin-small-left button-width" type="button">
       기간
     </button>
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
-        <li class="uk-active"><a href="#">전체</a></li>
+        <!-- <li class="uk-active"><a href="#">전체</a></li> -->
+        <li><a href="#">전체</a></li>
         <li><a href="#">1일</a></li>
         <li><a href="#">1주일</a></li>
-        <li><a href="#">1달</a></li>
+        <li><a href="#">1개월</a></li>
+        <li><a href="#">3개월</a></li>
         <li><a href="#">6개월</a></li>
+        <li><a href="#">1년</a></li><br>
+        <li class="direct-date">
+          <span>직접입력 </span>
+          <input type="date" id="start-date" name="start-date" class="date">
+          <input type="date" id="end-date" name="end-date" class="date">
+        </li>
 
 
         <!-- <mat-form-field>
@@ -40,10 +53,10 @@
             </mat-form-field> -->
         <!-- <button mat-raised-button (click)="picker.open()">Open</button> -->
 
-        <li><a href="#">Item</a></li>
+        <!-- <li><a href="#">Item</a></li>
         <li><a href="#">Item</a></li>
         <li class="uk-nav-divider"></li>
-        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li> -->
       </ul>
     </div>
 
@@ -52,13 +65,17 @@
     </button>
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
-        <li class="uk-active"><a href="#">Active</a></li>
+        <!-- <li class="uk-active"><a href="#">Active</a></li>
         <li><a href="#">Item</a></li>
         <li class="uk-nav-header">Header</li>
         <li><a href="#">Item</a></li>
         <li><a href="#">Item</a></li>
         <li class="uk-nav-divider"></li>
-        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li> -->
+        <li><a href="#">국회 외교통일위원회</a></li>
+        <li><a href="#">남북사회통합연구원</a></li>
+        <li><a href="#">남북교류협력지원협회</a></li>
+        <li><a href="#">남북물류포럼</a></li>
       </ul>
     </div>
 
@@ -66,7 +83,7 @@
       주제별
     </button>
     <div uk-dropdown="pos: bottom-justify">
-      <ul class="uk-nav uk-dropdown-nav">
+      <!-- <ul class="uk-nav uk-dropdown-nav">
         <li class="uk-active"><a href="#">Active</a></li>
         <li><a href="#">Item</a></li>
         <li class="uk-nav-header">Header</li>
@@ -74,9 +91,22 @@
         <li><a href="#">Item</a></li>
         <li class="uk-nav-divider"></li>
         <li><a href="#">Item</a></li>
+      </ul> -->
+      <ul class="uk-nav uk-dropdown-nav">
+        <li><a href="#">전체</a></li>
+        <li><a href="#">정치</a></li>
+        <li><a href="#">경제</a></li>
+        <li><a href="#">사회</a></li>
+        <li><a href="#">문화</a></li>
+        <li><a href="#">국제</a></li>
+        <li><a href="#">지역</a></li>
+        <li><a href="#">스포츠</a></li>
+        <li><a href="#">과학</a></li>
       </ul>
+        <!-- 한개를 선택하면 바로 검색이 되게 해야되나? 아니면 몇가지를 선택하면 몇가지를 다 가지고 검색을 해야되나? -->
     </div>
 
+    <!--  상세검색 기능이 뭔지 모르겠어서 일단 주석 - KSJ   
     <button class="filter-font uk-button uk-button-default uk-margin-small-left" type="button">
       상세검색&nbsp;&nbsp;
     </button>
@@ -91,6 +121,7 @@
         <li><a href="#">Item</a></li>
       </ul>
     </div>
+    -->
 
     <button class="filter-font uk-button uk-button-text uk-margin-small-left" style="border:0; color:#606060">
       검색도움말&nbsp;&nbsp;<span uk-icon="icon: info; ratio:0.8"></span>

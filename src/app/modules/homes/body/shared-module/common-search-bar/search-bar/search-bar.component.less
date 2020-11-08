@@ -21,10 +21,39 @@ input::placeholder {
   border: 1px solid #dddddd;
 }
 
+*:focus{
+  outline: none;
+}
+
+button:focus {
+  box-shadow:none;
+}
+
+.btn-img {
+  height: 15px;
+  width: 15px;
+  outline: none;
+}
+
+.search-refresh {
+  display: inline;
+}
+
 .search-filter {
   display: flex;
   justify-content: center;
   align-content: center;
 }
 
-.search-bar-area {}
+// .search-bar-area {}
+
+.date {
+  border-color: lightgray;
+  border-radius: 30px;
+}
+
+.direct-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
