@@ -1,43 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');//javscript with token lib
-var secret = 'harrypotter';//???? no use?
-// const User = require('./models/user');
-// const conn = require('./connection/userConn')
+
 const User = require('../models/user');
 const Res = require("../models/Res");
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// class Res {
-//     //there is no type restriction in typescript.
-//     constructor(succ, msg, payload) {
-//         this.succ = succ;//try to be booelan //request success or fail!
-//         this.msg = msg;//try to be string
-//         this.payload = payload;//try to be object
-//     }
-// }
-
-/**
- * Email User Authentification Ware
- * Request : Response : info
- * User login : success. fail(wrong password or eamil) : user info(name, token) or why fail
- * User register : success.
- * Token verification : valid or invalid : name, email
- * User check : already our user or not our user
- * 
- * succ : true or false. 
- * info : 
- * 
- * Communication Format whould be fixed for flexiblility, easy debugging, and maintainance. 
- * request OK
- * request fail
- * 
- * 
- */
-// router.get()
-// router.get('/getEuserList')
 router.get('/getEuserList', (req, res) => {
     // console.log("get all user list init");
     User.find((err, allUser) => {
@@ -69,7 +39,7 @@ async function verifyToken(req, res) {
         let payload;
         //js with token.
         try {
-            payload = jwt.verify(token, secret)
+            payload = jwt.verify(token, 'SeCrEtKeYfOrHaShInG')
             // console.log("payload : ", payload);
         }
         catch (err) {
@@ -115,111 +85,86 @@ async function verifyToken(req, res) {
     }
 }
 
-//check if this email user is aleady our user?
+/* Checker to check duplicated email in our db */ 
 router.post('/eCheckUser', (req, res) => {
-    let userData = req.body;
-    let email = userData.email;
-    let user = userData.user;
-    // user.email
-    User.findOne({ email: email }, (error, user) => {
+    /* Read request body and save email into variable */
+    let userEmail = req.body.email;
+    console.log(userEmail)
+
+    /* Send MongoDB query */
+    User.findOne({ email: userEmail }, (error, user) => {
         if (error) {
-            console.log("user already exist check failed!");
+            console.log("Error while checking db!");
         }
         else {
-            if (!user) {//when this user is not our list
+            console.log(user);
+            if (!user) {
                 console.log("user is not one of us");
                 res.json(new Res(false));
             }
-            else {//when this user is already our user
-                // console.log("user one of us");
+            else {
+                console.log("user one of us");
                 res.json(new Res(true));
             }
         }
     })
 })
 
-
-/**
- * @EmailLoginFunctions
- * 
- * 
- * 
- * 
- * 
- * 
- */
-//at register dir
+/* Registration of new user */
 router.post('/register', (req, res) => {
-    let userData = req.body;//req.body. what is req form?
-
-    //if this user is new, allow to register.
-    // var pw = jwt.sign(userData.password,secret);
-    // userData.password = pw;//hide password
-    // userData.password
+    let userData = req.body;
     bcrypt.genSalt(saltRounds, (err, salt) => {
+        /* Convert password into encrypted hash and update password information with the hash */
         bcrypt.hash(userData.password, salt, (err, hash) => {
             userData.password = hash;
-            // console.log(userData);
             userData.auth = "email";
             let user = new User(userData);
-            user.save((error, userData) => {//save new user data account
+            /* Send query to save userdata into db */
+            user.save((error, userData) => {
                 if (error) {
                     console.log(error)
                 } else {
-                    // console.log("api : email register : save ok, user info : ", userData);
-                    let payload = { subject: userData._id };//new user id : subject => payload. create token.
-                    var token = jwt.sign(payload, secret, { expiresIn: '24h' });//secret harry poter usage check required. //토큰 발급.
+                    /* Create and response token with user information */
+                    let payload = { subject: userData._id }; 
+                    var token = jwt.sign(payload, 'SeCrEtKeYfOrHaShInG', { expiresIn: '24h' });
                     res.json(new Res(true, 'User registered!', { token: token, name: user.name, email: user.email }));//토큰 전송.
                 }
             })
-
-
         })
     })
 
 })
 
-
-// http://localhost:4000/api/login
+/* Login */
 router.post('/login', (req, res) => {
     let userData = req.body;
-    // console.log("recieved user data : ",userData);
-    // if (!eCheckUser(userData.email)) {//when this user is not on our user list, deny login, and lead to register
-    //     console.log("hello?");
-    //     res.json({ success: false, message: "this user is not our user" });
-    // }
-    // else {
-    // console.log("login process init")
-    User.findOne({ email: userData.email }, (error, user) => {
+    let userEmail = userData.email;
+
+    /* send query to get user information that has userEmail information */
+    User.findOne({ email: userEmail }, (error, user) => {
         if (error) {
             console.err(error)
         }
         else {
-            if (!user) {//no user -> serious error since we have already check this user is one of us in FE.
+            if (!user) { 
                 res.json(new Res(false, 'danger'));
             }
             else {
                 bcrypt.compare(userData.password, user.password, function (err, result) {
-                    // console.log("recieved userdata pw : ",userData.password);
-                    // console.log("user db pw : ",user.password);
-                    // console.log("pw match result : ", result);
-                    if (!result) {//hash value incorrect
-                        // console.log("password failed");
+                    /* Case when password does not match */
+                    if (!result) {
                         res.json(new Res(false, 'pw'));
                     }
                     else {
-                        let payload = { subject: user._id };//토큰에 오고 갈 정보 : id
-                        var token = jwt.sign(payload, secret, { expiresIn: '24h' });//토큰 발급.
-                        // console.log("email user query : login : token : ", token);
-                        res.json(new Res(true, 'User authenticated!', { token: token, name: user.name, email: user.email }));//토큰 전송
+                        let payload = { subject: user._id }; //토큰에 오고 갈 정보 : id
+                        var token = jwt.sign(payload, 'SeCrEtKeYfOrHaShInG', { expiresIn: '24h' }); //토큰 발급.
+                        res.json(new Res(true, 'User authenticated!', { token: token, name: user.name, email: user.email, inst: user.inst, nickname: user.nickName, api: user.api })); //토큰 전송
                     }
                 });
             }
         }
     })
-    // }
 })
-
 
 router.post('/verify', verifyToken);
 module.exports = router;
