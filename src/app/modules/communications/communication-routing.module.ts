@@ -13,6 +13,7 @@ import { AuthGuard } from './fe-backend-db/membership/auth.guard';
 import { SocialRegisterComponent } from '../homes/body/membership/register/social-register/social-register.component';
 import { UserpageComponent } from '../homes/body/membership/userpage/userpage.component';
 import { ControlComponent } from '../homes/body/membership/control/control.component';
+import { ApiRegisterComponent } from '../homes/body/membership/register/api-register/api-register.component';
 
 const routes: Routes = [
   // {
@@ -34,6 +35,11 @@ const routes: Routes = [
     path: 'socReg',
     component: SocialRegisterComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'api-register',
+    component: ApiRegisterComponent,
+    //canActivate: [AuthGuard]
   },
   {
     path: 'login',
