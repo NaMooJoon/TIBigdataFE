@@ -1,42 +1,65 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthGoogleService } from '../../../../../communications/fe-backend-db/membership/auth-google.service';
 import { Router } from "@angular/router";
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+
+class userProfile {
+  nickName: String;
+  name: String;
+  status: String;
+  inst: String;
+  email: String;
+  password: String;
+  api: Boolean;
+}
 
 @Component({
   selector: 'app-social-register',
   templateUrl: './social-register.component.html',
   styleUrls: ['./social-register.component.less']
 })
+
 export class SocialRegisterComponent implements OnInit {
+  private registerForm: FormGroup;
+  private statusList: any = ['대학생', '석사', '박사', '연구원', '기타'];
+  private registerProfile = new userProfile;
+  constructor(private gAuth: AuthGoogleService, private _router: Router, private formBuilder: FormBuilder) { }
 
-  constructor(private gAuth: AuthGoogleService, private router : Router) { }
-
-  private agrEmail: boolean = false;
-  private agrAcs: boolean = false;
-  private agrSrcHtr: boolean = false;
-
-  ngOnInit() {
+  ngOnInit(): void {
+    this.registerForm = this.formBuilder.group({
+      nickName: new FormControl('', [
+        Validators.required,
+      ]),
+      status: new FormControl('', [
+        Validators.required,
+      ]),
+      inst: new FormControl('', [
+        Validators.required,
+      ]),
+    })
   }
 
-  gRegister(platform: string): void {
-
+  gRegister(): void {
+    // TODO: update database with gmail info + info from form(nickname, inst, status)
     this.gAuth.googleSignIn().then((user) => {
+      this.registerProfile.name = user.name;
+      this.registerProfile.email = user.email;
+      this.registerProfile.api = false;
+      this.registerProfile.inst = this.registerForm.get('inst').value;
+      this.registerProfile.status = this.registerForm.get('status').value;
+      this.registerProfile.nickName = this.registerForm.get('nickName').value;
 
-      // gauth.signIn(platform).then((response) => {
+      let regResult = this.gAuth.register(this.registerProfile);
 
-      this.gAuth.register(user);
-      // .subscribe((res) => {
-      //   // if(res...is yes)
-      //   //then
-      //   console.log(res);
-      //   alert(res.payload.user + "으로 회원가입 되었습니다. KUBiC 회원이 되신 것을 환영합니다. 다시 로그인해주세요.");
-      //   this.router.navigate(['/homes']);
-
-      // });
-
+      if (regResult) {
+        this._router.navigate(['/register-ok'], { queryParams: { email: this.registerProfile.email } });
+      }
+      else {
+        alert("오류가 발생했습니다. 다시 회원가입을 시도해주세요");
+        this.ngOnInit();
+      }
     })
 
-    // })
 
   }
 
