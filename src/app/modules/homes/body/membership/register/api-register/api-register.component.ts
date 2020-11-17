@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵsetCurrentInjector } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'angularx-social-login';
 import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
@@ -18,7 +18,17 @@ export class ApiRegisterComponent implements OnInit {
     private _router: Router,
   ) { }
 
-  ngOnInit() {
-    console.log(this._auth.getLogInStat());
+  async ngOnInit() {
+    await this._auth.verifySignIn();
+    if (this._auth.getApiStat()) {
+      alert("이미 API 사용이 승인된 계정입니다.");
+      this._router.navigateByUrl("/homes");
+    }
+
+    this._userAuthType = this._auth.getAuthType();
+  }
+
+  async registerApi() {
+    await this._auth.apiRegister();
   }
 }

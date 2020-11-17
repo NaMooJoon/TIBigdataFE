@@ -21,6 +21,6 @@ export class RegisterOkComponent implements OnInit {
   }
 
   toApiReg() {
-    console.log(this.userEmail);
+    this._router.navigateByUrl("/api-register");
   }
 }

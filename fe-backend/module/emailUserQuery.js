@@ -16,34 +16,28 @@ router.get('/getEuserList', (req, res) => {
     });
 });
 
-
-
-//email verify code
+/**
+ * @description verify passed token and keep user activation
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function verifyToken(req, res) {
-    // console.log("verifyToken func has been inited!");
-    // console.log(req.headers);
-    // console.log(req.body);
     try {
-        //if req header is not valid
         if (!req.headers.authorization) {
             return res.status(401).send(new Res(false, 'header authorization issue'));
         }
-
-        //parse
+        /* Take token from request */
         let token = JSON.parse(req.headers.authorization.split(' ')[1]).token;
-        // console.log("token : ",token);
-        //parser result is null => invalid
+        
         if (!token) {
             return res.status(401).send(new Res(false, 'token null'));
         }
+        
         let payload;
-        //js with token.
         try {
             payload = jwt.verify(token, 'SeCrEtKeYfOrHaShInG')
-            // console.log("payload : ", payload);
         }
         catch (err) {
-            // console.log(err);
             if (err.message == "jwt expired") {
                 return res.status(200).send(new Res(false, "expired"));
             }
@@ -52,17 +46,12 @@ async function verifyToken(req, res) {
                 return res.status(401).send(new Res(false, "token unverified!"));
             }
         }
-        //if decoded is not wrong? invalid? how invalid then?
         if (!payload) {
             return res.status(401).send(new Res(false, 'payload undefined'));
         }
 
-        // console.log(payload.subject);
-        var user_id = payload.subject//need to know how the req is formed first....
-        //why do they again set value of req? not res?
-        // next()//where does this function come from?
-        // console.log(user_id);
-        let name, email;
+        let user_id = payload.subject
+        
         await User.findOne({ _id: user_id }, (error, user) => {
             // console.log(user.name);
             if (error)
@@ -70,14 +59,18 @@ async function verifyToken(req, res) {
             if(user == null)
                 console.log(user)
             else {
-                name = user.name;
-                email = user.email
+                let userInfo = new User({
+                    nickName : user.nickName,
+                    auth : user.auth,
+                    name : user.name,
+                    status : user.status,
+                    inst : user.status,
+                    email : user.email,
+                    api : user.api,
+                });
+                return res.status(200).send(new Res(true, "OK", { user: userInfo }));
             }
         })
-
-
-        return res.status(200).send(new Res(true, "OK", { name: name, email: email }));
-        // name : user.name, email : user.email
     }
     catch (err) {
         console.log("server error! : ", err);
@@ -132,6 +125,29 @@ router.post('/register', (req, res) => {
             })
         })
     })
+
+})
+
+// TODO: This query should be separated from this js. It would be better if we have common query model that can be used for both google and general email user.
+router.post('/apiRegister', (req, res)=>{
+    let userEmail = req.body.payload;
+
+    console.log(userEmail);
+
+    User.updateOne(
+        { email: userEmail} ,
+        { $set: { api: true } }, (error, result) => {
+            if(error){
+                console.log(error);
+            }
+            else{
+                if (!result){
+                    res.json(new Res(false, 'Wrong attempt'));
+                }
+                res.json(new Res(true, 'api auth is given!'));
+            }
+        }
+    )
 
 })
 

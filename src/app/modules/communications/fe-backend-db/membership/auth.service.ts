@@ -27,6 +27,7 @@ export class EPAuthService {
   private ERASE_ALL_MY_DOC = this.URL + "/myDoc/eraseAllDoc";
   private ADD_SEARCH_HISTORY_URL = this.URL + "/hst/addHistory";
   private SHOW_SEARCH_HISTORY_URL = this.URL + "/hst/showHistory";
+  private UPDATE_API_AUTH = this.URL + "/eUser/apiRegister";
 
   private isLogIn: logStat = logStat.unsigned;//for static, inactive, passive use
   private loginStatChange$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
@@ -60,7 +61,7 @@ export class EPAuthService {
     return this.isLogIn;
   }
 
-  setLogStat(stat) {
+  setLogStat(stat: logStat) {
     this.loginStatChange$.next(stat as logStat)
     this.isLogIn = stat as logStat;
   }
@@ -72,11 +73,16 @@ export class EPAuthService {
   getAuthType(): logStat {
     return this.userProfile.registerStat;
   }
+
   getToken() {
     return localStorage.getItem("token");
   }
 
-  logOut() {
+  getApiStat(): Boolean {
+    return this.userProfile.api;
+  }
+
+  async logOut() {
     this.auth.logOut()
     localStorage.removeItem("token");
 
@@ -87,13 +93,11 @@ export class EPAuthService {
     this.router.navigate(["/homes"]);
   }
 
-  async verifySignIn() {
-    var isSignIn: boolean = false;
-    var tk_with_type = JSON.parse(this.getToken());//token is stored in string.
-    console.log("auth service : token : ", tk_with_type);
+  async verifySignIn(): Promise<Boolean> {
+    let tk_with_type = JSON.parse(this.getToken());//token is stored in string.
     if (tk_with_type) {//when token exists
-      var tk = tk_with_type.token;
-      var type = tk_with_type.type;
+      let tk = tk_with_type.token;
+      let type = tk_with_type.type;
 
       if (type == logStat.google) {
         this.auth = this.gAuth.getInstance();
@@ -101,20 +105,21 @@ export class EPAuthService {
       }
       else if (type == logStat.email) {
         this.auth = this.eAuth.getInstance();
-        console.log("email mode")
       }
 
-      var tkStat = await this.auth.verifyToken(tk);//verify it this token is valid or expired.
-      // console.log(tkStat);
-      if (tkStat.succ) {//if token is valid
-        this.userProfile = new UserProfile(type, tkStat.payload.email, tkStat.payload.name, tkStat.payload.nickname, tkStat.payload.inst, tkStat.payload.api, tk);
+      let tkStat = await this.auth.verifyToken(tk);//verify it this token is valid or expired.
+      if (tkStat.succ) {
+        this.userProfile = new UserProfile(type, tkStat.payload.user.email, tkStat.payload.user.name, tkStat.payload.user.nickname, tkStat.payload.user.inst, tkStat.payload.user.api, tk);
+        console.log("set stat after verifying: " + type);
+        this.setLogStat(type);
+        console.log(this.userProfile);
         let isSU = this.SUPERUSER.findIndex(i => {
           i == this.userProfile.name
         })
         if (isSU)
           type = logStat.SUPERUSER;
-        this.setLogStat(type);
 
+        return true;
       }
       else {//toekn verify failed
         if (tkStat.msg == "expired") {
@@ -126,7 +131,7 @@ export class EPAuthService {
     }
 
     else {//when token does not exist.
-      return isSignIn;
+      return false;
     }
   }
 
@@ -205,10 +210,21 @@ export class EPAuthService {
   }
 
   async eraseAllMyDoc() {
-    let res = await this.http.post<any>(this.ERASE_ALL_MY_DOC, { payload: this.userProfile.email }).toPromise()
+    let res = await this.http.post<any>(this.ERASE_ALL_MY_DOC, { payload: this.userProfile.email }).toPromise();
     if (res.succ)
       alert("나의 문서를 모두 지웠어요.");
     else
       alert("문서 지우기에 실패했습니다. 관리자에게 문의해주세요.")
+  }
+
+  async apiRegister() {
+    let res = await this.http.post<any>(this.UPDATE_API_AUTH, { payload: this.userProfile.email }).toPromise();
+    if (res.succ) {
+      alert("회원가입이 완료되었습니다! API 키 발급페이지로 이동합니다.");
+
+    }
+    else {
+      alert("잘못된 접근입니다. 로그인이 되어 있는지 확인해주세요.");
+    }
   }
 }
