@@ -13,14 +13,13 @@ export class RegisterOkComponent implements OnInit {
   private userEmail = null;
 
   ngOnInit() {
-    this.activateRoute.queryParams.subscribe((params) => { this.userEmail = params['email'] })
   }
 
   toHome() {
     this._router.navigateByUrl("/homes");
   }
 
-  toApiReg() {
-    this._router.navigateByUrl("/api-register");
+  toLogIn() {
+    this._router.navigateByUrl("/login");
   }
 }
