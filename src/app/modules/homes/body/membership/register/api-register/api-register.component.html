@@ -213,14 +213,15 @@
                             &nbsp;&nbsp;&nbsp;* 본 약관에 대한 저작권은 행정안전부에 귀속하며 무단 복제, 배포, 전송, 기타 저작권 침해행위를 엄금합니다.
         </div>
         <div class="agreement">
-            <label for="agreement-check"><input type="checkbox" name="" id="agreement-check"> 약관에 동의합니다</label>
+            <label for="agreement-check"><input type="checkbox" name="" id="agreement-check" [(ngModel)]="agreement"> 약관에 동의합니다</label>
         </div>
     </section>    
-    <section class="email-box">
+     <!-- TODO: Decide additional email authorization -->
+    <!-- <section class="email-box">
         <p> 이메일 인증 </p>
         <button class="email-not-confirmed" *ngIf="_userAuthType == 2" >인증하기</button>
         <span class="email-confirmed" *ngIf="_userAuthType == 3" >✔︎ 이메일 인증이 완료되었습니다!</span>
-    </section>
+    </section> -->
 
-    <button class="submit-button" (click)="registerApi()"> 회원가입 및 인증키 발급 페이지로 이동</button>
+    <button class="submit-button" [disabled]="!agreement" (click)="registerApi()"> 회원가입 및 인증키 발급 페이지로 이동 </button>
 </div>
