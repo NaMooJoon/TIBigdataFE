@@ -2,7 +2,7 @@ import { UserProfile, logStat } from "./user.model";
 import { Auth } from "./userAuth.model";
 import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { IpService } from 'src/app/ip.service';
 import { DocumentService } from "../../../homes/body/search/service/document/document.service";
@@ -221,10 +221,10 @@ export class EPAuthService {
     let res = await this.http.post<any>(this.UPDATE_API_AUTH, { payload: this.userProfile.email }).toPromise();
     if (res.succ) {
       alert("회원가입이 완료되었습니다! API 키 발급페이지로 이동합니다.");
-
     }
     else {
       alert("잘못된 접근입니다. 로그인이 되어 있는지 확인해주세요.");
+      this.router.navigateByUrl("/login");
     }
   }
 }
