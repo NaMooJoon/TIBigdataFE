@@ -25,7 +25,7 @@
         (change)="checkBoxUpdate(i)" />
     전체선택
 </div>
-<button class="mydoc" (click)="storeCheckBox()">담기</button>
+<button class="mydoc" (click)="keepMyDoc()" *ngIf="isLogStat">담기</button>
 <div class="search-result">
     <!-- search-result -->
     <!-- <span uk-spinner="ratio: 4.5 " *ngIf="isSearchLoaded == false; else loadFin">
@@ -39,7 +39,7 @@
             <div *ngIf="isLogStat" class="uk-width-small check-box-postition">
                 <span class="form-group">
                     <input class="uk-checkbox custom-check" type="checkbox"
-                        style="border-radius: 3px; border: 1px solid #8a8d8e;" (change)="checkBoxUpdate(i)" />
+                        style="border-radius: 3px; border: 1px solid #8a8d8e;" (change)="checkBoxUpdate(i)" ng-checked="isChecked"/>
                 </span>
             </div>
 
