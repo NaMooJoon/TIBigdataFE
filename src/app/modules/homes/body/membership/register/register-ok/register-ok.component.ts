@@ -19,7 +19,7 @@ export class RegisterOkComponent implements OnInit {
     this._router.navigateByUrl("/homes");
   }
 
-  toApiReg() {
-    this._router.navigateByUrl("/api-register");
+  toLogIn() {
+    this._router.navigateByUrl("/login");
   }
 }
