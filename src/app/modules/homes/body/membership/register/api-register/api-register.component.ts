@@ -11,6 +11,8 @@ import { logStat, UserProfile } from 'src/app/modules/communications/fe-backend-
 })
 export class ApiRegisterComponent implements OnInit {
   private _userAuthType = null;
+  private isLogIn: Boolean;
+
 
   constructor(
     private _auth: EPAuthService,
@@ -19,16 +21,18 @@ export class ApiRegisterComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this._auth.verifySignIn();
-    if (this._auth.getApiStat()) {
+    this.isLogIn = await this._auth.verifySignIn();
+    if (this.isLogIn && this._auth.getApiStat()) {
       alert("이미 API 사용이 승인된 계정입니다.");
       this._router.navigateByUrl("/homes");
     }
-
-    this._userAuthType = this._auth.getAuthType();
+    // else if (!this.isLogIn) {
+    //   alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요");
+    //   this._router.navigateByUrl("/login");
+    // }
   }
 
-  async registerApi() {
+  async registerApi(): Promise<void> {
     await this._auth.apiRegister();
   }
 }
