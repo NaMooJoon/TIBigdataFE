@@ -10,6 +10,7 @@ class userProfile {
   inst: String;
   email: String;
   password: String;
+  api: Boolean;
 }
 
 @Component({
@@ -61,7 +62,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-
     console.log(this.registerForm.get('name').value);
     this.userProfile.name = this.registerForm.get('name').value;
     this.userProfile.nickName = this.registerForm.get('nickName').value;
@@ -69,20 +69,21 @@ export class RegisterComponent implements OnInit {
     this.userProfile.inst = this.registerForm.get('inst').value;
     this.userProfile.email = this.registerForm.get('email').value;
     this.userProfile.password = this.registerForm.get('password').value;
-
-
+    this.userProfile.api = false;
 
     this.registerUser();
   }
 
   async registerUser() {
+    console.log(this.userProfile);
     let regResult = await this.eAuth.register(this.userProfile); //_auth : register user service
 
     if (regResult) {
-      this._router.navigate(['/register-ok'], { queryParams: { email: this.userProfile.email } });
+      this._router.navigateByUrl("/register-ok");
     }
     else {
-      window.location.reload();
+      alert("오류가 발생했습니다. 다시 회원가입을 시도해주세요");
+      this.ngOnInit();
     }
   }
 
@@ -98,7 +99,6 @@ export class RegisterComponent implements OnInit {
       if (matchingControl.errors && !matchingControl.errors.mustMatch) {
         return;
       }
-
       if (control.value !== matchingControl.value) {
         matchingControl.setErrors({ mustMatch: true });
       }
