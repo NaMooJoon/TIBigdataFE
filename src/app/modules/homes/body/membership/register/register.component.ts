@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
     let regResult = await this.eAuth.register(this.userProfile); //_auth : register user service
 
     if (regResult) {
-      this._router.navigate(['/register-ok'], { queryParams: { email: this.userProfile.email } });
+      this._router.navigateByUrl("/register-ok");
     }
     else {
       alert("오류가 발생했습니다. 다시 회원가입을 시도해주세요");

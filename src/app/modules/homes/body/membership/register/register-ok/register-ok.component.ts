@@ -13,7 +13,6 @@ export class RegisterOkComponent implements OnInit {
   private userEmail = null;
 
   ngOnInit() {
-    this.activateRoute.queryParams.subscribe((params) => { this.userEmail = params['email'] })
   }
 
   toHome() {
