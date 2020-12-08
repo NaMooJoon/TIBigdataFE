@@ -34,7 +34,7 @@ import { ApiRegisterComponent } from '../homes/body/membership/register/api-regi
 // import { QueryServiceComponent } fr
 // om './fe-backend-db/query-service/query-service.component';
 
-const PROVIDER_ID: string = "287082486827-0junp0td4ajs1c5p0381topvh168o6l5.apps.googleusercontent.com"; //진범 localhost 승인
+const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com"; //진범 localhost 승인
 
 let config = new AuthServiceConfig([
   {
