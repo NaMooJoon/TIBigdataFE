@@ -1,123 +1,38 @@
-<div class="uk-navbar-container" uk-navbar>
-    <div class="uk-navbar-left ">
-        <ul class="uk-navbar-nav uk-visible@m">
-
-
-            <!-- 사이트맵 -->
-            <li><a class="nav-text" (click)="ready()">사이트맵</a></li>
-            <!-- <li><a (click)="this.auth.forceLogOut()" >강제 로그아웃(개발용)</a></li> -->
-
-
-            <!-- 자료열람 -->
-            <li>
-                <a class="nav-text" (click)="navigateLibrary()">자료열람</a>
-            </li>
-
-
-            <!-- 자료분석 -->
-            <li *ngIf="isLogin">
-                <a class="nav-text" (click)="navigateSpecials()">자료분석</a>
-                <!-- <div class="uk-navbar-dropdown">
-                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <div *ngIf="isLogin">
-                            <li><a (click)="navigateSpecials()">대시보드</a></li>
-                        </div>
-                        <li><a href="#">시간 순 흐름</a></li>
-                        <li><a href="#">역대 정권 흐름</a></li>
-                    </ul>
-                </div> -->
-            </li>
-
-            <!-- 커뮤니티 -->
-            <li><a class="nav-text" (click)="toCommunity()">커뮤니티</a>
-
-                <div class="uk-navbar-dropdown">
-                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a (click)="toAnnouncement()">공지사항</a></li>
-                        <li><a (click)="toCommunity()">광장</a></li>
-                        <li><a (click)="toFaq()">FAQ</a></li>
-                        <li><a (click)="toCommunity()">관리자에게 바란다.</a></li>
-                        <!-- <li><a href="#">이벤트</a></li> -->
-                    </ul>
-                </div>
-            </li>
-
-            <!-- 홈페이지소개 -->
-            <li><a class="nav-text" (click)="toHomes()">홈페이지 소개</a>
-                <div class="uk-navbar-dropdown">
-                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="#">사이트 소개</a></li>
-                        <li><a href="#">서비스 안내</a></li>
-                        <li><a href="#">수집 정보</a></li>
-                        <li><a href="#">회원정책</a></li>
-                    </ul>
-                </div>
-            </li>
+<nav class="navbar">
+  <ul class="common-menu">
+    <li><a (click)="navigateLibrary()">자료열람</a></li>
+    <li><a (click)="navigateSpecials()">자료분석</a></li>
+    <li *ngIf="isApiUser"><a>OpenAPI</a></li>
+    <li class="community-menu">
+      <div class="dropdown-container">
+        <a (click)="toCommunity()">커뮤니티</a>
+        <ul class="community-dropdown-menu">
+          <li><a (click)="toAnnouncement()">공지사항</a></li>
+          <li><a (click)="toFaq()">FAQ</a></li>
+          <li><a (click)="toCommunity()">Q&A</a></li>
         </ul>
-    </div>
-
-    <div class="uk-navbar-right ">
-        <ul class="uk-navbar-nav uk-visible@m">
-            <!-- 로그인 -->
-            <div *ngIf="isLogin">
-                <ul class="uk-navbar-nav uk-visible@m">
-                    <li><a class="nav-text" (click)="toUserPage()">안녕하세요 {{nowUser}} 님</a></li>
-                    <li><a class="nav-text" (click)="toUserPage()">My Page</a></li>
-                    <li><a class="nav-text" (click)="logOut()">로그아웃</a></li>
-                    <li><a class="nav-text" *ngIf="isLogin==1" (click)="toControl()">SUPERUSER</a></li>
-                </ul>
-            </div>
-            <div *ngIf="!isLogin">
-                <ul class="uk-navbar-nav uk-visible@m">
-                    <li><a class="nav-text" (click)="toLogin()">로그인</a> </li>
-                    <li><a class="nav-text" (click)="toRegister()">회원가입</a></li>
-                </ul>
-            </div>
+      </div>
+    </li>
+    <li class="about-menu">
+      <div class="dropdown-container">
+        <a>홈페이지소개</a>
+        <ul class="about-dropdown-menu">
+          <li><a href="#자료분석">사이트소개</a></li>
+          <li><a href="#자료분석">서비스안내</a></li>
+          <li><a href="#자료분석">수집정보</a></li>
+          <li><a href="#자료분석">회원정책</a></li>
         </ul>
-    </div>
-</div>
+      </div>
+    </li>
+  </ul>
 
+  <ul *ngIf="!isSignedIn" class="login-menu">
+    <li><a (click)="toLogin()">로그인</a></li>
+    <li><a (click)="toRegister()">회원가입</a></li>
+  </ul>
 
-<nav class="uk-navbar-container" uk-navbar>
-    <div class="uk-navbar-center uk-flex-nowrap">
-        <!-- 브라우저 크기를 좌우로 줄이면 새 메뉴가 생긴다... -->
-        <!-- <a class="uk-navbar-toggle uk-hidden@m uk-padding-remove-left" uk-navbar-toggle-icon uk-toggle
-            href="#hamburger-menu">
-        </a> -->
-
-        <!-- 로고 -->
-        <!-- <div class="uk-navbar-item uk-logo uk-padding">
-            <img (click)="toHomes()" src="assets/kubic_logo.png" alt="" width="120">
-        </div> -->
-    </div>
-
-    <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav uk-visible@m" routerLinkActive="active">
-            <!-- <li><a (click)="navigateLibrary()">검색&middot;분석</a>
-                <div class="uk-navbar-dropdown">
-                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="#">검색</a></li>
-                        <li><a href="#">분석</a></li>
-                        <li><a href="#">기타</a></li>
-                    </ul>
-                </div>
-            </li> -->
-
-        </ul>
-    </div>
-
-
+  <ul *ngIf="isSignedIn" class="user-menu">
+    <li><a (click)="toUserPage()">마이페이지</a></li>
+    <li><a (click)="logOut()">로그아웃</a></li>
+  </ul>
 </nav>
-
-<!-- 브라우저 크기를 좌우로 줄이면 새 메뉴가 생긴다... -->
-<!-- <div id="hamburger-menu" uk-offcanvas="overlay: true">
-    <div class="uk-offcanvas-bar">
-        <ul class="uk-nav uk-nav-default uk-light">
-            <li><a href="">Menu1</a></li>
-            <li><a href="">Menu2</a></li>
-            <li><a href="">Menu3</a></li>
-            <li><a href="">Menu4</a></li>
-            <li><a href="">Menu4</a></li>
-        </ul>
-    </div>
-</div> -->

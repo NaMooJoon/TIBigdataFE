@@ -1,32 +1,93 @@
-.uk-navbar-container.uk-margin-left.uk-login{
-    height: 50%;
+* {
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
 }
 
-
-.uk-navbar-container {
-  background-color:white;
-  height:40px;
+:hover,
+:active {
+  text-decoration: none;
 }
 
-.uk-navbar-nav {
-    height:40px;
+nav>ul>li {
+  padding: 3px 15px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  transition: 0.1s;
 }
 
-.uk-navbar-nav .li{
-    height:40px;
+nav>ul>li:hover {
+  padding: 3px 15px;
+  border-radius: 25px;
+  border: 2px solid #0FBAFF;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
-.uk-navbar-nav >li >a{
-    min-height:5px;
-    height:40px;
+.common-menu,
+.login-menu,
+.user-menu {
+  font-size: 19px;
+  font-weight: 500;
 }
 
-.nav-text{
-    font-size : 19px;
-    color : #3d3d3d;
-    
+.common-menu>li,
+.login-menu>li,
+.user-menu>li {
+  margin: 5px;
+  float: left;
 }
 
-.nav-area{
-    // background-color: limegreen;
+.community-menu,
+.about-menu {
+  margin: 5px;
+}
+
+.community-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.community-dropdown-menu {
+  display: none;
+}
+
+div>ul>li {
+  font-size: 17px;
+  margin: 7px 0px;
+  text-align: center;
+}
+
+div>ul>li>a {
+  color: gray;
+  font-weight: 300;
+  margin: 0px;
+  padding: 0px;
+
+}
+
+.community-menu:hover .community-dropdown-menu {
+  display: block;
+  position: absolute;
+  width: auto;
+  padding: 0px;
+  margin-top: 35px;
+}
+
+.about-dropdown-menu {
+  display: none;
+}
+
+.about-menu:hover .about-dropdown-menu {
+  display: block;
+  position: absolute;
+  padding: 0px;
+  margin-top: 35px;
 }
