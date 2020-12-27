@@ -13,7 +13,7 @@ nav>ul>li {
   padding: 3px 15px;
   border-radius: 25px;
   border: 2px solid transparent;
-  transition: 0.1s;
+  transition: 0.5s;
 }
 
 .common-menu li:first {
@@ -34,9 +34,10 @@ nav>ul>li:hover {
 .common-menu,
 .login-menu,
 .user-menu {
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 500;
   padding: 0px;
+  margin: 0px;
 }
 
 .common-menu>li,
@@ -67,8 +68,12 @@ nav>ul>li:hover {
   display: none;
 }
 
+.about-dropdown-menu {
+  display: none;
+}
+
 div>ul>li {
-  font-size: 17px;
+  font-size: 15px;
   margin: 7px 0px;
   text-align: center;
 }
@@ -84,18 +89,15 @@ div>ul>li>a {
 .community-menu:hover .community-dropdown-menu {
   display: block;
   position: absolute;
-  width: auto;
   padding: 0px;
-  margin-top: 35px;
-}
-
-.about-dropdown-menu {
-  display: none;
+  padding-top: 35px;
+  z-index: 1;
 }
 
 .about-menu:hover .about-dropdown-menu {
   display: block;
   position: absolute;
   padding: 0px;
-  margin-top: 35px;
+  padding-top: 35px;
+  z-index: 1;
 }
