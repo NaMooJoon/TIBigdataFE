@@ -61,7 +61,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     console.log(this.registerForm.get('name').value);
     this.userProfile.name = this.registerForm.get('name').value;
     this.userProfile.nickName = this.registerForm.get('nickName').value;
@@ -74,10 +74,8 @@ export class RegisterComponent implements OnInit {
     this.registerUser();
   }
 
-  async registerUser() {
-    console.log(this.userProfile);
+  async registerUser(): Promise<void> {
     let regResult = await this.eAuth.register(this.userProfile); //_auth : register user service
-
     if (regResult) {
       this._router.navigateByUrl("/register-ok");
     }
