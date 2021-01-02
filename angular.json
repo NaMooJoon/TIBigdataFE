@@ -33,7 +33,7 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/uikit/dist/js/uikit.min.js",
-              "node_modules/uikit/dist/js/uikit-icons.min.js",
+              "node_modules/uikit/dist/js/uikit-icons.min.js"
             ]
           },
           "configurations": {
@@ -140,5 +140,8 @@
       }
     }
   },
-  "defaultProject": "KUBiC"
+  "defaultProject": "KUBiC",
+  "cli": {
+    "analytics": "083f4bda-99af-4099-85b2-4a887119ee88"
+  }
 }
