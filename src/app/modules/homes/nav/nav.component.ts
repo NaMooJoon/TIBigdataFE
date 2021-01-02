@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { EPAuthService } from '../../communications/fe-backend-db/membership/auth.service';
 // import { LoginComponent} from '../../core/componets/membership/login/login.component';
 import { UserpageComponent } from '../body/membership/userpage/userpage.component';
-import { SocialUser, AuthService } from 'angularx-social-login';
+import { SocialUser, SocialAuthService } from 'angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 import { IpService } from 'src/app/ip.service'
 

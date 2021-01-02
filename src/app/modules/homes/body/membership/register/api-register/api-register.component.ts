@@ -1,6 +1,6 @@
 import { Component, OnInit, ɵsetCurrentInjector } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'angularx-social-login';
+import { SocialAuthService } from 'angularx-social-login';
 import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
 import { logStat, UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 
@@ -16,7 +16,7 @@ export class ApiRegisterComponent implements OnInit {
 
   constructor(
     private _auth: EPAuthService,
-    private _gauth: AuthService,
+    private _gauth: SocialAuthService,
     private _router: Router,
   ) { }
 

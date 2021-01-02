@@ -5,11 +5,7 @@ import { logStat, UserProfile } from "./user.model";
 import { Auth } from "./userAuth.model";
 import { Router } from "@angular/router";
 import { DocumentService } from "../../../homes/body/search/service/document/document.service";
-
-import {
-  AuthService,
-  GoogleLoginProvider,
-} from "angularx-social-login";
+import { SocialAuthService, GoogleLoginProvider } from "angularx-social-login";
 
 class storeToken {
   type: logStat;
@@ -21,6 +17,8 @@ class storeToken {
   }
 }
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,11 +26,9 @@ export class AuthGoogleService extends Auth {
   getProfile(user: any) {
     throw new Error("Method not implemented.");
   }
-
+  PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com"; //진범 localhost 승인
   protected user: UserProfile;
-
-  protected URL = this.ipService.get_FE_DB_ServerIp();
-
+  protected URL = this.ipService.getFrontDBServerIp();
   private GOOGLE_REG_URL = this.URL + "/gUser/gRegister";
   private GOOGLE_CHECK_OUR_USER_URL = this.URL + "/gUser/check_is_our_g_user";
   private GOOGLE_VERIFY_TOKEN_URL = this.URL + "/gUser/verifyGoogleToken";
@@ -42,8 +38,9 @@ export class AuthGoogleService extends Auth {
     private ipService: IpService,
     http: HttpClient,
     router: Router,
-    private gauth: AuthService,
+    private gauth: SocialAuthService,
     private docSvc: DocumentService,
+
   ) {
     super(router, http);
   }
@@ -75,6 +72,7 @@ export class AuthGoogleService extends Auth {
     let singInResult = await this.googleSignIn();
 
     //check if this user is our user already
+    // TODO : do we need to check postisouruser? we might just use singinresult to identify the existence of the user.
     let isOurUser = await super.postIsOurUser(singInResult, this.GOOGLE_CHECK_OUR_USER_URL)
 
     if (!isOurUser.succ) {
@@ -89,8 +87,7 @@ export class AuthGoogleService extends Auth {
       console.log(this.user);
       super.confirmUser(this.user);
 
-
-      this.router.navigate(['/homes'])
+      location.replace("http://localhost:4200")
     }
   }
 
@@ -106,15 +103,15 @@ export class AuthGoogleService extends Auth {
   /**
    * @description 구글 로그아웃
    */
-  logOut(): void {
+  async logOut(): Promise<void> {
     localStorage.removeItem("token");
-    this.gauth.signOut();
+    await this.gauth.signOut();
     // this.isLogIn = logStat.unsigned;
   }
 
   //verify if this token is from google
   async verifyToken(token: string): Promise<any> {
-    var client = this.injector.get("GOOGLE PROVIDER ID"); //get google api client id from angular injector
+    var client = this.PROVIDER_ID
     return await this.http.post<any>(this.GOOGLE_VERIFY_TOKEN_URL, { token: token, client: client }).toPromise();
   }
 }
