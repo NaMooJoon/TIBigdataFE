@@ -30,7 +30,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   @Output() related_keywords_ready = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
   // @Input() is_lib_first : boolean;
   // public relatedKeywords = [];
-  private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
+  private RCMD_URL: string = this.ipService.getFrontDBServerIp() + ":5000/rcmd";
   private search_result_doc_id_list: string[] = [];
   private keepIdList: string[] = [];
   private relatedDocs: ArticleSource[][] = [];
@@ -166,9 +166,11 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
  * 페이지 번호따오기
  */
 
+
+  // TODO: Pagination algorithm is not efficient. we do not need to caculate numBloc. There will be more efficient and clear alorithm for pagination. Try other approaches later on.
   async loadPagesNumbers() {
     this.pages = []; //initlize
-    let pageInfo = await this.es.pagingAlgo();
+    let pageInfo = await this.es.setPagination();
     this.debug("community compo : load pages : pageInfo : ", pageInfo);
     this.numPagePerBloc = pageInfo.numPagePerBloc;
     this.numPage = pageInfo.numPage;
@@ -385,7 +387,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.debug("tgglRelated")
     this.debug("toggle_update id list check : ", this.search_result_doc_id_list);
 
-    this.load_related_docs(i); //load from flask
+    this.loadRelatedDocs(i); //load from flask
     this.relateToggle[i] = !this.relateToggle[i];
   }
 
@@ -394,8 +396,8 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    * @param idx 
    * @description 연간문서를 실제로 호출해서 보여준다. 검색 결과에서 해당 idx번째 문서의 연관 문서를 reference table에서 불러온다.
    */
-  load_related_docs(idx: number) {
-    this.db.load_related_docs(this.search_result_doc_id_list[idx]).then(res => {
+  loadRelatedDocs(idx: number) {
+    this.db.loadRelatedDocs(this.search_result_doc_id_list[idx]).then(res => {
       // this.debug("from db : ",res)
       this.relatedDocs[idx] = res as [];
 
@@ -419,7 +421,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     let relatedKeywords: string[] = []; //연관검색어
 
 
-    this.db.get_tfidf_value(this.search_result_doc_id_list).then(res => {
+    this.db.getTfidfVal(this.search_result_doc_id_list).then(res => {
       let data = res as []
 
       for (let n = 0; n < data.length; n++) {

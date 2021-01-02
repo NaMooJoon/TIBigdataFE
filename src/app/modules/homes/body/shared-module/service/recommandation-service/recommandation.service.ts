@@ -11,18 +11,18 @@ import { IdControlService } from '../id-control-service/id-control.service';
   providedIn: "root"
 })
 export class RecomandationService {
-  constructor(private ipService : IpService, private http: HttpClient,
-  private _router : Router,
-  private idControl : IdControlService) {}
+  constructor(private ipService: IpService, private http: HttpClient,
+    private _router: Router,
+    private idControl: IdControlService) { }
   // private idList: string[] = [];
-  private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
+  private RCMD_URL: string = this.ipService.getFrontDBServerIp() + ":5000/rcmd";
   private isInfoLoaded: boolean = false;
   rcmdList: {};
   private headers: HttpHeaders = new HttpHeaders({
     "Content-Type": "application/json"
   });
 
-  getRcmd(idList:Array<string>) {
-    return this.http.post(this.RCMD_URL, { idList: idList }, { headers: this.headers }).toPromise()   
+  getRcmd(idList: Array<string>) {
+    return this.http.post(this.RCMD_URL, { idList: idList }, { headers: this.headers }).toPromise()
   }
 }

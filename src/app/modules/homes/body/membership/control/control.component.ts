@@ -14,14 +14,14 @@ export class ControlComponent implements OnInit {
   constructor(private http: HttpClient, private auth: EPAuthService, private ipservice: IpService) { }
   // private userEmailReqURL: string = this.ipservice.getUserServerIp() + "/??";
   // private userGoogleReqUrl: string = this.ipservice.getUserServerIp() + ""
-  private HISTORY_URL: string = this.ipservice.get_FE_DB_ServerIp() + "/hst/getTotalHistory";
-  private HISTORY_COUNT_URL: string = this.ipservice.get_FE_DB_ServerIp() + "/hst/getHistoryCount";
+  private HISTORY_URL: string = this.ipservice.getFrontDBServerIp() + "/hst/getTotalHistory";
+  private HISTORY_COUNT_URL: string = this.ipservice.getFrontDBServerIp() + "/hst/getHistoryCount";
 
-  private E_USER_URL: string = this.ipservice.get_FE_DB_ServerIp() + "/eUser/getEuserList";
-  private G_USER_URL: string = this.ipservice.get_FE_DB_ServerIp() + "/gUser/getGuserList";
+  private E_USER_URL: string = this.ipservice.getFrontDBServerIp() + "/eUser/getEuserList";
+  private G_USER_URL: string = this.ipservice.getFrontDBServerIp() + "/gUser/getGuserList";
 
   private pageNum: number = 1;//현재 몇페이지인지
-  private lastPageNum : number ;//마지막 페이지의 index
+  private lastPageNum: number;//마지막 페이지의 index
   private isSinglePage: boolean = true;//single page라면 버튼을 없앤다.
   private pages: any[] = [];
   // private isSudo : booelean;
@@ -35,15 +35,15 @@ export class ControlComponent implements OnInit {
     //get history count
     this.http.get<any>(this.HISTORY_COUNT_URL).subscribe((res) => {
       let count = res.payload.count;
-      
+
       let startIdx = 0;
       var num = this.HST_PER_PAGE;
-      
+
       if (count > 50) {
         this.isSinglePage = false;
-        
+
       }
-      
+
       //get total history
       this.http.post<any>(this.HISTORY_URL, { idx: startIdx, num: num }).subscribe((res) => {
         var r = res.payload.histories;
@@ -114,21 +114,16 @@ export class ControlComponent implements OnInit {
             password: d.password
           });
       }
-
     });
-
-
-
-
   }
 
-  nextButton(){
+  nextButton() {
     this.pageNum += 1;
     this.get_i_th_HistroyList(this.pageNum);
 
   }
-  
-  priorButton(){
+
+  priorButton() {
     this.pageNum -= 1;
     this.get_i_th_HistroyList(this.pageNum);
 

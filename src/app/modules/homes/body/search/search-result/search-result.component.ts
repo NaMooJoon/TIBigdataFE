@@ -28,9 +28,9 @@ import { AnalysisDatabaseService } from "../../../../communications/fe-backend-d
   styleUrls: ["./search-result.component.less"]
 })
 export class SearchResultComponent implements OnInit {
-  
+
   public relatedKeywords = [];
-  private RCMD_URL: string = this.ipService.get_FE_DB_ServerIp() + ":5000/rcmd";
+  private RCMD_URL: string = this.ipService.getFrontDBServerIp() + ":5000/rcmd";
   // private searchResultIdList: string[] = [];
   // private keepIdList : string [] = [];
   // private relatedDocs: ArticleSource[][] = [];
@@ -60,20 +60,14 @@ export class SearchResultComponent implements OnInit {
     private http: HttpClient,
     private es: ElasticsearchService, //private cd: ChangeDetectorRef.
     private db: AnalysisDatabaseService,
-    private docControl : DocumentService
-    
+    private docControl: DocumentService
+
   ) {
     // this.isConnected = false;
     // this.subscription = this.es.articleInfo$.subscribe(info => {
-      // this.articleSources = info;
-      // //this.debug(info)
+    // this.articleSources = info;
+    // //this.debug(info)
     // });
-  }
-  readonly DEBUG : boolean = false;
-
-  debug(...arg:any[]){
-    if(this.DEBUG)
-      console.log(arg);
   }
   ngOnInit() {
 
@@ -87,21 +81,16 @@ export class SearchResultComponent implements OnInit {
   }
 
 
-  loadRealtedKeywords(keys : string[]){
+  setRelatedKeywords(keys: string[]) {
     this.relatedKeywords = keys;
-    this.debug("load related keywords : ", this.relatedKeywords);
   }
-  
 
-  
   //Get result from flask
   async freqAnalysis() {
-   
     this._router.navigateByUrl("search/freqAnalysis");
   }
 
   relatedSearch(keyword: string) {
-    console.log("hey?")
     this.es.searchKeyword(keyword);
     // this.queryText = keyword;
     this.auth.addSrchHst(this.queryText);
@@ -109,6 +98,6 @@ export class SearchResultComponent implements OnInit {
     // this.loadResultPage();
   }
 
-  
+
 
 }

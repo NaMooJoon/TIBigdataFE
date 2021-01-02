@@ -8,22 +8,22 @@ import { IpService } from 'src/app/ip.service'
 })
 export class EventService {
 
-  private _eventsUrl = this.ipService.get_FE_DB_ServerIp() + "/api/events";
-  private _srchHstUrl = this.ipService.get_FE_DB_ServerIp() + "/api/searchHistory";
-  private srchHst : string[] = [];
+  private _eventsUrl = this.ipService.getFrontDBServerIp() + "/api/events";
+  private _srchHstUrl = this.ipService.getFrontDBServerIp() + "/api/searchHistory";
+  private srchHst: string[] = [];
 
 
-  constructor(private http: HttpClient,private ipService : IpService) { }
+  constructor(private http: HttpClient, private ipService: IpService) { }
 
-  getEvents(){
+  getEvents() {
     return this.http.get<any>(this._eventsUrl);
   }
 
-  addSrchHst(hst:string){
+  addSrchHst(hst: string) {
     this.srchHst.push(hst);
   }
 
-  getSrchHst(){
+  getSrchHst() {
     return this.srchHst;
   }
 }

@@ -49,20 +49,20 @@ export class SearchDetailComponent implements OnInit {
 
     let id = this.idControl.getOneID();
 
-    this.db.load_related_docs(id).then(res => {
+    this.db.loadRelatedDocs(id).then(res => {
       this.rcmdList = res as [];
-      this.isRelatedLoaded ++;
+      this.isRelatedLoaded++;
     });
 
     this.es.searchById(id).then((res) => {
       this.article = res["hits"]["hits"][0]["_source"];
-      this.isDocInfoLoaded ++;
+      this.isDocInfoLoaded++;
 
     })
     this.wordcloud.createCloud(id)
       .then((data) => {
         this.cData = data as CloudData[]
-        this.isCloudLoaded ++;
+        this.isCloudLoaded++;
       });
     // let id = this.idControl.getArticle()["_id"];
 

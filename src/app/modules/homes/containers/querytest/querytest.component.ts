@@ -14,7 +14,7 @@
 // })
 // export class QuerytestComponent implements OnInit {
 
-//   private URL = this.ipService.get_FE_DB_ServerIp()
+//   private URL = this.ipService.getFrontDBServerIp()
 //   //Flask data
 //   private BASE_URL: string = URL+':5000/queryTest';
 //   // private headers: Headers = new Headers({'Content-Type': 'application/json'});
@@ -45,7 +45,7 @@
 //     //   this.articleSources=info;
 //     //   console.log(this.articleSources);
 //     // });
- 
+
 //   }
 
 
@@ -58,7 +58,7 @@
 //     this.searchKeyword = "flask test"
 //     let body= 
 //       {"keyword":this.searchKeyword}
-    
+
 //     this.http.post(this.BASE_URL, 
 //       body)
 //       .subscribe(

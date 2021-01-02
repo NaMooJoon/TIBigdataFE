@@ -18,7 +18,7 @@ export class EPAuthService {
   private JC: string = "jcnam@handong.edu";
   private BAEK: string = "21500850@handong.edu";
   private SONG: string = "21500831@handong.edu";
-  protected URL = this.ipService.get_FE_DB_ServerIp();
+  protected URL = this.ipService.getFrontDBServerIp();
 
   private SUPERUSER: string[] = [this.JC, this.BAEK, this.SONG]
 
@@ -82,6 +82,10 @@ export class EPAuthService {
     return this.userProfile.api;
   }
 
+  getUserEmail(): String {
+    return this.userProfile.email;
+  }
+
   async logOut() {
     this.auth.logOut()
     localStorage.removeItem("token");
@@ -137,18 +141,13 @@ export class EPAuthService {
 
   //검색내역 history 추가 
   addSrchHst(keyword: string): void {
-    // //console.log(this.socUser);
-
     let bundle = { login: undefined, email: undefined, key: keyword }
     if (this.isLogIn) {
-      console.log("add serach history : user is login.", this.userProfile)
       let userEmail = this.userProfile.email;
       bundle = { login: this.isLogIn, email: userEmail, key: keyword }
     }
     this.http.post<any>(this.ADD_SEARCH_HISTORY_URL, bundle).subscribe((res) => {
-      console.log("history added raw result : ", res);
       this.schHst = res.history;
-      console.log("personal history : ", this.schHst);
     });
   }
 

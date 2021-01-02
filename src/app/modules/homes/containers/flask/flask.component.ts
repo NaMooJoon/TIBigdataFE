@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CloudData, CloudOptions } from 'angular-tag-cloud-module';
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import * as CanvasJS from '../../../../../assets/canvasjs.min.js';
 import { IpService } from 'src/app/ip.service'
 
-import { Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-flask',
@@ -14,17 +14,17 @@ import { Observable, of} from 'rxjs';
   styleUrls: ['./flask.component.less']
 })
 export class FlaskComponent implements OnInit {
-  private URL = this.ipService.get_FE_DB_ServerIp();
-  private BASE_URL: string = this.URL+':5000/wordrank';
-  private TEST_URL: string = this.URL+':5000/test';
+  private URL = this.ipService.getFrontDBServerIp();
+  private BASE_URL: string = this.URL + ':5000/wordrank';
+  private TEST_URL: string = this.URL + ':5000/test';
 
 
-  private headers: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
+  private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   serverData: JSON;
   employeeData: JSON;
   searchKeyword;
 
-  constructor(private ipService : IpService,private http:HttpClient, private es: ElasticsearchService) { }
+  constructor(private ipService: IpService, private http: HttpClient, private es: ElasticsearchService) { }
 
 
   options: CloudOptions = {
@@ -35,13 +35,13 @@ export class FlaskComponent implements OnInit {
   };
 
   cData: CloudData[] = [];
-  
- 
+
+
   ngOnInit() {
 
     this.http.get(this.BASE_URL).subscribe(data => {
-      
-       console.log(data);
+
+      console.log(data);
       //Retrieve data from flask.
       const changedData$: Observable<CloudData[]> = of([]);
       changedData$.subscribe(res => this.cData = res);
@@ -51,18 +51,18 @@ export class FlaskComponent implements OnInit {
 
 
       //Push data for WordCloud.
-      for(let i in data){
-        this.cData.push({text:data[i]["label"], weight:data[i]["y"]})
+      for (let i in data) {
+        this.cData.push({ text: data[i]["label"], weight: data[i]["y"] })
       }
       console.log(this.cData);
     })
   }
-  getResult(){
+  getResult() {
     this.searchKeyword = "flask test"
-    let body= 
-      {"keyword":this.searchKeyword}
-    
-    this.http.post(this.TEST_URL, 
+    let body =
+      { "keyword": this.searchKeyword }
+
+    this.http.post(this.TEST_URL,
       body)
       .subscribe(
         (data) => {
@@ -70,7 +70,7 @@ export class FlaskComponent implements OnInit {
         }
       )
   }
-  
 
-  
+
+
 }

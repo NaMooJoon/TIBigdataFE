@@ -12,9 +12,9 @@ import { IpService } from 'src/app/ip.service'
 export class SearchHistoryComponent implements OnInit {
 
   constructor(private http: HttpClient, private ipService: IpService) { }
-  private ALL_HST_REQ_URL = this.ipService.get_FE_DB_ServerIp() + "/hst/getTotalHistory";
-  private SORT_HST_FREQ_REQ_URL = this.ipService.get_FE_DB_ServerIp() + "/hst/getSortFreqHistory";
-  private MONTH_HST_FREQ_REQ_URL = this.ipService.get_FE_DB_ServerIp() + "/hst/getMonthFreqHistory";
+  private ALL_HST_REQ_URL = this.ipService.getFrontDBServerIp() + "/hst/getTotalHistory";
+  private SORT_HST_FREQ_REQ_URL = this.ipService.getFrontDBServerIp() + "/hst/getSortFreqHistory";
+  private MONTH_HST_FREQ_REQ_URL = this.ipService.getFrontDBServerIp() + "/hst/getMonthFreqHistory";
 
   private hstFreq: any[] = [];
   private isChartReady: boolean = false;

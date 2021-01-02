@@ -29,7 +29,7 @@ import { Observable, of } from 'rxjs';
  * @enum GRAPH
  * @description 사용자가 선택하는 그래프 종류
  */
-enum GRAPHS{
+enum GRAPHS {
   LINE,
   DOUGHNUT,
   WORDCLOUD,
@@ -41,7 +41,7 @@ enum GRAPHS{
  * @enum ANLS
  * @description 사용자가 선택하는 분석 방법 종류
  */
-enum ANLS{//ANALYSIS
+enum ANLS {//ANALYSIS
   TFIDF,
   REALRED,
   // LDA,
@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit {
 
   docTitleList = [];
 
-  private hstReqUrl = this.ipService.get_FE_DB_ServerIp() + "/hst/getTotalHistory";
+  private hstReqUrl = this.ipService.getFrontDBServerIp() + "/hst/getTotalHistory";
   private hstFreq: any[];
 
   private graphXData = [];
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
   private choiceComplete = false;
   private userDataChoice = [];
   private userDocChoice = [];
-  private userAnalysisChoice: string;
+  private userAnalysisChoice: string = "";
   private userGraphChoice: string;
   private userNumChoice = 0;
 
@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit {
 
 
   async getKeywords(ids) {
-    return await this.db.get_tfidf_value(ids, 5, true);
+    return await this.db.getTfidfVal(ids, 5, true);
   }
 
   getMyKeepDoc() {
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
   private TfTable = [];
   async load_tfidf_for_keyword_anls() {
     // var docNum = this.idList.length;
-    let tfidf_table = await this.db.get_tfidf_value(this.chosenList, this.userNumChoice, true);
+    let tfidf_table = await this.db.getTfidfVal(this.chosenList, this.userNumChoice, true);
     // this.getKeywords(this.chosenList).then(tfidf_table => {
     // this.http.get(this.tfidfDir).subscribe(docData1 => {
     let oneDoc = tfidf_table as []
@@ -308,7 +308,7 @@ export class DashboardComponent implements OnInit {
    * @description 유저가 어떤 분석할지 선택하면 값 업데이트
    * @param $event 
    */
-  get_user_analysis_choice($event){
+  get_user_analysis_choice($event) {
     this.userAnalysisChoice = $event.target.innerText;
     // console.log(this.userAnalysisChoice)
   }
@@ -318,7 +318,7 @@ export class DashboardComponent implements OnInit {
    * @description 유저가 선택하는 시각화그래프 값 업데이트
    * @param $event 
    */
-  get_user_graph_choice($event){
+  get_user_graph_choice($event) {
     this.userGraphChoice = $event.target.innerText;
   }
 
@@ -430,16 +430,16 @@ export class DashboardComponent implements OnInit {
 
   makeRelatedCloud() {
     console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
-    this.db.get_related_docs_table(this.chosenList[0], 10, true).then(data1 => {
-      console.log("makeRelatedCloud : ",data1);
+    this.db.getRelatedDocsTbl(this.chosenList[0], 10, true).then(data1 => {
+      console.log("makeRelatedCloud : ", data1);
 
       data1 = data1[0]["rcmd"]
       let data = []
       let count = 0;
       let idsArr = []
       let valArr = []
-      for(let i = 0 ; i < data1.length; i++){
-        if(data1[i] != undefined && data1[i].length > 0){
+      for (let i = 0; i < data1.length; i++) {
+        if (data1[i] != undefined && data1[i].length > 0) {
           console.log(data1[i].length)
           idsArr.push(data1[i][0])
           valArr.push(data1[i][1])

@@ -10,24 +10,24 @@ import { EPAuthService } from '../../../../communications/fe-backend-db/membersh
 })
 export class CommunityComponent implements OnInit {
 
-  private docList : {}[] = [];
-  private pages : number[] = [];
-  private cur_start_idx : number = 0;
+  private docList: {}[] = [];
+  private pages: number[] = [];
+  private cur_start_idx: number = 0;
   private isLogStat: number = 0;
-  private numPagePerBloc : number = 0;
-  private numPage : number = 0;
-  private numBloc : number = 0;
-  private blocIdx : number = 0;
-  private pageIdx : number = 0;
+  private numPagePerBloc: number = 0;
+  private numPage: number = 0;
+  private numBloc: number = 0;
+  private blocIdx: number = 0;
+  private pageIdx: number = 0;
   headers = ["번호", "이름", "내용"];
 
-  constructor(       
-    private router: Router, private cm_svc : CommunityServiceService, private auth : EPAuthService) { }
+  constructor(
+    private router: Router, private cm_svc: CommunityServiceService, private auth: EPAuthService) { }
 
   ngOnInit() {
     this.loadFirstDocList();
     this.loadPagesNumbers();
-    this.auth.getLoginStatChange().subscribe(stat=>{
+    this.auth.getLoginStatChange().subscribe(stat => {
       this.isLogStat = stat;
       console.log("comm compo stat : ", stat)
     })
@@ -39,29 +39,25 @@ export class CommunityComponent implements OnInit {
    * 
    */
 
-  async loadPagesNumbers(){
-    let pageInfo = await this.cm_svc.pagingAlgo();
-    console.log("community compo : load pages : pageInfo : ", pageInfo)
-  //  * @return numPagePerBloc
-  //  * @return numPage
-  //  * @return numBloc  
-  //  *
+  async loadPagesNumbers() {
+    let pageInfo = await this.cm_svc.setPagination();
+    console.log("community compo : load pages : pageInfo : ", pageInfo);
     this.numPagePerBloc = pageInfo.numPagePerBloc;
     this.numPage = pageInfo.numPage;
     this.numBloc = pageInfo.numBloc;
 
     // this.pageIdx = this.numBloc  * this.numPagePerBloc;
-    if(this.numBloc > 1){
-      for(let i = 0 ; i < this.numPagePerBloc; i++){
+    if (this.numBloc > 1) {
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(i);
       }
     }
-    else{
-      for(let i = 0 ; i < this.numPage; i++){
+    else {
+      for (let i = 0; i < this.numPage; i++) {
         this.pages.push(i);
       }
     }
-      
+
     /**
      * if numBloc > 1
      *  numPagePerBloc 만큼 숫자 만들기
@@ -76,8 +72,8 @@ export class CommunityComponent implements OnInit {
      * 백엔드는 받은 숫자 * 10을 해서 새로운 index으로 삼는다.
      * 
      */
-    
-  
+
+
   }
 
 
@@ -88,7 +84,7 @@ export class CommunityComponent implements OnInit {
   async loadFirstDocList() {
     this.docList = await this.cm_svc.loadFirstDocList();
     console.log("commu compo load first doc list : ", this.docList);
-    if(this.docList.length != 10){
+    if (this.docList.length != 10) {
       console.log("ERROR : community component : load first doc list : doc num not 10");
     }
     // console.log("cur_start idx : ", this.cur_start_idx)
@@ -104,7 +100,7 @@ export class CommunityComponent implements OnInit {
    */
   navToReadThisDoc(i: number) {
     // console.log(i+"th doc clicked!")
-    this.cm_svc.choseDoc(i);
+    this.cm_svc.chooseDoc(i);
     this.router.navigateByUrl("community/readDoc");
 
   }
@@ -114,7 +110,7 @@ export class CommunityComponent implements OnInit {
    * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
    * @param i 
    */
-  async choosePageNum(i : number){
+  async choosePageNum(i: number) {
     // console.log("hello number ",i);
     this.docList = await this.cm_svc.loadListByPageIdx(i);
     // console.log("pressNextList : ", this.docList)
@@ -130,12 +126,8 @@ export class CommunityComponent implements OnInit {
    * @description 다음 리스트의 커뮤니티 게시판을 요청하는 함수. FE 백엔드 서버에 요청.
    */
   async pressNextList() {
-    
     this.docList = await this.cm_svc.loadNextDocList(this.cur_start_idx);
-    // console.log("pressNextList : ", this.docList)
-    // console.log("cur idx : ", this.cur_start_idx)
     this.cur_start_idx = this.cm_svc.getNewStartIDx();
-    // console.log("new cur idx : ", this.cur_start_idx)
   }
 
   /**
@@ -152,51 +144,51 @@ export class CommunityComponent implements OnInit {
   /**
    * 다음 블록 버튼 눌렀을 때
    */
-  async pressNextBloc(){
+  async pressNextBloc() {
     this.docList = [];
     this.blocIdx++;
     this.pages = [];
     let newStartIdx = this.blocIdx * this.numPagePerBloc;
     this.docList = await this.cm_svc.loadListByPageIdx(newStartIdx);
     console.log(this.docList);
-    if(this.blocIdx < this.numBloc -1 ){
-      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+    if (this.blocIdx < this.numBloc - 1) {
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(newStartIdx + i);
       }
 
     }
-    else{
+    else {
       let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for(let i = 0 ; i < redundentNumPages; i++){
+      for (let i = 0; i < redundentNumPages; i++) {
         this.pages.push(newStartIdx + i);
       }
     }
 
   }
 
-  async pressPriorBloc(){
+  async pressPriorBloc() {
     this.docList = [];
 
     this.blocIdx--;
     this.pages = [];
     let newStartIdx = this.blocIdx * this.numPagePerBloc;
     this.docList = await this.cm_svc.loadListByPageIdx(newStartIdx);
-    if(this.blocIdx < this.numBloc -1 ){//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
-      for(let i = 0; i < this.numPagePerBloc ; i++ ){
+    if (this.blocIdx < this.numBloc - 1) {//bloc 시작 Index = 0. numBloc = 2라면 1페이지까지가 꽉 찬다.
+      for (let i = 0; i < this.numPagePerBloc; i++) {
         this.pages.push(newStartIdx + i);
       }
 
     }
-    else{
+    else {
       let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for(let i = 0 ; i < redundentNumPages; i++){
+      for (let i = 0; i < redundentNumPages; i++) {
         this.pages.push(newStartIdx + i);
       }
     }
   }
 
 
-  updateSearchKey($event){
+  updateSearchKey($event) {
     let keyword = $event.target.value;
   }
 
