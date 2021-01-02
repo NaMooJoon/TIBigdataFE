@@ -75,10 +75,16 @@ export class CategoryComponent implements OnInit {
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
+
+    console.log(id);
     switch (id) {
       case "topic": {
-        ct = this.convertTopicToEng(ct);
+        console.log(ct);
         let docIDs = await this.getDocIDsFromTopic(ct);
+
+        console.log(docIDs)
+
+
         docIDs.map(e => this.idControl.pushIDList(e));
         let partialIDs = this.idControl.getIDList().slice(0, this.es.getDefaultNumDocsPerPage());
         this.es.setKeyword(ct)
@@ -102,40 +108,10 @@ export class CategoryComponent implements OnInit {
   async search_category() {
     this.idControl.clearIDList();
     let category = this.get_chosen_category();
-
-    category = this.convertTopicToEng(category)
-
     let docs_id = await this.getDocIDsFromTopic(category)//현재 토픽에 해당하는 내용을 불러온다.
     docs_id.map(e => this.idControl.pushIDList(e));
     // this.idControl.pushIDList(docs_id);
     this.es.multIdSearchComplete(docs_id);
-  }
-
-  convertTopicToEng(category: string) {
-    switch (category) {
-      case "정치":
-        category = "pol";
-        break;
-      case "경제":
-        category = "eco";
-        break;
-      case "사회":
-        category = "soc";
-        break;
-      case "문화":
-        category = "cul";
-        break;
-      case "국제":
-        category = "innt";
-        break;
-      case "IT":
-        category = "it";
-        break;
-      case "스포츠":
-        category = "spo";
-        break;
-    }
-    return category;
   }
 
   get_chosen_category() {
@@ -146,5 +122,4 @@ export class CategoryComponent implements OnInit {
     // console.log(category)
     return await this.db.getOneTopicDocs(category) as [];
   }
-
 }

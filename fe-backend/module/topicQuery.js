@@ -29,34 +29,32 @@ router.get("/getTopicTblPlain", (req, res) => {
     })
 })
 
-function getOneTopicDocs(req,res){
+router.post("/getOneTopicDocs", (req, res) => {
+    console.log("get reqeust");
     let tp = req.body.topic;
+    console.log(tp);
     topic.aggregate(
         [
             {
-                $match: {"topic": tp }
+                $match: { "topic": tp }
             },
             {
                 $project: {
-                    docID: 1,
-                    // rcmd: { $slice: ["$rcmd", num] }
+                    'docID': 1,
                 }
             },
         ],
-        (err,docs)=>{
+        (err, docs)=>{
             if(err)
                 console.log(err)
             else{
                 console.log(docs);
                 res.json(docs);
-            }
-                
+            }   
         }
     );
     
-}
-
-router.post("/getOneTopicDocs",getOneTopicDocs);
+})
 
 
 function getTopicTbl(req,res){
