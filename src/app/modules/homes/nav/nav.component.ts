@@ -136,6 +136,23 @@ export class NavComponent implements OnInit {
   }
 
   toOpenApi() { }
+
+  toSiteIntro() {
+    this._router.navigateByUrl("/introduce/intro");
+  }
+
+  toServiceGuide() {
+    this._router.navigateByUrl("/introduce/service-guide");
+  }
+
+  toCollectedInfo() {
+    this._router.navigateByUrl("/introduce/collected-info");
+  }
+
+  toMemberPolicy() {
+    this._router.navigateByUrl("/introduce/member-policy");
+  }
+
 }
 
 
