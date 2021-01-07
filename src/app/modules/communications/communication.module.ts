@@ -1,25 +1,9 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
-
-//For Online video lecture
-import {
-  MatToolbarModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatIconModule,
-  MatButtonModule,
-  MatCardModule,
-  MatTableModule,
-  MatDividerModule,
-  MatSnackBarModule
-} from '@angular/material';
-
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 import { CommunicationRoutingModule } from './communication-routing.module';
 import { RegisterComponent } from '../homes/body/membership/register/register.component';
 import { LoginComponent } from '../homes/body/membership/login/login.component';
@@ -35,13 +19,6 @@ import { ApiRegisterComponent } from '../homes/body/membership/register/api-regi
 // om './fe-backend-db/query-service/query-service.component';
 
 const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com"; //진범 localhost 승인
-
-let config = new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider(PROVIDER_ID)
-  }
-]);
 
 @NgModule({
   declarations: [
@@ -60,19 +37,8 @@ let config = new AuthServiceConfig([
     CommonModule,
     HttpClientModule,
     CommunicationRoutingModule,
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatTableModule,
-    MatDividerModule,
-    MatSnackBarModule,
     ReactiveFormsModule,
-    SocialLoginModule.initialize(config)//refer angularx-sicial-login.umd.js
+    SocialLoginModule,
   ],
   providers: [
     EventService,
@@ -82,15 +48,24 @@ let config = new AuthServiceConfig([
       useClass: TokenInterceptorService,
       multi: true
     },
-
     /**
      * need to use Google API client id
      * to communicate with backend server.
      * Register the client id into to angular Injector with provider.
      */
     {
-      provide: "GOOGLE PROVIDER ID",
-      useValue: PROVIDER_ID
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              PROVIDER_ID
+            )
+          },
+        ]
+      } as SocialAuthServiceConfig,
     }
   ],
   // exports:[HeaderContainerComponent]

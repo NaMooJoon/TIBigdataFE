@@ -27,6 +27,10 @@ const routes: Routes = [
       {
         path: 'community',
         loadChildren: () => import('./community/community.module').then(m => m.CommunityModule),
+      },
+      {
+        path: 'introduce',
+        loadChildren: () => import('./intro/intro.module').then(m => m.IntroModule),
       }
     ]
   }

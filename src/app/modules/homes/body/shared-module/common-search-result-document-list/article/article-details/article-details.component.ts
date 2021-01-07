@@ -9,19 +9,21 @@ import { AnalysisDatabaseService } from "../../../../../../communications/fe-bac
   templateUrl: './article-details.component.html',
   styleUrls: ['./article-details.component.less']
 })
+
+// TODO : This compnent seems never used. Needed to be checked
 export class ArticleDetailsComponent implements OnInit {
 
   @Input() article: any;
   // @Input() keywords : [];
-  docId : string;
-  constructor(    private db: AnalysisDatabaseService, public _router: Router ,    private idControl: IdControlService,
-    ) { }
-    readonly DEBUG : boolean = false;
+  docId: string;
+  constructor(private db: AnalysisDatabaseService, public _router: Router, private idControl: IdControlService,
+  ) { }
+  readonly DEBUG: boolean = false;
 
-    debug(...arg:any[]){
-      if(this.DEBUG)
-        console.log(arg);
-    }
+  debug(...arg: any[]) {
+    if (this.DEBUG)
+      console.log(arg);
+  }
 
   ngOnInit() {
     // console.log(this.article)
@@ -30,14 +32,14 @@ export class ArticleDetailsComponent implements OnInit {
     this.load_top_keywords();
   }
 
-  view_doc_detail(){
+  view_doc_detail() {
     // console.log("article detail id: ", this.docId);
     this.idControl.selecOneID(this.docId);
     this.navToDocDetail();
 
     // this.docId = this.article["_id"];
     // console.log(this.docId);
-    
+
   }
 
   //   /**
@@ -52,25 +54,25 @@ export class ArticleDetailsComponent implements OnInit {
   //   this.navToDocDetail();
   // }
 
-  
 
-    //각 문서마다 들어갈 상위 키워드를 저장할 array
-    private keywords: any[] = [];
 
-    load_top_keywords() {
-      // console.log("article detail load top keyword start : doc_id", this.docId, " source : ", this.article)
-      this.db.get_tfidf_value(this.docId).then(res => {
-        this.debug("article detail res : ", res)
-        let data = res as []
-        
-        for (let n = 0; n < data.length; n++) {
-          let tfVal = data[n]["tfidf"];
-          this.keywords.push(tfVal)//각 문서에 상위 키워드 배열을 담는다.
-        }
-      })
-      // console.log("article detail : keywords : ",this.keywords)
-      // this.isKeyLoaded = true;  
-    }
+  //각 문서마다 들어갈 상위 키워드를 저장할 array
+  private keywords: any[] = [];
+
+  load_top_keywords() {
+    // console.log("article detail load top keyword start : doc_id", this.docId, " source : ", this.article)
+    this.db.getTfidfVal(this.docId).then(res => {
+      this.debug("article detail res : ", res)
+      let data = res as []
+
+      for (let n = 0; n < data.length; n++) {
+        let tfVal = data[n]["tfidf"];
+        this.keywords.push(tfVal)//각 문서에 상위 키워드 배열을 담는다.
+      }
+    })
+    // console.log("article detail : keywords : ",this.keywords)
+    // this.isKeyLoaded = true;  
+  }
 
 
 

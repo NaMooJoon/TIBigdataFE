@@ -20,7 +20,6 @@ export class IdControlService {
    * @description 
    */
   clearAll() {
-    this.oneID = "";
     this.idList = [];
     this.oneID = "";
   }

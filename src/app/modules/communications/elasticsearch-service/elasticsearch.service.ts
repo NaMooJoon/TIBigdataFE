@@ -65,7 +65,7 @@ export class ElasticsearchService {
     this.currentSearchMode = mode;
   }
 
-  getCurrSearchMode() {
+  getCurrSearchMode(): SEARCHMODE {
     return this.currentSearchMode;
   }
 
@@ -76,7 +76,7 @@ export class ElasticsearchService {
   }
 
 
-  getCountNumChange(): Observable<any> {
+  getCountNumChange(): Observable<number> {
     return this.countNum.asObservable();
   }
 
@@ -98,22 +98,11 @@ export class ElasticsearchService {
       this.keyword = keyword;
 
     }
-
   }
-
 
   getKeyword(): string {
-    // console.log("es : getkey")
-    // return new Promise(resolve=>{
     return this.keyword;
-    // resolve(res);
-    // })
-    // })
   }
-
-  // getKeywordChange() {
-  //   return this.keywordChange;
-  // }
 
   private queryalldocs = {
     query: {
@@ -161,7 +150,7 @@ export class ElasticsearchService {
    * @description 모든 문서를 검색하는 함수를 실행한 뒤 article source까지 저장
    */
   allSearchComplete(startIndex?: number): void {
-    this.save_search_result_from_hook(this.searchAllDocs(startIndex));
+    this.saveSearchResult(this.searchAllDocs(startIndex));
   }
 
   /**
@@ -179,14 +168,14 @@ export class ElasticsearchService {
       _field = searchOption.body;
     if (!_queryText)
       _queryText = this.keyword;
-    this.save_search_result_from_hook(this.searchByText(_field, _queryText, startIndex, docSize));
+    this.saveSearchResult(this.searchByText(_field, _queryText, startIndex, docSize));
   }
 
   /**
    * @function searchByText
    * @description search by keyword text matching
    */
-  searchByText(_field, _queryText, startIndex?: number, docSize?: number): Promise<any> {
+  searchByText(_field: string, _queryText: string, startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex)
       startIndex = 0;
     if (!docSize)
@@ -264,7 +253,7 @@ export class ElasticsearchService {
     )
   }
 
-  getCountNumber(field, queryText): Promise<number> {
+  getCountNumber(field: string, queryText: string): Promise<number> {
     return this.countByText(field, queryText).then(
       res => {
         return res.count;
@@ -280,7 +269,7 @@ export class ElasticsearchService {
    * @description ES에서 검색하고자 하는 문서의 id을 검색해서 article source에 저장까지 완료
    */
   IdSearchComplete(id: string): void {
-    this.save_search_result_from_hook(this.searchById(id));
+    this.saveSearchResult(this.searchById(id));
   }
 
   /**
@@ -316,8 +305,8 @@ export class ElasticsearchService {
    * @param id : string array
    * @description ES에서 검색하고자 하는 문서의 id array을 검색해서 article source에 저장까지 완료
    */
-  MultIdSearchComplete(ids: string[]): void {
-    this.save_search_result_from_hook(this.searchByManyId(ids));
+  multIdSearchComplete(ids: string[]): void {
+    this.saveSearchResult(this.searchByManyId(ids));
   }
 
   /**
@@ -326,7 +315,7 @@ export class ElasticsearchService {
    * 
    * @param id : 검색할 id string
    */
-  searchByManyId(ids: string[], startIndex?: number, docSize?: number) {
+  searchByManyId(ids: string[], startIndex?: number, docSize?: number): Promise<any> {
     // console.log("es ts: the num of ids : "+ids.length);
     return this.client.search({
       // filterPath: ["hits.hits"],
@@ -350,35 +339,20 @@ export class ElasticsearchService {
     });
   }
 
-  save_search_result_from_hook(hookFunc): void {
-    hookFunc.then(response => {
-      //검색 후 observable에 저장
-      this.debug("save search result from hook", response)
-      this.transfer_docs_to_article_source(response.hits.hits);
+  saveSearchResult(queryFunc: any): void {
+    queryFunc.then(response => {
+      this.docs2artclSrc(response.hits.hits);
     });
   }
 
   /**
- * @function transfer_docs_to_article_source
- * 검색 결과를 observable에 저장하는 함수.
- * 저장을 해줘야 subscribe 함수를 통해서 subscriber들이 받아올 수 있다.
- * 비동기 함수로 유용하게 사용!
- * @param info
- * 저장할 article array
- *
+ * @function docs2artclSrc
+ * @description save new article source and call observable event 
+ * @param info array of documents that is collected by ES query result.
  */
-  transfer_docs_to_article_source(info: ArticleSource[]): void {
+  docs2artclSrc(info: ArticleSource[]): void {
     this.articleSource.next(info);
-    // console.log("saved : ", this.articleSource);
   }
-
-
-
-
-  /**
-   * page Algo
-   */
-
 
   getDefaultNumDocsPerPage(): number {
     return this.DOC_NUM_PER_EACH_PAGE;
@@ -388,70 +362,32 @@ export class ElasticsearchService {
     this.DOC_NUM_PER_EACH_PAGE = num;
   }
 
-
-  /**
-  * pseudo code 
-     number of docs per page ← N
-     number of pages ← number of total docs / N
-     if number of total docs % N > 0:
-       then number of pages ++
-     number of pages per bloc ← M
-     number of bloc ← number of pages / M
-     if number of pages % M > 0:
-       then number of bloc ++
-
-  * 
-  * 
-  */
-
-  /**
-   * 
-   * @param res 
-   * 처음에 numPagePerBloc만큼만 보여준다.
-   * pageIdx % numPagePerBloc = 0이 되면 다음 bloc으로 이동. bloc idx update. bloc idx의 최대값은 numBloc이다.
-   * pageIdx 의 최대값ㅂ은 numPage이다.
-   * @return numPagePerBloc
-   * @return numPage
-   * @return numBloc
-   */
-  async pagingAlgo(): Promise<any> {
-    //number of docs per page ← N
-    // use predefined this.DOC_NUM_PER_EACH_PAGE;
-    //number of pages ← number of total docs / N
+  // TODO: Pagination algorithm is not efficient. we do not need to caculate numBloc. There will be more efficient and clear alorithm for pagination. Try other approaches later on.
+  async setPagination(): Promise<any> {
     return new Promise(resolve => {
+      this.countNum.subscribe(totalDocs => {
+        /* Get total page number */
+        let totalPageNum = Math.floor(totalDocs / this.DOC_NUM_PER_EACH_PAGE);
+        if (totalDocs % this.DOC_NUM_PER_EACH_PAGE > 0) {
+          totalPageNum++;
+        }
 
-      this.countNum.subscribe(num => {
-
-        this.debug("community service numTotalDocs : ", num);
-        let numTotalDocs = num;
-        // let numTotalDocs = res.payload.data;
-
-        let numPage = Math.floor(numTotalDocs / this.DOC_NUM_PER_EACH_PAGE);
-        //if number of total docs % N > 0:
-        if (numTotalDocs % this.DOC_NUM_PER_EACH_PAGE > 0)
-          //  then number of pages ++
-          numPage++;
-        //number of pages per bloc ← M
-        // let numPagePerBloc = this.DOC_NUM_PER_EACH_PAGE;
-        let numPagePerBloc = 10;
+        let numPagePerBloc = this.DOC_NUM_PER_EACH_PAGE;
         //number of bloc ← number of pages / M
-        let numBloc = Math.floor(numPage / numPagePerBloc);
+        let numBloc = Math.floor(totalPageNum / numPagePerBloc);
         //if number of pages % M > 0:
-        if (numPage % numPagePerBloc > 0)
+        if (totalPageNum % numPagePerBloc > 0)
           //  then number of bloc ++
           numBloc++;
-        this.debug("page result : ", { numPage: numPage, numPagePerBloc: numPagePerBloc, numBloc: numBloc })
-        resolve({ numPage: numPage, numPagePerBloc: numPagePerBloc, numBloc: numBloc });
+        resolve({ numPage: totalPageNum, numPagePerBloc: numPagePerBloc, numBloc: numBloc });
       })
     })
   }
 
-
-  nextSearch(startIndex: number,) {
+  nextSearch(startIndex: number) {
+    // TODO: return for what? 'fullTextSearchComplete' does not have return value.
     return this.fullTextSearchComplete(searchOption.body, this.keyword, startIndex)
   }
-
-
 
   /**
    * @description 페이지 번호 눌러서 해당 페이지의 글들 로드하는 함수
@@ -467,24 +403,10 @@ export class ElasticsearchService {
       this.fullTextSearchComplete(searchOption.body, this.keyword, startIndex)
     else if (this.currentSearchMode == SEARCHMODE.ID) {
       let partialIDs = this.idCtrSvc.getIDList().slice(startIndex, this.getDefaultNumDocsPerPage());
-
-      // let idList = this.idCtrSvc.getIDList();
-      // let partialList = idList.slice(startIndex,startIndex + 10)
-      // this.MultIdSearchComplete(partialList);
     }
     else
       console.error("elasticsearch.service.ts : loadListByPageIdx parameter error.")
-    // else
-    //   console.error("elasticsearch.service.ts loadListByPageIdx: wrong syntax error");
-    // let res = await this.http.post<any>(this.URL_LOAD_LIST_BY_PAGE_IDX,body).toPromise();
-    // return this.saveResponse(res);
   }
-
-
-
-
-
-
 
   //Elasticsearch Connection
   private _connect() {
@@ -492,7 +414,7 @@ export class ElasticsearchService {
     this.client = new elasticsearch.Client({
       host: es_url,
       headers: {
-        'Access-Control-Allow-Origin': this.ipSvc.adaptIp(this.ipSvc.get_FE_Ip()) + this.ipSvc.getAngularPort()
+        'Access-Control-Allow-Origin': this.ipSvc.adaptIp(this.ipSvc.getFrontEndServerIP()) + this.ipSvc.getAngularPort()
       }
       // log: "trace"//to log the query and response in stdout
     });

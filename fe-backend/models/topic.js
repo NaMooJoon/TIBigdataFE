@@ -9,4 +9,4 @@ const topicSchema = new Schema({
     lastUpdate : Date
 })  
 const conn = require('../connection/dataConn');
-module.exports = conn.model('topic',topicSchema);
+module.exports = conn.model('topics',topicSchema);

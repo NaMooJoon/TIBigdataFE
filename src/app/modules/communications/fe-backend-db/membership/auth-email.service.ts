@@ -21,7 +21,7 @@ class storeToken {
 })
 export class AuthEmailService extends Auth {
 
-    protected URL = this.ipService.get_FE_DB_ServerIp();
+    protected URL = this.ipService.getFrontDBServerIp();
     protected user: UserProfile;
     private EMAIL_REG_URL = this.URL + "/eUser/register"; //mongoDB
     private EMAIL_LOGIN_URL = this.URL + "/eUser/login";
@@ -79,7 +79,7 @@ export class AuthEmailService extends Auth {
      * @param user user input information : id and password
      * @returns 
      */
-    async logIn(user): Promise<any> {
+    async logIn(user) {
         /* Check if there is an email registered in our DB */
         let isOurUser = await super.postIsOurUser(user, this.EMAIL_CHECK_OUR_USER_URL);
         if (!isOurUser.succ) {
@@ -89,7 +89,7 @@ export class AuthEmailService extends Auth {
         else {
             let res = await this.http.post<any>(this.EMAIL_LOGIN_URL, user).toPromise();
             if (res.succ) {
-                alert("돌아오신 걸 환영합니다, " + res.payload.name + "님. 홈 화면으로 이동합니다.");
+                alert("돌아오신 걸 환영합니다, " + res.payload.name + "님. 홈ddddd 화면으로 이동합니다.");
                 localStorage.setItem('token', JSON.stringify(new storeToken(logStat.email, res.payload.token)));
                 //reg, email, name, nickname, inst, token)
                 console.log(res.payload.email + "\n" + res.payload.name + "\n" + res.payload.nickname + "\n" + res.payload.inst + "\n" + res.payload.inst + "\n" + res.payload.token + "\n");

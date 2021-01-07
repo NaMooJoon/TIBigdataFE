@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialUser, AuthService } from 'angularx-social-login';
+import { SocialUser, SocialAuthService } from 'angularx-social-login';
 import { Router } from '@angular/router';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { LoginComponent } from '../login/login.component';
@@ -38,7 +38,7 @@ export class UserpageComponent implements OnInit {
     public _router: Router,
     private _auth: EPAuthService,
     private _login: LoginComponent,
-    private _gauth: AuthService
+    private _gauth: SocialAuthService
   ) { }
 
   ngOnInit() {
