@@ -24,6 +24,31 @@ import { CloseScrollStrategy } from '@angular/cdk/overlay';
 import { keyframes } from '@angular/animations';
 import { Observable, of } from 'rxjs';
 
+
+/**
+ * @enum GRAPH
+ * @description 사용자가 선택하는 그래프 종류
+ */
+enum GRAPHS {
+  LINE,
+  DOUGHNUT,
+  WORDCLOUD,
+  BAR
+}
+
+
+/**
+ * @enum ANLS
+ * @description 사용자가 선택하는 분석 방법 종류
+ */
+enum ANLS {//ANALYSIS
+  TFIDF,
+  REALRED,
+  // LDA,
+  // RNN
+}
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -46,20 +71,14 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   RELATED: string = "RelatedDoc";
-  analysisList: string[] = ["키워드분석(TFIDF)"];//"Related Doc",
+  analysisList: string[] = [ANLS[ANLS.REALRED], ANLS[ANLS.REALRED]];//"Related Doc",
 
   // analysisList: string[] = ["TFIDF", "LDA", "RNN"];//"Related Doc",
-  graphList: string[] = ["Dounut", "Word-Cloud", "Bar", "Line"];
-
-
-
+  graphList: string[] = [GRAPHS[GRAPHS.DOUGHNUT], GRAPHS[GRAPHS.WORDCLOUD], GRAPHS[GRAPHS.BAR], GRAPHS[GRAPHS.LINE]];
 
   docTitleList = [];
 
-  // private tfidfDir: string = "../../../../../../assets/entire_tfidf/data.json";
-
-
-  private hstReqUrl = this.ipService.get_FE_DB_ServerIp() + "/hst/getTotalHistory";
+  private hstReqUrl = this.ipService.getFrontDBServerIp() + "/hst/getTotalHistory";
   private hstFreq: any[];
 
   private graphXData = [];
@@ -76,7 +95,7 @@ export class DashboardComponent implements OnInit {
   private choiceComplete = false;
   private userDataChoice = [];
   private userDocChoice = [];
-  private userAnalysisChoice: string;
+  private userAnalysisChoice: string = "";
   private userGraphChoice: string;
   private userNumChoice = 0;
 
@@ -94,7 +113,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.auth.getLogInObs().subscribe((logInStat) => {
+    this.auth.getLoginStatChange().subscribe((logInStat) => {
 
       if (!logInStat)
         // console.log("wow");
@@ -112,7 +131,7 @@ export class DashboardComponent implements OnInit {
 
 
   async getKeywords(ids) {
-    return await this.db.getTfidfValue(ids, 5, true);
+    return await this.db.getTfidfVal(ids, 5, true);
   }
 
   getMyKeepDoc() {
@@ -126,37 +145,29 @@ export class DashboardComponent implements OnInit {
       })//[{title, id},...]
       // this.idList = this.idSvc.getIdList();
 
-      console.log(this.docTitleList)
-      console.log(this.docIdList)
+      // console.log(this.docTitleList)
+      // console.log(this.docIdList)
     })
   }
 
-  addList(i) {
-    this.chosenList.push(this.idList[i])
-    this.chosenCount++;
-    console.log(this.chosenList)
-  }
 
-  removeList(i) {
-    this.chosenList.pop()
-    this.chosenCount--;
-    console.log(this.chosenList)
-
-  }
-
-
-  boxChange(i) {
+  /**
+   * @function my_doc_checkbox_update
+   * @param i 
+   * @description 내가 찜한 문서 체크박스 클릭하면 박스 선택되는 정보 업데이트
+   */
+  my_doc_checkbox_update(i) {
     console.log(i)
-    console.log("this.docIdList[i] : ",this.docIdList[i])
+    // console.log("this.docIdList[i] : ",this.docIdList[i])
     let idx = this.chosenList.indexOf(this.docIdList[i]);
-    console.log("idx : ", idx)
+    // console.log("idx : ", idx)
     if (idx != -1) {
-      console.log("pull" + this.docTitleList[i]);
+      // console.log("pull" + this.docTitleList[i]);
       this.chosenList.splice(idx, 1);
       this.chosenCount--;
     }
     else {
-      console.log("push" + this.docTitleList[i]);
+      // console.log("push" + this.docTitleList[i]);
       this.chosenList.push(this.docIdList[i])
       this.chosenCount++;
     }
@@ -177,12 +188,17 @@ export class DashboardComponent implements OnInit {
   //   }
   // }
 
+
+
+
+  /**
+   * @function load_tfidf_for_keyword_anls
+   * @description 사용자가 키워드 분석을 선택했을 때 키워드 분석 결과를 백엔드에서 받아온다. TF-IDF 알고리즘 사용.
+   */
   private TfTable = [];
-
-
-  async makeTf() {
+  async load_tfidf_for_keyword_anls() {
     // var docNum = this.idList.length;
-    let tfidf_table = await this.db.getTfidfValue(this.chosenList, this.userNumChoice, true);
+    let tfidf_table = await this.db.getTfidfVal(this.chosenList, this.userNumChoice, true);
     // this.getKeywords(this.chosenList).then(tfidf_table => {
     // this.http.get(this.tfidfDir).subscribe(docData1 => {
     let oneDoc = tfidf_table as []
@@ -252,18 +268,26 @@ export class DashboardComponent implements OnInit {
     console.log("Y : " + this.graphYData);
   }
 
-  getUserChoice() {
-    this.userDataChoice = this.search_history;
-    //this.userAnalysisChoice = "";
-    //this.userGraphChoice  = document.getElementById("g1");
-  }
+  // getUserChoice() {
+  //   this.userDataChoice = this.search_history;
+  //   //this.userAnalysisChoice = "";
+  //   //this.userGraphChoice  = document.getElementById("g1");
+  // }
 
 
-  onChange(value) {
+  /**
+   * @description 유저가 출력할 데이터의 숫자 버튼 변경하면 값 업데이트
+   * @param value 
+   */
+  update_num_anls_data(value) {
     this.userNumChoice = value;
   }
 
-  clearResult() {
+
+  /**
+   * @description 새로 분석을 다시 하기 전에 초기화
+   */
+  analysis_initialize() {
     this.barChartData = [];
     this.barChartLabels = [];
 
@@ -276,25 +300,47 @@ export class DashboardComponent implements OnInit {
     this.userAnalysisChoice = "";
     this.userGraphChoice = '';
     this.userNumChoice = 0;
-    console.log("CLEAR");
+    // console.log("CLEAR");
   }
 
 
-  showResult() {
+  /**
+   * @description 유저가 어떤 분석할지 선택하면 값 업데이트
+   * @param $event 
+   */
+  get_user_analysis_choice($event) {
+    this.userAnalysisChoice = $event.target.innerText;
+    // console.log(this.userAnalysisChoice)
+  }
+
+
+  /**
+   * @description 유저가 선택하는 시각화그래프 값 업데이트
+   * @param $event 
+   */
+  get_user_graph_choice($event) {
+    this.userGraphChoice = $event.target.innerText;
+  }
+
+
+  /**
+   * @description 검색 결과 표현
+   */
+  visualize() {
     console.clear();
-    this.getUserChoice();
+    // this.getUserChoice();
     this.choiceComplete = true;
 
-    console.log(this.userAnalysisChoice)
-    console.log(this.userGraphChoice)
+    // console.log(this.userAnalysisChoice)
+    // console.log(this.userGraphChoice)
 
 
     if (this.userAnalysisChoice == "키워드분석(TFIDF)") {
       console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
-      this.makeTf();
+      this.load_tfidf_for_keyword_anls();
     }
     else if (this.userAnalysisChoice == "LDA") {
-      console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
+      // console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
 
     }
     else if (this.userAnalysisChoice == "RELATED") {
@@ -302,7 +348,7 @@ export class DashboardComponent implements OnInit {
 
     }
     else if (this.userAnalysisChoice == "RNN") {
-      console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
+      // console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
     }
   }
 
@@ -384,16 +430,16 @@ export class DashboardComponent implements OnInit {
 
   makeRelatedCloud() {
     console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
-    this.db.getRcmdTable(this.chosenList[0], 10, true).then(data1 => {
-      console.log("makeRelatedCloud : ",data1);
+    this.db.getRelatedDocsTbl(this.chosenList[0], 10, true).then(data1 => {
+      console.log("makeRelatedCloud : ", data1);
 
       data1 = data1[0]["rcmd"]
       let data = []
       let count = 0;
       let idsArr = []
       let valArr = []
-      for(let i = 0 ; i < data1.length; i++){
-        if(data1[i] != undefined && data1[i].length > 0){
+      for (let i = 0; i < data1.length; i++) {
+        if (data1[i] != undefined && data1[i].length > 0) {
           console.log(data1[i].length)
           idsArr.push(data1[i][0])
           valArr.push(data1[i][1])
@@ -414,7 +460,7 @@ export class DashboardComponent implements OnInit {
       // for (let k = 0; k < graphData.length; k++) {
       //   idsArr.push(graphData[k][1])
       // }
-      this.docSvc.convertID2Title(idsArr).then(t => {
+      this.docSvc.convert_id_to_doc_title(idsArr).then(t => {
         console.log("ids arr :", idsArr);
         console.log("titles : ", t);
         let titles = t as [];

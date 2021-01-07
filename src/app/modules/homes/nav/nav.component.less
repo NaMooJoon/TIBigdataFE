@@ -1,32 +1,103 @@
-.uk-navbar-container.uk-margin-left.uk-login{
-    height: 50%;
+.navbar {
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+:hover,
+:active {
+  text-decoration: none;
+}
+
+nav>ul>li {
+  padding: 3px 15px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  transition: 0.5s;
+}
+
+.common-menu li:first {
+  margin-left: 0px;
+  padding-left: 0px;
+
 }
 
 
-.uk-navbar-container {
-  background-color:white;
-  height:40px;
+nav>ul>li:hover {
+  padding: 3px 15px;
+  border-radius: 25px;
+  border: 2px solid #0FBAFF;
+  text-decoration: none;
+  transition: 0.3s;
 }
 
-.uk-navbar-nav {
-    height:40px;
+.common-menu,
+.login-menu,
+.user-menu {
+  font-size: 17px;
+  font-weight: 500;
+  padding: 0px;
+  margin: 0px;
 }
 
-.uk-navbar-nav .li{
-    height:40px;
+.common-menu>li,
+.login-menu>li,
+.user-menu>li {
+  margin: 5px;
+  float: left;
 }
 
-.uk-navbar-nav >li >a{
-    min-height:5px;
-    height:40px;
+.community-menu,
+.about-menu {
+  margin: 5px;
 }
 
-.nav-text{
-    font-size : 19px;
-    color : #3d3d3d;
-    
+.community-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.nav-area{
-    // background-color: limegreen;
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.community-dropdown-menu {
+  display: none;
+}
+
+.about-dropdown-menu {
+  display: none;
+}
+
+div>ul>li {
+  font-size: 15px;
+  margin: 7px 0px;
+  text-align: center;
+}
+
+div>ul>li>a {
+  color: gray;
+  font-weight: 300;
+  margin: 0px;
+  padding: 0px;
+
+}
+
+.community-menu:hover .community-dropdown-menu {
+  display: block;
+  position: absolute;
+  padding: 0px;
+  padding-top: 35px;
+  z-index: 1;
+}
+
+.about-menu:hover .about-dropdown-menu {
+  display: block;
+  position: absolute;
+  padding: 0px;
+  padding-top: 35px;
+  z-index: 1;
 }

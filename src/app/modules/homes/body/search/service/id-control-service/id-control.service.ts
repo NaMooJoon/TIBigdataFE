@@ -15,25 +15,28 @@ export class IdControlService {
 
   constructor() { }
 
+
+  /**
+   * @description 
+   */
   clearAll() {
-    this.oneID = "";
     this.idList = [];
     this.oneID = "";
   }
 
-  setIdList(id: string) {
+  pushIDList(id: string) {
     this.idList.push(id);
   }
 
-  popIdList() {
+  popIDList() {
     this.idList.pop();
   }
 
-  clearIdList() {
+  clearIDList() {
     this.idList = [];
   }
 
-  getIdList() {
+  getIDList() {
     return this.idList;
   }
 
@@ -41,16 +44,16 @@ export class IdControlService {
     this.idList = [];
   }
 
-  setIdChosen(id: string) {
+  selecOneID(id: string) {
     this.oneID = id;
     // console.log(this.idChosen);
   }
 
-  getIdChosen() {
+  getOneID() {
     return this.oneID;
   }
 
-  clearIdChosen() {
+  clearOneID() {
     this.oneID = "";
   }
 

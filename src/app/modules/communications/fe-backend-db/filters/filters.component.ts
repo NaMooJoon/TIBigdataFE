@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { SourceMapGenerator } from '@angular/compiler/src/output/source_map';
-import { Observable} from 'rxjs'
-import {map, filter, switchMap} from 'rxjs/operators';
+import { Observable } from 'rxjs'
+import { map, filter, switchMap } from 'rxjs/operators';
 import { IpService } from 'src/app/ip.service'
 
-interface Post{
-  "postName" : string;
-  "category" : string;
+interface Post {
+  "postName": string;
+  "category": string;
 }
 
 @Component({
@@ -18,10 +18,10 @@ interface Post{
 export class FiltersComponent implements OnInit {
 
   public post;
-  private URL = this.ipService.get_FE_DB_ServerIp() + ":9200/victolee/blog/1/_source"
+  private URL = this.ipService.getFrontDBServerIp() + ":9200/victolee/blog/1/_source"
 
-  constructor(public http:HttpClient,private ipService : IpService
-    ) { }
+  constructor(public http: HttpClient, private ipService: IpService
+  ) { }
 
   ngOnInit() {
     this.fetchPosts();
@@ -29,13 +29,13 @@ export class FiltersComponent implements OnInit {
 
   public fetchPosts() {
     return this.http.get(this.URL)
-        .subscribe((data) => {
-          this.post = data;
-          console.log(this.post);
-        })
+      .subscribe((data) => {
+        this.post = data;
+        console.log(this.post);
+      })
   }
 
- 
+
 
 
 }

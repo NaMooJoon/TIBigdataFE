@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-community-root',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommunityRootComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -23,5 +24,20 @@ export class CommunityRootComponent implements OnInit {
    * 취소
    *  취소하는 함수
   */
+
+ navToCmm() {
+  this.router.navigateByUrl("community");
+
+}
+
+navToAnounce() {
+  this.router.navigateByUrl("community/announcement");
+
+}
+
+navToFaq() {
+  this.router.navigateByUrl("community/faq");
+
+}
 
 }

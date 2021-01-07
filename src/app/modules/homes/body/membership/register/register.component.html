@@ -1,58 +1,44 @@
-<div class="row">
-  <div class="col-md-6 mx-auto">
-    <div class="card rounded-0">
-      <div class="card-header">
-        <h3 class="mb-0">Register</h3>
-      </div>
-
-      <div class="card-body">
-        <form action="" class="form">
-          <div class="form-group">
-            <label for="">닉네임 : 익명으로 사용할 경우</label>
-            <!-- register use email input -->
-            <input [(ngModel)]="registerUserData.nickname" name="nickname" type="text" class="form-control rounded-0" required>
-          </div>
-          <div class="form-group">
-            <label for="">이름</label>
-            <!-- register use email input -->
-            <input [(ngModel)]="registerUserData.name" name="name" type="text" class="form-control rounded-0" required>
-          </div>
-          <div class="form-group">
-            <label for="">기관(Undergraduate, graduated, researcher in univ(MD, Phd?, poDoc?), resercher institute</label>
-            <!-- register use email input -->
-            <!-- 각각의 경우에 따라 어느 학교인지, 연구 기관이 어디인지 추가로 물어보기. 
-            기관 리스트 나열해서 선택하게 하거나 직접 입력 -->
-            <input [(ngModel)]="registerUserData.inst" name="inst" type="text" class="form-control rounded-0" required>
-          </div>
-          <div class="form-group">
-            <label for="">Email</label>
-            <!-- register use email input -->
-            <input [(ngModel)]="registerUserData.email" name="email" type="text" class="form-control rounded-0" required>
-          </div>
-          <div class="form-group">
-            <!-- <label for=""> 
-              비밀번호 : bcrypt사용해서 암호화하긴 하는데 아직 콘솔 중에 찍힐 수 있습니다.
-            </label> -->
-            <!-- register user password input -->
-            <input [(ngModel)]="pw1" name="password1"  type="password" class="form-control rounded-0" required>
-          </div>
-
-          <div class="form-group">
-            <label for="">비밀번호 다시입력</label>
-            <!-- register user password input -->
-            <input [(ngModel)]="pw2" name="password2"  type="password" class="form-control rounded-0" required>
-            <div *ngIf="!checkIfValid()">입력한 비밀번호가 달라요.</div>
-          </div>
-          
-          <!-- when click button, registerUser function init. -->
-          <button [disabled] = "!checkIfValid()"(click)="registerUser()" type="button" class="btn btn-primary float-right">Register </button>
-        </form>
-        
-        <!-- uncomment after google adjustion -->
-        <!-- <div class="or-seperator"><i>or</i></div>
-        <h2>소셜 계정 간편 가입</h2>
-        <a (click)="toSocReg()">Google 계정으로 회원가입</a> -->
-      </div>
+<div class="register">
+  <img src="assets/logo/logo_main.png" alt="kubic_logo" width="150px" />
+  <form class="form-field" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="field name-field">
+      <input formControlName="name" placeholder="이름"  />
+      <div class="required" *ngIf="registerForm.get('name').touched && registerForm.get('name').errors?.required">이름을 입력해주세요.</div>
     </div>
-  </div>
+    <div class="field nickname-field">
+      <input formControlName="nickName" placeholder="닉네임"  />
+      <div class="required" *ngIf="registerForm.get('nickName').touched && registerForm.get('nickName').errors?.required">닉네임을 입력해주세요.</div>
+    </div>
+    <div class="field status-field">
+      <select formControlName="status" >
+        <option class="dropdown-default" value="">신분을 선택해주세요</option>
+        <option *ngFor="let status of statusList"> {{status}} </option>
+      </select>
+      <div class="required" *ngIf="registerForm.get('status').touched && registerForm.get('status').errors?.required">신분을 선택해주세요.</div>
+    </div>
+    <div class="field inst-field">
+      <input formControlName="inst" placeholder="소속기관"  />
+      <div class="required" *ngIf="registerForm.get('inst').touched && registerForm.get('inst').errors?.required">소속된 기관을 입력해주세요.</div>
+    </div>
+    <div class="field email-field">
+      <input formControlName="email" placeholder="이메일"  />
+      <div class="required" *ngIf="registerForm.get('email').touched && registerForm.get('email').errors?.required">이메일을 입력해주세요.</div>
+      <div class="required" *ngIf="registerForm.get('email').touched && registerForm.get('email').errors?.email">올바른 이메일 형식을 사용해주세요.</div>
+    </div>
+    <div class="field password-field">
+      <input formControlName="password" placeholder="비밀번호" type="password"  />
+      <div class="required" *ngIf="registerForm.get('password').touched && registerForm.get('password').errors?.required">사용할 비밀번호를 입력해주세요.</div>
+      <div class="required" *ngIf="registerForm.get('password').touched && registerForm.get('password').errors?.minlength">8자 이상 입력해주세요.</div>
+    </div>
+    <div class="field password-confirm-field">
+      <input formControlName="passwordConfirm" placeholder="비밀번호 재입력" type="password"  />
+      <div class="required" *ngIf="registerForm.get('passwordConfirm').touched && registerForm.get('passwordConfirm').errors?.required">비밀번호를 재입력해주세요.</div>
+      <div class="required" *ngIf="registerForm.get('passwordConfirm').touched && registerForm.get('passwordConfirm').errors?.mustMatch">입력한 비밀번호와 다릅니다.</div>
+    </div>
+    <div class="buttons">
+      <button class="submit-button" [disabled]='!registerForm.valid' type="submit"> 가입하기 </button>
+      <button class="social-login" (click)="toSocReg()" type="button">구글로 회원가입 </button>
+    </div>
+  </form>
 </div>
+

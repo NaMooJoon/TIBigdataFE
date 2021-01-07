@@ -1,65 +1,38 @@
-<div class="login-form">
-    <form action="/examples/actions/confirmation.php" method="post">
-        <h2 class="text-center">로그인</h2>
+<div class="uk-container uk-container-center" >
 
 
-
-
-        <!-- email login -->
-        <!-- email input -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-text"><i class="fa fa-user"></i></span>
-                <input type="text" [(ngModel)]="loginUserData.email" class="form-control" name="email" placeholder="이메일 주소" required="required">
+    
+    <div class="login-form">
+        <!-- <div>
+            <img src="/assets/logo/logo_main.png" alt="logo">
+        </div> -->
+        <div class="uk-align-center form-group" >
+            <img src="/assets/logo/logo_main.png" alt="logo">
+            <div class="input-group uk-margin-bottom">
+                <input  type="text" [(ngModel)]="loginUserData.email" class="input-gray login-button-width" name="email" placeholder="이메일 주소" required="required">
             </div>
-        </div>
-        <!-- password input -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                <input type="password" [(ngModel)]="loginUserData.password" class="form-control" name="password" placeholder="비밀번호" required="required">
+    
+            <div class="input-group uk-margin-bottom">
+                <input   type="password" [(ngModel)]="loginUserData.password" class="input-gray login-button-width" name="password" placeholder="비밀번호" required="required">
             </div>
-        </div>
-        <!-- email login button -->
-        <div class="form-group">
-            <button type="submit" (click)="eLogIn()" class="btn btn-primary btn-block login-btn">로그인</button>
-        </div>
-
-
-        <!-- additinonal feature -->
-        <div class="clearfix">
-            <label class="pull-left checkbox-inline"><input type="checkbox"> 로그인 유지</label> 
-            <div style="text-align: center;">
-                <a (click)="toRegister()" class="text-success">회원가입</a>
-                <a href="#" class="pull-right text-success">비밀번호 찾기 </a>
+    
+            <div class="login-help">
+                <div>
+                <input type="checkbox" id="login" class="check">   
+                <span>로그인 유지</span> 
+                </div>
+                <a href="#" class="text-success">비밀번호를 잊으셨나요? </a>
+            
             </div>
+            <div class="buttons">
+                <button  type="submit" (click)="eLogIn()" class="login-button">로그인</button>  
+                <button  type="submit" (click)="toRegister()" class="register-button">회원가입</button>
+                <button  type="submit" (click)="gLogIn()" class="google-button">구글 로그인</button>
+            </div>
+    
+    
+            
         </div>
-
-
-        <div class="or-seperator"><i>소셜 네트워크 로그인</i></div>
-
-        <!-- 구글 로그인
-        <div class="text-center social-btn">
-            <a (click)="gLogIn()" class="btn btn-danger btn-block"><i class="fa fa-google"></i><b>Google 계정</b>으로 로그인</a>
-        </div>
-        -->
-
-        <div class="text-center social-btn" style="color: white;">
-            <a (click)="gLogIn()">
-                <img src="../../../../../../assets/google_Login.png" alt="google">
-            </a>
-        </div>
-
-    </form>
-
-
-
-<!--
-    <div *ngIf="user;">
-        <img src="{{user.photoUrl}} 안녕하세요">
-        <h4>{{user.name}}</h4>
-        <p>{{user.email}}</p>
     </div>
--->
-
-</div>
+    
+    </div>

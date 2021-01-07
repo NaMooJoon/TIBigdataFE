@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialUser, AuthService } from 'angularx-social-login';
+import { SocialUser, SocialAuthService } from 'angularx-social-login';
 import { Router } from '@angular/router';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { LoginComponent } from '../login/login.component';
@@ -28,23 +28,25 @@ export class UserpageComponent implements OnInit {
   // private myDocsNum : Number;
   private myHst: string[] = [];
   private isDocEmpty: boolean = false;
-  private user_menu : string = "";
+  private user_menu: string = "my_keep";
 
 
   constructor(
     private http: HttpClient,
-     private ipService: IpService,
-     private idSvs: IdControlService,
+    private ipService: IpService,
+    private idSvs: IdControlService,
     public _router: Router,
-     private _auth: EPAuthService,
-     private _login: LoginComponent,
-     private _gauth: AuthService
-  ) {}
+    private _auth: EPAuthService,
+    private _login: LoginComponent,
+    private _gauth: SocialAuthService
+  ) { }
 
   ngOnInit() {
-    this._auth.getLogInObs().subscribe((logstat) => {
+    this._auth.getLoginStatChange().subscribe((logstat) => {
       this.getKeepDocs();
       this.getMyHst()
+
+      console.log("token:" + this._auth.getToken());
       // console.log(logstat)
       // if(!logstat){
       //   this.nowUser  = this._auth.getNowUser()
@@ -54,8 +56,9 @@ export class UserpageComponent implements OnInit {
     });
   }
 
-  user_menu_set(event : string){
-      this.user_menu = event;
+  user_menu_set(event: string) {
+    console.log("menu : ", event)
+    this.user_menu = event;
   }
 
   gSignOut() {
@@ -98,7 +101,9 @@ export class UserpageComponent implements OnInit {
     console.log("my hist: ", this.myHst);
   }
 
-
+  toApiReg(): void {
+    this._router.navigateByUrl("/api-register");
+  }
 
   // //dashboard ts에도 동일한 함수 있음. 차후 idList ts으로 이동하여 합침. 
   // async convertID2Title() {

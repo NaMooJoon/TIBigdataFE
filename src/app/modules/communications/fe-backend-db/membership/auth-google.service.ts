@@ -1,19 +1,23 @@
 import { Injectable, Injector } from "@angular/core";
 import { IpService } from 'src/app/ip.service';
 import { HttpClient } from "@angular/common/http";
-import { Observable } from 'rxjs';
-// import { EPAuthService, Profile, } from './auth.service';
 import { logStat, UserProfile } from "./user.model";
 import { Auth } from "./userAuth.model";
-
 import { Router } from "@angular/router";
 import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { SocialAuthService, GoogleLoginProvider } from "angularx-social-login";
 
-import {
-  AuthService,
-  SocialUser,
-  GoogleLoginProvider,
-} from "angularx-social-login";
+class storeToken {
+  type: logStat;
+  token: string;
+
+  constructor(type: logStat, token: string) {
+    this.type = type;
+    this.token = token
+  }
+}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,34 +26,24 @@ export class AuthGoogleService extends Auth {
   getProfile(user: any) {
     throw new Error("Method not implemented.");
   }
-
-
-
-
-  protected URL = this.ipService.get_FE_DB_ServerIp();
-
+  PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com"; //진범 localhost 승인
+  protected user: UserProfile;
+  protected URL = this.ipService.getFrontDBServerIp();
   private GOOGLE_REG_URL = this.URL + "/gUser/gRegister";
   private GOOGLE_CHECK_OUR_USER_URL = this.URL + "/gUser/check_is_our_g_user";
   private GOOGLE_VERIFY_TOKEN_URL = this.URL + "/gUser/verifyGoogleToken";
+  private GOOGLE_USER_INFO_URL = this.URL + "/gUser/getUserInfo";
   constructor(
     private injector: Injector,
     private ipService: IpService,
     http: HttpClient,
     router: Router,
-    private gauth: AuthService,
+    private gauth: SocialAuthService,
     private docSvc: DocumentService,
-    // private auth: EPAuthService
+
   ) {
     super(router, http);
-    // this.isLogInObs$.next(logStat.unsigned);
   }
-  /**
-   * @GoogleSocialLogin
-   * Google Social Login functions
-   * Functions : login, checkUSer, register, signout, verify token
-   */
-
-
 
   /**
    * @function getInstance()
@@ -59,81 +53,43 @@ export class AuthGoogleService extends Auth {
     return this;
   }
 
+  async register(user): Promise<any> {
+    /* call http request with email address to check db. */
+    let isOurUser = await super.postIsOurUser(user, this.GOOGLE_CHECK_OUR_USER_URL);
 
-
-  /**
-   * @function isOurUser 
-   * @param user
-   * @description check if this user is already our user. check out from the DB. 
-   */
-  // isOurUser(user: {}): Promise<any> {
-  //   return this.http.post<any>(this.GOOGLE_CHECK_OUR_USER_URL, user).toPromise();
-  // }
-
-  register(user: any): Observable<any> {
-    return this.http.post<any>(this.GOOGLE_REG_URL, user);
-  }
-
-  /**
-   * @function gLogIn
-   * @param platform 
-   * @description user login with google social login
-   * 
-   */
-
-  async logIn(): Promise<any> {
-    let response = await this.googleSignIn();
-
-    /**
-     * 정식 패키지를 사용하지 않고 구글에서 제공한 디버깅 방법.
-     * 구글 서버로 토큰 정보를 바로 보내 valid한 토큰인지 확인.
-     */
-    // console.log(response)
-    // this.http.get<any>("https://oauth2.googleapis.com/tokeninfo?id_token=" + response.authToken).subscribe(
-    //   (res) => {
-
-    //   console.log("resresres")
-    //   console.log("GOOGLE AUTH DEBUG: ", res)
-    // },err=>{
-    //   if(err)
-    //   console.error(err)
-    // })
-
-    //check if this user is our user already
-    let res = await super.postIsOurUser(response, this.GOOGLE_CHECK_OUR_USER_URL)
-
-    if (res.succ == false) {
-      //console.log("This user is not yet our user : need sign up : ", res);
-      alert("아직 KUBiC 회원이 아니시군요?\n 반갑습니다!\n 회원가입 페이지로 이동합니다. :)");
-      this.router.navigateByUrl("/membership/register");
+    if (isOurUser.succ) {
+      alert("이미 등록되어 있는 id 입니다. 로그인 페이지로 이동합니다.");
+      this.router.navigateByUrl("/login");
     }
     else {
-      this.router.navigate(['/homes'])
-
-      return new UserProfile(response.name, response.email, response.idToken, logStat.google);
-      //console.log("This user is already our user!");
-      // this.socUser = response as SocialUser;
-      //console.log(this.socUser);
-      // localStorage.setItem('token', JSON.stringify(new storeToken(logStat.google, this.socUser.idToken)));
-
-      // localStorage.setItem('token',this.socUser.idToken);
-      //console.log("login user info saved : ", this.socUser);
-      // this.isLogIn = logStat.google;
+      /* call http request with user information to register new user */
+      let res = await this.http.post<any>(this.GOOGLE_REG_URL, user).toPromise();
+      return res.succ;
     }
   }
 
-  /**
-   * @description : return user profile
-   * @param user : user = {payload : {
-   *                                  name : string, 
-   *                                  email : string
-   *                                  }
-   *                      }
-   */
-  // getProfile(res: any) {
-  //   return new Profile(res.user.name, res.user.email);
-  // }
+  async logIn(): Promise<any> {
+    let singInResult = await this.googleSignIn();
 
+    //check if this user is our user already
+    // TODO : do we need to check postisouruser? we might just use singinresult to identify the existence of the user.
+    let isOurUser = await super.postIsOurUser(singInResult, this.GOOGLE_CHECK_OUR_USER_URL)
+
+    if (!isOurUser.succ) {
+      alert("아직 KUBiC 회원이 아니시군요? 회원가입 해주세요! :)");
+      this.router.navigateByUrl("/register");
+    }
+    else {
+      let res = await this.http.post<any>(this.GOOGLE_USER_INFO_URL, singInResult).toPromise();
+      alert("돌아오신 걸 환영합니다, " + singInResult.name + "님. 홈 화면으로 이동합니다.");
+      localStorage.setItem('token', JSON.stringify(new storeToken(logStat.google, singInResult.idToken)));
+      this.user = new UserProfile(logStat.google, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, singInResult.idToken);
+      console.log(this.user);
+      super.confirmUser(this.user);
+
+      location.replace("http://localhost:4200")
+    }
+  }
 
   /**
    * @description 루글 로그인 : google login api 사용
@@ -141,32 +97,21 @@ export class AuthGoogleService extends Auth {
   async googleSignIn() {
     let platform = GoogleLoginProvider.PROVIDER_ID;
     return await this.gauth.signIn(platform);
-
-    // return new Promise((resolve) => {
-    //   .then((response) => {//error branch 추가할 필요성 있음...
-    //     resolve(response);
-    //   })
-    // })
-
   }
 
 
   /**
    * @description 구글 로그아웃
    */
-  logOut(): void {
+  async logOut(): Promise<void> {
     localStorage.removeItem("token");
-    this.gauth.signOut();
+    await this.gauth.signOut();
     // this.isLogIn = logStat.unsigned;
   }
 
   //verify if this token is from google
-  verifyToken(token: string): Promise<any> {
-    // this.http.get<any>("https://oauth2.googleapis.com/tokeninfo?id_token=" + token).subscribe(res => {
-    //   console.log("GOOGLE AUTH DEBUG: ", res)
-    // })
-    var client = this.injector.get("GOOGLE PROVIDER ID");//get google api client id from angular injector
-    // console.log(client);
-    return this.http.post<any>(this.GOOGLE_VERIFY_TOKEN_URL, { token: token, client: client }).toPromise();
+  async verifyToken(token: string): Promise<any> {
+    var client = this.PROVIDER_ID
+    return await this.http.post<any>(this.GOOGLE_VERIFY_TOKEN_URL, { token: token, client: client }).toPromise();
   }
 }

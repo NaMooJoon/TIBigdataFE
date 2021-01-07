@@ -4,15 +4,17 @@ export class UserProfile {
     name: string;
     token: string;
     password?: string;
-    nickName? : String;
-    // nickname? : string;
-    inst?: string;
-    photo?: string;
-    constructor(reg, email, name, token){
+    nickName?: String;
+    inst: string;
+    api: boolean;
+    constructor(reg, email, name, nickname, inst, api, token) {
         this.registerStat = reg;
         this.email = email;
         this.name = name;
         this.token = token;
+        this.nickName = nickname;
+        this.inst = inst
+        this.api = api;
     }
 }
 
@@ -22,4 +24,4 @@ export enum logStat {
     SUPERUSER,//1
     email,//2
     google,//3
-  }
+}
