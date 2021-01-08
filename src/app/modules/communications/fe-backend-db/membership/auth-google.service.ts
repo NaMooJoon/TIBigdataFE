@@ -17,8 +17,6 @@ class storeToken {
   }
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -85,8 +83,6 @@ export class AuthGoogleService extends Auth {
       localStorage.setItem('token', JSON.stringify(new storeToken(logStat.google, singInResult.idToken)));
       this.user = new UserProfile(logStat.google, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, singInResult.idToken);
       console.log(this.user);
-      super.confirmUser(this.user);
-
       location.replace("http://localhost:4200")
     }
   }
