@@ -172,8 +172,26 @@ export class EPAuthService {
   }
 
   async addMyDoc(docIDs) {
+  
+    let idRes = await this.http.post<any>(this.GET_MY_DOC_URL, { payload: this.userProfile.email }).toPromise();
+    console.log("idRes: ", idRes);
+    
+    if (idRes.succ === false) {
+      let payload = { userEmail: this.userProfile.email, docs: docIDs };
+      let res = await this.http.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
+      this.myDocs = res.myDoc;
+      return;
+    }
+
+    for (var i=0; i<idRes.payload.length; i++) {
+      for (var j=0; j<docIDs.length; j++) {
+        if (idRes.payload[i] === docIDs[j]) {
+          docIDs.splice(j, 1);
+        }
+      }
+    }
+
     let payload = { userEmail: this.userProfile.email, docs: docIDs };
-    //console.log("keep doc sending data : ", payload);
     let res = await this.http.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
     this.myDocs = res.myDoc;
 
