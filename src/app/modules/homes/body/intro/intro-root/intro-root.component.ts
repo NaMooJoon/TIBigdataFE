@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-intro-root',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IntroRootComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public _router: Router,
+  ) { }
 
   ngOnInit() {
+  }
+
+  toSiteIntro() {
+    this._router.navigateByUrl("/introduce/intro");
+  }
+
+  toServiceGuide() {
+    this._router.navigateByUrl("/introduce/service-guide");
+  }
+
+  toCollectedInfo() {
+    this._router.navigateByUrl("/introduce/collected-info");
+  }
+
+  toMemberPolicy() {
+    this._router.navigateByUrl("/introduce/member-policy");
   }
 
 }
