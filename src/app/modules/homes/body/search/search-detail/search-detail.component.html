@@ -1,155 +1,87 @@
 <div class="search-detail-area">
-  <h2 class="uk-margin-bottom" style="font-weight : bold; color : #3d3d3d; font-size:27px;">문서 상세보기</h2>
-
+  <h2>문서 상세보기</h2>
   <div *ngIf="article">
-
-
-
-    <h4 class=" alignleft" style="font-weight : bold; color : #3d3d3d; font-size:30px;">{{ article.post_title }}</h4>
-    <h4 class=" alignright" style="font-weight : bold; color : #3d3d3d; font-size:20px;">{{ article.post_writer }}</h4>
-    <div style="clear: both;"></div>
-
-    <hr style="border : 0; height : 2px; background : #8a8d8e;">
-
-    <div class="uk-align-right temp-url-area" style="font-weight : regular; color : #3d3d3d; font-size:23px;">
-      {{article.published_institution_url}}
-    </div>
-
-    <div class="uk-section">
-
-
-      <div uk-grid>
-        <!-- info -->
-        <div class="detail-gray-box">
-          발행기관
-        </div>
-        <div class="detail-info">
-          {{article.published_institution_url}}
-        </div>
-      </div>
-      <div uk-grid>
-
-        <div class="detail-gray-box">
-          간행물
-        </div>
-        <div class="detail-info">
-
-        </div>
-      </div>
-      <div uk-grid>
-
-        <div class="detail-gray-box">
-          간행물 구분
-        </div>
-        <div class="detail-info">
-
-        </div>
-      </div>
-      <div uk-grid>
-
-        <div class="detail-gray-box">
-          발행년월
-        </div>
-        <div class="detail-info">
-          {{article.post_date}}
-        </div>
+    <div>
+      <div class="article-header">
+        <h3 class="header-title"> {{ article.post_title }} </h3>
+        <h3 class="header-writer"> {{ article.post_writer }} </h3>
       </div>
 
-      <div uk-grid>
-        <div class="detail-gray-box">
-          페이지
-        </div>
-        <div class="detail-info">
-          {{article.number}}
-        </div>
+      <hr>
+
+      <div class="inst-url">
+        <a>{{article.published_institution_url}}</a>
       </div>
 
+      <ul class="article-info">
+
+        <li class="info">
+          <div class="info-title"> 발행기관 </div>
+          <div class="info-content"> {{ article.published_institution }}</div>
+        </li>
+        <li class="info">
+          <div class="info-title"> 간행물 </div>
+          <div class="info-content"> </div>
+        </li>
+        <li class="info">
+          <div class="info-title"> 간행물 구분 </div>
+          <div class="info-content"> </div>
+        </li>
+        <li class="info">
+          <div class="info-title"> 발행년월 </div>
+          <div class="info-content"> {{ article.post_date }}</div>
+        </li>
+        <li class="info">
+          <div class="info-title"> 페이지 </div>
+          <div class="info-content"> {{ article.page }}</div>
+        </li>
+        <li class="info">
+          <div class="info-title"> URL </div>
+          <div class="info-content"> {{ article.file_download_url }}</div>
+        </li>
+      </ul>
 
       <!-- 소제목들 -->
-      <div class="set-margin-element">
+      <div class="article-index">
+        <h4 class="article-detail-subtitle">목차</h4>
+        <hr>
+        <div class="detail-body">
+          {{ article.post_body }}
+        </div>
+      </div>
 
-        <div class="set-margin-element" id="breif">
-          <h2 class="detail-header">
-            목차
-          </h2>
-          <hr style="border : 0; height : 0.5px; background : #606060;">
+      <div class="article-abtract">
+        <h4 class="article-detail-subtitle">초록</h4>
+        <hr>
+        <div class="detail-body"></div>
+      </div>
+
+      <div class="article-related">
+        <h4 class="article-detail-subtitle">연관문서</h4>
+        <hr>
+        <div class="detail-body">
           <ul>
-            <li>1. a</li>
-            <li>2. </li>
-            <li>3. </li>
-            <li>4. </li>
+            <li *ngFor="let rcmd of rcmdList; index as r">
+              <a class="detail-content" (click)="goToDoc(r)">{{ rcmd["title"] }}</a>
+            </li>
           </ul>
         </div>
+      </div>
 
-        <div class="set-margin-element" id="summ">
-          <h2 class="detail-header">
-            초록
-          </h2>
-          <hr style="border : 0; height : 0.5px; background : #606060;">
-          <p class="detail-content">
-
-          </p>
+      <div class="article-wordcloud">
+        <h4 class="article-detail-subtitle">워드클라우드</h4>
+        <hr>
+        <div class="detail-body">
+          <span>데이터 분석이 진행 중입니다.</span>
         </div>
-
-        <div class="set-margin-element" id="related-doc">
-          <h2 class="detail-header">
-            연관문서
-          </h2>
-          <hr style="border : 0; height : 0.5px; background : #606060;">
-          <div *ngIf="0 < isRelatedLoaded">
-
-            <div *ngFor="let rcmd of rcmdList; index as r">
-              <a class="detail-content" (click)="goToDoc(r)">{{ rcmd["title"] }}</a>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- 워드클라우드 -->
-        <div class="uk-container uk-container-center" id="word-cloud">
-          <h2 class="detail-header">
-            워드클라우드
-          </h2>
-          <hr style="border : 0; height : 0.5px; background : #606060;">
-
-          <div *ngIf="0 < isCloudLoaded">
-            <!-- <div class="uk-container"> -->
-            <!-- <div class="card card-body mb-2"> -->
-            <div class="uk-align-center" style="
-                border: 1pt solid #c6c6c6;          
-                border-radius: 30px ;
-                margin-left : 100px;
-                margin-right : 100px;
-                height : 500px;
-            ">
-              <angular-tag-cloud [data]="cData" [step]=10 [width]="options.width" [height]="options.height">
-              </angular-tag-cloud>
-            </div>
-            <!-- </div> -->
-            <!-- </div> -->
-          </div>
-
-
-          <!-- {{ article.post_body }}</div> -->
-        </div>
-
-        <div class="set-margin-element">
-          <h2 class="detail-header">
-            추가자료
-          </h2>
-          <hr style="border : 0; height : 0.5px; background : #606060;">
-        </div>
-
-        <div class="set-margin-element">
-          <h2 class="detail-header">
-            문서 내용
-          </h2>
-          {{ article.post_body }}
-          <hr style="border : 0; height : 0.5px; background : #606060;">
-        </div>
-
 
       </div>
-    </div>
-  </div>
-</div>
+
+      <div class="article-more">
+        <h4 class="article-detail-subtitle">추가 자료</h4>
+        <hr>
+        <div class="detail-body">
+          <span> 등록된 정보가 없습니다. </span>
+        </div>
+
+      </div>
