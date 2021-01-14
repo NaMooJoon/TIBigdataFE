@@ -455,20 +455,24 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
    */
   checkBoxUpdate(i) {
     let idx = this.keepIdList.indexOf(this.search_result_doc_id_list[i]);
-    idx != undefined ?
+
+    idx == -1 ?
       this.keepIdList.push(this.search_result_doc_id_list[i]) :
       this.keepIdList.splice(idx, 1);
   }
-
 
   /**
    * @description 문서 체크한 뒤 담기 버튼 누르면 실제로 담는 함수.
    */
   keepMyDoc() {
-    this.auth.addMyDoc(this.keepIdList).then(() => {
-      alert("문서가 나의 문서함에 저장되었어요.")
-    });
-
+    if (this.keepIdList.length == 0) {
+      alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.")
+    } else {
+      // 이미 담긴 문서 알림창 다르게. 
+      this.auth.addMyDoc(this.keepIdList).then(() => {
+        alert("문서가 나의 문서함에 저장되었어요.")
+      });
+    }
   }
 
 
