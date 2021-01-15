@@ -138,8 +138,10 @@ export class ElasticsearchService {
         "post_title",
         "post_date",
         "published_institution_url",
+        "published_institution",
         "post_writer",
-        "post_body"
+        "post_body",
+        "file_download_url",
       ]
     })
   }
@@ -203,8 +205,10 @@ export class ElasticsearchService {
           "post_title",
           "post_date",
           "published_institution_url",
+          "published_institution",
           "post_writer",
-          "post_body"
+          "post_body",
+          "file_download_url",
         ]
       })
   }
@@ -293,8 +297,10 @@ export class ElasticsearchService {
         "post_title",
         "post_date",
         "published_institution_url",
+        "published_institution",
         "post_writer",
-        "post_body"
+        "post_body",
+        "file_download_url",
       ]
     });
   }
@@ -318,8 +324,6 @@ export class ElasticsearchService {
   searchByManyId(ids: string[], startIndex?: number, docSize?: number): Promise<any> {
     // console.log("es ts: the num of ids : "+ids.length);
     return this.client.search({
-      // filterPath: ["hits.hits"],
-      // index: "nkdb",
       from: startIndex,
       size: docSize,
       body: {
@@ -333,8 +337,10 @@ export class ElasticsearchService {
         "post_title",
         "post_date",
         "published_institution_url",
+        "published_institution",
         "post_writer",
-        "post_body"
+        "post_body",
+        "file_download_url"
       ]
     });
   }
