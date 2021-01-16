@@ -68,22 +68,5 @@ export class SearchDetailComponent implements OnInit {
         this.cData = data as CloudData[]
         this.isCloudLoaded++;
       });
-    // let id = this.idControl.getArticle()["_id"];
-
-    // console.log(this.article);
   }
-
-  // cldData: CloudData;
-  options: CloudOptions = {
-    // if width is between 0 and 1 it will be set to the size of the upper element multiplied by the value
-    width: 1000,
-    height: 600,
-    // font : "bold",
-    // overflow: true,
-    // strict : true
-    // randomizeAngle : true
-  };
-
-
-
 }
