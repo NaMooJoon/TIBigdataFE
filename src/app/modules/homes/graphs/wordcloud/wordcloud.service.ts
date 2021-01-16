@@ -16,8 +16,6 @@ export class WordcloudService {
   async createCloud(id: string) {
     let cData = new Array<CloudData>();
     let data = await this.db.getTfidfVal(id, 15, true);
-    // console.log("wordClud res : ", data);
-
     let tfidfData = data[0] as [];
     let tfIdfVal = tfidfData["tfidf"] as [];
     tfIdfVal.map(v => {
@@ -25,8 +23,6 @@ export class WordcloudService {
         text: v[0],
         weight: v[1]
       })
-      // console.log("service cData : " + cData);
-
     })
     return cData;
   }

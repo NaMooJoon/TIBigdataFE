@@ -94,12 +94,10 @@ export class AuthEmailService extends Auth {
                 //reg, email, name, nickname, inst, token)
                 console.log(res.payload.email + "\n" + res.payload.name + "\n" + res.payload.nickname + "\n" + res.payload.inst + "\n" + res.payload.inst + "\n" + res.payload.token + "\n");
                 this.user = new UserProfile(logStat.email, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, res.payload.token);
-                super.confirmUser(this.user);
-
             }
             else if (!res.succ) {
                 alert("이메일 혹은 비밀번호가 잘못되었어요.");
-                return null;
+                return;
             }
             err => {
                 console.log(err)

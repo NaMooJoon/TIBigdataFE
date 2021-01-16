@@ -34,14 +34,13 @@ export class SearchDetailComponent implements OnInit {
   ngOnInit() {
     this.load_new_document();
 
-
   }
   goToDoc(r) {
     this.idControl.selecOneID(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 
-  load_new_document() {
+  async load_new_document() {
     // this.isLoaded = 0;
     this.isRelatedLoaded = 0;
     this.isCloudLoaded = 0;
@@ -54,32 +53,20 @@ export class SearchDetailComponent implements OnInit {
       this.isRelatedLoaded++;
     });
 
-    this.es.searchById(id).then((res) => {
+    await this.es.searchById(id).then((res) => {
       this.article = res["hits"]["hits"][0]["_source"];
+      console.log(this.article)
       this.isDocInfoLoaded++;
-
     })
+
+    if (this.article.file_download_url === undefined) {
+      this.article.file_download_url = this.article.published_institution_url
+    }
+
     this.wordcloud.createCloud(id)
       .then((data) => {
         this.cData = data as CloudData[]
         this.isCloudLoaded++;
       });
-    // let id = this.idControl.getArticle()["_id"];
-
-    // console.log(this.article);
   }
-
-  // cldData: CloudData;
-  options: CloudOptions = {
-    // if width is between 0 and 1 it will be set to the size of the upper element multiplied by the value
-    width: 1000,
-    height: 600,
-    // font : "bold",
-    // overflow: true,
-    // strict : true
-    // randomizeAngle : true
-  };
-
-
-
 }
