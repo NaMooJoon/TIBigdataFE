@@ -43,7 +43,7 @@
 
       <!-- 소제목들 -->
       <div class="article-index">
-        <h4 class="article-detail-subtitle">목차</h4>
+        <h4 class="article-content-subtitle">목차</h4>
         <hr>
         <div class="detail-body">
           {{ article.post_body }}
@@ -51,13 +51,13 @@
       </div>
 
       <div class="article-abtract">
-        <h4 class="article-detail-subtitle">초록</h4>
+        <h4 class="article-content-subtitle">초록</h4>
         <hr>
         <div class="detail-body"></div>
       </div>
 
       <div class="article-related">
-        <h4 class="article-detail-subtitle">연관문서</h4>
+        <h4 class="article-content-subtitle">연관문서</h4>
         <hr>
         <div class="detail-body">
           <ul>
@@ -69,16 +69,15 @@
       </div>
 
       <div class="article-wordcloud">
-        <h4 class="article-detail-subtitle">워드클라우드</h4>
-        <hr>
-        <div class="detail-body">
-          <span>데이터 분석이 진행 중입니다.</span>
+        <h4 class="article-content-subtitle">워드클라우드</h4>
+        <div class="detail-body wordcloud" *ngIf="0 < isCloudLoaded">
+          <angular-tag-cloud [data]="cData" [step]=5>
+          </angular-tag-cloud>
         </div>
-
       </div>
 
       <div class="article-more">
-        <h4 class="article-detail-subtitle">추가 자료</h4>
+        <h4 class="article-content-subtitle">추가 자료</h4>
         <hr>
         <div class="detail-body">
           <span> 등록된 정보가 없습니다. </span>
