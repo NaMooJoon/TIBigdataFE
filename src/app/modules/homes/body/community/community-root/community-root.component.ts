@@ -25,19 +25,19 @@ export class CommunityRootComponent implements OnInit {
    *  취소하는 함수
   */
 
- navToCmm() {
-  this.router.navigateByUrl("community");
+  navToCmm() {
+    this.router.navigateByUrl("community/qna");
 
-}
+  }
 
-navToAnounce() {
-  this.router.navigateByUrl("community/announcement");
+  navToAnounce() {
+    this.router.navigateByUrl("community/announcement");
 
-}
+  }
 
-navToFaq() {
-  this.router.navigateByUrl("community/faq");
-
-}
+  navToFaq() {
+    this.router.navigateByUrl("community/faq");
+  
+  }
 
 }
