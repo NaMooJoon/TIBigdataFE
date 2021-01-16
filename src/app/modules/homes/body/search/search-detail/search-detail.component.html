@@ -6,11 +6,9 @@
         <h3 class="header-title"> {{ article.post_title }} </h3>
         <h3 class="header-writer"> {{ article.post_writer }} </h3>
       </div>
-
       <hr>
-
-      <div class="inst-url">
-        <a>{{article.published_institution_url}}</a>
+      <div class="inst-url-container">
+        <a class="inst-url" href="{{ article.published_institution_url }}">{{article.published_institution_url}}</a>
       </div>
 
       <ul class="article-info">
@@ -36,8 +34,8 @@
           <div class="info-content"> {{ article.page }}</div>
         </li>
         <li class="info">
-          <div class="info-title"> URL </div>
-          <div class="info-content"> {{ article.file_download_url }}</div>
+          <div class="info-title"> 자료열람 </div>
+          <div class="info-content"> <a href="{{ article.file_download_url }}"> 열람하기 </a></div>
         </li>
       </ul>
 
@@ -70,6 +68,7 @@
 
       <div class="article-wordcloud">
         <h4 class="article-content-subtitle">워드클라우드</h4>
+        <div class="detail-body" *ngIf="0 === isCloudLoaded"> 데이터 분석이 진행 중인 문서입니다. 이후에 다시 열람해주세요.</div>
         <div class="detail-body wordcloud" *ngIf="0 < isCloudLoaded">
           <angular-tag-cloud [data]="cData" [step]=5>
           </angular-tag-cloud>
