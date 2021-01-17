@@ -1,4 +1,7 @@
 <div class="search-bar-container">
+  <img (click)="gotoMain()" *ngIf="!isMain" src="assets/logo/KUBiC로고2_가로형.png" alt="kubic_logo" width="200px" />     
+  <img (click)="gotoMain()" *ngIf="isMain" src="assets/logo/logo_main.png" alt="main_logo" width="200px"/> 
+
   <input class="search-bar" type="text" (keyup)="updateKeyword($event)" (keyup.enter)="search()" />
   <div class="search-filter-container">
     <div class="reset-filter">

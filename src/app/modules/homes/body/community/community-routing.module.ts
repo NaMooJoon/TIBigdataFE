@@ -14,7 +14,7 @@ const routes: Routes = [
     component : CommunityRootComponent,
     children : [
       {
-        path :"",
+        path :"qna",
         component : CommunityComponent
       },
       {

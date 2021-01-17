@@ -9,13 +9,14 @@ import { ReadCommunityDocComponent } from './read-community-doc/read-community-d
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { FAQComponent } from './faq/faq.component';
 import { RequestToAdminComponent } from './request-to-admin/request-to-admin.component';
-
+import { CommonSearchBarModule } from '../shared-module/common-search-bar/common-search-bar.module';
 
 @NgModule({
   declarations: [CommunityRootComponent, CommunityComponent, WriteNewCommunityDocComponent, ReadCommunityDocComponent, AnnouncementComponent, FAQComponent, RequestToAdminComponent],
   imports: [
     CommonModule,
-    CommunityRoutingModule
+    CommunityRoutingModule,
+    CommonSearchBarModule
   ]
 })
 export class CommunityModule { }

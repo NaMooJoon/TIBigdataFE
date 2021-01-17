@@ -89,7 +89,7 @@ export class AuthEmailService extends Auth {
         else {
             let res = await this.http.post<any>(this.EMAIL_LOGIN_URL, user).toPromise();
             if (res.succ) {
-                alert("돌아오신 걸 환영합니다, " + res.payload.name + "님. 홈ddddd 화면으로 이동합니다.");
+                alert("돌아오신 걸 환영합니다, " + res.payload.name + "님. 홈 화면으로 이동합니다.");
                 localStorage.setItem('token', JSON.stringify(new storeToken(logStat.email, res.payload.token)));
                 //reg, email, name, nickname, inst, token)
                 console.log(res.payload.email + "\n" + res.payload.name + "\n" + res.payload.nickname + "\n" + res.payload.inst + "\n" + res.payload.inst + "\n" + res.payload.token + "\n");
