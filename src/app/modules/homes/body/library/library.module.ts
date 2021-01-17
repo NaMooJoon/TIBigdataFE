@@ -8,6 +8,8 @@ import { CategoryComponent } from './category/category.component';
 import { CatGraphComponent } from './category-graph/category-graph.component';
 // import { SearchModule } from '../search/search.module';
 import { CommonSearchResultDocumentListModule } from '../shared-module/common-search-result-document-list/common-search-result-document-list.module';
+import { CommonSearchBarModule } from '../shared-module/common-search-bar/common-search-bar.module';
+
 @NgModule({
   declarations: [
     LibraryRootComponent, 
@@ -19,7 +21,8 @@ import { CommonSearchResultDocumentListModule } from '../shared-module/common-se
     CommonModule,
     // SearchModule,
     LibraryRoutingModule,
-    CommonSearchResultDocumentListModule
+    CommonSearchResultDocumentListModule,
+    CommonSearchBarModule
   ],
   exports:[
     LibraryRootComponent,

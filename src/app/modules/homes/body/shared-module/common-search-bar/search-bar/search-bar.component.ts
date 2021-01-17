@@ -19,6 +19,7 @@ export class SearchBarComponent implements OnInit {
   private isTopicSelected: boolean = false;
   private selectedInst: string;
   private selectedTopic: string;
+  private isMain: Boolean = false;
 
   selectedStyleObject(flag: boolean): Object {
     if (flag) {
@@ -47,6 +48,8 @@ export class SearchBarComponent implements OnInit {
     this.isDateSelected = false;
     this.isInstSelected = false;
     this.isTopicSelected = false;
+
+    this.checkRouterIsMain();
   }
   updateDate(date: string) {
     this.selectedDate = date;
@@ -77,5 +80,18 @@ export class SearchBarComponent implements OnInit {
     this.es.setSearchMode(SEARCHMODE.KEY);
     this.es.searchKeyword(this.queryText);
     this._router.navigateByUrl("body/search/result");
+  }
+
+  gotoMain() {
+    this._router.navigateByUrl("");
+  }
+
+  checkRouterIsMain() {
+    if (this._router.routerState.snapshot.url === "/") {
+      this.isMain = true;
+    }
+    else {
+      this.isMain = false;
+    }
   }
 }

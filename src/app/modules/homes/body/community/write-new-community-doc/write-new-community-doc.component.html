@@ -1,11 +1,11 @@
-<p>write-new-community-doc works!</p>
+<!-- <p>write-new-community-doc works!</p> 
 <p #pRef>
     Start editing to see some magic happen :)
-  </p>
-<div class="uk-container">
+</p> -->
+<!-- <div class="uk-container"> -->
     
     <!-- <input type="text" #tbString>  -->
- 
+<!-- 
  <input type="button" value="미리 보기" (click)="previewString()"> <br>
  
  색상 : <select #fontColor>
@@ -52,17 +52,20 @@
  
  <input type="checkbox" (change)="fontOptions[8]" >대문자로 
  <span #result></span>
+-->
 
- <br>
-    <div class="uk-container-center" uk-grid>
-        <input (keyup)="updateTitle($event)" placeholder="문서 제목" />
-    </div>
+<h4>글쓰기</h4>
+<hr>
+<div class="inputs">
+        <input class="title" type="text" (keyup)="updateTitle($event)" placeholder="제목을 입력하세요." />
 
-        <div class="uk-container-center" uk-grid>
-        <br>
-
-        <input (drag)="setFontOptions($event)" (keyup)="updateContent($event)" #tbString style="width:800px; height:200px" placeholder="문서 내용" />
-    </div>
-    <button class="uk-button uk-button-primary " (click) ="saveNewDocument()">등록하기</button>
-    <button class="uk-button uk-button-primary" (click) ="testSave100()"> 테스트 용 100개 더미 만들기</button>
+        <input class="content" type="text" (drag)="setFontOptions($event)" (keyup)="updateContent($event)" #tbString style="width:800px; height:200px" placeholder="내용을 입력하세요."/>
 </div>
+
+<div>
+    <button class="button1" (click)="gotoList()">목록</button>
+    <button class="button2" (click)="saveNewDocument()">작성</button>
+</div>
+
+<!-- <button class="uk-button uk-button-primary " (click) ="saveNewDocument()">등록하기</button> -->
+<button class="button0" (click) ="testSave100()"> 테스트 용 100개 더미 만들기</button>
