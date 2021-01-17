@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angula
 import { Router } from "@angular/router";
 import { CommunityServiceService } from 'src/app/modules/communications/fe-backend-db/community/community-service.service';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-write-new-community-doc',
@@ -26,7 +27,7 @@ export class WriteNewCommunityDocComponent implements AfterViewInit {
   
     // var fontOptions = document.getElementsByName("fontOptions");
 
-  constructor( private router: Router, private cm_svs : CommunityServiceService, private auth : EPAuthService) { }
+  constructor( private router: Router, private cm_svs : CommunityServiceService, private auth : EPAuthService, private _location: Location) { }
 
     ngAfterViewInit() {
     console.log(this.pRef.nativeElement.innerHTML); 
@@ -194,7 +195,11 @@ export class WriteNewCommunityDocComponent implements AfterViewInit {
   // this.saveNewDocument();
   // this.testSave100();
 
-    this.router.navigateByUrl("/community");
+    this.router.navigateByUrl("/community/qna");
+  }
+
+  gotoList() {
+    this._location.back();
   }
 
 }
