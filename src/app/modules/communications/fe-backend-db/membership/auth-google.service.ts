@@ -82,8 +82,7 @@ export class AuthGoogleService extends Auth {
       alert("돌아오신 걸 환영합니다, " + singInResult.name + "님. 홈 화면으로 이동합니다.");
       localStorage.setItem('token', JSON.stringify(new storeToken(logStat.google, singInResult.idToken)));
       this.user = new UserProfile(logStat.google, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, singInResult.idToken);
-      console.log(this.user);
-      location.replace("http://localhost:4200")
+      location.replace("http://203.252.112.15:4200")
     }
   }
 
