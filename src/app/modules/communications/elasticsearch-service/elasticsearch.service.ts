@@ -421,7 +421,8 @@ export class ElasticsearchService {
         host: this.ipSvc.getBackEndServerIp(),
         auth: this.ipSvc.getESAuth(),
         protocol: 'http',
-        port: this.ipSvc.ES_PORT
+        port: this.ipSvc.ES_PORT,
+        index: this.ipSvc.ES_INDEX
       }],
       headers: {
         'Access-Control-Allow-Origin': this.ipSvc.getFrontEndServerIP() + this.ipSvc.getAngularPort()
