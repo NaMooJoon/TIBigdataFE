@@ -1,82 +1,107 @@
-
-
-.button{
-    // background-color: lightgreen;
+.filters {
+  border: 1px solid gray;
+  border-left: none;
+  border-radius: 0 60px 60px 0;
+  padding: 20px 20px 40px 13vw;
+  margin-right: 20px;
 }
 
-.filter{
-    // background-color: lightcoral;
+.reset-filter {
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.filter-header-font{
-    font-weight: medium; 
-    font-size: 20pt;
-    color :  #3d3d3d;
-}
-.re-search-area{
-    // background-color: lightblue;
-    padding : 10px;
+.reset-filter>span {
+  font-size: 20px;
 }
 
-.filter-button{
-    height : 30px;
-    font-size: 17pt;
-    text-align:left;
+.filter {
+  margin: 40px 0;
 }
 
-
-
-.search-filter {
-    width:8em;
-    text-align: center;
-    padding-top: 1em;
-    padding-bottom : 1em;
+.reset-btn {
+  margin-left: 5px;
+  width: 19px;
 }
 
-.period-area {
-    // background-color: darkcyan;
-    padding:10px;
-
+.search-again {
+  display: flex;
+  flex-direction: column;
 }
 
-.inst-area{
-    // background-color: darkgoldenrod;
-    // margin:5px;
-    // margin :3px;
-    padding:10px;
+.input-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+}
+
+.search-container {
+  display: flex;
 
 }
 
-.topic-area {
-    // background-color: darkolivegreen;
-    padding:10px;
+.textboxes {
+  display: flex;
+  flex-direction: column;
 }
 
-.small-button-size{
-    width: 75px;
-    // display: flex;
-    // justify-content: space-around;
+.textboxes input {
+  padding: 1px 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: rgb(242, 242, 242);
+  vertical-align: middle;
 }
 
-.big-button{
-    // background-color: lightslategray;
+.filter-title {
+  font-weight: 700;
 }
-// .uk-button {
-//     display:block;
-//     width: 8em;    
-// }
 
-// .uk-button.uk-button-text{
-//     font-size:1.1em;
-//     font-weight: bold;
-// }
+.search-btn {
+  align-self: flex-end;
+  width: 45px;
+  height: 28px;
+  background-image: url(src/assets/icons/19_search.png);
+  background-size: 20px;
+  background-color: darkgray;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  border-radius: 15px;
+  margin-left: 15px;
+}
 
-//globalized in src/style.less
-// .uk-button{
-//     border-radius: 20px;
-//     // padding : 3px 6px;
-// }
+.select-date-range {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  align-items: center;
+}
 
-// .uk-card-body{
-//     border:0.5px solid gainsboro;
-// }
+.select-date-range button,
+.topics button {
+  font-size: 15px;
+  width: 70px;
+  height: 35px;
+  margin: 5px;
+  background-color: white;
+  border-radius: 25px;
+  border: 1px solid lightgray;
+  padding-top: 1px;
+}
+
+.inst-list button {
+  font-size: 15px;
+  margin-top: 5px;
+  border: 1px solid rgb(242, 242, 242);
+  border-radius: 20px;
+}
+
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+}
