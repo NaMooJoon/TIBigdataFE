@@ -26,19 +26,17 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.article)
     this.docId = this.article._id
     this.article = this.article._source;
     this.load_top_keywords();
-    if (this.article.post_date.length === 4) {
-      this.article.post_date = this.article.post_date + "-01-01"
-    }
-    console.log(this.article.file_download_url);
+    // if (this.article.post_date.length === 4) {
+    //   this.article.post_date = this.article.post_date + "-01-01"
+    // }
+
     if (this.article.file_download_url === undefined) {
       this.article.file_download_url = this.article.published_institution_url
     }
-    console.log(this.article.file_download_url);
-    console.log(this.article.post_date);
+
   }
 
   view_doc_detail() {
