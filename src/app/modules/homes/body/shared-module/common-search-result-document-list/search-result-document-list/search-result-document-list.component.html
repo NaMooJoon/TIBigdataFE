@@ -1,86 +1,37 @@
-<div uk-grid>
-    <!-- 검색 결과 수 -->
-    <!-- 키워드 검색이 아니라 자료열람인 경우 띄우지 않는 메시지 -->
-    <div class="num-result uk-width-expand"
-        style="text-align:left;padding-bottom : 0; font-weight : Regular; font-size : 20px; color : #3d3d3d;">
-        {{queryText}}에 대한 검색 결과는 {{ searchResultNum }} 개 입니다.
-    </div>
+<div class="result-header">
+  <!-- Show number of result -->
+  <div *ngIf="isResultFound" class="result-count">{{queryText}}에 대한 검색 결과는 {{ searchResultNum }} 개 입니다.</div>
 
-    <!-- 최신순 10건씩 보기 -->
-    <div class="uk-width-medium" style="padding : 0;text-align:right;">
-        <select class="order-drop" id="order" name="order">
-            <option *ngFor="let ord of orders" [value]="ord">{{ord}}</option>
-        </select>
-        
-        <select class="amount-drop" id="amount" name="amount" (change)="searchAgain($event.target.value)">
-            <option *ngFor="let amt of amounts" [value]="amt">{{amt}} 건 씩 보기</option>
-        </select>
-    </div>
+  <div *ngIf="isResultFound" class="dropdown-menus">
+    <!-- Set Sort Order -->
+    <select class="order-drop" id="order" name="order">
+      <option *ngFor="let ord of orders" [value]="ord">{{ord}}</option>
+    </select>
+
+    <!-- Set number of doc per page -->
+    <select class="amount-drop" id="amount" name="amount" (change)="searchAgain($event.target.value)">
+      <option *ngFor="let amt of amounts" [value]="amt">{{amt}} 건 씩 보기</option>
+    </select>
+  </div>
 </div>
 
-
-<div class="form-group" style="padding : 0; margin : 0;">
-    <input class="uk-checkbox custom-check" type="checkbox"
-        style="padding : 0; margin : 0; border-radius: 3px; border: 1px solid #3d3d3d; font-size: 18pt; color:#3d3d3d; font-weight: regular;"
-        (change)="checkBoxUpdate(i)" />
-    전체선택
-</div>
-<button class="mydoc" (click)="keepMyDoc()" *ngIf="isLogStat">담기</button>
-<div class="search-result">
-    <!-- search-result -->
-    <!-- <span uk-spinner="ratio: 4.5 " *ngIf="isSearchLoaded == false; else loadFin">
-            Loading...
-        </span> -->
-    <!-- <ng-template #loadFin> -->
-    <div *ngFor="let articleSource of articleSources; index as i">
-        <div class="uk-child-width-expand " uk-grid>
-
-            <!-- check-box-position -->
-            <div *ngIf="isLogStat" class="uk-width-small check-box-postition">
-                <span class="form-group">
-                    <input class="uk-checkbox custom-check" type="checkbox"
-                        style="border-radius: 3px; border: 1px solid #8a8d8e;" (change)="checkBoxUpdate(i)" ng-checked="isChecked"/>
-                </span>
-            </div>
-
-            <!-- 각 검색 결과 문서 리스트 -->
-            <div class="article-detail uk-width-expand" style="padding-left: 1em;">
-                <!-- {{articleSource}} -->
-                <app-article-details [article]="articleSource"></app-article-details>
-                <!-- <div class="margin : 0;"> -->
-                <!-- style="padding: 1em; margin: auto;  -->
-                <button class="uk-button button-outline button-white uk-margin-remove"
-                    style="margin-left : 0; font-weight : regular; font-size:21px; color : #606060;"
-                    (click)="toggle_update(i)">
-                    연관문서
-                </button>
-                <div *ngIf="relateToggle[i] == true">
-                    <div *ngFor="let rcmd of relatedDocs[i]; index as r">
-                        <a (click)="setThisDoc(i, r)"
-                            style="font-size: 17px; color : #3d3d3d; font-weight: Regular;">{{rcmd["title"]}}</a>
-                    </div>
-                </div>
-                <!-- </div> -->
-            </div>
-        </div>
-        <hr style="border : 0; height : 0.25pt;background : #606060;">
-
-        <!--검색 결과의 마지막 -->
+<div *ngIf="isResultFound" class="result-body">
+  <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+    <div *ngFor="let articleSource of articleSources" class="article">
+      <label>
+        <input type="checkbox" [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
+      </label>
+      <app-article-details [article]="articleSource"></app-article-details>
     </div>
-    <div *ngIf="articleSources?.length < 1" style="margin-top: 20px;">
-        <div class="uk-position-center">
-            <h3>검색결과가 없습니다</h3>
-        </div>
-    </div>
-    <!-- </ng-template> -->
+    <input type="submit" class="mydoc" value="담기" />
+  </form>
 </div>
 
-<div class="uk-flex-center" uk-grid>
-    <button *ngIf="blocIdx > 0" class="uk-button uk-button-text " (click)="pressPriorBloc()">
-        < </button>
-            <button class="uk-padding-remove uk-margin-left uk-button button-blue uk-button-small" style="width : 40px; height : 40px"
-                (click)="choosePageNum(i)" *ngFor="let i of pages"> {{  i  }} </button>
-            <span>&nbsp;</span>
-            <button *ngIf="numBloc-1 > blocIdx"class="uk-button uk-button-text " (click)="pressNextBloc()"> > </button>
-            <br>
+<div *ngIf="!isResultFound" class="result-not-found-body">
+  <p> "{{ queryText }}"에 대한 검색결과가 없습니다.</p>
+  <ul>
+    <li>단어의 철자가 정확한지 확인해 보세요.</li>
+    <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+    <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
+  </ul>
 </div>

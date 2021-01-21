@@ -1,106 +1,64 @@
 .order-drop {
-    border-radius: 50px; 
-    width: 100px; 
-    height: 40px;
-    margin: 10px;
-    vertical-align: middle;
-    text-align-last: center;
-    outline: none;
+  border-radius: 50px;
+  width: 100px;
+  height: 40px;
+  margin: 10px;
+  vertical-align: middle;
+  text-align-last: center;
+  outline: none;
 }
 
 .mydoc {
-    position: fixed;
-    top: 83%;
-    left: 80%;
-    width: 160px;
-    height: 80px;
-    border-radius: 35px;
-    border: none;
-    font-size: 23px;
-    color: white;
-    background-color: rgb(97, 97, 97);
-    outline: none;
-    padding: 0px 0px 0px 67px;
-    background-image: url('/assets/20_담기.png');
-    background-repeat: no-repeat;
-    background-position: 20% 55%;
-    background-size: 55px;
+  position: fixed;
+  top: 83%;
+  left: 80%;
+  width: 160px;
+  height: 80px;
+  border-radius: 35px;
+  border: none;
+  font-size: 23px;
+  color: white;
+  background-color: rgb(97, 97, 97);
+  outline: none;
+  padding: 0px 0px 0px 67px;
+  background-image: url('/assets/20_담기.png');
+  background-repeat: no-repeat;
+  background-position: 20% 55%;
+  background-size: 55px;
 }
 
 .amount-drop {
-    border-radius: 50px; 
-    width: 140px; 
-    height: 40px;
-    vertical-align: middle;
-    text-align-last: center;
-    outline: none;
+  border-radius: 50px;
+  width: 140px;
+  height: 40px;
+  vertical-align: middle;
+  text-align-last: center;
+  outline: none;
 }
 
-// .uk-child-width-expand {
-//     border: 3px solid;
-// }
-.middle-result-area{
-    // background-color: lightslategrey;
-}
-.filter-in-result{
-    // background-color: lightsalmon;
+.result-header {
+  display: flex;
+  justify-content: space-between;
 }
 
-.search-result {
-//    background-color: lightgreen;
+.result-body {
+  display: flex;
 }
 
-.uk-width-small{
-    width : 70px;
+.result-count {
+  align-self: flex-end;
 }
 
-.check-box-postition{
-    width:70px; 
-    // background-color: lightsalmon;
-    padding-top : 10px;
+.result-not-found-body {
+  margin: 60px;
 }
 
-.custom-check{
-    // background-color: black;
+.result-not-found-body ul li {
+  margin-top: 5px;
+  list-style: inside;
 }
 
-.article-detail{
-    // background-color: lightpink;
-}
-
-.search-filter {
-    
-}
-
-ul.keyword-list li{
-    margin-right: 0.7em;
-    display:inline;
-}
-
-ul.keyword-list li a{
-    font-size: 14px;
-    color: steelblue;
-}
-
-.uk-button.uk-button-text{
-    font-size:1em;
-
-}
-
-
-// .outline{
-//     border: 1px solid black;
-//     border-radius: 20px;
-// }
-
-
-//globalized in src/style.less
-// .uk-button{
-//     border-radius: 20px;
-// }
-
-.left-wing{
-    padding : 0;
-    margin : 0;
-    // background-color: lightseagreen;
+.result-not-found-body p {
+  font-weight: bold;
+  font-size: larger;
 }
