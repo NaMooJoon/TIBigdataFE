@@ -1,16 +1,29 @@
+<div *ngIf="this.relatedKeywords.length" class="related-keywords-container">
+  <p>연관검색어</p>
+  <ul class="keyword-list" *ngFor="let keyword of relatedKeywords">
+    <li>
+      <a (click)="relatedSearch(keyword)">{{ keyword }}</a>
+    </li>
+  </ul>
+</div>
+
+<p class="page-route">
+  홈 > 검색결과
+</p>
+
 <hr />
+
 <div class="result-page">
-  <aside class="search-filter">
+  <aside class="filters-container">
     <div class="keyword-analysis-container">
       <button class="keyword-analysis" (click)="freqAnalysis()"> 키워드분석 </button>
       <button class="keyword-analysis-help"></button>
     </div>
-    <div class="filter">
-      <app-search-result-filter></app-search-result-filter>
-    </div>
+    <app-search-result-filter></app-search-result-filter>
   </aside>
 
-  <div class="results">
-    <app-search-result-document-list></app-search-result-document-list>
+  <div class="results-container">
+    <app-search-result-document-list (related_keywords_ready)="setRelatedKeywords($event)">
+    </app-search-result-document-list>
   </div>
 </div>
