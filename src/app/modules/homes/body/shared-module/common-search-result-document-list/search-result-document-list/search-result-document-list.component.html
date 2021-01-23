@@ -1,7 +1,6 @@
 <div class="result-header">
   <!-- Show number of result -->
-  <div *ngIf="isResultFound" class="result-count">{{queryText}}에 대한 검색 결과는 {{ searchResultNum }} 개 입니다.</div>
-
+  <div *ngIf="isResultFound" class="result-count">"{{queryText}}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.</div>
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
@@ -10,21 +9,33 @@
 
     <!-- Set number of doc per page -->
     <select class="amount-drop" id="amount" name="amount" (change)="searchAgain($event.target.value)">
-      <option *ngFor="let amt of amounts" [value]="amt">{{amt}} 건 씩 보기</option>
+      <option *ngFor="let amt of amounts" [value]="amt">{{amt}}건씩 보기</option>
     </select>
   </div>
 </div>
 
 <div *ngIf="isResultFound" class="result-body">
-  <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
-    <div *ngFor="let articleSource of articleSources" class="article">
+  <form [formGroup]="form" novalidate>
+    <div *ngFor="let articleSource of articleSources; index as i" class="article">
       <label>
-        <input type="checkbox" [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
+        <input class="article-checkbox" type="checkbox" [value]="articleSource['_id']"
+          (change)="onCheckboxChange($event)" />
       </label>
-      <app-article-details [article]="articleSource"></app-article-details>
+      <div class="article-info-container">
+        <app-article-details class="article-component" [article]="articleSource"></app-article-details>
+        <button (click)="toggle_update(i)"> 연관문서 </button>
+        <div *ngIf="relateToggle[i] == true">
+          <div *ngFor="let rcmd of relatedDocs[i]; index as r">
+            <a (click)="select_this_doc(i, r)">{{rcmd["title"]}}</a>
+          </div>
+        </div>
+        <hr class="sep" />
+      </div>
+
     </div>
     <input type="submit" class="mydoc" value="담기" />
   </form>
+
 </div>
 
 <div *ngIf="!isResultFound" class="result-not-found-body">

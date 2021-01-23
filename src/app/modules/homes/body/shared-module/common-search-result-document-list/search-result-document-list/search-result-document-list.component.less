@@ -1,11 +1,83 @@
-.order-drop {
+.order-drop,
+.amount-drop {
   border-radius: 50px;
-  width: 100px;
+  border-color: gray;
+  color: gray;
   height: 40px;
-  margin: 10px;
+  font-size: 19px;
+  font-weight: 400;
   vertical-align: middle;
   text-align-last: center;
   outline: none;
+  font-family: inherit;
+}
+
+select::-ms-expand {
+  padding: 3px;
+}
+
+.order-drop {
+  margin-right: 10px;
+  width: 100px;
+}
+
+.amount-drop {
+  width: 135px;
+}
+
+.result-header {
+  display: flex;
+  height: 40px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  justify-content: space-between;
+}
+
+
+.result-body {
+  width: 100%;
+}
+
+.result-count {
+  align-self: flex-end;
+}
+
+.result-not-found-body {
+  margin: 60px;
+}
+
+.result-not-found-body ul li {
+  margin-top: 5px;
+  list-style: inside;
+}
+
+.result-not-found-body p {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.article {
+  width: 100%;
+  display: flex;
+  white-space: nowrap;
+}
+
+.article-component {
+  width: 100%;
+}
+
+label {
+  margin-top: .4rem;
+}
+
+.article-checkbox {
+  margin: 0 20px;
+}
+
+.article-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .mydoc {
@@ -25,40 +97,4 @@
   background-repeat: no-repeat;
   background-position: 20% 55%;
   background-size: 55px;
-}
-
-.amount-drop {
-  border-radius: 50px;
-  width: 140px;
-  height: 40px;
-  vertical-align: middle;
-  text-align-last: center;
-  outline: none;
-}
-
-.result-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.result-body {
-  display: flex;
-}
-
-.result-count {
-  align-self: flex-end;
-}
-
-.result-not-found-body {
-  margin: 60px;
-}
-
-.result-not-found-body ul li {
-  margin-top: 5px;
-  list-style: inside;
-}
-
-.result-not-found-body p {
-  font-weight: bold;
-  font-size: larger;
 }
