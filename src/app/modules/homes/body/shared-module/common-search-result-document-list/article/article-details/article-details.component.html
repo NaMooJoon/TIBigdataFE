@@ -1,7 +1,9 @@
 <div *ngIf="article" class="article-info">
-  <a (click)="view_doc_detail()"> {{article.post_title}} </a>
+  <a class="post-title" (click)="view_doc_detail()"> {{article.post_title}} </a>
   <div class="post-preview"> {{ article.post_body }}</div>
-  <span>{{ article.post_date | date:"yyyy/MM/dd" }}</span>
-  <span>{{ article.post_writer }}</span>
-  <span>키워드 {{ keywords[0] }}</span>
+  <div class="post-detail-container">
+    <span class="post-date">{{ article.post_date | date:"yyyy/MM/dd" }}</span>
+    <span class="post-writer">{{ article.post_writer }}</span>
+    <span class="post-keywords">키워드 {{ keywords[0] }}</span>
+  </div>
 </div>
