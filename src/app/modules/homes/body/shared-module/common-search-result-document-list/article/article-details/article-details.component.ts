@@ -51,13 +51,13 @@ export class ArticleDetailsComponent implements OnInit {
 
   //   /**
   //  * @function setThisDoc
-  //  * @param article_source_idx 
-  //  * @param related_doc_idx 
+  //  * @param articleSourceIdx 
+  //  * @param RelatedDocIdx 
   //  * @description 개별 문서 선택할 때 해당 문서 자세히 보는 페이지로 이동
   //  */
-  // setThisDoc(article_source_idx : number, related_doc_idx: number) {
-  //   console.log("set this doc : ", article_source_idx);
-  //   this.idControl.setIdChosen(this.relatedDocs[article_source_idx][related_doc_idx]["id"]);
+  // setThisDoc(articleSourceIdx : number, RelatedDocIdx: number) {
+  //   console.log("set this doc : ", articleSourceIdx);
+  //   this.idControl.setIdChosen(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
   //   this.navToDocDetail();
   // }
 
