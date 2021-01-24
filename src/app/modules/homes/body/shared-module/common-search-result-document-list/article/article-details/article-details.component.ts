@@ -26,19 +26,17 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.article)
     this.docId = this.article._id
     this.article = this.article._source;
     this.load_top_keywords();
-    if (this.article.post_date.length === 4) {
-      this.article.post_date = this.article.post_date + "-01-01"
-    }
-    console.log(this.article.file_download_url);
+    // if (this.article.post_date.length === 4) {
+    //   this.article.post_date = this.article.post_date + "-01-01"
+    // }
+
     if (this.article.file_download_url === undefined) {
       this.article.file_download_url = this.article.published_institution_url
     }
-    console.log(this.article.file_download_url);
-    console.log(this.article.post_date);
+
   }
 
   view_doc_detail() {
@@ -53,13 +51,13 @@ export class ArticleDetailsComponent implements OnInit {
 
   //   /**
   //  * @function setThisDoc
-  //  * @param article_source_idx 
-  //  * @param related_doc_idx 
+  //  * @param articleSourceIdx 
+  //  * @param RelatedDocIdx 
   //  * @description 개별 문서 선택할 때 해당 문서 자세히 보는 페이지로 이동
   //  */
-  // setThisDoc(article_source_idx : number, related_doc_idx: number) {
-  //   console.log("set this doc : ", article_source_idx);
-  //   this.idControl.setIdChosen(this.relatedDocs[article_source_idx][related_doc_idx]["id"]);
+  // setThisDoc(articleSourceIdx : number, RelatedDocIdx: number) {
+  //   console.log("set this doc : ", articleSourceIdx);
+  //   this.idControl.setIdChosen(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
   //   this.navToDocDetail();
   // }
 

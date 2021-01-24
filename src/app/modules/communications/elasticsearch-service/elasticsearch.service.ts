@@ -416,13 +416,17 @@ export class ElasticsearchService {
 
   //Elasticsearch Connection
   private _connect() {
-    let es_url = this.ipSvc.getBackEndServerIp();
     this.client = new elasticsearch.Client({
-      host: es_url,
+      host: [{
+        host: this.ipSvc.getBackEndServerIp(),
+        auth: this.ipSvc.getESAuth(),
+        protocol: 'http',
+        port: this.ipSvc.ES_PORT,
+        index: this.ipSvc.ES_INDEX
+      }],
       headers: {
-        'Access-Control-Allow-Origin': this.ipSvc.adaptIp(this.ipSvc.getFrontEndServerIP()) + this.ipSvc.getAngularPort()
+        'Access-Control-Allow-Origin': this.ipSvc.getFrontEndServerIP() + this.ipSvc.getAngularPort()
       }
-      // log: "trace"//to log the query and response in stdout
     });
   }
 

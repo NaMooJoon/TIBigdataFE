@@ -11,7 +11,8 @@
     "google-auth-library": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "minimist": "^1.2.5",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.9.10",
+    "mquery": "^3.2.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

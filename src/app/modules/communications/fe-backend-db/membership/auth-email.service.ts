@@ -91,9 +91,9 @@ export class AuthEmailService extends Auth {
             if (res.succ) {
                 alert("돌아오신 걸 환영합니다, " + res.payload.name + "님. 홈 화면으로 이동합니다.");
                 localStorage.setItem('token', JSON.stringify(new storeToken(logStat.email, res.payload.token)));
-                //reg, email, name, nickname, inst, token)
                 console.log(res.payload.email + "\n" + res.payload.name + "\n" + res.payload.nickname + "\n" + res.payload.inst + "\n" + res.payload.inst + "\n" + res.payload.token + "\n");
                 this.user = new UserProfile(logStat.email, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, res.payload.token);
+                location.replace("http://203.252.112.15:4200");
             }
             else if (!res.succ) {
                 alert("이메일 혹은 비밀번호가 잘못되었어요.");
