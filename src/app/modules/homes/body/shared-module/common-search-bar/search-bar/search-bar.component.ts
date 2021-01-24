@@ -87,7 +87,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   checkRouterIsMain() {
-    if (this._router.routerState.snapshot.url === "/") {
+    if (this._router.routerState.snapshot.url === "/" || this._router.routerState.snapshot.url === "/homes") {
       this.isMain = true;
     }
     else {

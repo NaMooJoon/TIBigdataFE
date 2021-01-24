@@ -1,106 +1,116 @@
-.order-drop {
-    border-radius: 50px; 
-    width: 100px; 
-    height: 40px;
-    margin: 10px;
-    vertical-align: middle;
-    text-align-last: center;
-    outline: none;
+.order-drop,
+.amount-drop,
+.related-doc-toggle {
+  border-radius: 50px;
+  border-color: gray;
+  color: gray;
+  height: 40px;
+  font-size: 19px;
+  font-weight: 400;
+  vertical-align: middle;
+  text-align-last: center;
+  outline: none;
+  font-family: inherit;
 }
 
-.mydoc {
-    position: fixed;
-    top: 83%;
-    left: 80%;
-    width: 160px;
-    height: 80px;
-    border-radius: 35px;
-    border: none;
-    font-size: 23px;
-    color: white;
-    background-color: rgb(97, 97, 97);
-    outline: none;
-    padding: 0px 0px 0px 67px;
-    background-image: url('/assets/20_담기.png');
-    background-repeat: no-repeat;
-    background-position: 20% 55%;
-    background-size: 55px;
+select::-ms-expand {
+  padding: 3px;
+}
+
+.order-drop {
+  margin-right: 10px;
+  width: 100px;
 }
 
 .amount-drop {
-    border-radius: 50px; 
-    width: 140px; 
-    height: 40px;
-    vertical-align: middle;
-    text-align-last: center;
-    outline: none;
+  width: 135px;
 }
 
-// .uk-child-width-expand {
-//     border: 3px solid;
-// }
-.middle-result-area{
-    // background-color: lightslategrey;
-}
-.filter-in-result{
-    // background-color: lightsalmon;
+.related-doc-toggle {
+  background-color: transparent;
+  width: 120px;
+  border: 1px solid gray;
 }
 
-.search-result {
-//    background-color: lightgreen;
+.related-docs-link {
+  margin-top: 5px;
+  font-size: 15px;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.uk-width-small{
-    width : 70px;
+.result-header {
+  display: flex;
+  height: 40px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  justify-content: space-between;
 }
 
-.check-box-postition{
-    width:70px; 
-    // background-color: lightsalmon;
-    padding-top : 10px;
+.result-body {
+  width: 100%;
 }
 
-.custom-check{
-    // background-color: black;
+.result-count {
+  align-self: flex-end;
 }
 
-.article-detail{
-    // background-color: lightpink;
+.result-not-found-body {
+  margin: 60px;
 }
 
-.search-filter {
-    
+.result-not-found-body ul li {
+  margin-top: 5px;
+  list-style: inside;
 }
 
-ul.keyword-list li{
-    margin-right: 0.7em;
-    display:inline;
+.result-not-found-body p {
+  font-weight: bold;
+  font-size: larger;
 }
 
-ul.keyword-list li a{
-    font-size: 14px;
-    color: steelblue;
+.article {
+  width: 100%;
+  display: flex;
+  white-space: nowrap;
 }
 
-.uk-button.uk-button-text{
-    font-size:1em;
-
+.article-component {
+  width: 100%;
 }
 
+label {
+  margin-top: .4rem;
+}
 
-// .outline{
-//     border: 1px solid black;
-//     border-radius: 20px;
-// }
+.article-checkbox {
+  margin: 0 20px;
+}
 
+.article-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 92%;
+}
 
-//globalized in src/style.less
-// .uk-button{
-//     border-radius: 20px;
-// }
+.related-doc-toggle {}
 
-.left-wing{
-    padding : 0;
-    margin : 0;
-    // background-color: lightseagreen;
+.mydoc {
+  position: fixed;
+  top: 83%;
+  left: 80%;
+  width: 160px;
+  height: 80px;
+  border-radius: 35px;
+  border: none;
+  font-size: 23px;
+  color: white;
+  background-color: rgb(97, 97, 97);
+  outline: none;
+  padding: 0px 0px 0px 67px;
+  background-image: url('/assets/20_담기.png');
+  background-repeat: no-repeat;
+  background-position: 20% 55%;
+  background-size: 55px;
 }

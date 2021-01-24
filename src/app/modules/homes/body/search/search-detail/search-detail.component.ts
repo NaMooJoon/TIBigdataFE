@@ -22,7 +22,7 @@ export class SearchDetailComponent implements OnInit {
   private isCloudLoaded = 0;
   private isDocInfoLoaded = 0;
   private rcmdList: Array<string>;
-  private relateToggle: boolean = false;
+  private RelatedDocBtnToggle: boolean = false;
   constructor(
     private rcmd: RecomandationService,
     private idControl: IdControlService,

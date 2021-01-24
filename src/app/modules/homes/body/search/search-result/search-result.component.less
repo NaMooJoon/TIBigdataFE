@@ -1,89 +1,74 @@
-.search-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 0px;
+.result-page {
+  display: flex;
+  width: 100%;
 }
 
-// .uk-child-width-expand {
-//     border: 3px solid;
-// }
-.middle-result-area{
-    // background-color: lightslategrey;
-}
-.filter-in-result{
-    // background-color: lightsalmon;
+.related-keywords-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  font-size: 15px;
 }
 
-.search-result {
-//    background-color: lightgreen;
+.related-keywords-container>p {
+  font-weight: 600;
+  color: #52b9ff;
 }
 
-.uk-width-small{
-    width : 70px;
+.related-keywords-container * {
+  margin-bottom: 0;
 }
 
-.keyword-anls{
-    padding : 0;
-     margin : 0;
-     text-align:center;
-    //  background-color: cadetblue;
+.page-route {
+  font-size: 15px;
+  text-align: end;
+  padding-right: 15%;
 }
 
-.num-result{
-    text-align:center; 
-    // background-color: greenyellow;
+.filters-container {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
 }
 
-.check-box-postition{
-    width:70px; 
-    // background-color: lightsalmon;
-    padding-top : 10px;
-}
-
-.custom-check{
-    // background-color: black;
-}
-
-.article-detail{
-    // background-color: lightpink;
-}
-
-.search-filter {
-    
-}
-
-ul.keyword-list li{
-    margin-right: 0.7em;
-    display:inline;
-}
-
-ul.keyword-list li a{
-    font-size: 14px;
-    color: steelblue;
-}
-
-.uk-button.uk-button-text{
-    font-size:1em;
-
+.results-container {
+  width: 67%;
+  padding-right: 15%;
 }
 
 
-// .outline{
-//     padding-bottom: 30px;
-//     border-top: 0.5pt solid #606060;
-//     border-right: 0.5pt solid #606060;
-//     border-bottom: 0.5pt solid #606060;
-//     border-radius: 0px 70px 70px 0px ;
-// }
+.keyword-analysis-container {
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-//globalized in src/style.less
-// .uk-button{
-//     border-radius: 20px;
-// }
+.keyword-analysis {
+  font-size: 19px;
+  width: 120px;
+  height: 40px;
+  margin: 0px 5px;
+  background-color: #52b9ff;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1px;
+}
 
-.left-wing{
-    padding : 0;
-    margin : 0;
-    // background-color: lightseagreen;
+.keyword-analysis-help {
+  background-image: url(src/assets/icons/07_help.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  border: none;
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  margin-right: 70px;
 }
