@@ -6,7 +6,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 // import { Article } from '../article/article.interface';
 import { WordcloudService } from '../../../graphs/wordcloud/wordcloud.service';
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-import { RecomandationService } from '../service/recommandation-service/recommandation.service';
+import { RecommendationService } from '../service/recommandation-service/recommandation.service';
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 
 @Component({
@@ -24,7 +24,7 @@ export class SearchDetailComponent implements OnInit {
   private rcmdList: Array<string>;
   private RelatedDocBtnToggle: boolean = false;
   constructor(
-    private rcmd: RecomandationService,
+    private rcmd: RecommendationService,
     private idControl: IdControlService,
     private wordcloud: WordcloudService,
     private es: ElasticsearchService,

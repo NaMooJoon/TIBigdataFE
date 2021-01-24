@@ -7,7 +7,7 @@ import { IdControlService } from "../../../search/service/id-control-service/id-
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
 import { IpService } from "src/app/ip.service";
-import { RecomandationService } from "../../../search/service/recommandation-service/recommandation.service";
+import { RecommendationService } from "../../../search/service/recommandation-service/recommandation.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
@@ -60,7 +60,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   constructor(
     private auth: EPAuthService,
     private evtSvs: EventService,
-    private rcmd: RecomandationService,
+    private rcmd: RecommendationService,
     private ipService: IpService,
     private idControl: IdControlService,
     public _router: Router,

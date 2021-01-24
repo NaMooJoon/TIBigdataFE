@@ -7,7 +7,7 @@ import { IpService } from 'src/app/ip.service';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import { DocumentService } from "../../search/service/document/document.service"
-import { RecomandationService } from "../../search/service/recommandation-service/recommandation.service";
+import { RecommendationService } from "../../search/service/recommandation-service/recommandation.service";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { IdControlService } from "../../search/service/id-control-service/id-control.service";
 
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
     private ipService: IpService,
     private es: ElasticsearchService,
     private docSvc: DocumentService,
-    private rcmd: RecomandationService,
+    private rcmd: RecommendationService,
     private idSvc: IdControlService
   ) { }
 

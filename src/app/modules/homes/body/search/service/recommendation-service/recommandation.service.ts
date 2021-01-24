@@ -10,7 +10,7 @@ import { IdControlService } from '../id-control-service/id-control.service';
 @Injectable({
   providedIn: "root"
 })
-export class RecomandationService {
+export class RecommendationService {
   constructor(private ipService: IpService, private http: HttpClient,
     private _router: Router,
     private idControl: IdControlService) { }
