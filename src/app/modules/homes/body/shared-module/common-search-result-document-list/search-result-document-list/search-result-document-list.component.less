@@ -1,5 +1,6 @@
 .order-drop,
-.amount-drop {
+.amount-drop,
+.related-doc-toggle {
   border-radius: 50px;
   border-color: gray;
   color: gray;
@@ -25,6 +26,20 @@ select::-ms-expand {
   width: 135px;
 }
 
+.related-doc-toggle {
+  background-color: transparent;
+  width: 120px;
+  border: 1px solid gray;
+}
+
+.related-docs-link {
+  margin-top: 5px;
+  font-size: 15px;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .result-header {
   display: flex;
   height: 40px;
@@ -32,7 +47,6 @@ select::-ms-expand {
   margin-left: 20px;
   justify-content: space-between;
 }
-
 
 .result-body {
   width: 100%;
@@ -77,8 +91,10 @@ label {
 .article-info-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 92%;
 }
+
+.related-doc-toggle {}
 
 .mydoc {
   position: fixed;
