@@ -7,7 +7,7 @@ import { IdControlService } from "../../../search/service/id-control-service/id-
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DocumentService } from "../../../search/service/document/document.service";
 import { IpService } from "src/app/ip.service";
-import { RecommendationService } from "../../../search/service/recommandation-service/recommandation.service";
+import { RecommendationService } from "../../../search/service/recommendation-service/recommendation.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";

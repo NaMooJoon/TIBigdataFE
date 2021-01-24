@@ -6,7 +6,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 // import { Article } from '../article/article.interface';
 import { WordcloudService } from '../../../graphs/wordcloud/wordcloud.service';
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-import { RecommendationService } from '../service/recommandation-service/recommandation.service';
+import { RecommendationService } from '../service/recommendation-service/recommendation.service';
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 
 @Component({
