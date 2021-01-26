@@ -45,14 +45,6 @@ export class UserpageComponent implements OnInit {
     this._auth.getLoginStatChange().subscribe((logstat) => {
       this.getKeepDocs();
       this.getMyHst()
-
-      console.log("token:" + this._auth.getToken());
-      // console.log(logstat)
-      // if(!logstat){
-      //   this.nowUser  = this._auth.getNowUser()
-      //   console.log(this.nowUser)
-
-      // }
     });
   }
 
@@ -93,6 +85,16 @@ export class UserpageComponent implements OnInit {
       () => this.getKeepDocs()
     );
 
+  }
+
+  async apiTest() {
+    const dest = this.ipService.getFrontEndServerIP() + ':' + this.ipService.FLASK_PORT;
+    console.log(dest);
+    await this.http.post(dest, { email: this._auth.getUserEmail() }, { responseType: 'text' }).toPromise().then((res) => {
+      console.log(res);
+      if (res) window.location.href = dest + "?K=" + res;
+      else window.alert("잘못된 접근입니다.")
+    });
   }
 
   async getMyHst() {
