@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { Router } from "@angular/router";
 import { IpService } from 'src/app/ip.service';
-import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 
 class storeToken {
     type: logStat;

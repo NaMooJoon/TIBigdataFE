@@ -1,13 +1,13 @@
-import { ArticleSource } from '../../../shared-module/common-search-result-document-list/article/article.interface';
+import { ArticleSource } from '../../shared-modules/documents/article/article.interface';
 import { Injectable } from '@angular/core';
 
 // import { HomesModule } from '../../../homes.module'
 
-@Injectable(  
+@Injectable(
   {
     providedIn: 'root'
   }
-    )
+)
 export class IdControlService {
   private oneID: string = "";
   private idList: string[] = [];
@@ -15,24 +15,28 @@ export class IdControlService {
 
   constructor() { }
 
+
+  /**
+   * @description 
+   */
   clearAll() {
-    this.oneID = "";
     this.idList = [];
+    this.oneID = "";
   }
 
-  setIdList(id: string) {
+  pushIDList(id: string) {
     this.idList.push(id);
   }
 
-  popIdList() {
+  popIDList() {
     this.idList.pop();
   }
 
-  clearIdList() {
+  clearIDList() {
     this.idList = [];
   }
 
-  getIdList() {
+  getIDList() {
     return this.idList;
   }
 
@@ -40,19 +44,16 @@ export class IdControlService {
     this.idList = [];
   }
 
-  setIdChosen(id: string) {
+  selecOneID(id: string) {
     this.oneID = id;
-    console.log("id control service : oneID", this.oneID);
-    // console.log(this)
+    // console.log(this.idChosen);
   }
 
-  getIdChosen() {
-    console.log("id control service : ", this.oneID);
-    // console.log(this)
+  getOneID() {
     return this.oneID;
   }
 
-  clearIdChosen() {
+  clearOneID() {
     this.oneID = "";
   }
 
@@ -64,11 +65,11 @@ export class IdControlService {
     this.article = art;
   }
 
- 
 
-  
 
-  
+
+
+
 
 
 

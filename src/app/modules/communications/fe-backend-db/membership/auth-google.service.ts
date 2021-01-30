@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { logStat, UserProfile } from "./user.model";
 import { Auth } from "./userAuth.model";
 import { Router } from "@angular/router";
-import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 import { SocialAuthService, GoogleLoginProvider } from "angularx-social-login";
 
 class storeToken {

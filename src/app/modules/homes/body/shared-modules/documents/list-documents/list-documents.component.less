@@ -50,6 +50,8 @@ select::-ms-expand {
 
 .result-body {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .result-count {
@@ -113,4 +115,24 @@ label {
   background-repeat: no-repeat;
   background-position: 20% 55%;
   background-size: 55px;
+}
+
+.page-numbers {
+  align-self: center;
+}
+
+.page-numbers button {
+  margin: 0 10px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  width: 30px;
+  height: 30x;
+}
+
+.page-numbers button:focus,
+.page-numbers button:active {
+  outline: 0;
+  background-color: #0FBAFF;
+  color: white;
 }

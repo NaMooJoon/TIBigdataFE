@@ -3,23 +3,25 @@ import { Router } from "@angular/router";
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, Observable } from "rxjs";
-import { IdControlService } from "../../../search/service/id-control-service/id-control.service";
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { DocumentService } from "../../../search/service/document/document.service";
+import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
 import { IpService } from "src/app/ip.service";
-import { RecommendationService } from "../../../search/service/recommendation-service/recommendation.service";
+import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, Form } from '@angular/forms';
+import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
+import { select } from "d3-selection";
 
 @Component({
   selector: 'app-search-result-document-list',
-  templateUrl: './search-result-document-list.component.html',
-  styleUrls: ['./search-result-document-list.component.less']
+  templateUrl: './list-documents.component.html',
+  styleUrls: ['./list-documents.component.less']
 })
 
-export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
+export class ListDocumentsComponent implements OnInit, OnDestroy {
   orders = ['최신순', '과거순'];
   amounts = [10, 30, 50];
   form: FormGroup;
@@ -45,15 +47,12 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   private isResultFound = false;
   private isLogStat: Number = 0;
   private isQueryFin: boolean = false;
-
   private searchResultNum: string = "0";
-  private pageIndex: number = 0;
-  private numDocsPerPages: number = this.es.getDefaultNumDocsPerPage();
-
-  private numPagePerBloc: number = 0;
-  private numPage: number = 0;
-  private numBloc: number = 0;
+  private numDocsPerPages: number = this.es.getNumDocsPerPage();
   private pages: number[] = [];
+  private currentPage: number = 1;
+  private selectedPageNum: number = 1;
+  private maxPageNum: number = 9;
 
   private queryText: string;
 
@@ -68,7 +67,8 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     private es: ElasticsearchService, //private cd: ChangeDetectorRef.
     private db: AnalysisDatabaseService,
     private docControl: DocumentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private pgService: PaginationService,
   ) {
   }
 
@@ -81,7 +81,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isResultFound = false;
     this.isQueryFin = false;
-    this.loadingSearchResult();
+    this.loadSearchResult();
   }
 
   update_login_stat() {
@@ -96,30 +96,25 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadingSearchResult() {
+  async loadSearchResult() {
     this.initialize_search();
     this.articleSubs = this.articleChange$.subscribe(articles => {
       this.articleSources = articles
       this.createResultIdList();
+      this.pgService.loadPage();
       this.setCheckboxProp();
       this.loadRelatedKeywords();
-      console.log(this.rcmd.rcmdList)
       this.form = this.fb.group({
         checkArray: this.fb.array([])
       })
 
-      if (this.articleSources !== undefined) {
-        this.isResultFound = true;
-      }
-      else {
-        this.isResultFound = false;
-      }
+      if (this.articleSources !== undefined) this.isResultFound = true;
+      else this.isResultFound = false;
     });
 
     this.countNumSubs = this.countNumChange$.subscribe(num => {
       this.queryText = this.es.getKeyword();
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadPagesNumbers();
     })
     this.update_login_stat();
   }
@@ -140,108 +135,11 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
 
-  /**
- * 
- * 페이지 번호따오기
- */
-  // TODO: Pagination algorithm is not efficient. we do not need to calculate numBloc. There will be more efficient and clear alorithm for pagination. Try other approaches later on.
-  async loadPagesNumbers() {
-
-    this.pages = []; //initlize
-    let pageInfo = await this.es.setPagination();
-    this.numPagePerBloc = pageInfo.numPagePerBloc;
-    this.numPage = pageInfo.numPage;
-    this.numBloc = pageInfo.numBloc;
-
-    // this.pageIdx = this.numBloc  * this.numPagePerBloc;
-    if (this.numBloc > 1) {
-      for (let i = 0; i < this.numPagePerBloc; i++) {
-        this.pages.push(i);
-      }
-    }
-    else {
-      for (let i = 0; i < this.numPage; i++) {
-        this.pages.push(i);
-      }
-    }
-  }
-
-
-  /**
- * @description 가장 우선순위 높은 게시판 글들 로드하는 함수
- */
-  async loadNextPage() {
-    this.pageIndex += this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex);
-  }
-
-
-  async loadPriorPage() {
-    this.pageIndex -= this.numDocsPerPages;
-    this.es.loadListByPageIdx(this.pageIndex);
-  }
-
-  /**
- * @description 특정 페이지 번호 누를 때 해당 페이지의 문서들 호출
- * @param i 
- */
-  async choosePageNum(i: number) {
-    this.es.loadListByPageIdx(i * this.numDocsPerPages);
-    // window.location.reload();
-    window.scroll(0, 0);//맨 위로 스크롤
-  }
-
-  private docList: {}[] = [];
-  private cur_start_idx: number = 0;
-  private blocIdx: number = 0;
-  private pageIdx: number = 0;
-  async pressNextBloc() {
-    this.docList = [];
-    this.blocIdx++;
-    this.pages = [];
-    let newStartIdx = this.blocIdx * this.numPagePerBloc;
-    this.es.loadListByPageIdx(newStartIdx);
-    if (this.blocIdx < this.numBloc - 1) {
-      for (let i = 0; i < this.numPagePerBloc; i++) {
-        this.pages.push(newStartIdx + i);
-      }
-
-    }
-    else {
-      let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for (let i = 0; i < redundentNumPages; i++) {
-        this.pages.push(newStartIdx + i);
-      }
-    }
-
-  }
-
-  async pressPriorBloc() {
-    this.docList = [];
-    this.blocIdx--;
-    this.pages = [];
-    let newStartIdx = this.blocIdx * this.numPagePerBloc;
-    this.es.loadListByPageIdx(newStartIdx);
-    if (this.blocIdx < this.numBloc - 1) {
-      for (let i = 0; i < this.numPagePerBloc; i++) {
-        this.pages.push(newStartIdx + i);
-      }
-
-    }
-    else {
-      let redundentNumPages = this.numPage % this.numPagePerBloc;
-      for (let i = 0; i < redundentNumPages; i++) {
-        this.pages.push(newStartIdx + i);
-      }
-    }
-  }
-
   initialize_search() {
     this.isResultFound = false;
     this.idControl.clearIDList();
     this.ResultIdList = [];
     this.selectedDocs = [];
-    this.pageIndex = 0;
   }
 
   createResultIdList() {
@@ -250,6 +148,7 @@ export class SearchResultDocumentListComponent implements OnInit, OnDestroy {
       this.ResultIdList[i] = this.articleSources[i]["_id"];
       this.RelatedDocBtnToggle.push(false);
     }
+    console.log("result id list: ", this.ResultIdList)
   }
 
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number) {

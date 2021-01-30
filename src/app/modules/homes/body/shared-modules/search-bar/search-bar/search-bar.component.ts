@@ -2,6 +2,7 @@ import { preserveWhitespacesDefault } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
+import { PaginationService } from "../../../shared-services/pagination-service/pagination.service";
 
 @Component({
   selector: "app-search-bar",
@@ -38,7 +39,8 @@ export class SearchBarComponent implements OnInit {
 
   constructor(
     public _router: Router,
-    private es: ElasticsearchService // private cd: ChangeDetectorRef
+    private es: ElasticsearchService,
+    private ps: PaginationService
   ) { }
 
   ngOnInit() {
@@ -75,10 +77,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   search() {
-
-    console.log(this.queryText)
-    this.es.setSearchMode(SEARCHMODE.KEY);
     this.es.searchKeyword(this.queryText);
+    this.ps.setCurrentPage(1);
     this._router.navigateByUrl("body/search/result");
   }
 

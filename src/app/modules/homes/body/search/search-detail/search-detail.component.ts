@@ -1,12 +1,12 @@
 // import { Injectable } from '@angular/core';
-import { IdControlService } from '../service/id-control-service/id-control.service';
-import { Article } from "../../shared-module/common-search-result-document-list/article/article.interface";
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
+import { Article } from "../../shared-modules/documents/article/article.interface";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import { Component, OnInit, Inject } from '@angular/core';
 // import { Article } from '../article/article.interface';
 import { WordcloudService } from '../../../graphs/wordcloud/wordcloud.service';
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-import { RecommendationService } from '../service/recommendation-service/recommendation.service';
+import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 
 @Component({

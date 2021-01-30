@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Article } from '../article.interface';
 import { Router } from "@angular/router";
-import { IdControlService } from "../../../../search/service/id-control-service/id-control.service";
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { AnalysisDatabaseService } from "../../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 
 @Component({

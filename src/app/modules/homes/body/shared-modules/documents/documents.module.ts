@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchResultDocumentListComponent } from './search-result-document-list/search-result-document-list.component';
+import { ListDocumentsComponent } from './list-documents/list-documents.component';
 import { ArticleDetailsComponent } from './article/article-details/article-details.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
-    SearchResultDocumentListComponent,
+    ListDocumentsComponent,
     ArticleDetailsComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [
-    SearchResultDocumentListComponent
+    ListDocumentsComponent
   ]
 })
 export class CommonSearchResultDocumentListModule { }

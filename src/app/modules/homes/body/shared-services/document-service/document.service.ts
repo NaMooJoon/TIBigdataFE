@@ -37,13 +37,13 @@ export class DocumentService {
             /**
              * 임시 방편 : 620 데이터에서는 제목이 array인것도 있고 string인 것도 있다...
              */
-            if(typeof(title) == "string")
+            if (typeof (title) == "string")
               this.myDocsTitles[idx] = title;
-            else if(Array.isArray(title))
+            else if (Array.isArray(title))
               this.myDocsTitles[idx] = title[0];
           }
         }
-        catch{
+        catch {
           console.log("error in document convert id 2 table")
         }
         console.log("myDocsTitles len : ", this.myDocsTitles.length);
