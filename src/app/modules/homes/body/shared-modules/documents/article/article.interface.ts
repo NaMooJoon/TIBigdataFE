@@ -6,7 +6,8 @@ export interface Article {
     published_institution: string,
     published_institution_url: string,
     post_body: string,
-    file_download_url: string
+    file_download_url: string,
+    original_url: string,
 
 }
 
