@@ -1,4 +1,5 @@
-<div class="search-detail-area">
+<hr />
+<div class="search-detail-container">
   <h2>문서 상세보기</h2>
   <div *ngIf="article">
     <div>
@@ -13,46 +14,52 @@
 
       <ul class="article-info">
 
-        <li class="info">
+        <li *ngIf="!isDataEmpty(article.published_institution)" class="info">
           <div class="info-title"> 발행기관 </div>
           <div class="info-content"> {{ article.published_institution }}</div>
         </li>
-        <li class="info">
+        <!-- <li class="info">
           <div class="info-title"> 간행물 </div>
           <div class="info-content"> </div>
         </li>
         <li class="info">
           <div class="info-title"> 간행물 구분 </div>
           <div class="info-content"> </div>
-        </li>
-        <li class="info">
+        </li> -->
+        <li *ngIf="!isDataEmpty(article.post_date)" class="info">
           <div class="info-title"> 발행년월 </div>
           <div class="info-content"> {{ article.post_date }}</div>
         </li>
-        <li class="info">
+        <!-- <li class="info">
           <div class="info-title"> 페이지 </div>
           <div class="info-content"> {{ article.page }}</div>
-        </li>
-        <li class="info">
+        </li> -->
+        <li *ngIf="!isDataEmpty(article.file_download_url)" class="info">
           <div class="info-title"> 자료열람 </div>
-          <div class="info-content"> <a href="{{ article.file_download_url }}"> 열람하기 </a></div>
+          <div class="info-content"> <a href="{{ article.file_download_url }}"> {{ article.file_download_url }}</a>
+          </div>
         </li>
       </ul>
 
       <!-- 소제목들 -->
       <div class="article-index">
-        <h4 class="article-content-subtitle">목차</h4>
+        <h4 class="article-content-subtitle">문서 정보</h4>
         <hr>
-        <div class="detail-body">
+        <div *ngIf="!isDataEmpty(article.post_body)" class="detail-body ">
           {{ article.post_body }}
         </div>
-      </div>
 
+        <div *ngIf="isDataEmpty(article.post_body)" class="detail-body empty-data">
+          등록된 정보가 없습니다.
+        </div>
+
+      </div>
+      <!-- 
       <div class="article-abtract">
         <h4 class="article-content-subtitle">초록</h4>
         <hr>
         <div class="detail-body"></div>
-      </div>
+      </div> -->
 
       <div class="article-related">
         <h4 class="article-content-subtitle">연관문서</h4>
@@ -74,12 +81,6 @@
           </angular-tag-cloud>
         </div>
       </div>
-
-      <div class="article-more">
-        <h4 class="article-content-subtitle">추가 자료</h4>
-        <hr>
-        <div class="detail-body">
-          <span> 등록된 정보가 없습니다. </span>
-        </div>
-
-      </div>
+    </div>
+  </div>
+</div>

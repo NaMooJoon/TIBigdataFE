@@ -69,4 +69,9 @@ export class SearchDetailComponent implements OnInit {
         this.isCloudLoaded++;
       });
   }
+
+  isDataEmpty(data: any) {
+    if (data == null || data === '') return true;
+    else return false;
+  }
 }
