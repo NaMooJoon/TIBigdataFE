@@ -40,7 +40,7 @@ export class ArticleDetailsComponent implements OnInit {
 
   view_doc_detail() {
     // console.log("article detail id: ", this.docId);
-    this.idControl.selecOneID(this.docId);
+    this.idControl.selectOneID(this.docId);
     this.navToDocDetail();
 
     // this.docId = this.article["_id"];

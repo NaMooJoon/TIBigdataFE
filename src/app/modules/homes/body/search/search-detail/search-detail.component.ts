@@ -36,7 +36,7 @@ export class SearchDetailComponent implements OnInit {
 
   }
   goToDoc(r) {
-    this.idControl.selecOneID(this.rcmdList[r]["id"]);
+    this.idControl.selectOneID(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 

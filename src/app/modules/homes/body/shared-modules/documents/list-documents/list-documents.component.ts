@@ -152,7 +152,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number) {
-    this.idControl.selecOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
+    this.idControl.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
     this.navToDocDetail();
   }
 
@@ -236,7 +236,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   view_doc_detail(docId: string) {
     console.log("article detail id: ", docId);
-    this.idControl.selecOneID(docId);
+    this.idControl.selectOneID(docId);
     this.navToDocDetail();
   }
 

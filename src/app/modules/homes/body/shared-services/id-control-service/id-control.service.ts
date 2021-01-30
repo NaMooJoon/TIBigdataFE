@@ -44,7 +44,7 @@ export class IdControlService {
     this.idList = [];
   }
 
-  selecOneID(id: string) {
+  selectOneID(id: string) {
     this.oneID = id;
     // console.log(this.idChosen);
   }
