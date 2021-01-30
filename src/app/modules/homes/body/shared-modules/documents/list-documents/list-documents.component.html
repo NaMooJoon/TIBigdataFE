@@ -40,7 +40,9 @@
   <div class="page-numbers">
     <button *ngIf="pgService.getCurrentPage() != 1" (click)="pgService.loadPriorTenPage()">
       << </button> <button *ngIf="pgService.getCurrentPage() > 1" (click)="pgService.loadPriorPage()">
-        < </button> <button (click)="pgService.setCurrentPage(i)" *ngFor="let i of pgService.getPages()"> {{  i  }}
+        < </button> <button
+          [ngStyle]="{'background-color': pgService.getCurrentPage() == i ? '#52b9ff' : 'transparent', 'color': pgService.getCurrentPage() == i ? 'white' : 'black'}"
+          (click)="pgService.setCurrentPage(i)" *ngFor="let i of pgService.getPages()"> {{  i  }}
     </button>
     <button *ngIf="pgService.getCurrentPage() < pgService.getTotalPage() && isResultFound"
       (click)="pgService.loadNextPage()"> > </button>
