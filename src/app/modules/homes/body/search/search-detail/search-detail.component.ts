@@ -47,13 +47,14 @@ export class SearchDetailComponent implements OnInit {
     this.isDocInfoLoaded = 0;
 
     let id = this.idControl.getOneID();
+    this.es.setIds([id]);
 
     this.db.loadRelatedDocs(id).then(res => {
       this.rcmdList = res as [];
       this.isRelatedLoaded++;
     });
 
-    await this.es.searchById(id).then((res) => {
+    await this.es.searchById().then((res) => {
       this.article = res["hits"]["hits"][0]["_source"];
       console.log(this.article)
       this.isDocInfoLoaded++;
