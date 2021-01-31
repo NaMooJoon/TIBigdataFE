@@ -1,0 +1,53 @@
+<div class="where">
+    <h4><strong> 내 분석함 </strong></h4>
+    <div class="folder-menu">
+        <button>새폴더생성</button>
+        <button>폴더편집 </button>
+    </div>
+</div>
+
+<div>
+    <div>
+        <div class="folders">
+            <a>
+                폴더1
+            </a>
+        </div>
+        
+        <div class="bundle">
+                <div class="upside">
+                    <div>
+                        <input type="checkbox"/>
+                        전체선택
+                    </div>
+                    <div *ngIf="!isDocEmpty">
+                            <button>
+                                선택삭제
+                            </button>
+
+                            <button (click)="deleteAllMyDocs()">
+                                전체삭제
+                            </button>
+                    </div>
+                </div>
+                <div>
+                    내 분석함 
+                </div> 
+        </div>
+            
+            <div *ngIf='user_menu == "my_keep"'>
+                <div *ngFor="let doc of myDocs; index as d">
+                    <input type="checkbox"(change)="this.boxChange(i)" />
+                    <a>{{ doc }} </a>
+                </div>
+            </div>
+            
+            <!-- <div *ngIf='user_menu == "my_history"'>
+                <div *ngFor="let doc of myHst; index as d">
+                    <input type="checkbox"(change)="this.boxChange(i)" />
+                    <a>{{ doc }} </a>
+                </div>
+            </div> -->
+            
+    </div>
+</div>
