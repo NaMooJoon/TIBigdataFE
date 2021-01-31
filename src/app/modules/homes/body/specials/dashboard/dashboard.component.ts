@@ -6,47 +6,26 @@ import { HttpClient } from '@angular/common/http';
 import { IpService } from 'src/app/ip.service';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
-import { DocumentService } from "../../search/service/document/document.service"
-import { RecommendationService } from "../../search/service/recommendation-service/recommendation.service";
+import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service"
+import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
-import { IdControlService } from "../../search/service/id-control-service/id-control.service";
-
-
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-
-import { thresholdSturges } from 'd3-array';
-import { map } from "rxjs/operators";
-import { ReturnStatement, viewClassName } from '@angular/compiler';
-import { doc } from '../../library/category-graph/nodes';
-import { inject } from '@angular/core/testing';
-import { FormControl, FormGroup } from "@angular/forms";
-import { CloseScrollStrategy } from '@angular/cdk/overlay';
-import { keyframes } from '@angular/animations';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 /**
  * @enum GRAPH
  * @description 사용자가 선택하는 그래프 종류
  */
-enum GRAPHS {
-  LINE,
-  DOUGHNUT,
-  WORDCLOUD,
-  BAR
-}
-
+enum GRAPHS { LINE, DOUGHNUT, WORDCLOUD, BAR }
 
 /**
  * @enum ANLS
  * @description 사용자가 선택하는 분석 방법 종류
  */
-enum ANLS {//ANALYSIS
-  TFIDF,
-  REALRED,
-  // LDA,
-  // RNN
-}
+enum ANLS { TFIDF, RELATED }
 
 
 @Component({
@@ -67,11 +46,12 @@ export class DashboardComponent implements OnInit {
     private es: ElasticsearchService,
     private docSvc: DocumentService,
     private rcmd: RecommendationService,
-    private idSvc: IdControlService
+    private idSvc: IdControlService,
+    private _router: Router,
   ) { }
 
   RELATED: string = "RelatedDoc";
-  analysisList: string[] = [ANLS[ANLS.REALRED], ANLS[ANLS.REALRED]];//"Related Doc",
+  analysisList: string[] = [ANLS[ANLS.RELATED], ANLS[ANLS.RELATED]];//"Related Doc",
 
   // analysisList: string[] = ["TFIDF", "LDA", "RNN"];//"Related Doc",
   graphList: string[] = [GRAPHS[GRAPHS.DOUGHNUT], GRAPHS[GRAPHS.WORDCLOUD], GRAPHS[GRAPHS.BAR], GRAPHS[GRAPHS.LINE]];
@@ -109,28 +89,20 @@ export class DashboardComponent implements OnInit {
 
   cData: CloudData[] = [];
 
-
-
-
   ngOnInit() {
-    this.auth.getLoginStatChange().subscribe((logInStat) => {
-
-      if (!logInStat)
-        // console.log("wow");
+    this.auth.getLoginStatChange().subscribe((logInStat: number) => {
+      if (!logInStat) {
         alert("로그인이 필요한 서비스 입니다. 로그인 해주세요.");
+        this._router.navigateByUrl("/login");
+      }
       else {
         this.chosenCount = 0;
-        // this..clearAll();
-        console.log("dash board - page");
         this.getMyKeepDoc();
       }
     })
-
   }
 
-
-
-  async getKeywords(ids) {
+  async getKeywords(ids: string | string[]) {
     return await this.db.getTfidfVal(ids, 5, true);
   }
 
@@ -142,14 +114,9 @@ export class DashboardComponent implements OnInit {
         this.docTitleList.push(o["title"]);
         this.docIdList.push(o["id"])
         return;
-      })//[{title, id},...]
-      // this.idList = this.idSvc.getIdList();
-
-      // console.log(this.docTitleList)
-      // console.log(this.docIdList)
+      })
     })
   }
-
 
   /**
    * @function my_doc_checkbox_update
@@ -174,22 +141,6 @@ export class DashboardComponent implements OnInit {
 
     console.log(this.chosenList)
   }
-  //solve issue that the order collapse from pop function
-
-  // private filter = [];
-  // private checkArr = [];
-  // boxChange(i) {
-  //   if (this.filter[i]) {
-  //     this.addList(i);
-  //     console.log(i + "넣음");
-  //   } else {
-  //     this.removeList(i);
-  //     console.log(i + "빠짐");
-  //   }
-  // }
-
-
-
 
   /**
    * @function load_tfidf_for_keyword_anls
@@ -198,9 +149,9 @@ export class DashboardComponent implements OnInit {
   private TfTable = [];
   async load_tfidf_for_keyword_anls() {
     // var docNum = this.idList.length;
+    console.log(this.chosenList);
+    console.log(this.userNumChoice);
     let tfidf_table = await this.db.getTfidfVal(this.chosenList, this.userNumChoice, true);
-    // this.getKeywords(this.chosenList).then(tfidf_table => {
-    // this.http.get(this.tfidfDir).subscribe(docData1 => {
     let oneDoc = tfidf_table as []
     console.log(oneDoc)
     var sampleID;
@@ -209,10 +160,6 @@ export class DashboardComponent implements OnInit {
     const tempArr = [] as any;
     let tWord, tVal;
     var tJson = new Object();
-
-    // oneDoc.map(d => {
-    //   d["tfidf"]
-    // })
 
     for (var i = 0; i < oneDoc.length; i++) {
       var docData = oneDoc[i]["tfidf"] as [];
@@ -234,18 +181,11 @@ export class DashboardComponent implements OnInit {
 
     this.findTextData(tempArr);
     this.findCountData(tempArr);
-
-
   }
-
-
 
   ///// put datas into GraphData /////
   findTextData(textArr) {
-    // console.log(textArr)
     var nums = textArr.length;
-    //nums = this.userNumChoice;
-    //this.graphXData = [];
     if (nums > this.userNumChoice) {
       nums = this.userNumChoice;
     }
@@ -268,13 +208,6 @@ export class DashboardComponent implements OnInit {
     console.log("Y : " + this.graphYData);
   }
 
-  // getUserChoice() {
-  //   this.userDataChoice = this.search_history;
-  //   //this.userAnalysisChoice = "";
-  //   //this.userGraphChoice  = document.getElementById("g1");
-  // }
-
-
   /**
    * @description 유저가 출력할 데이터의 숫자 버튼 변경하면 값 업데이트
    * @param value 
@@ -282,7 +215,6 @@ export class DashboardComponent implements OnInit {
   update_num_anls_data(value) {
     this.userNumChoice = value;
   }
-
 
   /**
    * @description 새로 분석을 다시 하기 전에 초기화
@@ -303,7 +235,6 @@ export class DashboardComponent implements OnInit {
     // console.log("CLEAR");
   }
 
-
   /**
    * @description 유저가 어떤 분석할지 선택하면 값 업데이트
    * @param $event 
@@ -313,7 +244,6 @@ export class DashboardComponent implements OnInit {
     // console.log(this.userAnalysisChoice)
   }
 
-
   /**
    * @description 유저가 선택하는 시각화그래프 값 업데이트
    * @param $event 
@@ -322,20 +252,17 @@ export class DashboardComponent implements OnInit {
     this.userGraphChoice = $event.target.innerText;
   }
 
-
   /**
    * @description 검색 결과 표현
    */
   visualize() {
     console.clear();
-    // this.getUserChoice();
     this.choiceComplete = true;
 
-    // console.log(this.userAnalysisChoice)
-    // console.log(this.userGraphChoice)
+    console.log(this.userAnalysisChoice)
+    console.log(this.userGraphChoice)
 
-
-    if (this.userAnalysisChoice == "키워드분석(TFIDF)") {
+    if (this.userAnalysisChoice === "키워드분석") {
       console.log("분석 : " + this.userAnalysisChoice + " 그래프 : " + this.userGraphChoice);
       this.load_tfidf_for_keyword_anls();
     }
@@ -380,9 +307,6 @@ export class DashboardComponent implements OnInit {
   barChartData: ChartDataSets[] = [
     { data: this.graphYData, label: this.userAnalysisChoice + " Analysis" }
   ];
-  /////////////
-
-
 
   ///////// line chart /// 
 
@@ -443,23 +367,8 @@ export class DashboardComponent implements OnInit {
           console.log(data1[i].length)
           idsArr.push(data1[i][0])
           valArr.push(data1[i][1])
-          // data[count] = data1[i][0]
-          // count++;
         }
       }
-
-      // let graphData = data[0]["rcmd"] as [];
-      // console.log("data : ", data);
-      // let idsArr = []
-      // let valArr = []
-      // data.map(d => {
-      //   idsArr.push(d[0])
-      //   valArr.push(d[1])
-      //   return
-      // })
-      // for (let k = 0; k < graphData.length; k++) {
-      //   idsArr.push(graphData[k][1])
-      // }
       this.docSvc.convert_id_to_doc_title(idsArr).then(t => {
         console.log("ids arr :", idsArr);
         console.log("titles : ", t);
@@ -518,16 +427,5 @@ export class DashboardComponent implements OnInit {
           color: "gray"
         });
     }
-
-
   }
-
-
-
-
-
-
-
-
-
 }

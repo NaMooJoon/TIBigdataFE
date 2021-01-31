@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { logStat, UserProfile } from "./user.model";
 import { Auth } from "./userAuth.model";
 import { Router } from "@angular/router";
-import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 import { SocialAuthService, GoogleLoginProvider } from "angularx-social-login";
 
 class storeToken {
@@ -82,7 +82,7 @@ export class AuthGoogleService extends Auth {
       alert("돌아오신 걸 환영합니다, " + singInResult.name + "님. 홈 화면으로 이동합니다.");
       localStorage.setItem('token', JSON.stringify(new storeToken(logStat.google, singInResult.idToken)));
       this.user = new UserProfile(logStat.google, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, singInResult.idToken);
-      location.replace("http://203.252.112.15:4200")
+      location.replace(this.ipService.getFrontEndServerIP() + ':' + this.ipService.getAngularPort());
     }
   }
 

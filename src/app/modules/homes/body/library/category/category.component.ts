@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ConfigService } from "../category-graph/category-graph.service";
 import { Router } from "@angular/router";
 import { AnalysisDatabaseService } from '../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
-import { SEARCHMODE, ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
-
-import { IdControlService } from "../../search/service/id-control-service/id-control.service";
-import { map } from 'rxjs/operators';
+import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
+import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
+import { PaginationService } from "../../shared-services/pagination-service/pagination.service";
 
 @Component({
   selector: "app-category",
@@ -15,43 +15,29 @@ import { map } from 'rxjs/operators';
 
 export class CategoryComponent implements OnInit {
   constructor(private db: AnalysisDatabaseService,
-    private configService: ConfigService,
     private idControl: IdControlService,
     private es: ElasticsearchService,
+    private ds: DocumentService,
+    private pg: PaginationService,
     public _router: Router) { }
 
-  // is_cat_loaded: boolean = false;
   private data: any;
   private toggleTopics: boolean[];
 
   private categories: string[] = ["전체", "정치", "경제", "사회", "국제", "IT", "스포츠", "문화", "과학"];
-  private dict_orders_1: string[] = ["전체", "ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ"];
-  private dict_orders_2: string[] = ["ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "A-Z"];
+  private dict_orders_1: string[] = ["전체", "가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하"];
   private institutions: string[] = ["전체", "기관1", "기관2", "기관3"]//bring from the fe server
 
   private ALL: string = "ALL";//전체 선택했을 경우
   private cat_choice_init = [this.ALL, this.ALL, this.ALL,];//주제, 사전편찬순, 기관순 3가지 종류
   cat_button_choice: string[] = this.cat_choice_init;
 
-  private BT_PER_ROW: number = 9;//한 줄당 버튼의 수
-  private bt_per_row: number[] = [];//줄당 버튼 수로 ngFor directive에 사용.
   ngOnInit() {
-    for (var i = 0; i < this.BT_PER_ROW; i++) {
-      this.bt_per_row[i] = i;
-    }
-    this.configService.getConfig().subscribe(data => {
-      this.data = data as {};
-      this.toggleTopics = [];
-
-      var num_topic = data.length;
-      for (let i = 0; i < num_topic; i++) {
-        this.toggleTopics.push(false);
-      }
-    });
+    this.es.setKeyword("전체문서");
     this.es.setSearchMode(SEARCHMODE.ALL);
-    this.es.setKeyword("전체문서")
-    this.es.allCountComplete();
+    this.pg.setCurrentPage(1);
     this.es.allSearchComplete();
+    this.es.allCountComplete();
   }
 
   navToGraph(): void {
@@ -65,7 +51,7 @@ export class CategoryComponent implements OnInit {
   navToDetail(doc) {
     // console.log(doc);
     let id = doc["idList"];
-    this.idControl.selecOneID(id);
+    this.idControl.selectOneID(id);
     this._router.navigateByUrl("search/DocDetail");
 
   }
@@ -81,16 +67,19 @@ export class CategoryComponent implements OnInit {
       case "topic": {
         console.log(ct);
         let docIDs = await this.getDocIDsFromTopic(ct);
-
-        console.log(docIDs)
-
-
         docIDs.map(e => this.idControl.pushIDList(e));
-        let partialIDs = this.idControl.getIDList().slice(0, this.es.getDefaultNumDocsPerPage());
+        let partialIDs: Object[] = this.idControl.getIDList().slice(0, this.es.getNumDocsPerPage());
+        const ids: string[] = [];
+        for (let i = 0; i < partialIDs.length; i++) {
+          ids.push(partialIDs[i]['docId'])
+        }
+
         this.es.setKeyword(ct)
+        this.es.setSearchMode(SEARCHMODE.IDS);
         this.es.setCountNumChange(docIDs.length);
-        this.es.multIdSearchComplete(partialIDs);
-        break;
+        this.pg.setCurrentPage(1);
+        this.es.setIds(ids);
+        this.es.multiIdSearchComplete();
       }
 
       case "dict": {
@@ -110,8 +99,8 @@ export class CategoryComponent implements OnInit {
     let category = this.get_chosen_category();
     let docs_id = await this.getDocIDsFromTopic(category)//현재 토픽에 해당하는 내용을 불러온다.
     docs_id.map(e => this.idControl.pushIDList(e));
-    // this.idControl.pushIDList(docs_id);
-    this.es.multIdSearchComplete(docs_id);
+    this.es.setIds(docs_id);
+    this.es.multiIdSearchComplete();
   }
 
   get_chosen_category() {

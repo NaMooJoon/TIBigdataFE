@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BodyContainerComponent } from './body-container/body-container.component';
 import { BodyRoutingModule } from "./body-routing.module";
-import { CommonSearchBarModule } from './shared-module/common-search-bar/common-search-bar.module';
-import { CommonSearchResultDocumentListModule } from './shared-module/common-search-result-document-list/common-search-result-document-list.module';
+import { CommonSearchBarModule } from './shared-modules/search-bar/common-search-bar.module';
+import { CommonSearchResultDocumentListModule } from './shared-modules/documents/documents.module';
 import { UserpageModule } from './userpage/userpage.module';
 
 // import { IdControlService } from './search/service/id-control-service/id-control.service';
@@ -26,8 +26,8 @@ import { UserpageModule } from './userpage/userpage.module';
     // SearchResultComponent,
     // SearchBarComponent
   ],
-  // providers:[
-  //   IdControlService
-  // ]
+  providers: [
+    //   IdControlService
+  ]
 })
 export class BodyModule { }

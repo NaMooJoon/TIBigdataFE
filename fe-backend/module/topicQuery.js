@@ -40,7 +40,8 @@ router.post("/getOneTopicDocs", (req, res) => {
             },
             {
                 $project: {
-                    'docID': 1,
+                    'docId': 1,
+                    '_id': 0
                 }
             },
         ],
@@ -48,7 +49,7 @@ router.post("/getOneTopicDocs", (req, res) => {
             if(err)
                 console.log(err)
             else{
-                console.log(docs);
+                console.log('docs', docs);
                 res.json(docs);
             }   
         }

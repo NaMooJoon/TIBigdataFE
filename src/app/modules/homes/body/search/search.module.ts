@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { TagCloudModule } from 'angular-tag-cloud-module';
 import { SearchRoutingModule } from './search-routing.module';
@@ -16,8 +16,8 @@ import { SearchResultFilterComponent } from './search-result/search-result-filte
 import { SearchRootComponent } from './search-root/search-root.component';
 import { SearchDetailComponent } from './search-detail/search-detail.component';
 
-import { CommonSearchBarModule } from '../shared-module/common-search-bar/common-search-bar.module';
-import { CommonSearchResultDocumentListModule } from '../shared-module/common-search-result-document-list/common-search-result-document-list.module';
+import { CommonSearchBarModule } from '../shared-modules/search-bar/common-search-bar.module';
+import { CommonSearchResultDocumentListModule } from '../shared-modules/documents/documents.module';
 // import {} from './article/'
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { CommonSearchResultDocumentListModule } from '../shared-module/common-se
     CommonSearchResultDocumentListModule
 
   ],
-  providers :[
+  providers: [
     // IdControlService
   ],
   exports: [

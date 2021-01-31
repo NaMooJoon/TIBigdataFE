@@ -5,7 +5,7 @@ import { EPAuthService } from '../../../../communications/fe-backend-db/membersh
 import { LoginComponent } from '../login/login.component';
 import { HttpClient } from "@angular/common/http";
 import { IpService } from 'src/app/ip.service'
-import { IdControlService } from "../../search/service/id-control-service/id-control.service";
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 
 // enum user_menu{
 //   my_keep,
