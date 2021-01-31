@@ -5,6 +5,7 @@ import { BodyContainerComponent } from './body-container/body-container.componen
 import { BodyRoutingModule } from "./body-routing.module";
 import { CommonSearchBarModule } from './shared-module/common-search-bar/common-search-bar.module';
 import { CommonSearchResultDocumentListModule } from './shared-module/common-search-result-document-list/common-search-result-document-list.module';
+import { UserpageModule } from './userpage/userpage.module';
 
 // import { IdControlService } from './search/service/id-control-service/id-control.service';
 
@@ -19,6 +20,7 @@ import { CommonSearchResultDocumentListModule } from './shared-module/common-sea
     CommonSearchResultDocumentListModule,
     FormsModule,
     ReactiveFormsModule,
+    UserpageModule,
   ],
   exports: [
     // SearchResultComponent,
