@@ -15,6 +15,7 @@ import { UserpageComponent } from '../homes/body/membership/userpage/userpage.co
 import { ControlComponent } from '../homes/body/membership/control/control.component';
 import { RegisterOkComponent } from '../homes/body/membership/register/register-ok/register-ok.component';
 import { ApiRegisterComponent } from '../homes/body/membership/register/api-register/api-register.component';
+import { ElasticSearchQueryModel } from './elasticsearch-service/elasticsearch.service.query.model';
 // import { QueryServiceComponent } fr
 // om './fe-backend-db/query-service/query-service.component';
 
@@ -26,11 +27,9 @@ const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.
     RegisterOkComponent,
     ApiRegisterComponent,
     LoginComponent,
-    // EventsComponent,
     SocialRegisterComponent,
     UserpageComponent,
     ControlComponent,
-    // QueryServiceComponent
   ],
   imports: [
     FormsModule,
@@ -42,17 +41,13 @@ const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.
   ],
   providers: [
     EventService,
+    ElasticSearchQueryModel,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
     },
-    /**
-     * need to use Google API client id
-     * to communicate with backend server.
-     * Register the client id into to angular Injector with provider.
-     */
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
