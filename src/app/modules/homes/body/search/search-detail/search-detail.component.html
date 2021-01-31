@@ -1,3 +1,4 @@
+<p class="location">홈 > 검색결과 > 문서상세보기 </p>
 <hr />
 <div class="search-detail-container">
   <h2>문서 상세보기</h2>
@@ -37,6 +38,11 @@
         <li *ngIf="!isDataEmpty(article.file_download_url)" class="info">
           <div class="info-title"> 자료열람 </div>
           <div class="info-content"> <a href="{{ article.file_download_url }}"> {{ article.file_download_url }}</a>
+          </div>
+        </li>
+        <li *ngIf="!isDataEmpty(article.original_url)" class="info">
+          <div class="info-title"> 문서출처 </div>
+          <div class="info-content"> <a href="{{ article.original_url }}"> {{ article.original_url }}</a>
           </div>
         </li>
       </ul>

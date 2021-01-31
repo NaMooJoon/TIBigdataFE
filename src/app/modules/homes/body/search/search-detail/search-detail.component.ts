@@ -59,10 +59,6 @@ export class SearchDetailComponent implements OnInit {
       this.isDocInfoLoaded++;
     })
 
-    if (this.article.file_download_url === undefined) {
-      this.article.file_download_url = this.article.published_institution_url
-    }
-
     this.wordcloud.createCloud(id)
       .then((data) => {
         this.cData = data as CloudData[]
@@ -71,7 +67,7 @@ export class SearchDetailComponent implements OnInit {
   }
 
   isDataEmpty(data: any) {
-    if (data == null || data === '') return true;
+    if (data === undefined || data === null || data === " ") return true;
     else return false;
   }
 }
