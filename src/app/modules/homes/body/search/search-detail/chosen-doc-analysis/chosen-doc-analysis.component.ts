@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-import { IdControlService } from "../../service/id-control-service/id-control.service";
+import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";;
 
 @Component({
   selector: "app-chsDocAnalysis",
@@ -9,12 +9,12 @@ import { IdControlService } from "../../service/id-control-service/id-control.se
   styleUrls: ["./chosen-doc-analysis.component.less"]
 })
 export class ChosenDocAnalysisComponent implements OnInit {
-  constructor(private http: HttpClient, private idCont: IdControlService) {}
+  constructor(private http: HttpClient, private idCont: IdControlService) { }
   private FILE_DIR: string =
     "assets//homes_search_result_wordcloud/tfidfData.json";
   private cDatas: any[] = new Array();
   private titles: string[] = new Array<string>();
-  private isLoaded : boolean = false;
+  private isLoaded: boolean = false;
 
   ngOnInit() {
     this.http.get(this.FILE_DIR).subscribe(data => {
@@ -31,7 +31,7 @@ export class ChosenDocAnalysisComponent implements OnInit {
       // console.log("idList contents : ");
       // console.log(idList);
       for (var i = 0; i <= idList.length; i++) {
-        let needData : {} = [];
+        let needData: {} = [];
         needData = tfidfData.find(d => d["docID"] === idList[i]);
 
         try {
@@ -49,12 +49,12 @@ export class ChosenDocAnalysisComponent implements OnInit {
                 text: tfIdfVal[k][0],
                 weight: tfIdfVal[k][1]
               });
-            } catch(err) {
+            } catch (err) {
               console.log("error in creating cloud : " + "index " + k + " has an error");
             }
           }
           this.cDatas.push(cData);
-        } catch(err){
+        } catch (err) {
           console.log(err.message);
           console.log("error in " + i);
           console.log("object detail : " + tfidfData[i]["docID"]);

@@ -7,7 +7,7 @@ import { IntroComponent } from './intro/intro.component';
 import { ServiceGuideComponent } from './service-guide/service-guide.component';
 import { CollectedInfoComponent } from './collected-info/collected-info.component';
 import { MemberPolicyComponent } from './member-policy/member-policy.component';
-import { CommonSearchBarModule } from '../shared-module/common-search-bar/common-search-bar.module';
+import { CommonSearchBarModule } from '../shared-modules/search-bar/common-search-bar.module';
 
 
 @NgModule({

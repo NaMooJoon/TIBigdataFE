@@ -1,84 +1,43 @@
-<hr>
-<!-- 하단부 -->
-<div uk-grid>
-  <div class="uk-width-1-2" style="text-align : left ; ">
-    <span style="font-weight: bold; font-size: 27px; color: #3d3d3d;">자료열람</span>
-    
-  </div>
+<hr />
 
-
-  <div class="uk-width-1-2" style="text-align : right ; ">
-    <button (click)="navToGraph()" class="uk-button button-blue" style="font-size:21px;">
-      통일연구동향그래프
+<div class="library-container">
+  <div class="library-header">
+    <h1>자료열람</h1>
+    <button (click)="navToGraph()">
+      통일연구 동향 그래프
     </button>
   </div>
-</div>
 
-<hr>
+  <hr />
 
-
-<div class="uk-container uk-margin-remove" uk-grid>
-  <div class="uk-width-1-6">
-    주제별
-  </div>
-  <div class="uk-width-5-6 uk-flex" style="padding : 0; ">
-    <div class="uk-margin-auto uk-padding-remove" *ngFor="let cat of categories; index as idx">
-      <div *ngIf='idx < 8; else bt_num_many'>
-        <button (click)="selectCategory($event)" id="topic" class="uk-button uk-button-default ">{{cat}}</button>
-      </div>
-      <ng-template #bt_num_many>
-        <button (click)="selectCategory($event)" id="topic" class="uk-button uk-button-default">{{cat}}</button>
-      </ng-template>
+  <div class="selection-container topic-container">
+    <h2>주제별</h2>
+    <div class="selection-buttons">
+      <button *ngFor="let cat of categories" id="topic" (click)="selectCategory($event)">{{cat}}</button>
     </div>
   </div>
-</div>
 
-<hr>
+  <hr />
 
-<div class="uk-container uk-margin-remove" uk-grid>
-  <div class="uk-width-1-6">
-    사전편찬순
-  </div>
-  <div class="uk-width-5-6" style=" padding : 0; ">
-    <div class="uk-flex ">
-      <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_1">
-        <button (click)="selectCategory($event)" class="uk-button uk-button-default"
-          style="width: 90px; margin-right:5px;">{{cat}}</button>
-      </div>
-    </div>
-
-    <div class="uk-flex uk-margin-small-top">
-      <div class="uk-padding-remove " style="margin-left:20px;" *ngFor="let cat of dict_orders_2">
-        <button (click)="selectCategory($event)" id="dict" class="uk-button uk-button-default"
-          style="width: 90px; margin-right:5px;">{{cat}}</button>
-      </div>
+  <div class="selection-container dict-container">
+    <h2>사전편찬별</h2>
+    <div class="selection-buttons">
+      <button *ngFor="let cat of dict_orders_1" (click)="selectCategory($event)">{{cat}}</button>
     </div>
   </div>
-</div>
 
+  <hr />
 
-<hr>
-
-
-<div class="uk-container" uk-grid>
-  <div class="uk-width-1-6">
-    기관별
-  </div>
-  <div class="uk-width-expand uk-flex">
-    <div *ngFor="let cat of institutions">
-      <button (click)="selectCategory($event)" id="inst" class="uk-button uk-button-default" style="margin-right:5px;">{{cat}}</button>
+  <div class="selection-container inst-container">
+    <h2>기관별</h2>
+    <div class="selection-buttons">
+      <button *ngFor="let cat of institutions" (click)="selectCategory($event)">{{cat}}</button>
     </div>
   </div>
-</div>
 
-<hr>
-<div uk-grid>
-  <div class="uk-width-1-4">
+  <hr />
 
-  </div>
-
-
-  <div class="uk-width-3-4">
-    <app-search-result-document-list ></app-search-result-document-list>
+  <div class="result-body">
+    <app-search-result-document-list></app-search-result-document-list>
   </div>
 </div>

@@ -1,8 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { IpService } from 'src/app/ip.service'
-import { IdControlService } from '../../../homes/body/search/service/id-control-service/id-control.service';
-import { DocumentService } from '../../../homes/body/search/service/document/document.service';
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +56,7 @@ export class AnalysisDatabaseService {
     this.debug("in db getRcmdTable, input ids : ", ids);
     let res = await this.http.post<any>(this.GET_RCMD_URL, { "id": ids, "num": num, "sim": sim }).toPromise()
     if (res.succ) {
-
+      console.log("res: ", res);
       // this.debug("in db rcmdTable : ",res);
       return res.payload;
     }

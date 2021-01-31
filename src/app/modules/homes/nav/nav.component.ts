@@ -116,7 +116,8 @@ export class NavComponent implements OnInit {
   }
 
   toUserPage() {
-    this._router.navigateByUrl("/userpage");
+    this._router.navigateByUrl("/userpage/my-docs");
+    // UserpageRootComponent.where = "내 보관함";
   }
 
   toControl() {

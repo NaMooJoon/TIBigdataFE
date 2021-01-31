@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { Router } from "@angular/router";
 import { IpService } from 'src/app/ip.service';
-import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 
 class storeToken {
     type: logStat;
@@ -93,7 +93,7 @@ export class AuthEmailService extends Auth {
                 localStorage.setItem('token', JSON.stringify(new storeToken(logStat.email, res.payload.token)));
                 console.log(res.payload.email + "\n" + res.payload.name + "\n" + res.payload.nickname + "\n" + res.payload.inst + "\n" + res.payload.inst + "\n" + res.payload.token + "\n");
                 this.user = new UserProfile(logStat.email, res.payload.email, res.payload.name, res.payload.nickname, res.payload.inst, res.payload.api, res.payload.token);
-                location.replace("http://203.252.112.15:4200");
+                location.replace(this.ipService.getFrontEndServerIP() + ':' + this.ipService.getAngularPort());
             }
             else if (!res.succ) {
                 alert("이메일 혹은 비밀번호가 잘못되었어요.");

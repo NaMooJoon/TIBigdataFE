@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { NavigationEnd, Router } from "@angular/router";
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { IpService } from 'src/app/ip.service';
-import { DocumentService } from "../../../homes/body/search/service/document/document.service";
+import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 import { AuthEmailService } from "./auth-email.service";
 import { AuthGoogleService } from "./auth-google.service";
 import { SocialUser } from "angularx-social-login";
@@ -84,6 +84,14 @@ export class EPAuthService {
 
   getUserEmail(): String {
     return this.userProfile.email;
+  }
+
+  getUserNickname(): String {
+    return this.userProfile.nickName;
+  }
+
+  getUserInst(): String {
+    return this.userProfile.inst;
   }
 
   async logOut() {
@@ -172,10 +180,10 @@ export class EPAuthService {
   }
 
   async addMyDoc(docIDs) {
-  
+
     let idRes = await this.http.post<any>(this.GET_MY_DOC_URL, { payload: this.userProfile.email }).toPromise();
     console.log("idRes: ", idRes);
-    
+
     if (idRes.succ === false) {
       let payload = { userEmail: this.userProfile.email, docs: docIDs };
       let res = await this.http.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
@@ -183,8 +191,8 @@ export class EPAuthService {
       return;
     }
 
-    for (var i=0; i<idRes.payload.length; i++) {
-      for (var j=0; j<docIDs.length; j++) {
+    for (var i = 0; i < idRes.payload.length; i++) {
+      for (var j = 0; j < docIDs.length; j++) {
         if (idRes.payload[i] === docIDs[j]) {
           docIDs.splice(j, 1);
         }
