@@ -86,6 +86,14 @@ export class EPAuthService {
     return this.userProfile.email;
   }
 
+  getUserNickname(): String {
+    return this.userProfile.nickName;
+  }
+
+  getUserInst(): String {
+    return this.userProfile.inst;
+  }
+
   async logOut() {
     this.auth.logOut()
     localStorage.removeItem("token");
