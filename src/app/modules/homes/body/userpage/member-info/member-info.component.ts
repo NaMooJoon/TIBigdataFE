@@ -10,6 +10,8 @@ export class MemberInfoComponent implements OnInit {
 
   private name: String;
   private email: String;
+  private nickName: String;
+  private inst: String;
 
   constructor(
     private _auth: EPAuthService,
@@ -19,7 +21,8 @@ export class MemberInfoComponent implements OnInit {
     
     this.name = this._auth.getUserName();
     this.email = this._auth.getUserEmail();
-    console.log("name??? " +  this.name);
+    this.nickName = this._auth.getUserNickname();
+    this.inst = this._auth.getUserInst();
 
   }
 
