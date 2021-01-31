@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, } from "@angular/core";
 import { Router } from "@angular/router";
-import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
+import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, Observable } from "rxjs";
 import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
@@ -128,7 +128,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   searchAgain(num: number) {
     this.es.setNumDocsPerPage(num);
-    this.es.setSearchMode(SEARCHMODE.KEY);
     this.es.searchKeyword(this.queryText);
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();
@@ -148,7 +147,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
       this.ResultIdList[i] = this.articleSources[i]["_id"];
       this.RelatedDocBtnToggle.push(false);
     }
-    console.log("result id list: ", this.ResultIdList)
+    //console.log("result id list: ", this.ResultIdList)
   }
 
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number) {

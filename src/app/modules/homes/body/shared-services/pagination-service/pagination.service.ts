@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
+import { Observable, Subscription } from 'rxjs';
+import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 
 const MAXPAGENUM = 5;
 
@@ -8,6 +9,8 @@ const MAXPAGENUM = 5;
 })
 
 export class PaginationService {
+  private countNumChange$: Observable<any> = this._es.getCountNumChange();
+  private countNumSubs: Subscription;
   private _totalDocs: number;
   private _currentPage: number;
   private _pageSize: number;
@@ -28,7 +31,11 @@ export class PaginationService {
 
 
 
-  paginate() {
+  async paginate() {
+    this.countNumChange$.subscribe(num => {
+      this._totalDocs = num;
+    });
+    this._pageSize = this._es.getNumDocsPerPage();
     this._totalPages = Math.ceil(this._totalDocs / this._pageSize);
     if (this._currentPage < 1) this._currentPage = 1;
     else if (this._currentPage > this._totalPages) this._currentPage = this._totalPages;
@@ -61,8 +68,18 @@ export class PaginationService {
 
 
   loadSelectedPage(selectedPageNum: number) {
+    let searchMode = this._es.getSearchMode()
     this._currentPage = selectedPageNum;
-    this._es.fullTextSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+    if (searchMode === SEARCHMODE.ALL) {
+      console.log("all");
+      this._es.allSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+    }
+    else if (searchMode === SEARCHMODE.IDS) {
+      this._es.multiIdSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+    }
+    else if (searchMode === SEARCHMODE.KEYWORD) {
+      this._es.fullTextSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+    }
   }
 
   loadPriorPage() {
@@ -103,9 +120,7 @@ export class PaginationService {
     return this._pages;
   }
 
-  async loadPage() {
-    this._totalDocs = await this._es.getCountNumber();
-    this._pageSize = this._es.getNumDocsPerPage();
+  loadPage() {
     this.paginate();
   }
 }

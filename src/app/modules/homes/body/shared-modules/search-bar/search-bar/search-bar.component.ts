@@ -78,6 +78,7 @@ export class SearchBarComponent implements OnInit {
 
   search() {
     this.es.searchKeyword(this.queryText);
+    this.es.setSearchMode(SEARCHMODE.KEYWORD);
     this.ps.setCurrentPage(1);
     this._router.navigateByUrl("body/search/result");
   }
