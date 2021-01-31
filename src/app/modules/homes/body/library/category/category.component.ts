@@ -75,9 +75,9 @@ export class CategoryComponent implements OnInit {
         }
 
         this.es.setKeyword(ct)
+        this.es.setSearchMode(SEARCHMODE.IDS);
         this.es.setCountNumChange(docIDs.length);
         this.pg.setCurrentPage(1);
-        this.es.setSearchMode(SEARCHMODE.IDS);
         this.es.setIds(ids);
         this.es.multiIdSearchComplete();
       }
