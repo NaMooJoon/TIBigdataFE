@@ -25,8 +25,25 @@ a {
 .post-detail-container {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.post-keywords {
+  font-weight: 500;
 }
 
 .post-date::after {
   content: " | ";
+  white-space: pre;
+}
+
+.post-writer::after {
+  content: "  ";
+  white-space: pre;
+}
+
+.post-keywords::after {
+  content: " ";
+  white-space: pre;
 }
