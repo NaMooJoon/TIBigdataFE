@@ -20,14 +20,12 @@ export class ElasticSearchQueryModel {
         "_scroll_id"
     ]
 
-    private _allDocs = {
-        query: {
-            match_all: {}
-        }
-    };
-
     public getAllDocs() {
-        return this._allDocs;
+        return {
+            "query": {
+                "match_all": {}
+            }
+        }
     }
 
     public getSearchDocs() {
@@ -49,13 +47,7 @@ export class ElasticSearchQueryModel {
         return this.filterPath;
     }
 
-    public getSearchIds(ids: string | string[]) {
-        if (typeof (ids) === 'string') {
-            this.ids = [];
-            this.ids.push(ids);
-        }
-        else this.ids = ids;
-
+    public getSearchIds() {
         return {
             query: {
                 ids: {
@@ -66,8 +58,10 @@ export class ElasticSearchQueryModel {
     }
 
     public setSearchKeyword(keyword: string) {
-        console.log(keyword);
         this.searchKeyword = keyword;
-        console.log(this.searchKeyword);
+    }
+
+    public setSearchIds(ids: string[]) {
+        this.ids = ids;
     }
 }

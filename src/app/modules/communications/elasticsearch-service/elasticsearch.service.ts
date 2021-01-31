@@ -4,22 +4,22 @@ import * as elasticsearch from "elasticsearch-browser";
 import { ArticleSource } from "src/app/modules/homes/body/shared-modules/documents/article/article.interface";
 import { Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { ElasticSearchQueryModel } from "./elasticsearch.service.query.model";
-import { start } from "repl";
 
-export enum SEARCHMODE { INIT, ALL, ID, KEY }
+export enum SEARCHMODE { ALL, IDS, KEYWORD };
 
 @Injectable({
   providedIn: "root"
 })
+
 export class ElasticsearchService {
   private client: Client;
   private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
   private countNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
+  private ids: string[] = [];
   private numDocsPerPage: number = 10;
-  currentSearchMode: SEARCHMODE = SEARCHMODE.INIT;
+  private searchMode: SEARCHMODE;
 
   constructor(
     private ipSvc: IpService,
@@ -29,19 +29,18 @@ export class ElasticsearchService {
     }
   }
 
-  setSearchMode(mode: SEARCHMODE) {
-    this.currentSearchMode = mode;
-  }
-
-  getCurrSearchMode(): SEARCHMODE {
-    return this.currentSearchMode;
-  }
-
   searchKeyword(keyword: string) {
     this.setKeyword(keyword);
-    this.setSearchMode(SEARCHMODE.KEY)
     this.fullTextSearchComplete();
     this.countByTextComplete();
+  }
+
+  getSearchMode() {
+    return this.searchMode;
+  }
+
+  setSearchMode(searchMode: SEARCHMODE) {
+    this.searchMode = searchMode;
   }
 
   getCountNumChange(): Observable<number> {
@@ -65,6 +64,11 @@ export class ElasticsearchService {
     return this.keyword;
   }
 
+  setIds(ids: string[]): void {
+    this.esQueryModel.setSearchIds(ids);
+    this.ids = ids;
+  }
+
   searchAllDocs(startIndex?: number, docSize?: number): any {
     if (!startIndex)
       startIndex = 0;
@@ -72,6 +76,7 @@ export class ElasticsearchService {
       docSize = this.numDocsPerPage;
 
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       body: this.esQueryModel.getAllDocs(),
       from: startIndex,
       size: docSize,
@@ -94,19 +99,18 @@ export class ElasticsearchService {
     if (!docSize)
       docSize = this.numDocsPerPage;
 
-    console.log('startindex: ', startIndex);
-    return this.client
-      .search({
-        from: startIndex,
-        size: docSize,
-        filterPath: this.esQueryModel.getFilterPath(),
-        body: this.esQueryModel.getSearchDocs(),
-        _source: this.esQueryModel.getSearchSource(),
-      })
+    return this.client.search({
+      from: startIndex,
+      size: docSize,
+      filterPath: this.esQueryModel.getFilterPath(),
+      body: this.esQueryModel.getSearchDocs(),
+      _source: this.esQueryModel.getSearchSource(),
+    })
   }
 
   countAllDocs() {
     return this.client.count({
+      index: this.ipSvc.ES_INDEX,
       body: this.esQueryModel.getAllDocs(),
     })
   }
@@ -129,14 +133,15 @@ export class ElasticsearchService {
     )
   }
 
-  countByIds(ids: string | string[]): Promise<any> {
+  countByIds(): Promise<any> {
     return this.client.count({
-      body: this.esQueryModel.getSearchIds(ids),
+      index: this.ipSvc.ES_INDEX,
+      body: this.esQueryModel.getSearchIds(),
     });
   }
 
-  countByIdsComplete(ids: string | string[]): void {
-    this.countByIds(ids).then(countNum =>
+  countByIdsComplete(): void {
+    this.countByIds().then(countNum =>
       this.countNum.next(countNum.count)
     )
   }
@@ -150,32 +155,32 @@ export class ElasticsearchService {
   }
 
   IdSearchComplete(id: string): void {
-    this.saveSearchResult(this.searchById(id));
+    this.saveSearchResult(this.searchById());
   }
 
-  searchById(id: string): Promise<any> {
+  searchById(): Promise<any> {
     return this.client.search({
       filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchIds(id),
+      body: this.esQueryModel.getSearchIds(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
 
-  multiIdSearchComplete(ids: string[], startIndex?: number): void {
-    this.saveSearchResult(this.searchByManyId(ids, startIndex));
+  multiIdSearchComplete(startIndex?: number): void {
+    this.saveSearchResult(this.searchByManyId(startIndex));
   }
 
-  searchByManyId(ids: string[], startIndex?: number, docSize?: number): Promise<any> {
+  searchByManyId(startIndex?: number, docSize?: number): Promise<any> {
     return this.client.search({
       from: startIndex,
       size: docSize,
-      body: this.esQueryModel.getSearchIds(ids),
+      body: this.esQueryModel.getSearchIds(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
 
-  saveSearchResult(queryFunc: any): void {
-    queryFunc.then(response => {
+  async saveSearchResult(queryFunc: any): Promise<void> {
+    await queryFunc.then(response => {
       this.docs2artclSrc(response.hits.hits);
     });
   }
