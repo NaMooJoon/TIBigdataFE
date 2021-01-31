@@ -16,12 +16,13 @@
 
 <div *ngIf="isResultFound" class="result-body">
   <form [formGroup]="form" (ngSubmit)="saveSelectedDocs()" novalidate>
-    <label><input class="article-checkbox" type="checkbox" (change)="onCheckboxChange($event)" value="toggleAll" /> 전체선택
+    <label *ngIf="isLogStat != 0"><input class="article-checkbox toggle-all" type="checkbox"
+        (change)="onCheckboxChange($event)" value="toggleAll" />전체선택
     </label>
     <div *ngFor="let articleSource of articleSources; index as i" class="article">
       <label>
-        <input class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected" name="selectDoc"
-          [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
+        <input *ngIf="isLogStat != 0" class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected"
+          name="selectDoc" [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
       </label>
       <div class="article-info-container">
         <app-article-details class="article-component" [article]="articleSource"></app-article-details>
@@ -34,7 +35,7 @@
         <hr class="sep" />
       </div>
     </div>
-    <input type="submit" class="mydoc" value="담기" />
+    <input *ngIf="isLogStat != 0" type="submit" class="mydoc" value="담기" />
   </form>
 
   <div class="page-numbers">
