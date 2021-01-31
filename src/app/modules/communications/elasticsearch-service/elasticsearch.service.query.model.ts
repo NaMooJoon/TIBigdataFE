@@ -7,6 +7,7 @@ export class ElasticSearchQueryModel {
         "post_date",
         "published_institution_url",
         "published_institution",
+        "original_url",
         "post_writer",
         "post_body",
         "file_download_url",
