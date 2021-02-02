@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
+export enum MENU { ANNCMNT, QNA, FAQ };
+
 @Component({
   selector: 'app-community-root',
   templateUrl: './community-root.component.html',
   styleUrls: ['./community-root.component.less']
 })
+
 export class CommunityRootComponent implements OnInit {
 
   constructor(private router: Router) { }
+  private selectedMenu: MENU;
 
   ngOnInit() {
+    this.selectedMenu = MENU.ANNCMNT;
   }
   /**
    * 
@@ -25,19 +30,25 @@ export class CommunityRootComponent implements OnInit {
    *  취소하는 함수
   */
 
-  navToCmm() {
-    this.router.navigateByUrl("community/qna");
 
+
+  navToQna() {
+    this.selectedMenu = MENU.QNA;
+    this.router.navigateByUrl("community/qna");
   }
 
-  navToAnounce() {
+  navToAnnouncement() {
+    this.selectedMenu = MENU.ANNCMNT;
     this.router.navigateByUrl("community/announcement");
 
   }
 
   navToFaq() {
+    this.selectedMenu = MENU.FAQ;
     this.router.navigateByUrl("community/faq");
-  
   }
 
+  public get menu(): typeof MENU {
+    return MENU
+  }
 }
