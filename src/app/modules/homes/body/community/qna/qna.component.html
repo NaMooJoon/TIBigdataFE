@@ -1,0 +1,42 @@
+<div class="uk-container-center margin">
+  <div class="uk-flex uk-flex-right uk-margin-bottom">
+    <input class="uk-padding button-gray" style="border-radius:30px; width:250px; height:40px;"
+      (keyup)="updateSearchKey($event)" placeholder="검색" />
+  </div>
+
+  <div uk-grid>
+    <table class="uk-table uk-table-striped">
+      <thead>
+        <tr style="border-top: 2px solid #606060; border-bottom: 1px solid #606060">
+          <th>글 번호</th>
+          <th>작성자</th>
+          <th>제목</th>
+        </tr>
+      </thead>
+      <tfoot>
+      </tfoot>
+      <tbody>
+        <tr style="border-top: 0.75px solid #c6c6c6; border-bottom: 0.75px solid #c6c6c6;"
+          *ngFor="let d of docList; let i = index">
+          <td (click)="navToReadThisDoc(i)">{{ d["id"] }}</td>
+          <td (click)="navToReadThisDoc(i)">{{ d["user"] }}</td>
+          <td (click)="navToReadThisDoc(i)">{{ d["title"] }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+  <div class="page-numbers">
+    <button *ngIf="pageInfo.currentPage" (click)="pgService.jumpPage(-10)">
+      << </button> <button *ngIf="pageInfo.currentPage > 1" (click)="pgService.jumpPage(-1)">
+        < </button> <button
+          [ngStyle]="{'background-color': pageInfo.currentPage == i ? '#52b9ff' : 'transparent', 'color': pgService.getCurrentPage() == i ? 'white' : 'black'}"
+          (click)="pgService.jumpPage(pageInfo.currentPage)" *ngFor="let i of pageInfo.pages"> {{  i  }}
+    </button>
+    <button *ngIf="pageInfo.currentPage() < pageInfo.totalPage && isResultFound" (click)="pgService.jumpPage(1)"> >
+    </button>
+    <button *ngIf="pageInfo.currentPage() != pageInfo.totalPage()" (click)="pgService.jumpPage(10)"> >>
+    </button>
+  </div>
+</div>
