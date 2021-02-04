@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
+import { PaginationModel } from './pagination.model';
 
 const MAXPAGENUM = 5;
 
@@ -11,117 +12,84 @@ const MAXPAGENUM = 5;
 export class PaginationService {
   private countNumChange$: Observable<any> = this._es.getCountNumChange();
   private countNumSubs: Subscription;
-  private _totalDocs: number;
-  private _currentPage: number;
-  private _pageSize: number;
-  private _totalPages: number;
-  private _startPage: number;
-  private _endPage: number;
-  private _startIndex: number;
-  private _endIndex: number;
-  private _pages: number[];
 
 
   constructor(
     private _es: ElasticsearchService
+
   ) {
-    this._currentPage = 1;
-    this._pageSize = _es.getNumDocsPerPage();
   }
 
+  async paginate(currentPage: number, totalDocs: number, pageSize: number): Promise<PaginationModel> {
+    console.log(totalDocs);
+    if (totalDocs === null)
+      this.countNumChange$.subscribe(num => { totalDocs = num });
+    if (pageSize === null) pageSize = this._es.getNumDocsPerPage();
 
+    if (currentPage === null) currentPage = 1;
 
-  async paginate() {
-    this.countNumChange$.subscribe(num => {
-      this._totalDocs = num;
-    });
-    this._pageSize = this._es.getNumDocsPerPage();
-    this._totalPages = Math.ceil(this._totalDocs / this._pageSize);
-    if (this._currentPage < 1) this._currentPage = 1;
-    else if (this._currentPage > this._totalPages) this._currentPage = this._totalPages;
+    let totalPages = Math.ceil(totalDocs / pageSize);
 
-    if (this._totalPages <= MAXPAGENUM) {
-      this._startPage = 1;
-      this._endPage = this._totalPages;
+    console.log(totalPages);
+    if (currentPage < 1) currentPage = 1;
+    else if (currentPage > totalPages) currentPage = totalPages;
+
+    let startPage: number, endPage: number;
+    if (totalPages <= MAXPAGENUM) {
+      startPage = 1;
+      endPage = totalPages;
     }
     else {
       let maxPagesBeforeCurrentPage = Math.floor(MAXPAGENUM / 2);
       let maxPagesAfterCurrentPage = Math.ceil(MAXPAGENUM / 2) - 1;
 
-      if (this._currentPage <= maxPagesBeforeCurrentPage) {
-        this._startPage = 1;
-        this._endPage = MAXPAGENUM;
+      if (currentPage <= maxPagesBeforeCurrentPage) {
+        startPage = 1;
+        endPage = MAXPAGENUM;
       }
-      else if (this._currentPage + maxPagesAfterCurrentPage >= this._totalPages) {
-        this._startPage = this._totalPages - MAXPAGENUM + 1;
-        this._endPage = this._totalPages;
+      else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
+        startPage = totalPages - MAXPAGENUM + 1;
+        endPage = totalPages;
       }
       else {
-        this._startPage = this._currentPage - maxPagesBeforeCurrentPage;
-        this._endPage = this._currentPage + maxPagesAfterCurrentPage;
+        startPage = currentPage - maxPagesBeforeCurrentPage;
+        endPage = currentPage + maxPagesAfterCurrentPage;
       }
     }
-    this._startIndex = (this._currentPage - 1) * this._pageSize;
-    this._endIndex = Math.min(this._startIndex + this._pageSize - 1, this._totalDocs - 1);
-    this._pages = Array.from(Array((this._endPage + 1) - this._startPage).keys()).map(i => this._startPage + i);
-  }
+    let startIndex = (currentPage - 1) * pageSize;
+    let endIndex = Math.min(startIndex + pageSize - 1, totalDocs - 1);
+    let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
 
+    return {
+      totalDocs: totalDocs,
+      currentPage: currentPage,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: startIndex,
+      endIndex: endIndex,
+      pages: pages
+    };
+  }
 
   loadSelectedPage(selectedPageNum: number) {
     let searchMode = this._es.getSearchMode()
-    this._currentPage = selectedPageNum;
     if (searchMode === SEARCHMODE.ALL) {
-      console.log("all");
-      this._es.allSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+      this._es.allSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
     }
     else if (searchMode === SEARCHMODE.IDS) {
-      this._es.multiIdSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+      this._es.multiIdSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
     }
     else if (searchMode === SEARCHMODE.KEYWORD) {
-      this._es.fullTextSearchComplete((this._currentPage - 1) * this._es.getNumDocsPerPage());
+      this._es.fullTextSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
     }
   }
 
-  loadPriorPage() {
-    this._currentPage--;
-    this.loadSelectedPage(this._currentPage);
+  jumpPage(currentPage: number, totalDocs: number, pageSize: number, jumpSize: number): Object {
+    this.loadSelectedPage(currentPage + jumpSize);
+    return this.paginate(currentPage, totalDocs, pageSize);
   }
 
-  loadNextPage() {
-    this._currentPage++;
-    this.loadSelectedPage(this._currentPage);
-  }
-
-  loadNextTenPage() {
-    this._currentPage += 10;
-    this.loadSelectedPage(this._currentPage);
-  }
-
-  loadPriorTenPage() {
-    this._currentPage -= 10;
-    if (this._currentPage < 1) this._currentPage = 1;
-    this.loadSelectedPage(this._currentPage);
-  }
-
-  setCurrentPage(currentPage: number) {
-    this._currentPage = currentPage;
-    this.loadSelectedPage(this._currentPage);
-  }
-
-  getCurrentPage() {
-    return this._currentPage;
-  }
-
-  getTotalPage() {
-    return this._totalPages;
-  }
-
-  getPages() {
-    return this._pages;
-  }
-
-  loadPage() {
-    this.paginate();
-  }
 }
 
