@@ -17,7 +17,7 @@ const keepDoc = require('./module/keepMyDocQuery');
 const keywords = require('./module/tfidfQuery');
 const rcmds = require('./module/rcmdQuery');
 const topic = require('./module/topicQuery');
-const community = require('./module/communityDocsQuery');
+const announcement = require('./module/announcementDocsQuery');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,7 +27,7 @@ app.use('/hst', hstQry);//hst 경로에서 항상 require("./hst") 호출한다.
 app.use('/myDoc',keepDoc);
 app.use('/keyword',keywords);
 app.use('/rcmd', rcmds);
-app.use('/community',community);
+app.use('/announcement',announcement);
 app.use('/topic',topic)
 //root dir
 app.get('/', function(req, res) {
