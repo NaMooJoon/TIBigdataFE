@@ -22,7 +22,7 @@ export class FAQComponent implements OnInit {
   private logStat: logStat;
   private pageSize = 10;
   private totalDocs: number;
-  private startIndex: number;
+  private startIndex: number = 0;
   private currentPage: number;
   private pages: number[];
   private totalPages: number;

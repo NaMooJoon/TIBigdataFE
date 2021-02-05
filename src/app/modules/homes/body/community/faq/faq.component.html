@@ -4,30 +4,24 @@
   <thead>
     <tr>
       <th class="doc-num">글 번호</th>
-      <th class="doc-faq"></th>
+      <th class="doc-category">카테고리</th>
       <th class="doc-title">글 제목</th>
-      <th class="doc-writer">작성자</th>
-      <th class="doc-postdate">등록일</th>
     </tr>
   </thead>
 
   <tbody *ngIf="docList.length">
     <tr *ngFor="let doc of docList; let i = index">
       <td class="doc-num">{{ doc["docId"] }}</td>
-      <td>
-        <div *ngIf="doc['isAnswered']" class="faq-button complete">완료</div>
-        <div *ngIf="!doc['isAnswered']" class="faq-button ongoing">검토중</div>
+      <td class="doc-category">
+        <div class="category-button">{{ doc["category"] }}</div>
       </td>
-
       <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
-      <td class="doc-writer"> <a>{{ doc["userName"] }}</a></td>
-      <td class="doc-postdate">{{ doc["regDate"] }}</td>
     </tr>
   </tbody>
 
   <tbody *ngIf="!docList.length">
     <tr>
-      <td class="no-docs" rowspan="5" colspan="5">등록된 게시물이 없습니다.</td>
+      <td class="no-docs" rowspan="3" colspan="3">등록된 게시물이 없습니다.</td>
     </tr>
   </tbody>
 </table>
