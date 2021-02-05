@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { CommunityPrivacyMaskingService } from 'src/app/modules/homes/body/community/community-services/community-privacy-masking.service';
 import { Res } from '../../../../communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, LOAD }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
@@ -18,6 +19,7 @@ export class CommunityService {
   private getDocsNumUrl: string = "/getDocsNum";
   private getDocsUrl: string = "/getDocs"
 
+  private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private docList: {}[] = [];
 
   private DOC_NUM_PER_EACH_PAGE = 10;
@@ -29,6 +31,7 @@ export class CommunityService {
     private prvcyService: CommunityPrivacyMaskingService,
     private authService: EPAuthService
   ) { console.log('cmservice init') }
+
 
 
   generateQueryUrl(operation: boardOperation): string {
@@ -51,6 +54,10 @@ export class CommunityService {
   }
   getCurrentMenu(): string {
     return this.currentMenu;
+  }
+
+  getBoardMenuChange(): Observable<boardMenu> {
+    return this.boardMenuChange$.asObservable();
   }
 
   getEachPageDocNum() {
@@ -91,12 +98,7 @@ export class CommunityService {
     if (menu === boardMenu.FAQ) this.currentMenu = 'faq';
     if (menu === boardMenu.QNA) this.currentMenu = 'qna';
 
-    console.log('set', menu);
-    console.log('set2', this.currentMenu);
-  }
-
-  getBoardMenu(): string {
-    return this.currentMenu;
+    this.boardMenuChange$.next(menu);
   }
 
   formatDate(date: string) {
