@@ -4,16 +4,15 @@ import { ElasticsearchService } from 'src/app/modules/communications/elasticsear
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, Observable } from "rxjs";
 import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
 import { IpService } from "src/app/ip.service";
 import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators, Form } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
-import { select } from "d3-selection";
 import { PaginationModel } from "../../../shared-services/pagination-service/pagination.model";
 
 @Component({
@@ -260,7 +259,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  view_doc_detail(docId: string) {
+  openDocDetail(docId: string) {
     console.log("article detail id: ", docId);
     this.idControl.selectOneID(docId);
     this.navToDocDetail();
