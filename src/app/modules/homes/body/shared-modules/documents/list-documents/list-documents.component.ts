@@ -14,6 +14,7 @@ import { AnalysisDatabaseService } from "../../../../../communications/fe-backen
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, Form } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
 import { select } from "d3-selection";
+import { PaginationModel } from "../../../shared-services/pagination-service/pagination.model";
 
 @Component({
   selector: 'app-search-result-document-list',
@@ -25,6 +26,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   orders = ['최신순', '과거순'];
   amounts = [10, 30, 50];
   form: FormGroup;
+
 
   @Input() isKeyLoaded: boolean;//키워드 검색으로 진입할 때
   @Output() relatedKeywordsReady = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
@@ -49,12 +51,17 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   private isQueryFin: boolean = false;
   private searchResultNum: string = "0";
   private numDocsPerPages: number = this.es.getNumDocsPerPage();
-  private pages: number[] = [];
   private currentPage: number = 1;
   private selectedPageNum: number = 1;
-  private maxPageNum: number = 9;
 
   private queryText: string;
+  pages: number[];
+  startIndex: number;
+  totalPages: number = 1;
+  totalDocs: number;
+  cmService: any;
+  pageInfo: any;
+  pageSize: number = 10;
 
   constructor(
     private auth: EPAuthService,
@@ -70,6 +77,26 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private pgService: PaginationService,
   ) {
+
+    this.articleSubs = this.articleChange$.subscribe(articles => {
+      this.articleSources = articles;
+      this.createResultIdList();
+      this.setCheckboxProp();
+      this.loadRelatedKeywords();
+      this.form = this.fb.group({
+        checkArray: this.fb.array([])
+      });
+      if (this.articleSources !== undefined) this.isResultFound = true;
+      else this.isResultFound = false;
+    });
+
+    this.countNumSubs = this.countNumChange$.subscribe(async num => {
+      this.totalDocs = num;
+      console.log(this.totalDocs);
+      this.queryText = this.es.getKeyword();
+      this.searchResultNum = this.convertNumberFormat(num);
+      this.loadPage(this.currentPage);
+    })
   }
 
   ngOnDestroy() {
@@ -81,6 +108,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isResultFound = false;
     this.isQueryFin = false;
+    this.currentPage = 1;
     this.loadSearchResult();
   }
 
@@ -98,26 +126,25 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   async loadSearchResult() {
     this.initialize_search();
-    this.articleSubs = this.articleChange$.subscribe(articles => {
-      this.articleSources = articles
-      this.createResultIdList();
-      this.pgService.loadPage();
-      this.setCheckboxProp();
-      this.loadRelatedKeywords();
-      this.form = this.fb.group({
-        checkArray: this.fb.array([])
-      })
 
-      if (this.articleSources !== undefined) this.isResultFound = true;
-      else this.isResultFound = false;
-    });
 
-    this.countNumSubs = this.countNumChange$.subscribe(num => {
-      this.queryText = this.es.getKeyword();
-      this.searchResultNum = this.convertNumberFormat(num);
-    })
+
     this.update_login_stat();
   }
+
+  setPageInfo(pageInfo: PaginationModel) {
+    this.pages = pageInfo.pages;
+    this.currentPage = pageInfo.currentPage;
+    this.startIndex = pageInfo.startIndex;
+    this.totalPages = pageInfo.totalPages;
+  }
+
+
+  async loadPage(currentPage: number) {
+    let pageInfo: PaginationModel = await this.pgService.jumpPage(this.totalDocs, this.pageSize, currentPage);
+    this.setPageInfo(pageInfo);
+  }
+
 
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();

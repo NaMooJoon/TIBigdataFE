@@ -22,8 +22,8 @@ export class PaginationService {
 
   async paginate(currentPage: number, totalDocs: number, pageSize: number): Promise<PaginationModel> {
     console.log(totalDocs);
-    if (totalDocs === null)
-      this.countNumChange$.subscribe(num => { totalDocs = num });
+    // if (totalDocs === null)
+    //   this.countNumChange$.subscribe(num => { totalDocs = num });
     if (pageSize === null) pageSize = this._es.getNumDocsPerPage();
 
     if (currentPage === null) currentPage = 1;
@@ -86,9 +86,10 @@ export class PaginationService {
     }
   }
 
-  jumpPage(currentPage: number, totalDocs: number, pageSize: number, jumpSize: number): Object {
-    this.loadSelectedPage(currentPage + jumpSize);
-    return this.paginate(currentPage, totalDocs, pageSize);
+  jumpPage(totalDocs: number, pageSize: number, jumpPage: number): Promise<PaginationModel> {
+    console.log(jumpPage)
+    this.loadSelectedPage(jumpPage);
+    return this.paginate(jumpPage, totalDocs, pageSize);
   }
 
 }
