@@ -1,42 +1,48 @@
-<div class="uk-container-center margin">
-  <div class="uk-flex uk-flex-right uk-margin-bottom">
-    <input class="uk-padding button-gray" style="border-radius:30px; width:250px; height:40px;"
-      (keyup)="updateSearchKey($event)" placeholder="검색" />
-  </div>
+<input class=search-bar (keyup)="updateSearchKey($event)" placeholder="검색" />
 
-  <div uk-grid>
-    <table class="uk-table uk-table-striped">
-      <thead>
-        <tr style="border-top: 2px solid #606060; border-bottom: 1px solid #606060">
-          <th>글 번호</th>
-          <th>작성자</th>
-          <th>제목</th>
-        </tr>
-      </thead>
-      <tfoot>
-      </tfoot>
-      <tbody>
-        <tr style="border-top: 0.75px solid #c6c6c6; border-bottom: 0.75px solid #c6c6c6;"
-          *ngFor="let d of docList; let i = index">
-          <td (click)="navToReadThisDoc(i)">{{ d["id"] }}</td>
-          <td (click)="navToReadThisDoc(i)">{{ d["user"] }}</td>
-          <td (click)="navToReadThisDoc(i)">{{ d["title"] }}</td>
-        </tr>
-      </tbody>
+<table>
+  <thead>
+    <tr>
+      <th class="doc-num">글 번호</th>
+      <th class="doc-qna"></th>
+      <th class="doc-title">글 제목</th>
+      <th class="doc-writer">작성자</th>
+      <th class="doc-postdate">등록일</th>
+    </tr>
+  </thead>
 
-    </table>
-  </div>
+  <tbody *ngIf="docList.length">
+    <tr *ngFor="let doc of docList; let i = index">
+      <td class="doc-num">{{ doc["docId"] }}</td>
+      <td>
+        <div *ngIf="doc['isAnswered']" class="qna-button complete">완료</div>
+        <div *ngIf="!doc['isAnswered']" class="qna-button ongoing">검토중</div>
+      </td>
 
-  <div class="page-numbers">
-    <button *ngIf="pageInfo.currentPage" (click)="pgService.jumpPage(-10)">
-      << </button> <button *ngIf="pageInfo.currentPage > 1" (click)="pgService.jumpPage(-1)">
-        < </button> <button
-          [ngStyle]="{'background-color': pageInfo.currentPage == i ? '#52b9ff' : 'transparent', 'color': pgService.getCurrentPage() == i ? 'white' : 'black'}"
-          (click)="pgService.jumpPage(pageInfo.currentPage)" *ngFor="let i of pageInfo.pages"> {{  i  }}
-    </button>
-    <button *ngIf="pageInfo.currentPage() < pageInfo.totalPage && isResultFound" (click)="pgService.jumpPage(1)"> >
-    </button>
-    <button *ngIf="pageInfo.currentPage() != pageInfo.totalPage()" (click)="pgService.jumpPage(10)"> >>
-    </button>
-  </div>
+      <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
+      <td class="doc-writer"> <a>{{ doc["userName"] }}</a></td>
+      <td class="doc-postdate">{{ doc["regDate"] }}</td>
+    </tr>
+  </tbody>
+
+  <tbody *ngIf="!docList.length">
+    <tr>
+      <td class="no-docs" rowspan="5" colspan="5">등록된 게시물이 없습니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="buttons">
+  <button class="button-write" (click)="navToWriteNewDoc()">글쓰기</button>
+</div>
+
+<div class="page-numbers">
+  <button *ngIf="currentPage>1" (click)="loadPage(currentPage-10)">
+    << </button> <button *ngIf="currentPage > 1" (click)="loadPage(currentPage-1)">
+      < </button> <button
+        [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
+        (click)="loadPage(i)" *ngFor="let i of pages"> {{  i  }}
+  </button>
+  <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
+  <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
 </div>

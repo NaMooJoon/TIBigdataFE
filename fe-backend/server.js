@@ -18,6 +18,8 @@ const keywords = require('./module/tfidfQuery');
 const rcmds = require('./module/rcmdQuery');
 const topic = require('./module/topicQuery');
 const announcement = require('./module/announcementDocsQuery');
+const qna = require('./module/qnaDocsQuery');
+const faq = require('./module/faqDocsQuery');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,7 +30,9 @@ app.use('/myDoc',keepDoc);
 app.use('/keyword',keywords);
 app.use('/rcmd', rcmds);
 app.use('/announcement',announcement);
+app.use('/qna',qna);
 app.use('/topic',topic)
+app.use('/faq',faq)
 //root dir
 app.get('/', function(req, res) {
     res.send('Hello from server');

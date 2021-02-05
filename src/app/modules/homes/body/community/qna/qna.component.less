@@ -1,58 +1,120 @@
-* {
-    margin:0; padding:0
+table {
+  width: 100%;
 }
 
-// body {
-//         font-family: '맑은 고딕' 돋움; font-size:0.75em; color:#333
-// }
-
-.align-center { text-align: center; }
-body { text-align: center; /* Quirks Mode 를 위한 가운데 정렬 */ }
-
-.container {
-    height: 200px;
-    position: relative;
-    border: 3px solid green;
-  }
-  
-  .center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
-
-
-.tbl-ex{
-         margin:100px auto 0px auto;
+thead {
+  border-top: 1.5px solid black;
+  border-bottom: 1px solid gray;
 }
 
-.tbl-ex, .tbl-ex th , .tbl-ex td{
-         border:1px solid gray;
-         border-width: 1px 0;
-         border-collapse: collapse;
-         text-align: center;
-         padding:8px;
+th {
+  padding: 15px 0px;
+  font-weight: 500;
+  text-align: center;
 }
 
-.tbl-ex th{
-         background-color: #999;
-         font-size: 1.1em;
-         color: #fff;
-         border-width:2px 0;
+td {
+  border-bottom: 1px solid lightgray;
+  height: 55px;
+  vertical-align: middle;
 }
 
-.tbl-ex td{
-         border-style:dotted;
+.doc-num {
+  width: 10%;
+  text-align: center;
 }
 
-.tbl-ex tr:hover td{
-         background-color: tomato;
-         cursor : pointer;
+.doc-qna {
+  text-align: center;
+  width: 15%;
 }
 
-.even{
-         background-color: highlight;
+.doc-postdate {
+  text-align: center;
+}
+
+.qna-button {
+  border: none;
+  width: 50%;
+  background-color: #8c8b8b;
+  color: white;
+  text-align: center;
+  border-radius: 25px;
+  margin: 10px auto;
+  padding: 5px 0px;
+}
+
+.doc-title {
+  width: 50%;
+  text-align: start;
+}
+
+.doc-postdate {
+  width: 15%;
+}
+
+.doc-writer {
+  width: 10%;
+  text-align: center;
+}
+
+.search-bar {
+  color: black;
+  width: 20%;
+  border-radius: 25px;
+  background-color: rgb(236, 239, 239);
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: 10px center;
+  padding-left: 40px;
+  margin: 10px 0px;
+  background-image: url(src/assets/icons/19_search.png);
+  border: none;
+  height: 43px;
+  float: right;
+}
+
+
+.page-numbers {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 50px 0px;
+}
+
+.page-numbers button {
+  margin: 0 10px;
+  display: inline-block;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  width: 37px;
+  height: 37px;
+}
+
+.page-numbers button:active,
+.page-numbers button:focus {
+  outline: 0;
+}
+
+.no-docs {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+}
+
+.button-write {
+  width: 80px;
+  height: 32px;
+  border-radius: 20px;
+  border: none;
+  font-size: 15px;
+  color: white;
+  background-color: rgb(97, 97, 97);
+  outline: none;
 }
