@@ -1,19 +1,20 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CommunityRoutingModule } from './community-routing.module';
 import { CommunityRootComponent } from './community-root/community-root.component';
-import { CommunityComponent } from './community/community.component';
+import { QnaComponent } from './qna/qna.component';
 import { WriteNewCommunityDocComponent } from './write-new-community-doc/write-new-community-doc.component';
 import { ReadCommunityDocComponent } from './read-community-doc/read-community-doc.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { FAQComponent } from './faq/faq.component';
 import { CommonSearchBarModule } from '../shared-modules/search-bar/common-search-bar.module';
+import { CommunityService } from './community-services/community.service';
 
 @NgModule({
   declarations: [
     CommunityRootComponent,
-    CommunityComponent,
+    QnaComponent,
     WriteNewCommunityDocComponent,
     ReadCommunityDocComponent,
     AnnouncementComponent,
@@ -22,6 +23,7 @@ import { CommonSearchBarModule } from '../shared-modules/search-bar/common-searc
     CommonModule,
     CommunityRoutingModule,
     CommonSearchBarModule
-  ]
+  ],
+
 })
 export class CommunityModule { }

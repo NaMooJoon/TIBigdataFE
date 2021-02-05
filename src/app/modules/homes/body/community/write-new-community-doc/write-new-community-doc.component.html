@@ -1,71 +1,19 @@
-<!-- <p>write-new-community-doc works!</p> 
-<p #pRef>
-    Start editing to see some magic happen :)
-</p> -->
-<!-- <div class="uk-container"> -->
-    
-    <!-- <input type="text" #tbString>  -->
-<!-- 
- <input type="button" value="미리 보기" (click)="previewString()"> <br>
- 
- 색상 : <select #fontColor>
- 
-  <option value="red">빨강 </option>
- 
-  <option value="blue">파랑 </option>
- 
-  <option value="yellow">노랑 </option>
- 
- </select><br>
- 
- 크기 : <select #fontSize>
- 
-  <option value="1">1</option> 
- 
-  <option value="2">2</option> 
- 
-  <option value="3">3</option> 
- 
-  <option value="4">4</option>
- 
-   <option value="5">5</option>
- 
-  </select><br>
- 
- <input type="checkbox" (change)="fontOptions[0]" >취소선 
- 
- <input type="checkbox" (change)="fontOptions[1]" >크게 
- 
- <input type="checkbox" (change)="fontOptions[2]" >작게 
- 
- <input type="checkbox" (change)="fontOptions[3]" >두껍게
- 
- <input type="checkbox" (change)="fontOptions[4]" >기울임
- 
- <br>
- 
- <input type="checkbox" (change)="fontOptions[5]" >위첨자 
- 
- <input type="checkbox" (change)="fontOptions[6]" >아래첨자
- 
- <input type="checkbox" (change)="fontOptions[7]" >소문자로 
- 
- <input type="checkbox" (change)="fontOptions[8]" >대문자로 
- <span #result></span>
--->
-
-<h4>글쓰기</h4>
+<h3>글쓰기</h3>
 <hr>
-<div class="inputs">
-        <input class="title" type="text" (keyup)="updateTitle($event)" placeholder="제목을 입력하세요." />
+<form class="inputs">
+  <input class="title" type="text" (keyup)="updateTitle($event)" placeholder="제목을 입력하세요." />
+  <div *ngIf="!selectedBoard === boardMenu.QNA" class="options">
+    <label class="is-main-checkbox" for="isMain"><input type="checkbox" name="isMain" id="isMain"> 공지로 등록하기</label>
+    <label class="category-radio"><input type="radio" name="category" id="" value="오류보고"> 오류보고</label>
+    <label class="category-radio"><input type="radio" name="category" id="" value="데이터"> 데이터</label>
+    <label class="category-radio"><input type="radio" name="category" id="" value="회원관련"> 회원관련</label>
+  </div>
 
-        <input class="content" type="text" (drag)="setFontOptions($event)" (keyup)="updateContent($event)" #tbString style="width:800px; height:200px" placeholder="내용을 입력하세요."/>
+  <textarea class="content" (keyup)="updateContent($event)"
+    placeholder="제목과 내용에 개인정보(이메일, 전화번호, 주민번호, 주소 등)가 포함되면 자동으로 해당 정보는 삭제됩니다."></textarea>
+</form>
+
+<div class=buttons>
+  <button class="button-list" (click)="gotoList()">목록</button>
+  <button class="button-write" (click)="saveNewDocument()">작성</button>
 </div>
-
-<div>
-    <button class="button1" (click)="gotoList()">목록</button>
-    <button class="button2" (click)="saveNewDocument()">작성</button>
-</div>
-
-<!-- <button class="uk-button uk-button-primary " (click) ="saveNewDocument()">등록하기</button> -->
-<button class="button0" (click) ="testSave100()"> 테스트 용 100개 더미 만들기</button>

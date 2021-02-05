@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import moment from 'moment';
-import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
 import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
+import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
 
-
 @Component({
-  selector: 'app-announcement',
-  templateUrl: './announcement.component.html',
-  styleUrls: ['./announcement.component.less'],
+  selector: 'app-qna',
+  templateUrl: './qna.component.html',
+  styleUrls: ['./qna.component.less']
 })
-
-export class AnnouncementComponent implements OnInit {
+export class QnaComponent implements OnInit {
 
   private docList: {}[] = [];
   private pageInfo: PaginationModel;
@@ -40,7 +38,7 @@ export class AnnouncementComponent implements OnInit {
       this.logStat = stat;
       console.log("comm compo stat : ", stat);
     });
-    this.cmService.setBoardMenu(boardMenu.ANNOUNCE);
+    this.cmService.setBoardMenu(boardMenu.QNA);
     this.loadPage(1);
   }
 

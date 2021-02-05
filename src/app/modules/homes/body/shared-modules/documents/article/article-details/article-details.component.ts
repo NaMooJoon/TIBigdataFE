@@ -38,7 +38,7 @@ export class ArticleDetailsComponent implements OnInit {
 
   }
 
-  view_doc_detail() {
+  openDocDetail() {
     // console.log("article detail id: ", this.docId);
     this.idControl.selectOneID(this.docId);
     this.navToDocDetail();
