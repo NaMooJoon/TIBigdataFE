@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from "@angular/router";
-import { CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
+import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
 import { Location } from '@angular/common';
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
@@ -21,8 +21,10 @@ export class WriteNewCommunityDocComponent {
 
   private title: string;
   private content: string;
-  private isMain: boolean;
 
+  private selectedBoard: boardMenu;
+  private selectedCategory: string;
+  private isMain: boolean;
 
   ngOnInit() {
     if (this.auth.getLogInStat() == logStat.unsigned) {
@@ -42,7 +44,6 @@ export class WriteNewCommunityDocComponent {
 
   async saveNewDocument() {
     let filteredContent: { title: string, body: string } = this.cmService.verifyPrivacyLeak(this.title, this.content);
-
     this.title = filteredContent.title;
     this.content = filteredContent.body;
 
@@ -68,7 +69,7 @@ export class WriteNewCommunityDocComponent {
 
 
   toCommunity() {
-    this.router.navigateByUrl("/community/" + this.cmService.getBoardMenu());
+    this.router.navigateByUrl("/community/" + this.cmService.getCurrentMenu());
   }
 
   gotoList() {
