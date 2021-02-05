@@ -29,6 +29,8 @@
         [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
         (click)="loadPage(i)" *ngFor="let i of pages"> {{  i  }}
   </button>
-  <button *ngIf="currentPage < totalPages && isResultFound" (click)="loadPage(i)"> > </button>
+  <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
   <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
 </div>
+
+<button class="button-write" (click)="navToWriteNewDoc()">작성</button>
