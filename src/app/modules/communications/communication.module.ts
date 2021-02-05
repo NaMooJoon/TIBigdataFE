@@ -16,6 +16,7 @@ import { ControlComponent } from '../homes/body/membership/control/control.compo
 import { RegisterOkComponent } from '../homes/body/membership/register/register-ok/register-ok.component';
 import { ApiRegisterComponent } from '../homes/body/membership/register/api-register/api-register.component';
 import { ElasticSearchQueryModel } from './elasticsearch-service/elasticsearch.service.query.model';
+import { CommunityPrivacyMaskingService } from '../homes/body/community/community-services/community-privacy-masking.service';
 // import { QueryServiceComponent } fr
 // om './fe-backend-db/query-service/query-service.component';
 
@@ -42,6 +43,7 @@ const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.
   providers: [
     EventService,
     ElasticSearchQueryModel,
+    CommunityPrivacyMaskingService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

@@ -35,7 +35,6 @@ export class CategoryComponent implements OnInit {
   ngOnInit() {
     this.es.setKeyword("전체문서");
     this.es.setSearchMode(SEARCHMODE.ALL);
-    this.pg.setCurrentPage(1);
     this.es.allSearchComplete();
     this.es.allCountComplete();
   }
@@ -77,7 +76,6 @@ export class CategoryComponent implements OnInit {
         this.es.setKeyword(ct)
         this.es.setSearchMode(SEARCHMODE.IDS);
         this.es.setCountNumChange(docIDs.length);
-        this.pg.setCurrentPage(1);
         this.es.setIds(ids);
         this.es.multiIdSearchComplete();
       }

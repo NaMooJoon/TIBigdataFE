@@ -1,40 +1,42 @@
-<div class="uk-container-center margin">
-    <div class="uk-flex uk-flex-right uk-margin-bottom">
-        <input class=" button-gray" style="border-radius:30px; width:250px; height:40px;" (keyup)="updateSearchKey($event)" placeholder="검색"/>
-    </div>
+<input class=search-bar (keyup)="updateSearchKey($event)" placeholder="검색" />
 
-    <div uk-grid>
-        <table class="uk-table uk-table-striped">
-            <thead>
-                <tr style="border-top: 2px solid #606060; border-bottom: 1px solid #606060">
-                    <th>글 번호</th>
-                    <th>작성자</th>
-                    <th>제목</th>
-                </tr>
-            </thead>
-            <tfoot>
-            </tfoot>
-            <tbody>
-                <tr style="border-top: 0.75px solid #c6c6c6; border-bottom: 0.75px solid #c6c6c6;"
-                    *ngFor="let d of docList; let i = index">
-                    <td (click)="navToReadThisDoc(i)">{{ d["id"] }}</td>
-                    <td (click)="navToReadThisDoc(i)">{{ d["user"] }}</td>
-                    <td (click)="navToReadThisDoc(i)">{{ d["title"] }}</td>
-                </tr>
-            </tbody>
+<table>
+  <thead>
+    <tr>
+      <th class="doc-num">글 번호</th>
+      <th class="doc-category">카테고리</th>
+      <th class="doc-title">글 제목</th>
+    </tr>
+  </thead>
 
-        </table>
-    </div>
+  <tbody *ngIf="docList.length">
+    <tr *ngFor="let doc of docList; let i = index">
+      <td class="doc-num">{{ doc["docId"] }}</td>
+      <td class="doc-category">
+        <div class="category-button">{{ doc["category"] }}</div>
+      </td>
+      <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
+    </tr>
+  </tbody>
 
-    <div class="uk-flex-center" uk-grid>
-        <button class="uk-button uk-button-text " (click)="pressPriorBloc()">
-            < </button>
-                <button class="uk-margin-left uk-button button-blue" style="width : 40px; height : 40px"
-                    (click)="choosePageNum(i)" *ngFor="let i of pages"> {{  i  }} </button>
-                <span>&nbsp;</span>
-                <button class="uk-button uk-button-text " (click)="pressNextBloc()"> > </button>
-                <br>
-                <button *ngIf="isLogStat" class="uk-button uk-button-text " (click)="navToWriteNewDoc()"> 새 글 쓰기
-                </button>
-    </div>
+  <tbody *ngIf="!docList.length">
+    <tr>
+      <td class="no-docs" rowspan="3" colspan="3">등록된 게시물이 없습니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="buttons">
+  <button class="button-write" (click)="navToWriteNewDoc()">글쓰기</button>
+</div>
+
+<div class="page-numbers">
+  <button *ngIf="currentPage>1" (click)="loadPage(currentPage-10)">
+    << </button> <button *ngIf="currentPage > 1" (click)="loadPage(currentPage-1)">
+      < </button> <button
+        [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
+        (click)="loadPage(i)" *ngFor="let i of pages"> {{  i  }}
+  </button>
+  <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
+  <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
 </div>

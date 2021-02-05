@@ -1,43 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
+import { boardMenu, CommunityService } from '../community-services/community.service';
 
 @Component({
   selector: 'app-community-root',
   templateUrl: './community-root.component.html',
   styleUrls: ['./community-root.component.less']
 })
+
 export class CommunityRootComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private cmService: CommunityService,
+    private cdRef: ChangeDetectorRef) { }
+  private selectedMenu: boardMenu;
 
   ngOnInit() {
-  }
-  /**
-   * 
-   * 새 컴포넌트
-   * 글 제목
-   *  property title
-   * 글 내용
-   *  property content
-   * 저장
-   *  저장하는 함수
-   * 취소
-   *  취소하는 함수
-  */
 
-  navToCmm() {
+  }
+
+  ngAfterViewInit() {
+
+    this.cmService.getBoardMenuChange().subscribe(menu => {
+      this.selectedMenu = menu;
+      this.cdRef.detectChanges();
+    });
+
+  }
+
+
+  navToQna() {
     this.router.navigateByUrl("community/qna");
-
   }
 
-  navToAnounce() {
+  navToAnnouncement() {
     this.router.navigateByUrl("community/announcement");
-
   }
 
   navToFaq() {
     this.router.navigateByUrl("community/faq");
-  
   }
 
+  public get menu(): typeof boardMenu {
+    return boardMenu
+  }
 }

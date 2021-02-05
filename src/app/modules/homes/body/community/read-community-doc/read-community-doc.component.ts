@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommunityServiceService } from "src/app/modules/communications/fe-backend-db/community/community-service.service";
+import { CommunityService } from "src/app/modules/homes/body/community/community-services/community.service";
 
 @Component({
   selector: 'app-read-community-doc',
@@ -9,7 +9,7 @@ import { CommunityServiceService } from "src/app/modules/communications/fe-backe
 export class ReadCommunityDocComponent implements OnInit {
 
   private doc = {};
-  constructor(private cm_svc : CommunityServiceService) { }
+  constructor(private cm_svc: CommunityService) { }
   ngOnInit() {
     this.doc = this.cm_svc.getChosenDoc();
     // console.log(this.doc);
