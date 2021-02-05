@@ -17,6 +17,7 @@ router.post('/getDocs', getDocs);
 async function getDocsNum(req, res){
     Faq.count({}, function(err, count){
         if(err){
+            console.log(err);
             return res.status(400).json(new Res(false, "failed to get query result.", null))
         }
         else{
@@ -44,6 +45,7 @@ async function registerDoc (req, res){
 }
 
 async function getDocs(req, res){
+    if (req.body.startIndex < 0) req.body.startIndex = 0;
     Faq.find({}).sort({'docId':-1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
         if (err){
             

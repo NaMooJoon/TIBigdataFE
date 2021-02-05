@@ -48,6 +48,7 @@ async function registerDoc (req, res){
 }
 
 async function getDocs(req, res){
+    if (req.body.startIndex < 0) req.body.startIndex = 0;
     Qna.find({}).sort({'status':1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
         if (err){
             

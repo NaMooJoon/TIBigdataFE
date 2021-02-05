@@ -47,8 +47,7 @@ async function registerDoc (req, res){
 }
 
 async function getDocs(req, res){
-    console.log(req.body.startIndex);
-    console.log("getDocs here")
+    if (req.body.startIndex < 0) req.body.startIndex = 0;
     Announcement.find({}).sort({'docId':-1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
         if (err){
             
