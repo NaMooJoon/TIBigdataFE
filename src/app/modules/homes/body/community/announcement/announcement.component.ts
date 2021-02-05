@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { boardMenu, CommunityService } from 'src/app/modules/communications/fe-backend-db/community/community.service';
+import moment from 'moment';
+import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
 import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
-import * as moment from 'moment';
 
 
 @Component({
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
-  styleUrls: ['./announcement.component.less']
+  styleUrls: ['./announcement.component.less'],
 })
 
 export class AnnouncementComponent implements OnInit {
@@ -32,17 +32,18 @@ export class AnnouncementComponent implements OnInit {
     private cmService: CommunityService,
     private pgService: PaginationService,
     private authService: EPAuthService,
+
   ) { }
 
   ngOnInit() {
     this.authService.getLoginStatChange().subscribe(stat => {
       this.logStat = stat;
-      console.log("comm compo stat : ", stat)
+      console.log("comm compo stat : ", stat);
     });
     this.cmService.setBoardMenu(boardMenu.ANNOUNCE);
     this.loadPage(1);
   }
-  2
+
   async loadPage(currentPage: number) {
     this.docList = [];
     let resNum: Res = await this.cmService.getDocsNum();
@@ -60,8 +61,6 @@ export class AnnouncementComponent implements OnInit {
     this.currentPage = pageInfo.currentPage;
     this.startIndex = pageInfo.startIndex;
     this.totalPages = pageInfo.totalPages;
-    console.log(this.totalPages);
-    console.log(this.pages);
   }
 
   saveDocsInFormat(list: {}[]): void {
@@ -81,6 +80,5 @@ export class AnnouncementComponent implements OnInit {
 
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
-
   }
 }
