@@ -26,6 +26,7 @@ export class AnnouncementComponent implements OnInit {
   private currentPage: number;
   private pages: number[];
   private totalPages: number;
+  private mainAnnounceNum: number;
 
   constructor(
     private router: Router,
@@ -50,10 +51,15 @@ export class AnnouncementComponent implements OnInit {
     this.totalDocs = resNum.payload['data'];
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-    let res: Object = await this.cmService.getDocs(this.startIndex);
-    this.saveDocsInFormat(res['data']);
 
-    console.log(this.docList);
+    let announceDocs: Object = await this.cmService.getMainAnnounceDocs();
+    this.saveDocsInFormat(announceDocs['data']);
+
+    console.log(this.docList.length);
+    this.mainAnnounceNum = this.docList.length;
+
+    let generalDocs: Object = await this.cmService.getDocs(this.startIndex);
+    this.saveDocsInFormat(generalDocs['data']);
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -64,8 +70,9 @@ export class AnnouncementComponent implements OnInit {
   }
 
   saveDocsInFormat(list: {}[]): void {
+    if (list == null) return;
     list.forEach((doc) => {
-      doc['regDate'] = moment(doc['regDate']).format('YYYY-MM-DD');
+      doc['regDate'] = moment(doc['regDate']).format('YY-MM-DD');
       this.docList.push(doc);
     });
   }
