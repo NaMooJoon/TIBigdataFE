@@ -13,7 +13,7 @@ import { CommunityQueryModel } from '../community.query.model';
   templateUrl: './write-community-doc.component.html',
   styleUrls: ['./write-community-doc.component.less'],
 })
-export class WriteNewCommunityDocComponent {
+export class WriteCommunityDocComponent {
 
   constructor(
     private router: Router,

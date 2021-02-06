@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WriteNewCommunityDocComponent } from './write-new-community-doc.component';
+import { WriteCommunityDocComponent } from './write-community-doc.component';
 
-describe('WriteNewCommunityDocComponent', () => {
-  let component: WriteNewCommunityDocComponent;
-  let fixture: ComponentFixture<WriteNewCommunityDocComponent>;
+describe('WriteCommunityDocComponent', () => {
+  let component: WriteCommunityDocComponent;
+  let fixture: ComponentFixture<WriteCommunityDocComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WriteNewCommunityDocComponent ]
+      declarations: [WriteCommunityDocComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WriteNewCommunityDocComponent);
+    fixture = TestBed.createComponent(WriteCommunityDocComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

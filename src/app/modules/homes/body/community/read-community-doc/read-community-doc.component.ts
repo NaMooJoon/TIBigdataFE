@@ -9,10 +9,9 @@ import { CommunityService } from "src/app/modules/homes/body/community/community
 export class ReadCommunityDocComponent implements OnInit {
 
   private doc = {};
-  constructor(private cm_svc: CommunityService) { }
+  constructor(private cmService: CommunityService) { }
   ngOnInit() {
-    this.doc = this.cm_svc.getChosenDoc();
-    // console.log(this.doc);
+    this.doc = this.cmService.getChosenDoc();
   }
 
 }

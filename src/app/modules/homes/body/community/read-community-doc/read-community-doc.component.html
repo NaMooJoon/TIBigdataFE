@@ -1,8 +1,32 @@
 <h1>개별 문서 읽기 페이지</h1>
 <div class="uk-card uk-card-body uk-card-default">
-    글 작성자 : {{doc["user"]}}
+  글 작성자 : {{doc["user"]}}
 </div>
 
-<div class="uk-card uk-card-body uk-card-default">
-    글 내용 : {{doc["content"]}}
+
+<h3>게시글 읽기</h3>
+<hr>
+<input class="title" formControlName="title" type="text" placeholder="제목을 입력하세요." required />
+<div class="options">
+  <div *ngIf="selectedBoard == 0" class="announce-checkbox">
+    <input type="checkbox" (change)=onCheckboxChange($event) name="isMain" id="isMain">
+    <label class="is-main-checkbox" for="isMain"> 상단 공지 노출</label>
+  </div>
+  <div *ngIf="selectedBoard == 2" class="faq-radios">
+    <input formControlName="category" type="radio" name="category" id="error" value="오류보고" checked />
+    <label class="category-radio" for="error">오류보고</label>
+    <input formControlName="category" type="radio" name="category" id="data" value="데이터" />
+    <label class="category-radio" for="data"> 데이터</label>
+    <input formControlName="category" type="radio" name="category" id="membership" value="회원관련" />
+    <label class="category-radio" for="membership">회원관련</label>
+    <input formControlName="category" type="radio" name="category" id="etc" value="기타" />
+    <label class="category-radio" for="etc">기타</label>
+  </div>
+</div>
+
+<p class="doc-content"> {{doc["content"]}} </p>
+
+<div class=buttons>
+  <button class="button-list" (click)="gotoList()">목록</button>
+  <input type="submit" class="button-write" [disabled]="boardForm.invalid" value="작성" />
 </div>
