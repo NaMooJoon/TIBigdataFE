@@ -10,6 +10,7 @@ import { AnnouncementComponent } from './announcement/announcement.component';
 import { FAQComponent } from './faq/faq.component';
 import { CommonSearchBarModule } from '../shared-modules/search-bar/common-search-bar.module';
 import { CommunityService } from './community-services/community.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CommunityService } from './community-services/community.service';
   imports: [
     CommonModule,
     CommunityRoutingModule,
-    CommonSearchBarModule
+    CommonSearchBarModule,
+    ReactiveFormsModule
   ],
 
 })
