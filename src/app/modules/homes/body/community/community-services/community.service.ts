@@ -5,6 +5,7 @@ import { CommunityPrivacyMaskingService } from 'src/app/modules/homes/body/commu
 import { Res } from '../../../../communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CommunityQueryModel } from '../community.query.model';
 
 enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, LOAD }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
@@ -13,11 +14,13 @@ export enum boardMenu { ANNOUNCE, QNA, FAQ }
   providedIn: 'root'
 })
 export class CommunityService {
+
   protected dbUrl = this.ipService.getFrontDBServerIp();
-  private currentMenu: string;
+  private currentMenu: string = null;
   private registerDocUrl: string = "/registerDoc";
   private getDocsNumUrl: string = "/getDocsNum";
   private getDocsUrl: string = "/getDocs"
+  private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs"
 
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private docList: {}[] = [];
@@ -30,7 +33,7 @@ export class CommunityService {
     private http: HttpClient,
     private prvcyService: CommunityPrivacyMaskingService,
     private authService: EPAuthService
-  ) { console.log('cmservice init') }
+  ) { }
 
 
 
@@ -68,12 +71,8 @@ export class CommunityService {
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), "").toPromise();
   }
 
-  async registerDoc(docInfo: { title: string, content: string, isMain?: boolean }): Promise<Res> {
-    docInfo['userEmail'] = this.authService.getUserEmail();
-    docInfo['userName'] = this.authService.getUserName();
-
+  async registerDoc(docInfo: CommunityQueryModel): Promise<Res> {
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo).toPromise();
-
   }
 
   async getDocs(startIndex: number): Promise<Object> {
@@ -87,10 +86,19 @@ export class CommunityService {
     }
   }
 
-  verifyPrivacyLeak(title: string, body: string): { title: string, body: string } {
-    title = this.prvcyService.checkAllPrivacyLeak(title);
-    body = this.prvcyService.checkAllPrivacyLeak(body);
-    return { title: title, body: body };
+  async getMainAnnounceDocs(): Promise<Object> {
+    let res: Res = await this.http.post<any>(this.dbUrl + "/" + this.currentMenu + this.getMainAnnounceDocsUrl, "").toPromise();
+    if (res.succ) {
+      console.log('res', res);
+      return res.payload;
+    }
+    else {
+      return null;
+    }
+  }
+
+  verifyPrivacyLeak(content: string): string {
+    return content;
   }
 
   setBoardMenu(menu: boardMenu) {
