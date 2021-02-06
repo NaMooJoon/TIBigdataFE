@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
 router.post('/registerDoc', registerDoc)
 router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
+router.post('/deleteDoc', deleteDoc);
 
 
 async function getDocsNum(req, res){
@@ -59,6 +60,18 @@ async function getDocs(req, res){
             return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
         }
     })
+}
+async function deleteDoc(req, res){
+    console.log(req);
+    console.log(req.body.docId);
+    Qna.remove({'docId': req.body.docId}, function(err){
+        if (err){
+            return res.status(400).json(new Res(false, "failed to delete docs", null));
+        }
+        else{
+            return res.status(200).json(new Res(true, "successfully load docs", null));
+        }
+    });
 }
 
 

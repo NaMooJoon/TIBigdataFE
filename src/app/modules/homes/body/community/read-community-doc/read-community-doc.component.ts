@@ -21,9 +21,8 @@ export class ReadCommunityDocComponent implements OnInit {
     private auth: EPAuthService) { }
   ngOnInit() {
     this.doc = this.cmService.getSelectedDoc();
-    this.currentUser = this.auth.getUserEmail();
-
-    console.log(this.auth.getUserEmail());
+    // this.currentUser = this.auth.getUserEmail();
+    // console.log(this.auth.getUserEmail());
 
     console.log(this.doc);
     if (this.doc === undefined || this.doc === null) {

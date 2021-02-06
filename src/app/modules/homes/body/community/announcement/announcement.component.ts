@@ -56,7 +56,6 @@ export class AnnouncementComponent implements OnInit {
     let announceDocs: Object = await this.cmService.getMainAnnounceDocs();
     this.saveDocsInFormat(announceDocs['data']);
 
-    console.log(this.docList.length);
     this.mainAnnounceNum = this.docList.length;
 
     let generalDocs: Object = await this.cmService.getDocs(this.startIndex);

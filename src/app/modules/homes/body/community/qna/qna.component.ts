@@ -7,6 +7,7 @@ import { boardMenu, CommunityService } from 'src/app/modules/homes/body/communit
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
+import { CommunityDocModel } from '../community.doc.model';
 
 @Component({
   selector: 'app-qna',
@@ -14,8 +15,7 @@ import { PaginationService } from '../../shared-services/pagination-service/pagi
   styleUrls: ['./qna.component.less']
 })
 export class QnaComponent implements OnInit {
-
-  private docList: {}[] = [];
+  private docList: Array<CommunityDocModel>;
   private pageInfo: PaginationModel;
   private logStat: logStat;
   private pageSize = 10;
@@ -62,13 +62,15 @@ export class QnaComponent implements OnInit {
   }
 
   saveDocsInFormat(list: {}[]): void {
-    list.forEach((doc) => {
-      doc['regDate'] = moment(doc['regDate']).format('YYYY-MM-DD');
+    if (list == null) return;
+    list.forEach((doc: CommunityDocModel) => {
+      doc['regDate'] = moment(doc['regDate']).format('YY-MM-DD');
       this.docList.push(doc);
     });
   }
 
   navToReadThisDoc(i: number) {
+    this.cmService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/readDoc");
   }
 
