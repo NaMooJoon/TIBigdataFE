@@ -9,10 +9,11 @@ const DOC_NUMBERS = 10;
 router.get('/', (req, res) => {
     res.send('announcement query works!');
 })
-router.post('/registerDoc', registerDoc)
+router.post('/registerDoc', registerDoc);
 router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
 router.post('/getMainAnnounceDocs', getMainAnnounceDocs);
+router.post('/deleteDoc', deleteDoc);
 
 
 async function getDocsNum(req, res){
@@ -70,6 +71,19 @@ async function getMainAnnounceDocs(req, res){
             return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
         }
     })
+}
+
+async function deleteDoc(req, res){
+    console.log(req);
+    console.log(req.body.docId);
+    Announcement.remove({'docId': req.body.docId}, function(err){
+        if (err){
+            return res.status(400).json(new Res(false, "failed to delete docs", null));
+        }
+        else{
+            return res.status(200).json(new Res(true, "successfully load docs", null));
+        }
+    });
 }
 
 module.exports = router;
