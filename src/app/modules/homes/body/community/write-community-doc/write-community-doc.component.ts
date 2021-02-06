@@ -6,7 +6,7 @@ import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
 import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommunityQueryModel } from '../community.query.model';
+import { CommunityDocModel } from '../community.doc.model';
 
 @Component({
   selector: 'app-write-community-doc',
@@ -70,7 +70,7 @@ export class WriteCommunityDocComponent {
     this.isMainAnnounce = $event.target.checked;
   }
 
-  generateAnnounceQueryBody(): CommunityQueryModel {
+  generateAnnounceQueryBody(): CommunityDocModel {
     console.log(this.isMainAnnounce)
     return {
       userEmail: this.auth.getUserEmail(),
@@ -81,7 +81,7 @@ export class WriteCommunityDocComponent {
     };
   }
 
-  generateFaqQueryBody(): CommunityQueryModel {
+  generateFaqQueryBody(): CommunityDocModel {
     return {
       userEmail: this.auth.getUserEmail(),
       userName: this.auth.getUserName(),
@@ -91,7 +91,7 @@ export class WriteCommunityDocComponent {
     };
   }
 
-  generateQnaQueryBody(): CommunityQueryModel {
+  generateQnaQueryBody(): CommunityDocModel {
     return {
       userEmail: this.auth.getUserEmail(),
       userName: this.auth.getUserName(),
@@ -100,7 +100,7 @@ export class WriteCommunityDocComponent {
     };
   }
 
-  generateQueryBody(): CommunityQueryModel {
+  generateQueryBody(): CommunityDocModel {
     if (this.cmService.getCurrentMenu() == 'announcement') return this.generateAnnounceQueryBody();
     if (this.cmService.getCurrentMenu() == 'faq') return this.generateFaqQueryBody();
     if (this.cmService.getCurrentMenu() == 'qna') return this.generateQnaQueryBody();

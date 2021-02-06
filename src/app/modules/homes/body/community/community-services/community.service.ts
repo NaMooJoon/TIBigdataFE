@@ -5,7 +5,7 @@ import { CommunityPrivacyMaskingService } from 'src/app/modules/homes/body/commu
 import { Res } from '../../../../communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CommunityQueryModel } from '../community.query.model';
+import { CommunityDocModel } from '../community.doc.model';
 
 enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, LOAD }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
@@ -21,21 +21,15 @@ export class CommunityService {
   private getDocsNumUrl: string = "/getDocsNum";
   private getDocsUrl: string = "/getDocs"
   private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs"
-
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
-  private docList: {}[] = [];
+  private selectedDoc: CommunityDocModel;
 
-  private DOC_NUM_PER_EACH_PAGE = 10;
-
-  private selectedDoc = {};
   constructor(
     protected ipService: IpService,
     private http: HttpClient,
     private prvcyService: CommunityPrivacyMaskingService,
     private authService: EPAuthService
   ) { }
-
-
 
   generateQueryUrl(operation: boardOperation): string {
     if (operation === boardOperation.CREATE)
@@ -46,15 +40,6 @@ export class CommunityService {
       return this.dbUrl + "/" + this.currentMenu + this.getDocsUrl;
   }
 
-  chooseDoc(i: number): void {
-    this.selectedDoc["user"] = this.docList[i]["user"];
-    this.selectedDoc["content"] = this.docList[i]["content"];
-    this.selectedDoc["title"] = this.docList[i]["title"];
-  }
-
-  getChosenDoc(): Object {
-    return this.selectedDoc;
-  }
   getCurrentMenu(): string {
     return this.currentMenu;
   }
@@ -63,15 +48,11 @@ export class CommunityService {
     return this.boardMenuChange$.asObservable();
   }
 
-  getEachPageDocNum() {
-    return this.DOC_NUM_PER_EACH_PAGE;
-  }
-
   async getDocsNum(): Promise<Res> {
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), "").toPromise();
   }
 
-  async registerDoc(docInfo: CommunityQueryModel): Promise<Res> {
+  async registerDoc(docInfo: CommunityDocModel): Promise<Res> {
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo).toPromise();
   }
 
@@ -121,5 +102,9 @@ export class CommunityService {
       day = '0' + day;
 
     return [year, month, day].join('-');
+  }
+
+  setSelectedDoc(doc: CommunityDocModel) {
+    this.selectedDoc = doc;
   }
 }

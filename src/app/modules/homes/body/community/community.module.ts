@@ -9,7 +9,6 @@ import { ReadCommunityDocComponent } from './read-community-doc/read-community-d
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { FAQComponent } from './faq/faq.component';
 import { CommonSearchBarModule } from '../shared-modules/search-bar/common-search-bar.module';
-import { CommunityService } from './community-services/community.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -19,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     WriteCommunityDocComponent,
     ReadCommunityDocComponent,
     AnnouncementComponent,
-    FAQComponent],
+    FAQComponent,
+  ],
   imports: [
     CommonModule,
     CommunityRoutingModule,
