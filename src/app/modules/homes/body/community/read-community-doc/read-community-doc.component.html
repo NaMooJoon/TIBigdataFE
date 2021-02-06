@@ -1,10 +1,12 @@
 <h3>게시글 읽기</h3>
 <hr>
-<p class="doc-title"> {{doc["title"]}} </p>
+<p class="doc-title"> {{ doc["title"] }} </p>
 <p class="doc-writer"> {{doc["userName"]}} </p>
+<p class="doc-regDate"> {{doc["regDate"]}} </p>
+<p class="doc-modDate"> {{doc["modDate"]}} </p>
 <p class="doc-content"> {{doc["content"]}} </p>
 
 <div class=buttons>
   <button class="button-list" (click)="gotoList()">목록</button>
-  <input type="submit" class="button-write" [disabled]="boardForm.invalid" value="작성" />
+  <input type="submit" class="button-write" value="수정" />
 </div>
