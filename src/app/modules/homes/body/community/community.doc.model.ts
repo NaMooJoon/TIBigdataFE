@@ -1,5 +1,5 @@
 export interface CommunityDocModel {
-    docId?: Number,
+    docId?: number,
     userName: String,
     userEmail: String,
     title?: String,
