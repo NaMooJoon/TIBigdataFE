@@ -19,10 +19,13 @@ export class CommunityService {
   private currentMenu: string = null;
   private registerDocUrl: string = "/registerDoc";
   private getDocsNumUrl: string = "/getDocsNum";
-  private getDocsUrl: string = "/getDocs"
-  private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs"
+  private getDocsUrl: string = "/getDocs";
+  private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs";
+  private deleteDocUrl: string = "/deleteDoc";
+
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private selectedDoc: CommunityDocModel;
+
 
   constructor(
     protected ipService: IpService,
@@ -38,6 +41,8 @@ export class CommunityService {
       return this.dbUrl + "/" + this.currentMenu + this.getDocsNumUrl;
     if (operation === boardOperation.LOAD)
       return this.dbUrl + "/" + this.currentMenu + this.getDocsUrl;
+    if (operation === boardOperation.DELETE)
+      return this.dbUrl + "/" + this.currentMenu + this.deleteDocUrl;
   }
 
   getCurrentMenu(): string {
@@ -78,6 +83,13 @@ export class CommunityService {
     }
   }
 
+  async deleteDocs(docId: number): Promise<boolean> {
+
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.DELETE), { 'docId': docId }).toPromise();
+    if (res.succ) return true;
+    else return false;
+  }
+
   verifyPrivacyLeak(content: string): string {
     return content;
   }
@@ -107,4 +119,9 @@ export class CommunityService {
   setSelectedDoc(doc: CommunityDocModel) {
     this.selectedDoc = doc;
   }
+
+  getSelectedDoc() {
+    return this.selectedDoc;
+  }
+
 }
