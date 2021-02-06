@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
 router.post('/registerDoc', registerDoc)
 router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
+router.post('/getMainAnnounceDocs', getMainAnnounceDocs);
 
 
 async function getDocsNum(req, res){
@@ -31,6 +32,7 @@ async function registerDoc (req, res){
         "content" : req.body.content,
         "userName" : req.body.userName,
         "userEmail" : req.body.userEmail,
+        "isMainAnnounce": req.body.isMainAnnounce,
         "regDate" : moment().format('YYYY-MM-DD'),
         "modDate" : moment().format("YYYY-MM-DD"),
     });
@@ -50,15 +52,24 @@ async function getDocs(req, res){
     if (req.body.startIndex < 0) req.body.startIndex = 0;
     Announcement.find({}).sort({'docId':-1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
         if (err){
-            
             return res.status(400).json(new Res(false, "failed to get docs", null));
         }
         else{
-            
             return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
         }
     })
 }
 
+async function getMainAnnounceDocs(req, res){
+    if (req.body.startIndex < 0) req.body.startIndex = 0;
+    Announcement.find({isMainAnnounce: true}).sort({'docId':-1}).limit(5).exec(function(err, docList){
+        if (err){
+            return res.status(400).json(new Res(false, "failed to get docs", null));
+        }
+        else{
+            return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
+        }
+    })
+}
 
 module.exports = router;
