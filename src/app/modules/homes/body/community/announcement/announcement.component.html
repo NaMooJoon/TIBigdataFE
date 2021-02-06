@@ -11,7 +11,8 @@
   </thead>
 
   <tbody *ngIf="docList">
-    <tr *ngFor="let doc of docList; let i = index">
+    <tr *ngFor="let doc of docList; let i = index"
+      [ngStyle]="{'background-color': i <= mainAnnounceNum ? 'rgb(236, 239, 239)' : 'white'}">
       <td class="doc-num">{{ doc["docId"] }}</td>
       <td>
         <div *ngIf="doc['isMainAnnounce']" class="doc-announcement announcement-button">공지</div>
