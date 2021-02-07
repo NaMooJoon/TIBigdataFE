@@ -13,7 +13,6 @@ import { CommunityDocModel } from '../community.doc.model';
   styleUrls: ['./mod-community-doc.component.css']
 })
 export class ModCommunityDocComponent implements OnInit {
-
   constructor(
     private router: Router,
     private cmService: CommunityService,
@@ -41,7 +40,6 @@ export class ModCommunityDocComponent implements OnInit {
       category: new FormControl(this.selectedDoc['category']),
       isMainAnnounce: new FormControl(this.selectedDoc['isMainAnnounce']),
     });
-
   }
 
   async modifyDocument(): Promise<void> {

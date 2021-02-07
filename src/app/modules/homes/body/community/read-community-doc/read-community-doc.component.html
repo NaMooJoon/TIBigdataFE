@@ -1,18 +1,50 @@
 <h3>게시글 읽기</h3>
 <hr>
-<div class="doc-header">
-  <p class="doc-title"> {{ doc["title"] }} </p>
+
+<div *ngIf="currentMenu !=='announcement'" class="question-container">
   <div class="doc-date-writer">
-    <p class="doc-regDate"> {{doc["regDate"]}} </p>
     <p class="doc-writer"> {{doc["userName"]}} </p>
+    <p class="doc-regDate"> {{doc["regDate"]}} </p>
+  </div>
+  <div class="doc-content-question">
+    <p class="doc-title"> {{ doc["title"] }} </p>
+    <p>{{doc["content"]}} </p>
   </div>
 </div>
-<div class="doc-info">
+
+<div *ngIf="currentMenu!=='announcement' && !isReplyMode" class="answer-container">
+  <div *ngIf="!isAnswered" class="doc-content-answer">
+    <p class="doc-title"> {{ doc["reply"].title }}</p>
+    <p>{{ doc["reply"].content }}</p>
+  </div>
+  <div class="info-container">
+    <button class="button-reply" (click)="changeReplyMode()"> 답변 등록/수정</button>
+    <div class="doc-date-writer">
+      <p class="doc-writer"> {{ doc["reply"].userName }} </p>
+      <p class="doc-regDate"> {{ doc["reply"].regDate }} </p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="currentMenu!=='announcement' && isReplyMode " class="answer-container">
+  <div class="doc-content-answer">
+    <form [formGroup]="replyForm" (ngSubmit)="registerReply()" class="reply-form">
+      <input formControlName="title" class="input-answer doc-title" type="text" placeholder="제목을 입력하세요">
+      <textarea formControlName="content" (keyup)="autoGrowTextZone($event)" class="input-answer" name="" id=""
+        placeholder="답변 내용을 입력하세요"></textarea>
+      <div class="info-container">
+        <button class="button-reply" type="submit"> 답변 등록/수정</button>
+        <button class="button-reply" (click)="changeReplyMode()">삭제</button>
+        <button class="button-reply" (click)="changeReplyMode()">취소</button>
+      </div>
+    </form>
+  </div>
 
 </div>
-<p class="doc-content"> {{doc["content"]}} </p>
 
-<div class=buttons>
+
+
+<div class="buttons">
   <button class="button-list" (click)="gotoList()">목록</button>
   <button class="button-mod" (click)="navigateToModDoc()"> 수정</button>
   <button class="button-del" (click)="deleteDoc()"> 삭제</button>

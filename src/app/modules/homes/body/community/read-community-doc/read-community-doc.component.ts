@@ -1,5 +1,7 @@
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import moment from 'moment';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
 import { Auth } from 'src/app/modules/communications/fe-backend-db/membership/userAuth.model';
@@ -14,20 +16,38 @@ import { CommunityDocModel } from '../community.doc.model';
 export class ReadCommunityDocComponent implements OnInit {
   private doc: CommunityDocModel;
   private currentUser: String;
+  private currentMenu: string;
+  private isReplyMode: boolean;
+  private replyForm: FormGroup;
+  private isAnswered: boolean;
 
   constructor(
     private cmService: CommunityService,
     private router: Router,
     private auth: EPAuthService) { }
+
   ngOnInit() {
     this.doc = this.cmService.getSelectedDoc();
-    // this.currentUser = this.auth.getUserEmail();
-    // console.log(this.auth.getUserEmail());
+    this.currentMenu = this.cmService.getCurrentMenu();
+    this.isReplyMode = false;
 
-    console.log(this.doc);
     if (this.doc === undefined || this.doc === null) {
       window.alert('존재하지 않는 게시글입니다.');
       this.router.navigateByUrl("/community/announcement");
+    }
+
+    this.replyForm = new FormGroup({
+      title: new FormControl('', Validators.required),
+      content: new FormControl('', Validators.required),
+    });
+
+    if ('reply' in this.doc) {
+      this.isAnswered = true;
+      console.log(this.isAnswered);
+    }
+    else {
+      this.isAnswered = false;
+      console.log(this.isAnswered);
     }
   }
 
@@ -49,5 +69,35 @@ export class ReadCommunityDocComponent implements OnInit {
   navigateToModDoc() {
     this.router.navigateByUrl('/community/modDoc');
   }
+  autoGrowTextZone(e) {
+    e.target.style.height = "0px";
+    e.target.style.height = (e.target.scrollHeight + 25) + "px";
+  }
+  changeReplyMode() {
+    this.isReplyMode = !this.isReplyMode;
+  }
 
+  registerReply() {
+    let queryBody: CommunityDocModel = {
+      "docId": this.doc["docId"],
+      "reply": {
+        "title": this.replyForm.controls['title'].value,
+        "content": this.replyForm.controls['content'].value,
+        "userEmail": this.auth.getUserEmail(),
+        "userName": this.auth.getUserName(),
+      }
+    }
+    if (this.doc.reply === null) {
+      this.cmService.registerReply(queryBody);
+      this.doc.reply.regDate = moment(this.doc.reply.regDate).format('YY-MM-DD');
+      console.log(this.doc.reply.regDate);
+      this.ngOnInit();
+    }
+    else {
+      this.cmService.modifyReply(queryBody);
+      this.doc.reply.regDate = moment(this.doc.reply.regDate).format('YY-MM-DD')
+      this.ngOnInit();
+
+    }
+  }
 }
