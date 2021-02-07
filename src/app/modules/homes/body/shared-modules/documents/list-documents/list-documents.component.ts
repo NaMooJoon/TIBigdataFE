@@ -35,6 +35,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   // private keywordChange$ : Observable<string> = this.es.getKeywordChange();
   private countNumChange$: Observable<any> = this.es.getCountNumChange();
+  private searchStatusChange$: Observable<boolean> = this.es.getSearchStatus();
   private articleChange$: Observable<ArticleSource[]> = this.es.getArticleChange();
   private loginStatChage$ = this.auth.getLoginStatChange();
 
@@ -42,12 +43,13 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   private countNumSubs: Subscription;
   private articleSubs: Subscription;
   private loginStatSubs: Subscription;
+  private isSearchDoneSubs: Subscription;
   private articleSources: ArticleSource[];
 
   private RelatedDocBtnToggle: Array<boolean>;
-  private isResultFound = false;
+  private isResultFound: boolean;
   private isLogStat: Number = 0;
-  private isQueryFin: boolean = false;
+  private isSearchDone: boolean;
   private searchResultNum: string = "0";
   private numDocsPerPages: number = this.es.getNumDocsPerPage();
   private currentPage: number = 1;
@@ -87,11 +89,16 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
       });
       if (this.articleSources !== undefined) this.isResultFound = true;
       else this.isResultFound = false;
+
+      this.es.setSearchStatus(true);
     });
+
+    this.isSearchDoneSubs = this.searchStatusChange$.subscribe(async status => {
+      this.isSearchDone = status;
+    })
 
     this.countNumSubs = this.countNumChange$.subscribe(async num => {
       this.totalDocs = num;
-      console.log(this.totalDocs);
       this.queryText = this.es.getKeyword();
       this.searchResultNum = this.convertNumberFormat(num);
       this.loadPage(this.currentPage);
@@ -106,7 +113,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isResultFound = false;
-    this.isQueryFin = false;
+    this.isSearchDone = false;
     this.currentPage = 1;
     this.loadSearchResult();
   }

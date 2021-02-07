@@ -76,7 +76,8 @@ export class SearchBarComponent implements OnInit {
     this.ngOnInit();
   }
 
-  search() {
+  async search() {
+    this.es.setSearchStatus(false);
     this.es.searchKeyword(this.queryText);
     this.es.setSearchMode(SEARCHMODE.KEYWORD);
     this._router.navigateByUrl("body/search/result");

@@ -21,16 +21,11 @@ export class PaginationService {
   }
 
   async paginate(currentPage: number, totalDocs: number, pageSize: number): Promise<PaginationModel> {
-    console.log(totalDocs);
-    // if (totalDocs === null)
-    //   this.countNumChange$.subscribe(num => { totalDocs = num });
     if (pageSize === null) pageSize = this._es.getNumDocsPerPage();
 
     if (currentPage === null) currentPage = 1;
 
     let totalPages = Math.ceil(totalDocs / pageSize);
-
-    console.log(totalPages);
     if (currentPage < 1) currentPage = 1;
     else if (currentPage > totalPages) currentPage = totalPages;
 
