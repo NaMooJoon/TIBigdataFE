@@ -7,7 +7,7 @@ import { EPAuthService } from '../../../../communications/fe-backend-db/membersh
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommunityDocModel } from '../community.doc.model';
 
-enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, LOAD }
+enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
 
 @Injectable({
@@ -23,6 +23,8 @@ export class CommunityService {
   private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs";
   private deleteDocUrl: string = "/deleteDoc";
   private modifyDocUrl: string = "/modDoc";
+  private registerReplyUrl: string = "/modifyReply";
+  private modifyReplyUrl: string = "/registerReply";
 
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private selectedDoc: CommunityDocModel;
@@ -38,14 +40,18 @@ export class CommunityService {
   generateQueryUrl(operation: boardOperation): string {
     if (operation === boardOperation.CREATE)
       return this.dbUrl + "/" + this.currentMenu + this.registerDocUrl;
-    if (operation === boardOperation.READ)
+    if (operation === boardOperation.COUNT)
       return this.dbUrl + "/" + this.currentMenu + this.getDocsNumUrl;
-    if (operation === boardOperation.LOAD)
+    if (operation === boardOperation.READ)
       return this.dbUrl + "/" + this.currentMenu + this.getDocsUrl;
     if (operation === boardOperation.DELETE)
       return this.dbUrl + "/" + this.currentMenu + this.deleteDocUrl;
     if (operation === boardOperation.UPDATE)
       return this.dbUrl + "/" + this.currentMenu + this.modifyDocUrl;
+    if (operation === boardOperation.REPLY_CREATE)
+      return this.dbUrl + "/" + this.currentMenu + this.registerReplyUrl;
+    if (operation === boardOperation.REPLY_UPDATE)
+      return this.dbUrl + "/" + this.currentMenu + this.modifyReplyUrl;
   }
 
   getCurrentMenu(): string {
@@ -57,7 +63,7 @@ export class CommunityService {
   }
 
   async getDocsNum(): Promise<number> {
-    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), "").toPromise();
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.COUNT), "").toPromise();
     return res.payload['docNum'];
   }
 
@@ -66,7 +72,7 @@ export class CommunityService {
   }
 
   async getDocs(startIndex: number): Promise<Array<CommunityDocModel>> {
-    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.LOAD), { 'startIndex': startIndex }).toPromise();
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), { 'startIndex': startIndex }).toPromise();
     if (res.succ) {
       return res.payload['docList'];
     }
@@ -94,6 +100,18 @@ export class CommunityService {
 
   async modifyDoc(docInfo: CommunityDocModel): Promise<boolean> {
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.UPDATE), docInfo).toPromise();
+    if (res.succ) return true;
+    else return false;
+  }
+
+  async registerReply(docInfo: CommunityDocModel): Promise<boolean> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.REPLY_CREATE), docInfo).toPromise();
+    if (res.succ) return true;
+    else return false;
+  }
+
+  async modifyReply(docInfo: CommunityDocModel): Promise<boolean> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.REPLY_UPDATE), docInfo).toPromise();
     if (res.succ) return true;
     else return false;
   }
