@@ -39,7 +39,8 @@ export class WriteCommunityDocComponent {
     this.boardForm = new FormGroup({
       title: new FormControl('', Validators.required),
       content: new FormControl('', Validators.required),
-      category: new FormControl('')
+      category: new FormControl(''),
+      isMainAnnounce: new FormControl(false),
     });
 
     this.cmService.getBoardMenuChange().subscribe((menu) => {
@@ -66,8 +67,9 @@ export class WriteCommunityDocComponent {
     this._location.back();
   }
 
-  onCheckboxChange($event): void {
-    this.isMainAnnounce = $event.target.checked;
+  onCheckboxChange(): void {
+    this.boardForm.controls['isMainAnnounce'].setValue(!this.boardForm.controls['isMainAnnounce'].value);
+    console.log(this.boardForm.controls['isMainAnnounce'].value)
   }
 
   generateAnnounceQueryBody(): CommunityDocModel {
@@ -77,7 +79,7 @@ export class WriteCommunityDocComponent {
       userName: this.auth.getUserName(),
       title: this.cmService.verifyPrivacyLeak(this.boardForm.controls['title'].value),
       content: this.cmService.verifyPrivacyLeak(this.boardForm.controls['content'].value),
-      isMainAnnounce: this.isMainAnnounce,
+      isMainAnnounce: this.boardForm.controls['isMainAnnounce'].value,
     };
   }
 
