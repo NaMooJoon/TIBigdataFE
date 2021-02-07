@@ -15,8 +15,8 @@
     <tr *ngFor="let doc of docList; let i = index">
       <td class="doc-num">{{ doc["docId"] }}</td>
       <td>
-        <div *ngIf="doc['isAnswered']" class="qna-button complete">완료</div>
-        <div *ngIf="!doc['isAnswered']" class="qna-button ongoing">검토중</div>
+        <div *ngIf="isAnswered(doc)" class="qna-button complete">완료</div>
+        <div *ngIf="!isAnswered(doc)" class="qna-button ongoing">검토중</div>
       </td>
 
       <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>

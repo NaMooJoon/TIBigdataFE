@@ -7,6 +7,7 @@ import { boardMenu, CommunityService } from 'src/app/modules/homes/body/communit
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
+import { CommunityDocModel } from '../community.doc.model';
 
 @Component({
   selector: 'app-qna',
@@ -14,8 +15,7 @@ import { PaginationService } from '../../shared-services/pagination-service/pagi
   styleUrls: ['./qna.component.less']
 })
 export class QnaComponent implements OnInit {
-
-  private docList: {}[] = [];
+  private docList: Array<CommunityDocModel>;
   private pageInfo: PaginationModel;
   private logStat: logStat;
   private pageSize = 10;
@@ -36,7 +36,6 @@ export class QnaComponent implements OnInit {
   ngOnInit() {
     this.authService.getLoginStatChange().subscribe(stat => {
       this.logStat = stat;
-      console.log("comm compo stat : ", stat);
     });
     this.cmService.setBoardMenu(boardMenu.QNA);
     this.loadPage(1);
@@ -44,14 +43,16 @@ export class QnaComponent implements OnInit {
 
   async loadPage(currentPage: number) {
     this.docList = [];
-    let resNum: Res = await this.cmService.getDocsNum();
-    this.totalDocs = resNum.payload['data'];
+    this.totalDocs = await this.cmService.getDocsNum();
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-    let res: Object = await this.cmService.getDocs(this.startIndex);
-    this.saveDocsInFormat(res['data']);
+    await this.loadDocs();
+  }
 
-    console.log(this.docList);
+  async loadDocs() {
+    let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
+    if (generalDocs !== null)
+      this.saveDocsInFormat(generalDocs);
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -62,13 +63,15 @@ export class QnaComponent implements OnInit {
   }
 
   saveDocsInFormat(list: {}[]): void {
-    list.forEach((doc) => {
-      doc['regDate'] = moment(doc['regDate']).format('YYYY-MM-DD');
+    if (list == null) return;
+    list.forEach((doc: CommunityDocModel) => {
+      doc['regDate'] = moment(doc['regDate']).format('YY-MM-DD');
       this.docList.push(doc);
     });
   }
 
   navToReadThisDoc(i: number) {
+    this.cmService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/readDoc");
   }
 
@@ -78,5 +81,9 @@ export class QnaComponent implements OnInit {
 
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
+  }
+
+  isAnswered(doc: CommunityDocModel): boolean {
+    return ('reply' in doc);
   }
 }

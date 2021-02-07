@@ -14,6 +14,15 @@ const qnaDocSchema = new Schema({
     regDate : Date,
     modDate : Date,
     isAnswered: Boolean,
+    Answer: String,
+    reply: {
+        userName: String,
+        userEmail: String,
+        title: String,
+        content: String,
+        regDate: Date,
+        modDate: Date,
+    }
 })
 
 qnaDocSchema.plugin(autoIncrement.plugin, {

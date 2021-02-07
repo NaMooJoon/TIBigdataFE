@@ -2,11 +2,11 @@ import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommunityRootComponent } from './community-root/community-root.component';
 import { QnaComponent } from './qna/qna.component';
-import { WriteNewCommunityDocComponent } from './write-new-community-doc/write-new-community-doc.component';
+import { WriteCommunityDocComponent } from './write-community-doc/write-community-doc.component';
 import { ReadCommunityDocComponent } from "./read-community-doc/read-community-doc.component";
 import { AnnouncementComponent } from "./announcement/announcement.component";
 import { FAQComponent } from "./faq/faq.component";
-import { CommunityService } from './community-services/community.service';
+import { ModCommunityDocComponent } from './mod-community-doc/mod-community-doc.component';
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
       },
       {
         path: "newDoc",
-        component: WriteNewCommunityDocComponent
+        component: WriteCommunityDocComponent
       },
       {
         path: "readDoc",
@@ -33,7 +33,10 @@ const routes: Routes = [
         path: "faq",
         component: FAQComponent
       },
-
+      {
+        path: "modDoc",
+        component: ModCommunityDocComponent
+      }
     ]
   }
 
