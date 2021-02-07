@@ -47,14 +47,17 @@ export class FAQComponent implements OnInit {
 
   async loadPage(currentPage: number) {
     this.docList = [];
-    let resNum: Res = await this.cmService.getDocsNum();
-    this.totalDocs = resNum.payload['data'];
+    this.totalDocs = await this.cmService.getDocsNum();
+    console.log(this.totalDocs);
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-    let res: Object = await this.cmService.getDocs(this.startIndex);
-    this.saveDocsInFormat(res['data']);
+    await this.loadDocs();
+  }
 
-    console.log(this.docList);
+  async loadDocs() {
+    let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
+    if (generalDocs !== null)
+      this.saveDocsInFormat(generalDocs);
   }
 
   setPageInfo(pageInfo: PaginationModel) {

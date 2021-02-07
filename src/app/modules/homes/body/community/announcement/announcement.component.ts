@@ -48,18 +48,31 @@ export class AnnouncementComponent implements OnInit {
 
   async loadPage(currentPage: number) {
     this.docList = [];
-    let resNum: Res = await this.cmService.getDocsNum();
-    this.totalDocs = resNum.payload['data'];
+    this.totalDocs = await this.cmService.getDocsNum();
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
 
-    let announceDocs: Object = await this.cmService.getMainAnnounceDocs();
-    this.saveDocsInFormat(announceDocs['data']);
+    await this.loadAnnouncements();
+    await this.loadGenerals();
+  }
 
-    this.mainAnnounceNum = this.docList.length;
+  async loadAnnouncements() {
+    this.mainAnnounceNum = 0;
+    let announceDocs: Array<CommunityDocModel> = await this.cmService.getMainAnnounceDocs();
+    console.log(announceDocs);
+    if (announceDocs === null) {
+      this.mainAnnounceNum = 0;
+    }
+    else {
+      this.saveDocsInFormat(announceDocs);
+      this.mainAnnounceNum = announceDocs.length;
+    }
+  }
 
-    let generalDocs: Object = await this.cmService.getDocs(this.startIndex);
-    this.saveDocsInFormat(generalDocs['data']);
+  async loadGenerals() {
+    let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
+    if (generalDocs !== null)
+      this.saveDocsInFormat(generalDocs);
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -89,4 +102,6 @@ export class AnnouncementComponent implements OnInit {
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
   }
+
+
 }

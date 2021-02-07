@@ -22,6 +22,7 @@ export class CommunityService {
   private getDocsUrl: string = "/getDocs";
   private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs";
   private deleteDocUrl: string = "/deleteDoc";
+  private modifyDocUrl: string = "/modDoc";
 
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private selectedDoc: CommunityDocModel;
@@ -43,6 +44,8 @@ export class CommunityService {
       return this.dbUrl + "/" + this.currentMenu + this.getDocsUrl;
     if (operation === boardOperation.DELETE)
       return this.dbUrl + "/" + this.currentMenu + this.deleteDocUrl;
+    if (operation === boardOperation.UPDATE)
+      return this.dbUrl + "/" + this.currentMenu + this.modifyDocUrl;
   }
 
   getCurrentMenu(): string {
@@ -53,30 +56,30 @@ export class CommunityService {
     return this.boardMenuChange$.asObservable();
   }
 
-  async getDocsNum(): Promise<Res> {
-    return await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), "").toPromise();
+  async getDocsNum(): Promise<number> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.READ), "").toPromise();
+    return res.payload['docNum'];
   }
 
   async registerDoc(docInfo: CommunityDocModel): Promise<Res> {
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo).toPromise();
   }
 
-  async getDocs(startIndex: number): Promise<Object> {
+  async getDocs(startIndex: number): Promise<Array<CommunityDocModel>> {
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.LOAD), { 'startIndex': startIndex }).toPromise();
     if (res.succ) {
-      console.log('res', res);
-      return res.payload;
+      return res.payload['docList'];
     }
     else {
       return null;
     }
   }
 
-  async getMainAnnounceDocs(): Promise<Object> {
+  async getMainAnnounceDocs(): Promise<Array<CommunityDocModel>> {
     let res: Res = await this.http.post<any>(this.dbUrl + "/" + this.currentMenu + this.getMainAnnounceDocsUrl, "").toPromise();
+    console.log(res);
     if (res.succ) {
-      console.log('res', res);
-      return res.payload;
+      return res.payload['docList'];
     }
     else {
       return null;
@@ -84,8 +87,13 @@ export class CommunityService {
   }
 
   async deleteDocs(docId: number): Promise<boolean> {
-
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.DELETE), { 'docId': docId }).toPromise();
+    if (res.succ) return true;
+    else return false;
+  }
+
+  async modifyDoc(docInfo: CommunityDocModel): Promise<boolean> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.UPDATE), docInfo).toPromise();
     if (res.succ) return true;
     else return false;
   }

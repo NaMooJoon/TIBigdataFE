@@ -1,11 +1,11 @@
 export interface CommunityDocModel {
     docId?: number,
-    userName: String,
-    userEmail: String,
-    title?: String,
-    content?: String,
+    userName?: string,
+    userEmail?: string,
+    title?: string,
+    content?: string,
     regDate?: Date | string,
     modDate?: Date | string,
     isMainAnnounce?: Boolean,
-    category?: String
+    category?: string
 }
