@@ -4,7 +4,7 @@ export class UserProfile {
     name: string;
     token: string;
     password?: string;
-    nickName?: String;
+    nickName?: string;
     inst: string;
     api: boolean;
     constructor(reg, email, name, nickname, inst, api, token) {
