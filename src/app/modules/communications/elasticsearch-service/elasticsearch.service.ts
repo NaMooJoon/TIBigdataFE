@@ -20,6 +20,7 @@ export class ElasticsearchService {
   private ids: string[] = [];
   private numDocsPerPage: number = 10;
   private searchMode: SEARCHMODE;
+  private searchStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private ipSvc: IpService,
@@ -62,6 +63,14 @@ export class ElasticsearchService {
 
   getKeyword(): string {
     return this.keyword;
+  }
+
+  setSearchStatus(isSearchDone: boolean): void {
+    this.searchStatus.next(isSearchDone);
+  }
+
+  getSearchStatus(): Observable<boolean> {
+    return this.searchStatus.asObservable();
   }
 
   setIds(ids: string[]): void {

@@ -21,10 +21,10 @@ export class SearchResultComponent implements OnInit {
   ) {
   }
   ngOnInit() {
-    this.es.getCountNumChange().subscribe((num) => {
-      if (num == 0) this.isResultFound = false;
-      else this.isResultFound = true;
-    });
+    // this.es.getCountNumChange().subscribe((num) => {
+    //   if (num == 0) this.isResultFound = false;
+    //   else this.isResultFound = true;
+    // });
   }
 
   setRelatedKeywords(keys: string[]) {

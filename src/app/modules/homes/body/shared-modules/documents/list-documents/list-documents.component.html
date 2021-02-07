@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<div *ngIf="isResultFound" class="result-body">
+<div *ngIf="isResultFound && isSearchDone" class="result-body">
   <form [formGroup]="form" (ngSubmit)="saveSelectedDocs()" novalidate>
     <label *ngIf="isLogStat != 0"><input class="article-checkbox toggle-all" type="checkbox"
         (change)="onCheckboxChange($event)" value="toggleAll" />전체선택
@@ -48,12 +48,18 @@
     <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
     <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
   </div>
+</div>
 
-  <div *ngIf="!isResultFound" class="result-not-found-body">
-    <p> "{{ queryText }}"에 대한 검색결과가 없습니다.</p>
-    <ul>
-      <li>단어의 철자가 정확한지 확인해 보세요.</li>
-      <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
-      <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
-    </ul>
-  </div>
+<div *ngIf="!isResultFound && isSearchDone" class="result-not-found-body">
+  <p> "{{ queryText }}"에 대한 검색결과가 없습니다.</p>
+  <ul>
+    <li>단어의 철자가 정확한지 확인해 보세요.</li>
+    <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+    <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
+  </ul>
+</div>
+
+<div *ngIf="!isSearchDone" class="result-not-found-body">
+  <p> "{{ queryText }}"에 대한 문서를 검색 중입니다. 잠시만 기다려주세요.</p>
+
+</div>
