@@ -6,14 +6,16 @@ import { Res } from '../../../../communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommunityDocModel } from '../community.doc.model';
+import moment from 'moment';
 
-enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE }
+enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE, REPLY_DELETE, READ_SINGLE }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunityService {
+
 
   protected dbUrl = this.ipService.getFrontDBServerIp();
   private currentMenu: string = null;
@@ -23,8 +25,10 @@ export class CommunityService {
   private getMainAnnounceDocsUrl: string = "/getMainAnnounceDocs";
   private deleteDocUrl: string = "/deleteDoc";
   private modifyDocUrl: string = "/modDoc";
-  private registerReplyUrl: string = "/modifyReply";
+  private registerReplyUrl: string = "/modReply";
   private modifyReplyUrl: string = "/registerReply";
+  private getSingleDocUrl: string = "/getSingleDoc";
+  private deleteReplyUrl: string = "/deleteReply";
 
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private selectedDoc: CommunityDocModel;
@@ -52,6 +56,10 @@ export class CommunityService {
       return this.dbUrl + "/" + this.currentMenu + this.registerReplyUrl;
     if (operation === boardOperation.REPLY_UPDATE)
       return this.dbUrl + "/" + this.currentMenu + this.modifyReplyUrl;
+    if (operation === boardOperation.REPLY_DELETE)
+      return this.dbUrl + "/" + this.currentMenu + this.deleteReplyUrl;
+    if (operation === boardOperation.READ_SINGLE)
+      return this.dbUrl + "/" + this.currentMenu + this.getSingleDocUrl;
   }
 
   getCurrentMenu(): string {
@@ -81,6 +89,12 @@ export class CommunityService {
     }
   }
 
+  async getSelectedDoc(): Promise<CommunityDocModel> {
+    if (this.selectedDoc == null) return null;
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.READ_SINGLE), { 'docId': this.selectedDoc.docId }).toPromise();
+    return res.payload;
+  }
+
   async getMainAnnounceDocs(): Promise<Array<CommunityDocModel>> {
     let res: Res = await this.http.post<any>(this.dbUrl + "/" + this.currentMenu + this.getMainAnnounceDocsUrl, "").toPromise();
     console.log(res);
@@ -94,6 +108,12 @@ export class CommunityService {
 
   async deleteDocs(docId: number): Promise<boolean> {
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.DELETE), { 'docId': docId }).toPromise();
+    if (res.succ) return true;
+    else return false;
+  }
+
+  async deleteReply(docId: number): Promise<boolean> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.REPLY_DELETE), { 'docId': docId }).toPromise();
     if (res.succ) return true;
     else return false;
   }
@@ -129,25 +149,11 @@ export class CommunityService {
   }
 
   formatDate(date: string) {
-    var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
-    return [year, month, day].join('-');
+    return moment(date).format('YY-MM-DD');
   }
 
   setSelectedDoc(doc: CommunityDocModel) {
     this.selectedDoc = doc;
-  }
-
-  getSelectedDoc() {
-    return this.selectedDoc;
   }
 
 }

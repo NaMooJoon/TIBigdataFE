@@ -20,14 +20,15 @@ export class ReadCommunityDocComponent implements OnInit {
   private isReplyMode: boolean;
   private replyForm: FormGroup;
   private isAnswered: boolean;
+  private isLoaded: boolean = false;
 
   constructor(
     private cmService: CommunityService,
     private router: Router,
     private auth: EPAuthService) { }
 
-  ngOnInit() {
-    this.doc = this.cmService.getSelectedDoc();
+  async ngOnInit(): Promise<void> {
+    this.doc = await this.cmService.getSelectedDoc();
     this.currentMenu = this.cmService.getCurrentMenu();
     this.isReplyMode = false;
 
@@ -41,14 +42,22 @@ export class ReadCommunityDocComponent implements OnInit {
       content: new FormControl('', Validators.required),
     });
 
-    if ('reply' in this.doc) {
+    if ((this.doc != null) && ('reply' in this.doc)) {
       this.isAnswered = true;
-      console.log(this.isAnswered);
+      this.doc.reply.regDate = moment(this.doc.reply.regDate).format('YY-MM-DD');
+      this.doc.regDate = moment(this.doc.regDate).format('YY-MM-DD');
+      this.replyForm.controls['title'].setValue(this.doc.reply.title);
+      this.replyForm.controls['content'].setValue(this.doc.reply.content);
+    }
+    else if (this.doc != null) {
+      this.doc.regDate = moment(this.doc.regDate).format('YY-MM-DD');
+      this.isAnswered = false;
     }
     else {
-      this.isAnswered = false;
-      console.log(this.isAnswered);
+      window.alert('존재하지 않는 게시글입니다.');
+      this.router.navigateByUrl("/community/announcement");
     }
+    this.isLoaded = true;
   }
 
   async deleteDoc() {
@@ -56,6 +65,21 @@ export class ReadCommunityDocComponent implements OnInit {
     let res: boolean;
     if (confirm) {
       res = await this.cmService.deleteDocs(this.doc['docId']);
+    }
+    if (res) {
+      window.alert("게시글이 삭제되었습니다.");
+      this.router.navigateByUrl("/community/" + this.cmService.getCurrentMenu());
+    }
+    else {
+      window.alert("게시글이 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요.");
+    }
+  }
+
+  async deleteReply() {
+    let confirm = window.confirm("정말로 삭제하시겠습니까?");
+    let res: boolean;
+    if (confirm) {
+      res = await this.cmService.deleteReply(this.doc['docId']);
     }
     if (res) {
       window.alert("게시글이 삭제되었습니다.");
@@ -77,7 +101,7 @@ export class ReadCommunityDocComponent implements OnInit {
     this.isReplyMode = !this.isReplyMode;
   }
 
-  registerReply() {
+  async registerReply() {
     let queryBody: CommunityDocModel = {
       "docId": this.doc["docId"],
       "reply": {
@@ -87,17 +111,17 @@ export class ReadCommunityDocComponent implements OnInit {
         "userName": this.auth.getUserName(),
       }
     }
-    if (this.doc.reply === null) {
-      this.cmService.registerReply(queryBody);
-      this.doc.reply.regDate = moment(this.doc.reply.regDate).format('YY-MM-DD');
-      console.log(this.doc.reply.regDate);
+    if ('reply' in this.doc) {
+      await this.cmService.modifyReply(queryBody);
+      this.isAnswered = true;
+      console.log('mod')
       this.ngOnInit();
     }
     else {
-      this.cmService.modifyReply(queryBody);
-      this.doc.reply.regDate = moment(this.doc.reply.regDate).format('YY-MM-DD')
+      await this.cmService.registerReply(queryBody);
+      this.isAnswered = true;
+      console.log('new')
       this.ngOnInit();
-
     }
   }
 }

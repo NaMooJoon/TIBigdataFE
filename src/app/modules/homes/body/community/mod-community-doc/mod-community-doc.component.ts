@@ -31,8 +31,8 @@ export class ModCommunityDocComponent implements OnInit {
     this.loadDoc();
   }
 
-  loadDoc() {
-    this.selectedDoc = this.cmService.getSelectedDoc();
+  async loadDoc() {
+    this.selectedDoc = await this.cmService.getSelectedDoc();
     this.selectedBoard = this.cmService.getCurrentMenu();
     this.boardForm = new FormGroup({
       title: new FormControl(this.selectedDoc['title'], Validators.required),

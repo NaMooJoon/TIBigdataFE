@@ -47,6 +47,7 @@ p {
   font-size: 17px;
   display: flex;
   flex-direction: column;
+  white-space: pre-line;
 }
 
 .doc-content-answer {
@@ -61,6 +62,7 @@ p {
   margin-right: 10px;
   display: flex;
   flex-direction: column;
+  white-space: pre-line;
 }
 
 .buttons {
@@ -84,7 +86,7 @@ p {
 }
 
 .button-reply {
-  width: 120px;
+  width: 50px;
   align-self: flex-end;
 }
 
@@ -106,6 +108,7 @@ p {
   outline: none;
   background-color: transparent;
   border: none;
+  height: 100%;
 }
 
 textarea {
@@ -120,6 +123,35 @@ textarea {
 
 .reply-form {
   display: flex;
+  justify-content: space-between;
+}
+
+.form-container {
+  display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  width: 80%;
+}
+
+.buttons {
+  margin: 20px 0;
+}
+
+.announcement {
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.doc-content-announce {
+  background-color: rgb(245, 245, 245);
+  border: none;
+  border-radius: 0px 25px 25px 25px;
+  padding: 20px;
+  resize: none;
+  overflow: auto;
+  width: 100%;
+  font-size: 17px;
+  display: flex;
+  flex-direction: column;
+  white-space: pre-line;
 }

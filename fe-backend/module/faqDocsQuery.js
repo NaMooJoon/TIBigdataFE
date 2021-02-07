@@ -14,6 +14,7 @@ router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
 router.post('/deleteDoc', deleteDoc);
 router.post('/modDoc', modDoc);
+router.post('/getSingleDoc', getSingleDoc);
 
 async function getDocsNum(req, res){
     Faq.countDocuments({}, function(err, count){
@@ -88,6 +89,15 @@ async function modDoc (req, res){
         
             return res.status(200).json(new Res(true, "successfully update doc", null));
         }
+    });
+}
+
+async function getSingleDoc (req, res){
+    Faq.findOne({'docId': req.body.docId}).then((result) => {
+        return res.status(200).json(new Res(true, "successfully update doc", result));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json(new Res(false, "failed to update doc", null));
     });
 }
 

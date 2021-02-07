@@ -36,7 +36,6 @@ export class QnaComponent implements OnInit {
   ngOnInit() {
     this.authService.getLoginStatChange().subscribe(stat => {
       this.logStat = stat;
-      console.log("comm compo stat : ", stat);
     });
     this.cmService.setBoardMenu(boardMenu.QNA);
     this.loadPage(1);
@@ -82,5 +81,9 @@ export class QnaComponent implements OnInit {
 
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
+  }
+
+  isAnswered(doc: CommunityDocModel): boolean {
+    return ('reply' in doc);
   }
 }

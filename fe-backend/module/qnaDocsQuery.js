@@ -16,7 +16,8 @@ router.post('/deleteDoc', deleteDoc);
 router.post('/modDoc', modDoc);
 router.post('/modReply', modReply);
 router.post('/registerReply', registerReply);
-
+router.post('/getSingleDoc', getSingleDoc);
+router.post('/deleteReply', deleteReply);
 
 async function getDocsNum(req, res){
     Qna.countDocuments({}, function(err, count){
@@ -120,7 +121,7 @@ async function registerReply (req, res){
 }
 
 async function modReply (req, res){
-    qna.updateOne(
+    Qna.updateOne(
         {'docId': req.body.docId},
         {
             "reply":{
@@ -134,6 +135,23 @@ async function modReply (req, res){
         },
     ).then((result) => {
         return res.status(200).json(new Res(true, "successfully update doc", null));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json(new Res(false, "failed to update doc", null));
+    });
+}
+
+async function deleteReply(req, res){
+    Qna.updateOne({'docId': req.body.docId}, {$unset: {'reply':1}}, {multi:true}).then((result) => {
+        return res.status(200).json(new Res(true, "successfully update doc", null));
+    }).catch((err) => {
+        return res.status(400).json(new Res(false, "failed to update doc", null)); 
+    });
+}
+
+async function getSingleDoc (req, res){
+    Qna.findOne({'docId': req.body.docId}).then((result) => {
+        return res.status(200).json(new Res(true, "successfully update doc", result));
     }).catch((err) => {
         console.log(err);
         return res.status(400).json(new Res(false, "failed to update doc", null));
