@@ -90,6 +90,7 @@ export class ElasticsearchService {
   }
 
   fullTextSearchComplete(startIndex?: number, docSize?: number): void {
+    if (startIndex < 0) startIndex = 0;
     this.saveSearchResult(this.searchByText(startIndex, docSize));
   }
 
