@@ -9,11 +9,13 @@ const DOC_NUMBERS = 10;
 router.get('/', (req, res) => {
     res.send('qna query works!');
 })
-router.post('/registerDoc', registerDoc)
+router.post('/registerDoc', registerDoc);
 router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
 router.post('/deleteDoc', deleteDoc);
 router.post('/modDoc', modDoc);
+router.post('/modReply', modReply);
+router.post('/registerReply', registerReply);
 
 
 async function getDocsNum(req, res){
@@ -35,7 +37,6 @@ async function registerDoc (req, res){
         "userEmail" : req.body.userEmail,
         "regDate" : moment().format('YYYY-MM-DD'),
         "modDate" : moment().format("YYYY-MM-DD"),
-        "isAnswered" : false,
     });
 
     newDoc.save(function(err){
@@ -51,7 +52,7 @@ async function registerDoc (req, res){
 
 async function getDocs(req, res){
     if (req.body.startIndex < 0) req.body.startIndex = 0;
-    Qna.find({}).sort({'status':1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
+    Qna.find({}).sort({'status':1}).sort({'docId':-1}).skip(req.body.startIndex).limit(10).exec(function(err, docList){
         if (err){
             
             return res.status(400).json(new Res(false, "failed to get docs", null));
@@ -76,7 +77,7 @@ async function deleteDoc(req, res){
 }
 
 async function modDoc (req, res){
-    qna.updateOne(
+    Qna.updateOne(
         { 'docId': req.body.docId },
         {
             "title" : req.body.title,
@@ -95,5 +96,48 @@ async function modDoc (req, res){
     });
 }
 
+async function registerReply (req, res){
+    Qna.updateOne(
+        {'docId': req.body.docId},
+        { $set:
+            {        
+                "reply":{
+                    "title" : req.body.reply.title,
+                   "content" : req.body.reply.content,
+                    "userName" : req.body.reply.userName,
+                    "userEmail" : req.body.reply.userEmail,
+                    "regDate" : moment().format('YYYY-MM-DD'),
+                    "modDate" : moment().format("YYYY-MM-DD"),
+                }
+            },
+        },
+    ).then((result) => {
+        return res.status(200).json(new Res(true, "successfully update doc", null));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json(new Res(false, "failed to update doc", null));
+    });
+}
+
+async function modReply (req, res){
+    qna.updateOne(
+        {'docId': req.body.docId},
+        {
+            "reply":{
+                "title" : req.body.reply.title,
+                "content" : req.body.reply.content,
+                "userName" : req.body.reply.userName,
+                "userEmail" : req.body.reply.userEmail,
+                "regDate" : moment().format('YYYY-MM-DD'),
+                "modDate" : moment().format("YYYY-MM-DD"),
+            }
+        },
+    ).then((result) => {
+        return res.status(200).json(new Res(true, "successfully update doc", null));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json(new Res(false, "failed to update doc", null));
+    });
+}
 
 module.exports = router;
