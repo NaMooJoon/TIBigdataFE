@@ -7,6 +7,7 @@ import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
+import { CommunityDocModel } from '../community.doc.model';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { PaginationService } from '../../shared-services/pagination-service/pagi
 
 export class AnnouncementComponent implements OnInit {
 
-  private docList: {}[] = [];
+  private docList: Array<CommunityDocModel>;
   private pageInfo: PaginationModel;
   private logStat: logStat;
   private pageSize = 10;
@@ -26,6 +27,7 @@ export class AnnouncementComponent implements OnInit {
   private currentPage: number;
   private pages: number[];
   private totalPages: number;
+  private mainAnnounceNum: number;
 
   constructor(
     private router: Router,
@@ -46,14 +48,31 @@ export class AnnouncementComponent implements OnInit {
 
   async loadPage(currentPage: number) {
     this.docList = [];
-    let resNum: Res = await this.cmService.getDocsNum();
-    this.totalDocs = resNum.payload['data'];
+    this.totalDocs = await this.cmService.getDocsNum();
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-    let res: Object = await this.cmService.getDocs(this.startIndex);
-    this.saveDocsInFormat(res['data']);
 
-    console.log(this.docList);
+    await this.loadAnnouncements();
+    await this.loadGenerals();
+  }
+
+  async loadAnnouncements() {
+    this.mainAnnounceNum = 0;
+    let announceDocs: Array<CommunityDocModel> = await this.cmService.getMainAnnounceDocs();
+    console.log(announceDocs);
+    if (announceDocs === null) {
+      this.mainAnnounceNum = 0;
+    }
+    else {
+      this.saveDocsInFormat(announceDocs);
+      this.mainAnnounceNum = announceDocs.length;
+    }
+  }
+
+  async loadGenerals() {
+    let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
+    if (generalDocs !== null)
+      this.saveDocsInFormat(generalDocs);
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -64,13 +83,15 @@ export class AnnouncementComponent implements OnInit {
   }
 
   saveDocsInFormat(list: {}[]): void {
-    list.forEach((doc) => {
-      doc['regDate'] = moment(doc['regDate']).format('YYYY-MM-DD');
+    if (list == null) return;
+    list.forEach((doc: CommunityDocModel) => {
+      doc['regDate'] = moment(doc['regDate']).format('YY-MM-DD');
       this.docList.push(doc);
     });
   }
 
   navToReadThisDoc(i: number) {
+    this.cmService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/readDoc");
   }
 
@@ -81,4 +102,6 @@ export class AnnouncementComponent implements OnInit {
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
   }
+
+
 }

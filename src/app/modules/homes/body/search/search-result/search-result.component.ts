@@ -12,6 +12,7 @@ export class SearchResultComponent implements OnInit {
 
   public relatedKeywords = [];
   queryText: string;
+  private isResultFound: boolean;
 
   constructor(
     private auth: EPAuthService,
@@ -20,11 +21,14 @@ export class SearchResultComponent implements OnInit {
   ) {
   }
   ngOnInit() {
+    // this.es.getCountNumChange().subscribe((num) => {
+    //   if (num == 0) this.isResultFound = false;
+    //   else this.isResultFound = true;
+    // });
   }
 
   setRelatedKeywords(keys: string[]) {
     this.relatedKeywords = keys;
-
   }
 
   async freqAnalysis() {
@@ -33,6 +37,5 @@ export class SearchResultComponent implements OnInit {
 
   relatedSearch(keyword: string) {
     this.es.searchKeyword(keyword);
-    this.auth.addSrchHst(this.queryText);
   }
 }

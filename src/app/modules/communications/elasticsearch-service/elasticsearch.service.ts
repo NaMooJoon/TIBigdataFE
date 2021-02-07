@@ -20,6 +20,7 @@ export class ElasticsearchService {
   private ids: string[] = [];
   private numDocsPerPage: number = 10;
   private searchMode: SEARCHMODE;
+  private searchStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private ipSvc: IpService,
@@ -64,6 +65,14 @@ export class ElasticsearchService {
     return this.keyword;
   }
 
+  setSearchStatus(isSearchDone: boolean): void {
+    this.searchStatus.next(isSearchDone);
+  }
+
+  getSearchStatus(): Observable<boolean> {
+    return this.searchStatus.asObservable();
+  }
+
   setIds(ids: string[]): void {
     this.esQueryModel.setSearchIds(ids);
     this.ids = ids;
@@ -90,6 +99,7 @@ export class ElasticsearchService {
   }
 
   fullTextSearchComplete(startIndex?: number, docSize?: number): void {
+    if (startIndex < 0) startIndex = 0;
     this.saveSearchResult(this.searchByText(startIndex, docSize));
   }
 

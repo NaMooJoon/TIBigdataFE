@@ -66,7 +66,7 @@ export class EPAuthService {
     this.isLogIn = stat as logStat;
   }
 
-  getUserName(): String {
+  getUserName(): string {
     return this.userProfile.name;
   }
 
@@ -78,19 +78,19 @@ export class EPAuthService {
     return localStorage.getItem("token");
   }
 
-  getApiStat(): Boolean {
+  getApiStat(): boolean {
     return this.userProfile.api;
   }
 
-  getUserEmail(): String {
+  getUserEmail(): string {
     return this.userProfile.email;
   }
 
-  getUserNickname(): String {
+  getUserNickname(): string {
     return this.userProfile.nickName;
   }
 
-  getUserInst(): String {
+  getUserInst(): string {
     return this.userProfile.inst;
   }
 
