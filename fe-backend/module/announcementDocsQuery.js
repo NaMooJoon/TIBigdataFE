@@ -14,15 +14,16 @@ router.post('/getDocsNum', getDocsNum);
 router.post('/getDocs', getDocs);
 router.post('/getMainAnnounceDocs', getMainAnnounceDocs);
 router.post('/deleteDoc', deleteDoc);
+router.post('/modDoc', modDoc);
 
 
 async function getDocsNum(req, res){
-    Announcement.count({}, function(err, count){
+    Announcement.countDocuments({}, function(err, count){
         if(err){
             return res.status(400).json(new Res(false, "failed to get query result.", null))
         }
         else{
-            return res.status(200).json(new Res(true, "successfully get number of docs", { data : count }));
+            return res.status(200).json(new Res(true, "successfully get number of docs", { docNum : count }));
         }
     })
 } 
@@ -56,7 +57,7 @@ async function getDocs(req, res){
             return res.status(400).json(new Res(false, "failed to get docs", null));
         }
         else{
-            return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
+            return res.status(200).json(new Res(true, "successfully load docs", {'docList': docList}));
         }
     })
 }
@@ -68,20 +69,39 @@ async function getMainAnnounceDocs(req, res){
             return res.status(400).json(new Res(false, "failed to get docs", null));
         }
         else{
-            return res.status(200).json(new Res(true, "successfully load docs", {data: docList}));
+            return res.status(200).json(new Res(true, "successfully load docs", {'docList': docList}));
         }
     })
 }
 
 async function deleteDoc(req, res){
-    console.log(req);
-    console.log(req.body.docId);
     Announcement.remove({'docId': req.body.docId}, function(err){
         if (err){
             return res.status(400).json(new Res(false, "failed to delete docs", null));
         }
         else{
             return res.status(200).json(new Res(true, "successfully load docs", null));
+        }
+    });
+}
+
+async function modDoc (req, res){
+    Announcement.updateOne(
+        { 'docId': req.body.docId },
+        {
+            "title" : req.body.title,
+            "content" : req.body.content,
+            "isMainAnnounce": req.body.isMainAnnounce,
+            "modDate" : moment().format("YYYY-MM-DD"),
+        },
+    function(err){
+        if (err){
+            console.log(err)
+            return res.status(400).json(new Res(false, "failed to update doc", null));
+        }
+        else{
+        
+            return res.status(200).json(new Res(true, "successfully update doc", null));
         }
     });
 }
