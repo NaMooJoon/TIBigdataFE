@@ -6,7 +6,6 @@ import { WriteCommunityDocComponent } from './write-community-doc/write-communit
 import { ReadCommunityDocComponent } from "./read-community-doc/read-community-doc.component";
 import { AnnouncementComponent } from "./announcement/announcement.component";
 import { FAQComponent } from "./faq/faq.component";
-import { CommunityService } from './community-services/community.service';
 import { ModCommunityDocComponent } from './mod-community-doc/mod-community-doc.component';
 
 const routes: Routes = [
@@ -35,7 +34,7 @@ const routes: Routes = [
         component: FAQComponent
       },
       {
-        path: "mod",
+        path: "modDoc",
         component: ModCommunityDocComponent
       }
     ]

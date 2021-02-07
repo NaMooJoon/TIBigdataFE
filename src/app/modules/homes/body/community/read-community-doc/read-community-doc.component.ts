@@ -46,4 +46,8 @@ export class ReadCommunityDocComponent implements OnInit {
     }
   }
 
+  navigateToModDoc() {
+    this.router.navigateByUrl('/community/modDoc');
+  }
+
 }
