@@ -13,7 +13,7 @@ export class CommunityRootComponent implements OnInit {
   constructor(
     private router: Router,
     private cmService: CommunityService,
-    private cdRef: ChangeDetectorRef) { }
+  ) { }
   private selectedMenu: boardMenu;
 
   ngOnInit() {
@@ -21,12 +21,11 @@ export class CommunityRootComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-
     this.cmService.getBoardMenuChange().subscribe(menu => {
-      this.selectedMenu = menu;
-      this.cdRef.detectChanges();
+      setTimeout(() => {
+        this.selectedMenu = menu;
+      });
     });
-
   }
 
 
