@@ -7,6 +7,8 @@ autoIncrement.initialize(conn)
 
 const faqDocSchema = new Schema({
     docId : Number,
+    userName : String,
+    userEmail : String,
     title : String,
     content : String,
     category: String,

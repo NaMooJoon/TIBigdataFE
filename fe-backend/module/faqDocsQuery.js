@@ -29,7 +29,10 @@ async function getDocsNum(req, res){
 } 
 
 async function registerDoc (req, res){
+    console.log(req.body)
     newDoc = new Faq({
+        "userName" : req.body.userName,
+        "userEmail": req.body.userEmail,
         "title" : req.body.title,
         "content" : req.body.content,
         "category" : req.body.category,
@@ -72,7 +75,7 @@ async function deleteDoc(req, res){
 }
 
 async function modDoc (req, res){
-    faq.updateOne(
+    Faq.updateOne(
         { 'docId': req.body.docId },
         {
             "title" : req.body.title,
