@@ -49,14 +49,14 @@
       </div>
       <div class="info-container">
         <button class="button-reply" type="submit"> 등록</button>
-        <button class="button-reply" (click)="changeReplyMode()">취소</button>
+        <button class="button-reply" type="button" (click)="changeReplyMode()">취소</button>
       </div>
     </form>
   </div>
 </div>
 
 <div class="buttons">
-  <button class="button-list" (click)="gotoList()">목록</button>
+  <button class="button-list" (click)="goToList()">목록</button>
   <button *ngIf="!isAnswered" class="button-mod" (click)="navigateToModDoc()"> 수정</button>
   <button class="button-del" (click)="deleteDoc()"> 삭제</button>
   <button *ngIf="!isAnswered && cmService.currentMenu == 'qna'" (click)="changeReplyMode()"> 답변
