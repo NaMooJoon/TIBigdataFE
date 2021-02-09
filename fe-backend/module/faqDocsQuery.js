@@ -15,6 +15,8 @@ router.post('/getDocs', getDocs);
 router.post('/deleteDoc', deleteDoc);
 router.post('/modDoc', modDoc);
 router.post('/getSingleDoc', getSingleDoc);
+router.post('/searchDocs', searchDocs);
+router.post('/searchDocsNum', searchDocsNum);
 
 async function getDocsNum(req, res){
     Faq.countDocuments({}, function(err, count){
@@ -101,6 +103,25 @@ async function getSingleDoc (req, res){
     }).catch((err) => {
         console.log(err);
         return res.status(400).json(new Res(false, "failed to update doc", null));
+    });
+}
+
+async function searchDocs (req, res){
+    Faq.createIndexes({title: "text", content: "text"});
+    Faq.find({$text: {$search : req.body.searchText}}).limit(10).then((result) => {
+        return res.status(200).json(new Res(true, "successfully search doc", {'docList': result}));
+    }).catch((err) => {
+        return res.status(200).json(new Res(true, "failed to search doc", null));
+    });
+}
+
+async function searchDocsNum (req, res){
+    Faq.createIndexes({title: "text", content: "text"});
+    Faq.find({$text: {$search : req.body.searchText}}).count().then((count) => {
+        return res.status(200).json(new Res(true, "successfully search doc", { docNum : count }));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(200).json(new Res(true, "failed to search doc", null));
     });
 }
 

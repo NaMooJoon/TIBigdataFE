@@ -14,6 +14,8 @@ const faqDocSchema = new Schema({
     category: String,
 })
 
+faqDocSchema.index({title: 'text', content : 'text'})
+
 faqDocSchema.plugin(autoIncrement.plugin, {
     model : 'faqModel',
     field : 'docId',

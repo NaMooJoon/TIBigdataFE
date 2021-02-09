@@ -16,6 +16,8 @@ const announcementDocSchema = new Schema({
     isMainAnnounce: Boolean,
 })
 
+announcementDocSchema.index({title: 'text', content : 'text'})
+
 announcementDocSchema.plugin(autoIncrement.plugin, {
     model : 'announcementModel',
     field : 'docId',

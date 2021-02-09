@@ -28,39 +28,47 @@ export class AnnouncementComponent implements OnInit {
   private pages: number[];
   private totalPages: number;
   private mainAnnounceNum: number;
+  private isSearchMode: boolean = false;
+  private searchText: string;
 
   constructor(
     private router: Router,
     private cmService: CommunityService,
     private pgService: PaginationService,
     private authService: EPAuthService,
-
   ) { }
 
-  ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.authService.getLoginStatChange().subscribe(stat => {
       this.logStat = stat;
-      console.log("comm compo stat : ", stat);
     });
+
+
     this.cmService.setBoardMenu(boardMenu.ANNOUNCE);
-    this.loadPage(1);
+    await this.loadPage(1);
   }
 
-  async loadPage(currentPage: number) {
+  async loadPage(currentPage: number): Promise<void> {
     this.docList = [];
-    this.totalDocs = await this.cmService.getDocsNum();
-    let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
-    this.setPageInfo(pageInfo);
 
     await this.loadAnnouncements();
-    await this.loadGenerals();
+    if (this.isSearchMode) {
+      this.totalDocs = await this.cmService.getSearchDocsNum(this.searchText);
+      await this.loadSearchResults();
+    }
+    else {
+      this.totalDocs = await this.cmService.getDocsNum();
+      await this.loadGenerals();
+    }
+
+    let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
+    this.setPageInfo(pageInfo);
   }
 
   async loadAnnouncements() {
     this.mainAnnounceNum = 0;
     let announceDocs: Array<CommunityDocModel> = await this.cmService.getMainAnnounceDocs();
-    console.log(announceDocs);
-    if (announceDocs === null) {
+    if (announceDocs.length === 0) {
       this.mainAnnounceNum = 0;
     }
     else {
@@ -71,8 +79,22 @@ export class AnnouncementComponent implements OnInit {
 
   async loadGenerals() {
     let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
-    if (generalDocs !== null)
+    if (generalDocs.length !== 0)
       this.saveDocsInFormat(generalDocs);
+  }
+
+  async loadSearchResults() {
+    let resultDocs: Array<CommunityDocModel> = await this.cmService.searchDocs(this.searchText);
+    if (resultDocs.length !== 0)
+      this.saveDocsInFormat(resultDocs);
+  }
+
+  async searchDocs($event): Promise<void> {
+    if (this.isSearchMode) return;
+    this.searchText = $event.target.value;
+    this.isSearchMode = true;
+    await this.loadPage(1);
+    this.isSearchMode = false;
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -93,10 +115,6 @@ export class AnnouncementComponent implements OnInit {
   navToReadThisDoc(i: number) {
     this.cmService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/readDoc");
-  }
-
-  updateSearchKey($event: { target: { value: any; }; }) {
-    let keyword = $event.target.value;
   }
 
   navToWriteNewDoc() {
