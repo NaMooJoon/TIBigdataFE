@@ -7,7 +7,6 @@ import { GoogleLoginProvider } from 'angularx-social-login';
 import { CommunicationRoutingModule } from './communication-routing.module';
 import { RegisterComponent } from '../homes/body/membership/register/register.component';
 import { LoginComponent } from '../homes/body/membership/login/login.component';
-import { EventService } from './fe-backend-db/membership/event.service';
 import { AuthGuard } from './fe-backend-db/membership/auth.guard';
 import { TokenInterceptorService } from './fe-backend-db/membership/token-interceptor.service';
 import { SocialRegisterComponent } from '../homes/body/membership/register/social-register/social-register.component';
@@ -41,7 +40,6 @@ const PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.
     SocialLoginModule,
   ],
   providers: [
-    EventService,
     ElasticSearchQueryModel,
     CommunityPrivacyMaskingService,
     AuthGuard,
