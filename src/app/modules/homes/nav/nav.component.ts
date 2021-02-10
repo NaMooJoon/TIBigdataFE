@@ -1,8 +1,8 @@
 import { Component, AfterViewChecked, OnInit, OnChanges, Output, EventEmitter, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
-import { EPAuthService } from '../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../communications/fe-backend-db/membership/auth.service';
 // import { LoginComponent} from '../../core/componets/membership/login/login.component';
-import { UserpageComponent } from '../body/membership/userpage/userpage.component';
+import { UserPageComponent } from '../body/membership/userpage/userpage.component';
 import { SocialUser, SocialAuthService } from 'angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 import { IpService } from 'src/app/ip.service'
@@ -14,144 +14,117 @@ import { IpService } from 'src/app/ip.service'
   // providers:[LoginComponent]
 })
 export class NavComponent implements OnInit {
-
-  private nowUser: String = null;
   private isApiUser: Boolean = false;
   private isSignedIn: Boolean = false;
   private selectedMenu: String = "";
 
   constructor(
-    public _router: Router,
-    private auth: EPAuthService,
-    private _http: HttpClient,
-    private _ipService: IpService,
+    public router: Router,
+    private authService: AuthService,
+    private httpClient: HttpClient,
+    private ipService: IpService,
   ) {
-    this.auth.getLoginStatChange().subscribe(async (logInStat) => {
-      console.log("logstat : " + logInStat);
-      if (logInStat > 1) {
-        this.nowUser = this.auth.getUserName();
+    this.authService.getCurrentUserChange().subscribe((user) => {
+      if (user !== null) {
+        this.isApiUser = user.isApiUser;
+        this.isSignedIn = true;
       }
+      else {
+        this.isSignedIn = false;
+      }
+
+      console.log('signedin = ', this.isSignedIn);
     });
   }
 
-  async ngOnInit(): Promise<void> {
-    this.isSignedIn = await this.auth.verifySignIn();
-    this.setApiStat();
-    this.auth.getLoginStatChange().subscribe(async (logInStat) => {
-      console.log("logstat : " + logInStat);
-      if (logInStat > 1) {
-        this.nowUser = this.auth.getUserName();
-      }
-    });
+  ngOnInit() {
   }
 
   async logOut() {
     console.log("logout func init");
-    await this.auth.logOut();
+    await this.authService.signOut();
     this.ngOnInit();
   }
 
-  setApiStat(): void {
-    if (this.isSignedIn) {
-      this.isApiUser = this.auth.getApiStat();
-    }
-    else {
-      this.isApiUser = false;
-    }
-  }
-
-  setColor(menu: string): string {
-    if (this.selectedMenu === menu) {
-      return "red";
-    }
-    else {
-      return "";
-    }
-  }
-
-  ready() {
-    alert("준비중입니다");
-  }
-  //routers
   navigateSpecials() {
-    this._router.navigateByUrl("/specials");
+    this.router.navigateByUrl("/specials");
   }
 
   navigateParser() {
-    this._router.navigateByUrl("/flask");
+    this.router.navigateByUrl("/flask");
   }
 
   navigateLibrary() {
-    this._router.navigateByUrl("/library");
+    this.router.navigateByUrl("/library");
     this.selectedMenu = "library"
   }
 
   navigateQT() {
-    this._router.navigateByUrl("/querytest");
+    this.router.navigateByUrl("/querytest");
   }
 
   LineChart() {
-    this._router.navigateByUrl("/line-chart");
+    this.router.navigateByUrl("/line-chart");
   }
 
   toFlask() {
-    this._router.navigateByUrl("/flask");
+    this.router.navigateByUrl("/flask");
   }
 
   toHomes() {
-    this._router.navigateByUrl("/homes");
+    this.router.navigateByUrl("/homes");
   }
 
   toLogin() {
-    this._router.navigateByUrl("/login");
+    this.router.navigateByUrl("/login");
   }
   ///../core/componetsmembership/login
   toRegister() {
     // console.log("in the toReg func")
-    this._router.navigateByUrl("/register");
+    this.router.navigateByUrl("/register");
   }
 
   toEvent() {
-    this._router.navigateByUrl("/event");
+    this.router.navigateByUrl("/event");
   }
 
   toUserPage() {
-    this._router.navigateByUrl("/userpage/my-docs");
+    this.router.navigateByUrl("/userpage/my-docs");
     // UserpageRootComponent.where = "내 보관함";
   }
 
   toControl() {
-    this._router.navigateByUrl("/control");
+    this.router.navigateByUrl("/control");
   }
 
   toCommunity() {
-    this._router.navigateByUrl("/community/qna")
+    this.router.navigateByUrl("/community/qna")
   }
 
   toAnnouncement() {
-    this._router.navigateByUrl("/community/announcement");
+    this.router.navigateByUrl("/community/announcement");
   }
 
   toFaq() {
-    this._router.navigateByUrl("/community/faq");
+    this.router.navigateByUrl("/community/faq");
   }
 
   toOpenApi() { }
 
   toSiteIntro() {
-    this._router.navigateByUrl("/introduce/intro");
+    this.router.navigateByUrl("/introduce/intro");
   }
 
   toServiceGuide() {
-    this._router.navigateByUrl("/introduce/service-guide");
+    this.router.navigateByUrl("/introduce/service-guide");
   }
 
   toCollectedInfo() {
-    this._router.navigateByUrl("/introduce/collected-info");
+    this.router.navigateByUrl("/introduce/collected-info");
   }
 
   toMemberPolicy() {
-    this._router.navigateByUrl("/introduce/member-policy");
+    this.router.navigateByUrl("/introduce/member-policy");
   }
 
 }
