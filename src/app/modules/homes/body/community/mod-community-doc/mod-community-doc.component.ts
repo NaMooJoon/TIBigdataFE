@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
-import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+import { AuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
+
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { CommunityService, boardMenu } from '../community-services/community.service';
 import { CommunityDocModel } from '../community.doc.model';
@@ -16,7 +16,7 @@ export class ModCommunityDocComponent implements OnInit {
   constructor(
     private router: Router,
     private cmService: CommunityService,
-    private auth: EPAuthService,
+    private auth: AuthService,
   ) {
     this.boardForm = new FormGroup({
       title: new FormControl('', Validators.required),
@@ -31,12 +31,12 @@ export class ModCommunityDocComponent implements OnInit {
   private selectedDoc: CommunityDocModel;
 
   ngOnInit() {
-    if (this.auth.getLogInStat() == logStat.unsigned || this.cmService.getCurrentMenu() === null || this.selectedDoc === null) {
-      window.alert('비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.');
-      this.router.navigateByUrl('/community/announcement');
-      this.router.dispose();
-    }
-    else this.loadDoc();
+    // if (this.auth.getLogInStat() == logStat.unsigned || this.cmService.getCurrentMenu() === null || this.selectedDoc === null) {
+    //   window.alert('비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.');
+    //   this.router.navigateByUrl('/community/announcement');
+    //   this.router.dispose();
+    // }
+    // else this.loadDoc();
   }
 
   async loadDoc() {

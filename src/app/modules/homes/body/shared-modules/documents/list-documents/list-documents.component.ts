@@ -8,11 +8,13 @@ import { HttpClient } from "@angular/common/http";
 import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
 import { IpService } from "src/app/ip.service";
 import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
-import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
 import { PaginationModel } from "../../../shared-services/pagination-service/pagination.model";
+import { UserDocumentService } from "src/app/modules/communications/fe-backend-db/userDocument/userDocument.service";
+
 
 @Component({
   selector: 'app-search-result-document-list',
@@ -36,7 +38,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   private countNumChange$: Observable<any> = this.es.getCountNumChange();
   private searchStatusChange$: Observable<boolean> = this.es.getSearchStatus();
   private articleChange$: Observable<ArticleSource[]> = this.es.getArticleChange();
-  private loginStatChage$ = this.auth.getLoginStatChange();
 
   // private keywordSubs : Subscription;
   private countNumSubs: Subscription;
@@ -64,15 +65,11 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   pageSize: number = 10;
 
   constructor(
-    private auth: EPAuthService,
-    private rcmd: RecommendationService,
-    private ipService: IpService,
+    private userDocumentService: UserDocumentService,
     private idControl: IdControlService,
-    public _router: Router,
-    private http: HttpClient,
-    private es: ElasticsearchService, //private cd: ChangeDetectorRef.
+    private router: Router,
+    private es: ElasticsearchService,
     private db: AnalysisDatabaseService,
-    private docControl: DocumentService,
     private fb: FormBuilder,
     private pgService: PaginationService,
   ) {
@@ -116,12 +113,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     this.loadSearchResult();
   }
 
-  update_login_stat() {
-    this.loginStatSubs = this.loginStatChage$.subscribe(stat => {
-      this.isLogStat = stat;
-    })
-  }
-
   setCheckboxProp(): void {
     for (let i in this.articleSources) {
       this.articleSources[i]['isSelected'] = false;
@@ -130,10 +121,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   async loadSearchResult() {
     this.initialize_search();
-
-
-
-    this.update_login_stat();
   }
 
   setPageInfo(pageInfo: PaginationModel) {
@@ -219,7 +206,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     if (this.form.value['checkArray'].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.")
     } else {
-      this.auth.addMyDoc(this.form.value['checkArray']).then(() => {
+      this.userDocumentService.saveNewDoc(this.form.value['checkArray']).then(() => {
         alert("문서가 나의 문서함에 저장되었어요.")
       });
     }
@@ -271,6 +258,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   navToDocDetail() {
-    this._router.navigateByUrl("search/DocDetail");
+    this.router.navigateByUrl("search/DocDetail");
   }
 }

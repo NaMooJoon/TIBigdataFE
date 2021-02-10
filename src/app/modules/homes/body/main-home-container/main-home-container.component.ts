@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EPAuthService } from '../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../communications/fe-backend-db/membership/auth.service';
 import { SocialAuthService } from 'angularx-social-login'
 
 @Component({
@@ -9,11 +9,10 @@ import { SocialAuthService } from 'angularx-social-login'
 })
 export class MainHomeContainerComponent implements OnInit {
 
-  constructor(private auth: EPAuthService, private gAuth: SocialAuthService) { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
-    console.log("here");
-    this.auth.verifySignIn();//어디 갔다가 다시 웹사이트에 돌아왔을 때, 그 때 파악하는 용도.
+
   }
 
 }

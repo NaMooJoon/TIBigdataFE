@@ -2,10 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import moment from 'moment';
-import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
 import { CommunityDocModel } from '../community.doc.model';
@@ -20,7 +21,7 @@ import { CommunityDocModel } from '../community.doc.model';
 export class FAQComponent implements OnInit {
   private docList: Array<CommunityDocModel>;
   private pageInfo: PaginationModel;
-  private logStat: logStat;
+
   private pageSize = 10;
   private totalDocs: number;
   private startIndex: number = 0;
@@ -29,20 +30,27 @@ export class FAQComponent implements OnInit {
   private totalPages: number;
   private isSearchMode: boolean = false;
   private searchText: string;
+  private isAdmin: boolean = false;
+  private currentUser: UserProfile;
 
   constructor(
     private router: Router,
     private cmService: CommunityService,
     private pgService: PaginationService,
-    private authService: EPAuthService,
+    private authService: AuthService,
 
-  ) { }
+  ) {
+    this.authService.getCurrentUserChange().subscribe(currentUser => {
+      this.currentUser = currentUser;
+      if (currentUser !== null && currentUser.isAdmin === true)
+        this.isAdmin = true;
+      else
+        this.isAdmin = false;
+    });
+  }
 
   ngOnInit() {
-    this.authService.getLoginStatChange().subscribe(stat => {
-      this.logStat = stat;
-      console.log("comm compo stat : ", stat);
-    });
+
     this.cmService.setBoardMenu(boardMenu.FAQ);
     this.loadPage(1);
   }

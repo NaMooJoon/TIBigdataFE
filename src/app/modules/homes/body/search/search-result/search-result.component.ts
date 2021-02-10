@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 
 @Component({
   selector: "app-search-result",
@@ -15,7 +15,7 @@ export class SearchResultComponent implements OnInit {
   private isResultFound: boolean;
 
   constructor(
-    private auth: EPAuthService,
+    private auth: AuthService,
     public _router: Router,
     private es: ElasticsearchService,
   ) {
