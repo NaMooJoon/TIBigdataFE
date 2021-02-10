@@ -69,17 +69,7 @@ router.post('/addHistory', (req, res) => { //post로 바꿔주었음 20.05.13 16
     //record user own history for each user
     var isLogin = bundle.login;
     if (isLogin) {
-        /**
-         * //enumerate login status
-            enum logStat {
-                unsigned,//0
-                SUPERUSER,//1
-                email,//2
-                google,//3
-            }
-         */
-
-
+        
         let userEmail = bundle.email;
         User.findOneAndUpdate({ email: userEmail }, { $push: { history: keyword } }, (err, doc) => {
             if (err) {

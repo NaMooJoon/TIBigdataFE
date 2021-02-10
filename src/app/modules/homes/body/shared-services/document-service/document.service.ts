@@ -16,7 +16,7 @@ export class DocumentService {
    * @description id string array을 받아서 해당 id을 문서 제목에 매핑하는 함수
    * @param ids 가 없으면 현재 유저의 myDoc을 받아온다. ids가 있으면 param으로 받은 문서 가져옴
    */
-  async convert_id_to_doc_title(ids: string[]) {
+  async convert_id_to_doc_title(ids: string[]): Promise<string[]> {
     console.log("in documentn converid 2 table :  ", ids)
     this.es.setIds(ids);
     return new Promise((resolve) => {
