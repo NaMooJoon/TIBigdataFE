@@ -1,255 +1,130 @@
-import { UserProfile, logStat } from "./user.model";
-import { Auth } from "./userAuth.model";
-import { Injectable, Injector } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { NavigationEnd, Router } from "@angular/router";
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { IpService } from 'src/app/ip.service';
-import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
-import { AuthEmailService } from "./auth-email.service";
-import { AuthGoogleService } from "./auth-google.service";
-import { SocialUser } from "angularx-social-login";
-
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Observable } from "rxjs";
+import { Res } from "../res.model";
+import { UserProfile } from "./user.model";
+import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
+// import { PROVIDER_ID } from "../../communication.module";
 
 @Injectable({
   providedIn: 'root'
 })
-export class EPAuthService {
-  private JC: string = "jcnam@handong.edu";
-  private BAEK: string = "21500850@handong.edu";
-  private SONG: string = "21500831@handong.edu";
-  protected URL = this.ipService.getFrontDBServerIp();
+export class AuthService {
+  private API_URL: string = 'http://localhost:14000';
+  private headers = new HttpHeaders().set('Content-Type', 'application/json');
+  private currentUserChange$: BehaviorSubject<UserProfile> = new BehaviorSubject(null);
+  private currentUser: UserProfile;
+  private isLoggedIn: boolean;
+  private UPDATE_API_AUTH = this.API_URL + "/users/apiRegister";
+  private GOOGLE_VERIFY_TOKEN_URL = this.API_URL + "/users/verifyToken";
+  private PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com";
 
-  private SUPERUSER: string[] = [this.JC, this.BAEK, this.SONG]
-
-  private KEEP_MY_DOC_URL = this.URL + "/myDoc/keepMyDoc";
-  private GET_MY_DOC_URL = this.URL + "/myDoc/getMyDoc";
-  private ERASE_ALL_MY_DOC = this.URL + "/myDoc/eraseAllDoc";
-  private ADD_SEARCH_HISTORY_URL = this.URL + "/hst/addHistory";
-  private SHOW_SEARCH_HISTORY_URL = this.URL + "/hst/showHistory";
-  private UPDATE_API_AUTH = this.URL + "/eUser/apiRegister";
-
-  private isLogIn: logStat = logStat.unsigned;//for static, inactive, passive use
-  private loginStatChange$: BehaviorSubject<logStat> = new BehaviorSubject(logStat.unsigned);//to stream to subscribers
-  private loginUserData = {};
-  private socUser: SocialUser = null;//for social login
-  private userProfile: UserProfile = undefined;
-  private auth: Auth = undefined;
-
-  private schHst: [] = [];//user search history
-  private myDocs: [] = [];
   constructor(
-    protected ipService: IpService,
-    private http: HttpClient,
-    private router: Router,
-    private docSvc: DocumentService,
-    private eAuth: AuthEmailService,
-    private gAuth: AuthGoogleService,
+    private httpClient: HttpClient,
+    public router: Router,
+    private socialAuthService: SocialAuthService,
   ) {
+    this.currentUserChange$.subscribe((currentUser: UserProfile) => {
+      this.isLoggedIn = (currentUser != null);
+    });
   }
 
-  forceLogOut() {
-    alert("강제로 로그아웃 합니다. 새로고침 해야 적용 됨.");
-    localStorage.removeItem("token");
+  getCurrentUserChange(): Observable<UserProfile> {
+    return this.currentUserChange$.asObservable();
   }
 
-  getLoginStatChange(): Observable<logStat> {
-    return this.loginStatChange$.asObservable();
+  setCurrentUser(userProfile: UserProfile): void {
+    this.currentUserChange$.next(userProfile);
   }
 
-  getLogInStat(): logStat {
-    return this.isLogIn;
+  async register(user: UserProfile): Promise<boolean> {
+    let userDataFromGoogle: SocialUser = await this.getSocialAccountInfo();
+    this.disposeSocialAccountInfo();
+    if (await this.verifyUser(userDataFromGoogle.email)) return false;
+
+    let userData: UserProfile = new UserProfile(userDataFromGoogle);
+    userData.inst = user.inst;
+    userData.status = user.status;
+
+    let res: Res = await this.httpClient.post<any>(`${this.API_URL}/users/registerUser`, userData).toPromise();
+
+    return res.succ;
   }
 
-  setLogStat(stat: logStat) {
-    this.loginStatChange$.next(stat as logStat)
-    this.isLogIn = stat as logStat;
-  }
-
-  getUserName(): string {
-    return this.userProfile.name;
-  }
-
-  getAuthType(): logStat {
-    return this.userProfile.registerStat;
-  }
-
-  getToken() {
-    return localStorage.getItem("token");
-  }
-
-  getApiStat(): boolean {
-    return this.userProfile.api;
-  }
-
-  getUserEmail(): string {
-    return this.userProfile.email;
-  }
-
-  getUserNickname(): string {
-    return this.userProfile.nickName;
-  }
-
-  getUserInst(): string {
-    return this.userProfile.inst;
-  }
-
-  async logOut() {
-    this.auth.logOut()
-    localStorage.removeItem("token");
-
-    if (this.isLogIn == logStat.unsigned) {
-      new Error("logStat screwed up. need to be checked.");//in case of screwed up
+  async signIn(): Promise<boolean> {
+    let socialAccountInfo = await this.getSocialAccountInfo();
+    if (await this.verifyUser(socialAccountInfo.email)) {
+      this.setCurrentUser(await this.getUserProfile(socialAccountInfo.email));
+      this.setToken(socialAccountInfo);
+      return true;
     }
-    this.setLogStat(logStat.unsigned);
-    this.router.navigate(["/homes"]);
-  }
-
-  async verifySignIn(): Promise<Boolean> {
-    let tk_with_type = JSON.parse(this.getToken());//token is stored in string.
-    if (tk_with_type) {//when token exists
-      let tk = tk_with_type.token;
-      let type = tk_with_type.type;
-
-      if (type == logStat.google) {
-        this.auth = this.gAuth.getInstance();
-
-      }
-      else if (type == logStat.email) {
-        this.auth = this.eAuth.getInstance();
-      }
-
-      let tkStat = await this.auth.verifyToken(tk);//verify it this token is valid or expired.
-      if (tkStat.succ) {
-        this.userProfile = new UserProfile(type, tkStat.payload.user.email, tkStat.payload.user.name, tkStat.payload.user.nickname, tkStat.payload.user.inst, tkStat.payload.user.api, tk);
-        console.log("set stat after verifying: " + type);
-        this.setLogStat(type);
-        console.log(this.userProfile);
-        let isSU = this.SUPERUSER.findIndex(i => {
-          i == this.userProfile.name
-        })
-        if (isSU)
-          type = logStat.SUPERUSER;
-
-        return true;
-      }
-      else {//toekn verify failed
-        if (tkStat.msg == "expired") {
-          alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
-          this.auth.logOut();
-          this.router.navigate(['/homes']);
-        }
-      }
-    }
-
-    else {//when token does not exist.
+    else {
+      this.disposeSocialAccountInfo();
       return false;
     }
   }
 
-  //검색내역 history 추가 
-  addSrchHst(keyword: string): void {
-    let bundle = { login: undefined, email: undefined, key: keyword }
-    if (this.isLogIn) {
-      let userEmail = this.userProfile.email;
-      bundle = { login: this.isLogIn, email: userEmail, key: keyword }
-    }
-    this.http.post<any>(this.ADD_SEARCH_HISTORY_URL, bundle).subscribe((res) => {
-      this.schHst = res.history;
-    });
+  signOut(): void {
+    this.socialAuthService.signOut();
+    localStorage.removeItem("KUBIC_TOKEN");
+    this.setCurrentUser(null);
+    this.router.navigateByUrl('/');
   }
 
-  async showSrchHst() {
-    // var hst;
-    if (this.isLogIn) {
-      console.log("add serach history : user is login.", this.userProfile)
-      let userEmail = this.userProfile.email;
-      let bundle = { login: this.isLogIn, email: userEmail }
-
-      let res = await this.http.post<any>(this.SHOW_SEARCH_HISTORY_URL, bundle).toPromise()
-      console.log("show search hist : ", res);
-      if (res.succ)
-        return res.payload.map(h => h.keyword);
-      else
-        return ["아직 검색 기록이 없어요. 검색창에 키워드를 입력해보세요."]
-    }
-    else {
-      console.log("비 로그인 상태")
-      return Error;
-    }
+  async getUserProfile(email: string): Promise<UserProfile> {
+    let res: Res = await this.httpClient.post<any>(`${this.API_URL}/users/getUserInfo`, { 'email': email, headers: this.headers }).toPromise();
+    return res.payload['userProfile'];
   }
 
-  async addMyDoc(docIDs) {
+  async verifyUser(email: string): Promise<boolean> {
+    let res: Res = await this.httpClient.post<any>(`${this.API_URL}/users/verifyUser`, { 'email': email }).toPromise();
+    return res.payload['isRegistered'];
+  }
 
-    let idRes = await this.http.post<any>(this.GET_MY_DOC_URL, { payload: this.userProfile.email }).toPromise();
-    console.log("idRes: ", idRes);
-
-    if (idRes.succ === false) {
-      let payload = { userEmail: this.userProfile.email, docs: docIDs };
-      let res = await this.http.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
-      this.myDocs = res.myDoc;
-      return;
-    }
-
-    for (var i = 0; i < idRes.payload.length; i++) {
-      for (var j = 0; j < docIDs.length; j++) {
-        if (idRes.payload[i] === docIDs[j]) {
-          docIDs.splice(j, 1);
-        }
+  async verifySignIn(): Promise<void> {
+    let token = this.getToken();
+    if (token) {
+      let verifyResult: Res = await this.verifyToken(token);
+      if (verifyResult.succ) {
+        console.log(verifyResult.payload)
+        this.setCurrentUser(verifyResult.payload['userProfile']);
+      }
+      else {
+        alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+        this.signOut();
+        this.router.navigate(['/homes']);
       }
     }
-
-    let payload = { userEmail: this.userProfile.email, docs: docIDs };
-    let res = await this.http.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
-    this.myDocs = res.myDoc;
-
   }
 
-  /**
-   * @description 저장한 나의 문서의 제목을 호출한다.
-   * @param isId 문서의 id를 같이 요구한다면 true
-   * @return string array
-   */
-  async getMyDocs(isId?: boolean) {
-    // console.log(this.idList);
-    let idRes = await this.http.post<any>(this.GET_MY_DOC_URL, { payload: this.userProfile.email }).toPromise();
-
-    idRes = idRes.payload;
-    console.log("get my doc : ", idRes);
-
-    if (idRes) {
-      if (isId) {//when request id list
-        let titles = await this.docSvc.convert_id_to_doc_title(idRes) as [];
-        let i = -1;
-        return titles.map(t => {
-          i++
-          return { title: t, id: idRes[i] }
-        })
-        // return 
-      }
-      else//when only requset titles
-        return await this.docSvc.convert_id_to_doc_title(idRes)
-    }
-    else if (idRes == null)//when null => when no keep doc. 
-      return null
+  async verifyToken(token: string): Promise<Res> {
+    var client = this.PROVIDER_ID
+    return await this.httpClient.post<any>(`${this.API_URL}/users/verifyToken`, { token: token, client: client }).toPromise();
   }
 
-  async eraseAllMyDoc() {
-    let res = await this.http.post<any>(this.ERASE_ALL_MY_DOC, { payload: this.userProfile.email }).toPromise();
-    if (res.succ)
-      alert("나의 문서를 모두 지웠어요.");
-    else
-      alert("문서 지우기에 실패했습니다. 관리자에게 문의해주세요.")
+  async apiRegister(): Promise<boolean> {
+    let res: Res = await this.httpClient.post<any>(this.UPDATE_API_AUTH, { payload: this.currentUser.email }).toPromise();
+    return res.succ;
   }
 
-  async apiRegister() {
-    let res = await this.http.post<any>(this.UPDATE_API_AUTH, { payload: this.userProfile.email }).toPromise();
-    if (res.succ) {
-      alert("회원가입이 완료되었습니다! API 키 발급페이지로 이동합니다.");
-    }
-    else {
-      alert("잘못된 접근입니다. 로그인이 되어 있는지 확인해주세요.");
-      this.router.navigateByUrl("/login");
-    }
+  async getSocialAccountInfo(): Promise<SocialUser> {
+    return await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  async disposeSocialAccountInfo(): Promise<void> {
+    await this.socialAuthService.signOut();
+  }
+
+  getToken(): string {
+    return localStorage.getItem("KUBIC_TOKEN");
+  }
+
+  setToken(userData: SocialUser) {
+    localStorage.setItem("KUBIC_TOKEN", userData.idToken);
+  }
+
+  isUserLoggedIn(): boolean {
+    return this.isLoggedIn;
   }
 }
