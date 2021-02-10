@@ -1,27 +1,17 @@
-export class UserProfile {
-    registerStat: logStat;
-    email: string;
-    name: string;
-    token: string;
-    password?: string;
-    nickName?: string;
-    inst: string;
-    api: boolean;
-    constructor(reg, email, name, nickname, inst, api, token) {
-        this.registerStat = reg;
-        this.email = email;
-        this.name = name;
-        this.token = token;
-        this.nickName = nickname;
-        this.inst = inst
-        this.api = api;
-    }
-}
+import { SocialUser } from "angularx-social-login";
 
-//enumerate login status
-export enum logStat {
-    unsigned,//0
-    SUPERUSER,//1
-    email,//2
-    google,//3
+export class UserProfile {
+    name: string;
+    email: string;
+    inst: string;
+    status: string;
+    isAdmin: boolean = false;
+    isApiUser: boolean = false;
+
+    constructor(userData?: SocialUser) {
+        if (userData != null) {
+            this.name = userData.name;
+            this.email = userData.email;
+        }
+    }
 }
