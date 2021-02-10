@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthEmailService } from '../../../../communications/fe-backend-db/membership/auth-email.service';//register user service
-import { Router } from '@angular/router'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-
-class userProfile {
-  nickName: String;
-  name: String;
-  status: String;
-  inst: String;
-  email: String;
-  password: String;
-  api: Boolean;
-}
+import { Router } from "@angular/router";
+import { DomSanitizer } from "@angular/platform-browser";
+import { MatIconRegistry } from '@angular/material/icon';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { AuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
+import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 
 @Component({
   selector: 'app-register',
@@ -20,89 +13,40 @@ class userProfile {
 })
 
 export class RegisterComponent implements OnInit {
-
   private registerForm: FormGroup;
-  private userProfile = new userProfile();
-  private statusList: any = ['대학생', '석사', '박사', '연구원', '기타'];
-
+  private statusList: Array<string> = ['대학생', '석사', '박사', '연구원', '기타'];
   constructor(
-    private eAuth: AuthEmailService,
-    private _router: Router,
-    private formBuilder: FormBuilder,
-  ) { }
+    private authService: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder,) {
+  }
+
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      name: new FormControl('', [
-        Validators.required,
-      ]),
-      nickName: new FormControl('', [
-        Validators.required,
-      ]),
       status: new FormControl('', [
         Validators.required,
       ]),
       inst: new FormControl('', [
         Validators.required,
       ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      passwordConfirm: new FormControl('', [
-        Validators.required,
-      ]),
-    }, {
-      validator: this.mustMatch('password', 'passwordConfirm'),
-    });
-  }
-
-  onSubmit(): void {
-    console.log(this.registerForm.get('name').value);
-    this.userProfile.name = this.registerForm.get('name').value;
-    this.userProfile.nickName = this.registerForm.get('nickName').value;
-    this.userProfile.status = this.registerForm.get('status').value;
-    this.userProfile.inst = this.registerForm.get('inst').value;
-    this.userProfile.email = this.registerForm.get('email').value;
-    this.userProfile.password = this.registerForm.get('password').value;
-    this.userProfile.api = false;
-
-    this.registerUser();
+    })
   }
 
   async registerUser(): Promise<void> {
-    let regResult = await this.eAuth.register(this.userProfile); //_auth : register user service
-    if (regResult) {
-      this._router.navigateByUrl("/register-ok");
+    let userData: UserProfile = new UserProfile();
+    userData.inst = this.registerForm.get('inst').value;
+    userData.status = this.registerForm.get('status').value;
+    let result = await this.authService.register(userData);
+
+    console.log(result);
+    if (result) {
+      window.alert('회원가입이 완료되었습니다.');
+      this.router.navigateByUrl('/register-ok');
     }
     else {
-      alert("오류가 발생했습니다. 다시 회원가입을 시도해주세요");
-      this.ngOnInit();
-    }
-  }
-
-  toSocReg() {
-    this._router.navigateByUrl("/socReg");
-  }
-
-  mustMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-        return;
-      }
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ mustMatch: true });
-      }
-      else {
-        matchingControl.setErrors(null);
-      }
+      window.alert('이미 가입된 회원입니다. 로그인해주세요.');
+      this.router.navigateByUrl('/login')
     }
   }
 }
