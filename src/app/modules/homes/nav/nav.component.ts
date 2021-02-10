@@ -1,9 +1,6 @@
 import { Component, AfterViewChecked, OnInit, OnChanges, Output, EventEmitter, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../communications/fe-backend-db/membership/auth.service';
-// import { LoginComponent} from '../../core/componets/membership/login/login.component';
-import { UserPageComponent } from '../body/membership/userpage/userpage.component';
-import { SocialUser, SocialAuthService } from 'angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 import { IpService } from 'src/app/ip.service'
 
@@ -11,7 +8,6 @@ import { IpService } from 'src/app/ip.service'
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.less'],
-  // providers:[LoginComponent]
 })
 export class NavComponent implements OnInit {
   private isApiUser: Boolean = false;
@@ -90,7 +86,6 @@ export class NavComponent implements OnInit {
 
   toUserPage() {
     this.router.navigateByUrl("/userpage/my-docs");
-    // UserpageRootComponent.where = "내 보관함";
   }
 
   toControl() {
