@@ -4,16 +4,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    nickName : String,
-    auth : String,//google, email, ...
-    name : String,
+    name: String,
+    inst: String,
+    email: String,
     status: String,
-    inst : String,//institution
-    email:String,
-    password: String,//use only with email
-    api : Boolean,
-    history : [],
-    myDoc : []
+    isAdmin: Boolean,
+    isApiUser: Boolean,
 })
 
 const conn = require('../connection/userConn');
