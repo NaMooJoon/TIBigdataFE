@@ -30,8 +30,8 @@
     <p>{{ doc["reply"].content }}</p>
   </div>
   <div class="info-container">
-    <button class="button-reply" (click)="changeReplyMode()"> 수정</button>
-    <button class="button-reply" (click)="deleteReply()">삭제</button>
+    <button *ngIf="isAdmin && isReplyWriter" class="button-reply" (click)="changeReplyMode()"> 수정</button>
+    <button *ngIf="isAdmin && isReplyWriter" class="button-reply" (click)="deleteReply()">삭제</button>
     <div class="doc-date-writer">
       <p class="doc-writer"> {{ doc["reply"].userName }} </p>
       <p class="doc-regDate"> {{ doc["reply"].regDate }} </p>
@@ -57,8 +57,8 @@
 
 <div class="buttons">
   <button class="button-list" (click)="goToList()">목록</button>
-  <button *ngIf="!isAnswered" class="button-mod" (click)="navigateToModDoc()"> 수정</button>
-  <button class="button-del" (click)="deleteDoc()"> 삭제</button>
-  <button *ngIf="!isAnswered && cmService.currentMenu == 'qna'" (click)="changeReplyMode()"> 답변
+  <button *ngIf="!isAnswered && isPostWriter" class="button-mod" (click)="navigateToModDoc()"> 수정</button>
+  <button *ngIf="isPostWriter" class="button-del" (click)="deleteDoc()"> 삭제</button>
+  <button *ngIf="!isAnswered && isAdmin && cmService.currentMenu == 'qna'" (click)="changeReplyMode()"> 답변
     등록</button>
 </div>

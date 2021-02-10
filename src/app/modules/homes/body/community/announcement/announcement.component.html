@@ -29,7 +29,7 @@
 </table>
 
 <div class="buttons">
-  <button class="button-write" (click)="navToWriteNewDoc()">글쓰기</button>
+  <button *ngIf="isAdmin" class="button-write" (click)="navToWriteNewDoc()">글쓰기</button>
 </div>
 
 <div class="page-numbers">

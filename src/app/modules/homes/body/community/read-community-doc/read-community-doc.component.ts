@@ -2,11 +2,11 @@ import moment from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
-import { Auth } from 'src/app/modules/communications/fe-backend-db/membership/userAuth.model';
+import { AuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
 import { CommunityService } from "src/app/modules/homes/body/community/community-services/community.service";
 import { CommunityDocModel } from '../community.doc.model';
 import { Location } from '@angular/common';
+import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 
 @Component({
   selector: 'app-read-community-doc',
@@ -15,21 +15,45 @@ import { Location } from '@angular/common';
 })
 export class ReadCommunityDocComponent implements OnInit {
   private doc: CommunityDocModel;
-  private currentUser: String;
+  private currentUser: UserProfile;
   private currentMenu: string;
   private isReplyMode: boolean;
   private replyForm: FormGroup;
   private isAnswered: boolean;
   private isLoaded: boolean = false;
+  private currentUserEmail: string;
+  private isPostWriter: boolean;
+  private isReplyWriter: boolean;
+
+  isAdmin: boolean;
 
   constructor(
     private cmService: CommunityService,
     private router: Router,
-    private auth: EPAuthService,
-    private _location: Location) { }
+    private authService: AuthService,
+    private _location: Location
+  ) {
+    this.authService.getCurrentUserChange().subscribe(currentUser => {
+      this.currentUser = currentUser;
+      if (currentUser !== null) {
+        this.currentUserEmail = currentUser.email;
+        this.isAdmin = currentUser.isAdmin
+      }
+      else
+        this.isAdmin = false;
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     this.doc = await this.cmService.getSelectedDoc();
+    if (this.currentUserEmail === this.doc.userEmail)
+      this.isPostWriter = true;
+    else
+      this.isPostWriter = false;
+    if ('reply' in this.doc && this.currentUserEmail === this.doc.reply.userEmail)
+      this.isReplyWriter = true;
+    else
+      this.isReplyWriter = false;
     this.currentMenu = this.cmService.getCurrentMenu();
     this.isReplyMode = false;
 
@@ -110,8 +134,8 @@ export class ReadCommunityDocComponent implements OnInit {
       "reply": {
         "title": this.replyForm.controls['title'].value,
         "content": this.replyForm.controls['content'].value,
-        "userEmail": this.auth.getUserEmail(),
-        "userName": this.auth.getUserName(),
+        "userEmail": this.currentUser.email,
+        "userName": this.currentUser.name,
       }
     }
     if ('reply' in this.doc) {
