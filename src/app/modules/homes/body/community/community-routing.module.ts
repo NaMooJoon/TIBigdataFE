@@ -7,6 +7,7 @@ import { ReadCommunityDocComponent } from "./read-community-doc/read-community-d
 import { AnnouncementComponent } from "./announcement/announcement.component";
 import { FAQComponent } from "./faq/faq.component";
 import { ModCommunityDocComponent } from './mod-community-doc/mod-community-doc.component';
+import { AuthGuard } from 'src/app/modules/communications/fe-backend-db/membership/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
       },
       {
         path: "newDoc",
-        component: WriteCommunityDocComponent
+        component: WriteCommunityDocComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: "readDoc",
@@ -35,7 +37,8 @@ const routes: Routes = [
       },
       {
         path: "modDoc",
-        component: ModCommunityDocComponent
+        component: ModCommunityDocComponent,
+        canActivate: [AuthGuard],
       }
     ]
   }
