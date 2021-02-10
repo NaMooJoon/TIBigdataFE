@@ -1,41 +1,30 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
-import { AuthEmailService } from '../../../../communications/fe-backend-db/membership/auth-email.service';
-import { AuthGoogleService } from '../../../../communications/fe-backend-db/membership/auth-google.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { Router } from '@angular/router'
-import { SocialAuthService, SocialUser, GoogleLoginProvider } from 'angularx-social-login';
-import { thresholdSturges } from 'd3-array';
-import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
-  providers: [SocialAuthService]
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private auth: EPAuthService,
-    private _router: Router,
-    private _gauth: SocialAuthService,
-    private gAuth: AuthGoogleService,
-    private eAuth: AuthEmailService,) { }
-  private loginUserData = undefined;
+    private authService: AuthService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
-    this.loginUserData = {};
   }
 
-  eLogIn() {
-    this.eAuth.logIn(this.loginUserData)
+  async signIn() {
+    let isSuccess = await this.authService.signIn();
+    if (isSuccess) {
+      window.alert('환영합니다 :)');
+      this.router.navigateByUrl('/');
+    }
+    else {
+      window.alert('가입되지 않은 회원입니다. 가입 후 이용해주세요 :)');
+      this.router.navigateByUrl("/register");
+    }
   }
-
-  gLogIn(): void {
-    this.gAuth.logIn();
-  }
-
-  toRegister() {
-    this._router.navigateByUrl("/membership/register");
-  }
-
 }
