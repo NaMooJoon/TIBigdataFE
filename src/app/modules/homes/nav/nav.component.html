@@ -1,9 +1,16 @@
 <nav class="navbar">
   <ul class="common-menu">
-    <li><a (click)="navigateLibrary()">자료열람</a></li>
-    <li><a (click)="navigateSpecials()">자료분석</a></li>
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'library' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'library' ? 'white' : 'black'}">
+      <a (click)="navigateLibrary()">자료열람</a>
+    </li>
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'analysis' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'analysis' ? 'white' : 'black'}">
+      <a (click)="navigateSpecials()">자료분석</a></li>
     <li *ngIf="isApiUser"><a>OpenAPI</a></li>
-    <li class="community-menu">
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'community' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'community' ? 'white' : 'black'}"
+      class="community-menu">
       <div class="dropdown-container">
         <a (click)="toCommunity()">커뮤니티</a>
         <ul class="community-dropdown-menu">
@@ -13,7 +20,9 @@
         </ul>
       </div>
     </li>
-    <li class="about-menu">
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'intro' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'intro' ? 'white' : 'black'}"
+      class="about-menu">
       <div class="dropdown-container">
         <a>홈페이지소개</a>
         <ul class="about-dropdown-menu">
@@ -27,12 +36,18 @@
   </ul>
 
   <ul *ngIf="!isSignedIn" class="login-menu">
-    <li><a (click)="toLogin()">로그인</a></li>
-    <li><a (click)="toRegister()">회원가입</a></li>
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'login' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'login' ? 'white' : 'black'}">
+      <a (click)="toLogin()">로그인</a></li>
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'register' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'register' ? 'white' : 'black'}">
+      <a (click)="toRegister()">회원가입</a></li>
   </ul>
 
   <ul *ngIf="isSignedIn" class="user-menu">
-    <li><a (click)="toUserPage()">마이페이지</a></li>
+    <li
+      [ngStyle]="{'background-color': selectedMenu == 'myPage' ? '#52b9ff' : 'transparent', 'color': selectedMenu == 'myPage' ? 'white' : 'black'}">
+      <a (click)="toUserPage()">마이페이지</a></li>
     <li><a (click)="logOut()">로그아웃</a></li>
   </ul>
 </nav>

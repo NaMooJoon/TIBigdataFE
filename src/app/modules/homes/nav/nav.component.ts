@@ -12,7 +12,7 @@ import { IpService } from 'src/app/ip.service'
 export class NavComponent implements OnInit {
   private isApiUser: Boolean = false;
   private isSignedIn: Boolean = false;
-  private selectedMenu: String = "";
+  private selectedMenu: string = "";
 
   constructor(
     public router: Router,
@@ -37,55 +37,34 @@ export class NavComponent implements OnInit {
   }
 
   async logOut() {
-    console.log("logout func init");
-    await this.authService.signOut();
+    this.authService.signOut();
     this.ngOnInit();
   }
 
   navigateSpecials() {
     this.router.navigateByUrl("/specials");
-  }
-
-  navigateParser() {
-    this.router.navigateByUrl("/flask");
+    this.selectedMenu = "analysis";
   }
 
   navigateLibrary() {
     this.router.navigateByUrl("/library");
-    this.selectedMenu = "library"
-  }
-
-  navigateQT() {
-    this.router.navigateByUrl("/querytest");
-  }
-
-  LineChart() {
-    this.router.navigateByUrl("/line-chart");
-  }
-
-  toFlask() {
-    this.router.navigateByUrl("/flask");
-  }
-
-  toHomes() {
-    this.router.navigateByUrl("/homes");
+    this.selectedMenu = "library";
   }
 
   toLogin() {
     this.router.navigateByUrl("/login");
-  }
-  ///../core/componetsmembership/login
-  toRegister() {
-    // console.log("in the toReg func")
-    this.router.navigateByUrl("/register");
+    this.selectedMenu = "login";
   }
 
-  toEvent() {
-    this.router.navigateByUrl("/event");
+  toRegister() {
+    this.router.navigateByUrl("/register");
+    this.selectedMenu = "register";
   }
+
 
   toUserPage() {
     this.router.navigateByUrl("/userpage/my-docs");
+    this.selectedMenu = "myPage";
   }
 
   toControl() {
@@ -93,33 +72,40 @@ export class NavComponent implements OnInit {
   }
 
   toCommunity() {
-    this.router.navigateByUrl("/community/qna")
+    this.router.navigateByUrl("/community/qna");
+    this.selectedMenu = "community";
   }
 
   toAnnouncement() {
     this.router.navigateByUrl("/community/announcement");
+    this.selectedMenu = "community";
   }
 
   toFaq() {
     this.router.navigateByUrl("/community/faq");
+    this.selectedMenu = "community";
   }
 
   toOpenApi() { }
 
   toSiteIntro() {
     this.router.navigateByUrl("/introduce/intro");
+    this.selectedMenu = "intro";
   }
 
   toServiceGuide() {
     this.router.navigateByUrl("/introduce/service-guide");
+    this.selectedMenu = "intro";
   }
 
   toCollectedInfo() {
     this.router.navigateByUrl("/introduce/collected-info");
+    this.selectedMenu = "intro";
   }
 
   toMemberPolicy() {
     this.router.navigateByUrl("/introduce/member-policy");
+    this.selectedMenu = "intro";
   }
 
 }

@@ -4,11 +4,6 @@ import { ElasticsearchService } from 'src/app/modules/communications/elasticsear
 import { ArticleSource } from "../article/article.interface";
 import { Subscription, Observable } from "rxjs";
 import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
-import { HttpClient } from "@angular/common/http";
-import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
-import { IpService } from "src/app/ip.service";
-import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
-import { AuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
@@ -33,28 +28,20 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   private ResultIdList: string[] = [];
   private selectedDocs: string[] = [];
   private relatedDocs: ArticleSource[][] = [];
-
-  // private keywordChange$ : Observable<string> = this.es.getKeywordChange();
   private countNumChange$: Observable<any> = this.es.getCountNumChange();
   private searchStatusChange$: Observable<boolean> = this.es.getSearchStatus();
   private articleChange$: Observable<ArticleSource[]> = this.es.getArticleChange();
-
-  // private keywordSubs : Subscription;
   private countNumSubs: Subscription;
   private articleSubs: Subscription;
-  private loginStatSubs: Subscription;
   private isSearchDoneSubs: Subscription;
   private articleSources: ArticleSource[];
-
   private RelatedDocBtnToggle: Array<boolean>;
   private isResultFound: boolean;
   private isLogStat: Number = 0;
   private isSearchDone: boolean;
   private searchResultNum: string = "0";
-  private numDocsPerPages: number = this.es.getNumDocsPerPage();
   private currentPage: number = 1;
   private selectedPageNum: number = 1;
-
   private queryText: string;
   pages: number[];
   startIndex: number;
@@ -101,7 +88,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loginStatSubs.unsubscribe();
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();
   }
