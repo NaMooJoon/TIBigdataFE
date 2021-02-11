@@ -15,7 +15,6 @@ const routes: Routes = [
       {
         path: 'specials',
         loadChildren: () => import('./specials/specials.module').then(m => m.SpecialsModule),
-        canActivate: [AuthGuard],
       },
       {
         path: 'library',
