@@ -27,7 +27,8 @@ export class SearchBarComponent implements OnInit {
     if (flag) {
       return {
         'color': 'white',
-        'background-color': '#0FBAFF'
+        'background-color': '#0FBAFF',
+        'border': 'none'
       }
     }
     else {
@@ -51,8 +52,9 @@ export class SearchBarComponent implements OnInit {
     this.isDateSelected = false;
     this.isInstSelected = false;
     this.isTopicSelected = false;
-
     this.checkRouterIsMain();
+
+    console.log('ddddd');
   }
   updateDate(date: string) {
     this.selectedDate = date;
@@ -79,9 +81,9 @@ export class SearchBarComponent implements OnInit {
 
   async search() {
     if (this.queryText === this.es.getKeyword()) return;
+    this.es.setSearchMode(SEARCHMODE.KEYWORD);
     this.es.setSearchStatus(false);
     this.es.searchKeyword(this.queryText);
-    this.es.setSearchMode(SEARCHMODE.KEYWORD);
     this._router.navigateByUrl("body/search/result");
   }
 

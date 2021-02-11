@@ -21,10 +21,7 @@ export class SearchResultComponent implements OnInit {
   ) {
   }
   ngOnInit() {
-    if (this.es.getKeyword() === null || this.es.getKeyword() === undefined) {
-      window.alert('비정상적인 접근입니다.');
-      this._router.navigateByUrl('/');
-    }
+
   }
 
   setRelatedKeywords(keys: string[]) {

@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import moment from 'moment';
 import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
-import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
 import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
 import { CommunityDocModel } from '../community.doc.model';
 import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
-
 
 @Component({
   selector: 'app-announcement',

@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
-// import { IdControlService } from "../../";
 import { HttpClient } from "@angular/common/http";
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
 import { AnalysisDatabaseService } from "../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
-// communications/fe-backend-db/analysis-db/database.service";
 
 @Injectable({
   providedIn: "root"

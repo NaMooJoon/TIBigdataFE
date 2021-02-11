@@ -11,8 +11,7 @@ export class AppComponent {
 
   constructor(private auth: AuthService) { }
 
-  ngOnInit() {
-    console.log("here");
-    this.auth.verifySignIn()
+  async ngOnInit(): Promise<void> {
+    await this.auth.verifySignIn()
   }
 }

@@ -67,25 +67,5 @@ export class PaginationService {
       pages: pages
     };
   }
-
-  loadSelectedPage(selectedPageNum: number) {
-    let searchMode = this._es.getSearchMode()
-    if (searchMode === SEARCHMODE.ALL) {
-      this._es.allSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
-    }
-    else if (searchMode === SEARCHMODE.IDS) {
-      this._es.multiIdSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
-    }
-    else if (searchMode === SEARCHMODE.KEYWORD) {
-      this._es.fullTextSearchComplete((selectedPageNum - 1) * this._es.getNumDocsPerPage());
-    }
-  }
-
-  jumpPage(totalDocs: number, pageSize: number, jumpPage: number): Promise<PaginationModel> {
-    console.log(jumpPage)
-    this.loadSelectedPage(jumpPage);
-    return this.paginate(jumpPage, totalDocs, pageSize);
-  }
-
 }
 
