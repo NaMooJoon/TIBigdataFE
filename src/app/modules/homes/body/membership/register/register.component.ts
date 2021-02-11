@@ -5,6 +5,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
 import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+import { NavComponent } from '../../../nav/nav.component';
+import { navMenu, NavService } from '../../../nav/nav.service';
 
 @Component({
   selector: 'app-register',
@@ -18,9 +20,9 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private formBuilder: FormBuilder,) {
-  }
-
+    private formBuilder: FormBuilder,
+    private navService: NavService,
+  ) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -30,7 +32,8 @@ export class RegisterComponent implements OnInit {
       inst: new FormControl('', [
         Validators.required,
       ]),
-    })
+    });
+    this.navService.setNavMenu(navMenu.REGISTER);
   }
 
   async registerUser(): Promise<void> {

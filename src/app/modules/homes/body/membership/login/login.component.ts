@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { Router } from '@angular/router'
+import { navMenu, NavService } from '../../../nav/nav.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +12,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private navService: NavService,
   ) { }
 
   ngOnInit() {
+    this.navService.setNavMenu(navMenu.LOGIN);
   }
 
   async signIn() {
