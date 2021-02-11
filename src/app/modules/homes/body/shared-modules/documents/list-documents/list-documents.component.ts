@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
-import { ArticleSource } from "../article/article.interface";
+import { ArticleSource } from "../article.interface";
 import { Subscription, Observable } from "rxjs";
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
 import { PaginationModel } from "../../../shared-services/pagination-service/pagination.model";
 import { UserDocumentService } from "src/app/modules/communications/fe-backend-db/userDocument/userDocument.service";
 import { AuthService } from "src/app/modules/communications/fe-backend-db/membership/auth.service";
+import { DocumentService } from "../../../shared-services/document-service/document.service";
 
 @Component({
   selector: 'app-search-result-document-list',
@@ -52,7 +52,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   constructor(
     private userDocumentService: UserDocumentService,
-    private idControlService: IdControlService,
+    private documentService: DocumentService,
     private router: Router,
     private elasticSearchService: ElasticsearchService,
     private analysisDatabaseService: AnalysisDatabaseService,
@@ -84,9 +84,8 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     // Set pagination and search result number when the number of articles has been changed
     this.countNumSubs = this.countNumChange$.subscribe(async num => {
       this.totalDocs = num;
-      this.searchKeyword = this.elasticSearchService.getKeyword();
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadInitialPage();
+      this.loadPage(1);
     });
 
     // Observe to check if user is signed out
@@ -122,17 +121,16 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     this.currentPage = pageInfo.currentPage;
     this.startIndex = pageInfo.startIndex;
     this.totalPages = pageInfo.totalPages;
-    console.log(this.currentPage);
   }
 
-  async loadInitialPage(): Promise<void> {
-    let pageInfo: PaginationModel = await this.paginationService.paginate(1, this.totalDocs, this.pageSize);
+  async loadPage(currentPage: number): Promise<void> {
+    let pageInfo: PaginationModel = await this.paginationService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
   }
 
-  async jumpPage(jumpPage: number) {
-    let pageInfo: PaginationModel = await this.paginationService.jumpPage(this.totalDocs, this.pageSize, jumpPage);
-    this.setPageInfo(pageInfo);
+  jumpPage(jumpPageNum: number): void {
+    this.elasticSearchService.searchNext(jumpPageNum);
+    this.loadPage(jumpPageNum);
   }
 
   convertNumberFormat(num: number): string {
@@ -152,8 +150,9 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   initialize_search(): void {
     this.isResultFound = false;
-    this.idControlService.clearIDList();
+    this.documentService.clearIDList();
     this.ResultIdList = [];
+    this.searchKeyword = this.elasticSearchService.getKeyword();
   }
 
   createResultIdList(): void {
@@ -165,7 +164,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
-    this.idControlService.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
+    this.documentService.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
     this.navToDocDetail();
   }
 
@@ -204,7 +203,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     if (this.form.value['checkArray'].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.")
     } else {
-      this.userDocumentService.saveNewDoc(this.form.value['checkArray']).then(() => {
+      this.userDocumentService.saveNewMyDoc(this.form.value['checkArray']).then(() => {
         alert("문서가 나의 문서함에 저장되었어요.")
       });
     }
@@ -249,7 +248,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   openDocDetail(docId: string): void {
-    this.idControlService.selectOneID(docId);
+    this.documentService.selectOneID(docId);
     this.navToDocDetail();
   }
 

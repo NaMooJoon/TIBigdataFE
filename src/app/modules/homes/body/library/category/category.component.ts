@@ -3,7 +3,6 @@ import { ConfigService } from "../category-graph/category-graph.service";
 import { Router } from "@angular/router";
 import { AnalysisDatabaseService } from '../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service";
 import { PaginationService } from "../../shared-services/pagination-service/pagination.service";
 
@@ -15,7 +14,6 @@ import { PaginationService } from "../../shared-services/pagination-service/pagi
 
 export class CategoryComponent implements OnInit {
   constructor(private db: AnalysisDatabaseService,
-    private idControl: IdControlService,
     private es: ElasticsearchService,
     private ds: DocumentService,
     private pg: PaginationService,
@@ -50,13 +48,13 @@ export class CategoryComponent implements OnInit {
   navToDetail(doc) {
     // console.log(doc);
     let id = doc["idList"];
-    this.idControl.selectOneID(id);
+    this.ds.selectOneID(id);
     this._router.navigateByUrl("search/DocDetail");
 
   }
 
   async selectCategory($event) {
-    this.idControl.clearIDList();
+    this.ds.clearIDList();
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
@@ -66,8 +64,8 @@ export class CategoryComponent implements OnInit {
       case "topic": {
         console.log(ct);
         let docIDs = await this.getDocIDsFromTopic(ct);
-        docIDs.map(e => this.idControl.pushIDList(e));
-        let partialIDs: Object[] = this.idControl.getIDList().slice(0, this.es.getNumDocsPerPage());
+        docIDs.map(e => this.ds.pushIDList(e));
+        let partialIDs: Object[] = this.ds.getIDList().slice(0, this.es.getNumDocsPerPage());
         const ids: string[] = [];
         for (let i = 0; i < partialIDs.length; i++) {
           ids.push(partialIDs[i]['docId'])
@@ -93,10 +91,10 @@ export class CategoryComponent implements OnInit {
   }
 
   async search_category() {
-    this.idControl.clearIDList();
+    this.ds.clearIDList();
     let category = this.get_chosen_category();
     let docs_id = await this.getDocIDsFromTopic(category)//현재 토픽에 해당하는 내용을 불러온다.
-    docs_id.map(e => this.idControl.pushIDList(e));
+    docs_id.map(e => this.ds.pushIDList(e));
     this.es.setIds(docs_id);
     this.es.multiIdSearchComplete();
   }
