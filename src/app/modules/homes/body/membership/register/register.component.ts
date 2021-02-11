@@ -32,6 +32,14 @@ export class RegisterComponent implements OnInit {
       inst: new FormControl('', [
         Validators.required,
       ]),
+
+      policy1Agreed: new FormControl(false, [
+        Validators.requiredTrue
+      ]),
+
+      policy2Agreed: new FormControl(false, [
+        Validators.requiredTrue
+      ]),
     });
     this.navService.setNavMenu(navMenu.REGISTER);
   }
