@@ -37,7 +37,6 @@ export class NavComponent implements OnInit {
     });
 
     this.navService.getNavMenuChange().subscribe((menu) => {
-      console.log('change')
       if (menu === navMenu.ABOUT) this.selectedMenu = 'about';
       else if (menu === navMenu.ANALYSIS) this.selectedMenu = 'analysis';
       else if (menu === navMenu.COMMUNITY) this.selectedMenu = 'community';
@@ -46,8 +45,6 @@ export class NavComponent implements OnInit {
       else if (menu === navMenu.MYPAGE) this.selectedMenu = 'myPage';
       else if (menu === navMenu.REGISTER) this.selectedMenu = 'register';
       else this.selectedMenu = "";
-
-      console.log(this.selectedMenu)
     })
   }
   ngOnInit(): void {
