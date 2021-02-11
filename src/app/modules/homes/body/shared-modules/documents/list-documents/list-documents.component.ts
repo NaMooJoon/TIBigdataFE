@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
 import { PaginationModel } from "../../../shared-services/pagination-service/pagination.model";
 import { UserDocumentService } from "src/app/modules/communications/fe-backend-db/userDocument/userDocument.service";
-
+import { AuthService } from "src/app/modules/communications/fe-backend-db/membership/auth.service";
 
 @Component({
   selector: 'app-search-result-document-list',
@@ -22,69 +22,77 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   amounts = [10, 30, 50];
   form: FormGroup;
 
-
   @Input() isKeyLoaded: boolean;//키워드 검색으로 진입할 때
   @Output() relatedKeywordsReady = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
   private ResultIdList: string[] = [];
-  private selectedDocs: string[] = [];
+
   private relatedDocs: ArticleSource[][] = [];
-  private countNumChange$: Observable<any> = this.es.getCountNumChange();
-  private searchStatusChange$: Observable<boolean> = this.es.getSearchStatus();
-  private articleChange$: Observable<ArticleSource[]> = this.es.getArticleChange();
+  private countNumChange$: Observable<any> = this.elasticSearchService.getCountNumChange();
+  private searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
+  private articleChange$: Observable<ArticleSource[]> = this.elasticSearchService.getArticleChange();
+
   private countNumSubs: Subscription;
   private articleSubs: Subscription;
-  private isSearchDoneSubs: Subscription;
+
   private articleSources: ArticleSource[];
   private RelatedDocBtnToggle: Array<boolean>;
   private isResultFound: boolean;
-  private isLogStat: Number = 0;
   private isSearchDone: boolean;
+  private isLoggedIn: boolean;
+
   private searchResultNum: string = "0";
+  private searchKeyword: string;
+
   private currentPage: number = 1;
-  private selectedPageNum: number = 1;
-  private queryText: string;
-  pages: number[];
-  startIndex: number;
-  totalPages: number = 1;
-  totalDocs: number;
-  cmService: any;
-  pageInfo: any;
-  pageSize: number = 10;
+  private pages: number[];
+  private startIndex: number;
+  private totalPages: number = 1;
+  private totalDocs: number;
+  private pageSize: number = 10;
 
   constructor(
     private userDocumentService: UserDocumentService,
-    private idControl: IdControlService,
+    private idControlService: IdControlService,
     private router: Router,
-    private es: ElasticsearchService,
-    private db: AnalysisDatabaseService,
-    private fb: FormBuilder,
-    private pgService: PaginationService,
+    private elasticSearchService: ElasticsearchService,
+    private analysisDatabaseService: AnalysisDatabaseService,
+    private formBuilder: FormBuilder,
+    private paginationService: PaginationService,
+    private authService: AuthService,
   ) {
 
+    // Set articles when article has been changed
     this.articleSubs = this.articleChange$.subscribe(articles => {
       this.articleSources = articles;
+      this.initialize_search();
       this.createResultIdList();
       this.setCheckboxProp();
       this.loadRelatedKeywords();
-      this.form = this.fb.group({
-        checkArray: this.fb.array([])
+      this.form = this.formBuilder.group({
+        checkArray: this.formBuilder.array([])
       });
       if (this.articleSources !== undefined) this.isResultFound = true;
       else this.isResultFound = false;
-
-      this.es.setSearchStatus(true);
+      this.elasticSearchService.setSearchStatus(true);
     });
 
-    this.isSearchDoneSubs = this.searchStatusChange$.subscribe(async status => {
+    // Check if it is still searching
+    this.searchStatusChange$.subscribe(async status => {
       this.isSearchDone = status;
-    })
+    });
 
+    // Set pagination and search result number when the number of articles has been changed
     this.countNumSubs = this.countNumChange$.subscribe(async num => {
       this.totalDocs = num;
-      this.queryText = this.es.getKeyword();
+      this.searchKeyword = this.elasticSearchService.getKeyword();
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadPage(this.currentPage);
-    })
+      this.loadInitialPage();
+    });
+
+    // Observe to check if user is signed out
+    this.authService.getCurrentUserChange().subscribe(user => {
+      this.isLoggedIn = (user != null);
+    });
   }
 
   ngOnDestroy() {
@@ -105,23 +113,27 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadSearchResult() {
+  loadSearchResult(): void {
     this.initialize_search();
   }
 
-  setPageInfo(pageInfo: PaginationModel) {
+  setPageInfo(pageInfo: PaginationModel): void {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
     this.startIndex = pageInfo.startIndex;
     this.totalPages = pageInfo.totalPages;
+    console.log(this.currentPage);
   }
 
-
-  async loadPage(currentPage: number) {
-    let pageInfo: PaginationModel = await this.pgService.jumpPage(this.totalDocs, this.pageSize, currentPage);
+  async loadInitialPage(): Promise<void> {
+    let pageInfo: PaginationModel = await this.paginationService.paginate(1, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
   }
 
+  async jumpPage(jumpPage: number) {
+    let pageInfo: PaginationModel = await this.paginationService.jumpPage(this.totalDocs, this.pageSize, jumpPage);
+    this.setPageInfo(pageInfo);
+  }
 
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();
@@ -130,65 +142,65 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     return docCount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  searchAgain(num: number) {
-    this.es.setNumDocsPerPage(num);
-    this.es.searchKeyword(this.queryText);
+  searchAgain(num: number): void {
+    this.elasticSearchService.setNumDocsPerPage(num);
+    this.elasticSearchService.searchKeyword(this.searchKeyword);
     this.articleSubs.unsubscribe();
     this.countNumSubs.unsubscribe();
     this.ngOnInit();
   }
 
-  initialize_search() {
+  initialize_search(): void {
     this.isResultFound = false;
-    this.idControl.clearIDList();
+    this.idControlService.clearIDList();
     this.ResultIdList = [];
-    this.selectedDocs = [];
   }
 
-  createResultIdList() {
+  createResultIdList(): void {
     this.RelatedDocBtnToggle = [];
     for (var i in this.articleSources) {
       this.ResultIdList[i] = this.articleSources[i]["_id"];
       this.RelatedDocBtnToggle.push(false);
     }
-    //console.log("result id list: ", this.ResultIdList)
   }
 
-  openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number) {
-    this.idControl.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
+  openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
+    this.idControlService.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
     this.navToDocDetail();
   }
 
-  openRelatedDocList(i: number) {
-    this.loadRelatedDocs(i); //load from flask
+  openRelatedDocList(i: number): void {
+    this.loadRelatedDocs(i);
     this.RelatedDocBtnToggle[i] = !this.RelatedDocBtnToggle[i];
   }
 
-  loadRelatedDocs(idx: number) {
-    this.db.loadRelatedDocs(this.ResultIdList[idx]).then(res => {
+  loadRelatedDocs(idx: number): void {
+    this.analysisDatabaseService.loadRelatedDocs(this.ResultIdList[idx]).then(res => {
       this.relatedDocs[idx] = res as [];
     });
   }
 
-  loadRelatedKeywords() {
+  async loadRelatedKeywords(): Promise<void> {
     let relatedKeywords: string[] = [];
-    this.db.getTfidfVal(this.ResultIdList).then(res => {
+    await this.analysisDatabaseService.getTfidfVal(this.ResultIdList).then(res => {
       let data = res as []
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];
-        if (relatedKeywords.length < 7 && tfVal[0] !== this.queryText && !relatedKeywords.includes(tfVal[0]))
+        if (relatedKeywords.length < 7 && tfVal[0] !== this.searchKeyword && !relatedKeywords.includes(tfVal[0]))
           relatedKeywords.push(tfVal[0])
       }
       this.exportRelatedKeywords(relatedKeywords)
     })
+
+
     this.isKeyLoaded = true;
   }
 
-  exportRelatedKeywords(relatedKeywords: string[]) {
+  exportRelatedKeywords(relatedKeywords: string[]): void {
     this.relatedKeywordsReady.emit(relatedKeywords);
   }
 
-  saveSelectedDocs() {
+  saveSelectedDocs(): void {
     if (this.form.value['checkArray'].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.")
     } else {
@@ -198,7 +210,7 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkUncheckAll(isCheckAll: boolean, checkArray: FormArray) {
+  checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.articleSources.length; i++) {
         checkArray.push(new FormControl(this.articleSources[i]['_id']));
@@ -215,10 +227,9 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     return checkArray
   }
 
-  onCheckboxChange(e) {
+  onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get('checkArray') as FormArray;
     if (e.target.value === "toggleAll") {
-      console.log('toggle');
       checkArray = this.checkUncheckAll(e.target.checked, checkArray);
     }
     else {
@@ -237,13 +248,12 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDocDetail(docId: string) {
-    console.log("article detail id: ", docId);
-    this.idControl.selectOneID(docId);
+  openDocDetail(docId: string): void {
+    this.idControlService.selectOneID(docId);
     this.navToDocDetail();
   }
 
-  navToDocDetail() {
+  navToDocDetail(): void {
     this.router.navigateByUrl("search/DocDetail");
   }
 }

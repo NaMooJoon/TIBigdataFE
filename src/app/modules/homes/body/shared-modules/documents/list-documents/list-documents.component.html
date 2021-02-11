@@ -1,6 +1,6 @@
 <div class="result-header">
   <!-- Show number of result -->
-  <div *ngIf="isResultFound" class="result-count">"{{queryText}}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.</div>
+  <div *ngIf="isResultFound" class="result-count">"{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.</div>
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
@@ -16,12 +16,12 @@
 
 <div *ngIf="isResultFound && isSearchDone" class="result-body">
   <form [formGroup]="form" (ngSubmit)="saveSelectedDocs()" novalidate>
-    <label *ngIf="isLogStat != 0"><input class="article-checkbox toggle-all" type="checkbox"
+    <label *ngIf="isLoggedIn"><input class="article-checkbox toggle-all" type="checkbox"
         (change)="onCheckboxChange($event)" value="toggleAll" />전체선택
     </label>
     <div *ngFor="let articleSource of articleSources; index as i" class="article">
       <label>
-        <input *ngIf="isLogStat != 0" class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected"
+        <input *ngIf="isLoggedIn" class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected"
           name="selectDoc" [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
       </label>
       <div class="article-info-container">
@@ -35,18 +35,18 @@
         <hr class="sep" />
       </div>
     </div>
-    <input *ngIf="isLogStat != 0" type="submit" class="mydoc" value="담기" />
+    <input *ngIf="isLoggedIn" type="submit" class="mydoc" value="담기" />
   </form>
 
   <div class="page-numbers">
-    <button *ngIf="currentPage" (click)="loadPage(currentPage-10)">
-      << </button> <button *ngIf="currentPage > 1" (click)="loadPage(currentPage-1)">
+    <button *ngIf="currentPage > 1" (click)="jumpPage(currentPage-10)">
+      << </button> <button *ngIf="currentPage > 1" (click)="jumpPage(currentPage-1)">
         < </button> <button
           [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
-          (click)="loadPage(i)" *ngFor="let i of pages"> {{  i  }}
+          (click)="jumpPage(i)" *ngFor="let i of pages"> {{  i  }}
     </button>
-    <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
-    <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
+    <button *ngIf="currentPage < totalPages" (click)="jumpPage(currentPage+1)"> > </button>
+    <button *ngIf="currentPage != totalPages" (click)="jumpPage(currentPage+10)"> >> </button>
   </div>
 </div>
 
