@@ -7,10 +7,14 @@ autoIncrement.initialize(conn)
 
 const faqDocSchema = new Schema({
     docId : Number,
+    userName : String,
+    userEmail : String,
     title : String,
     content : String,
     category: String,
 })
+
+faqDocSchema.index({title: 'text', content : 'text'})
 
 faqDocSchema.plugin(autoIncrement.plugin, {
     model : 'faqModel',

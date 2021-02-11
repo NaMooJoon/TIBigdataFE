@@ -1,5 +1,4 @@
-<input class=search-bar (keyup)="updateSearchKey($event)" placeholder="검색" />
-
+<input class=search-bar (keyup.enter)="searchDocs($event)" placeholder="검색" />
 <table>
   <thead>
     <tr>
@@ -30,7 +29,7 @@
 </table>
 
 <div class="buttons">
-  <button class="button-write" (click)="  navToWriteNewDoc()">글쓰기</button>
+  <button class="button-write" (click)="navToWriteNewDoc()">글쓰기</button>
 </div>
 
 <div class="page-numbers">

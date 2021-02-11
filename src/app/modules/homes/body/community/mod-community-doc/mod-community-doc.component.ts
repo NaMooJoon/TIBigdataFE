@@ -17,29 +17,35 @@ export class ModCommunityDocComponent implements OnInit {
     private router: Router,
     private cmService: CommunityService,
     private auth: EPAuthService,
-  ) { }
+  ) {
+    this.boardForm = new FormGroup({
+      title: new FormControl('', Validators.required),
+      content: new FormControl('', Validators.required),
+      category: new FormControl(''),
+      isMainAnnounce: new FormControl(''),
+    });
+  }
 
   private selectedBoard: string;
   private boardForm: FormGroup;
   private selectedDoc: CommunityDocModel;
 
   ngOnInit() {
-    if (this.auth.getLogInStat() == logStat.unsigned || this.cmService.getCurrentMenu() === null) {
+    if (this.auth.getLogInStat() == logStat.unsigned || this.cmService.getCurrentMenu() === null || this.selectedDoc === null) {
       window.alert('비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.');
       this.router.navigateByUrl('/community/announcement');
+      this.router.dispose();
     }
-    this.loadDoc();
+    else this.loadDoc();
   }
 
   async loadDoc() {
     this.selectedDoc = await this.cmService.getSelectedDoc();
     this.selectedBoard = this.cmService.getCurrentMenu();
-    this.boardForm = new FormGroup({
-      title: new FormControl(this.selectedDoc['title'], Validators.required),
-      content: new FormControl(this.selectedDoc['content'], Validators.required),
-      category: new FormControl(this.selectedDoc['category']),
-      isMainAnnounce: new FormControl(this.selectedDoc['isMainAnnounce']),
-    });
+    this.boardForm.controls['title'].setValue(this.selectedDoc.title);
+    this.boardForm.controls['content'].setValue(this.selectedDoc.content);
+    this.boardForm.controls['category'].setValue(this.selectedDoc.category);
+    this.boardForm.controls['isMainAnnounce'].setValue(this.selectedDoc.isMainAnnounce);
   }
 
   async modifyDocument(): Promise<void> {

@@ -1,4 +1,3 @@
-import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 import moment from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +6,7 @@ import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/memb
 import { Auth } from 'src/app/modules/communications/fe-backend-db/membership/userAuth.model';
 import { CommunityService } from "src/app/modules/homes/body/community/community-services/community.service";
 import { CommunityDocModel } from '../community.doc.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-read-community-doc',
@@ -25,7 +25,8 @@ export class ReadCommunityDocComponent implements OnInit {
   constructor(
     private cmService: CommunityService,
     private router: Router,
-    private auth: EPAuthService) { }
+    private auth: EPAuthService,
+    private _location: Location) { }
 
   async ngOnInit(): Promise<void> {
     this.doc = await this.cmService.getSelectedDoc();
@@ -60,7 +61,7 @@ export class ReadCommunityDocComponent implements OnInit {
     this.isLoaded = true;
   }
 
-  async deleteDoc() {
+  async deleteDoc(): Promise<void> {
     let confirm = window.confirm("정말로 삭제하시겠습니까?");
     let res: boolean;
     if (confirm) {
@@ -75,7 +76,7 @@ export class ReadCommunityDocComponent implements OnInit {
     }
   }
 
-  async deleteReply() {
+  async deleteReply(): Promise<void> {
     let confirm = window.confirm("정말로 삭제하시겠습니까?");
     let res: boolean;
     if (confirm) {
@@ -90,18 +91,20 @@ export class ReadCommunityDocComponent implements OnInit {
     }
   }
 
-  navigateToModDoc() {
+  navigateToModDoc(): void {
     this.router.navigateByUrl('/community/modDoc');
   }
-  autoGrowTextZone(e) {
+
+  autoGrowTextZone(e): void {
     e.target.style.height = "0px";
     e.target.style.height = (e.target.scrollHeight + 25) + "px";
   }
-  changeReplyMode() {
+
+  changeReplyMode(): void {
     this.isReplyMode = !this.isReplyMode;
   }
 
-  async registerReply() {
+  async registerReply(): Promise<void> {
     let queryBody: CommunityDocModel = {
       "docId": this.doc["docId"],
       "reply": {
@@ -112,16 +115,24 @@ export class ReadCommunityDocComponent implements OnInit {
       }
     }
     if ('reply' in this.doc) {
-      await this.cmService.modifyReply(queryBody);
+      let res: boolean = await this.cmService.modifyReply(queryBody);
+      if (res) {
+        window.alert("수정이 완료되었습니다.");
+      }
       this.isAnswered = true;
-      console.log('mod')
       this.ngOnInit();
     }
     else {
-      await this.cmService.registerReply(queryBody);
+      let res: boolean = await this.cmService.registerReply(queryBody);
+      if (res) {
+        window.alert("수정이 완료되었습니다.");
+      }
       this.isAnswered = true;
-      console.log('new')
       this.ngOnInit();
     }
+  }
+
+  goToList() {
+    this._location.back();
   }
 }

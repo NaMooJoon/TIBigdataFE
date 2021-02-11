@@ -25,6 +25,8 @@ const qnaDocSchema = new Schema({
     }
 })
 
+qnaDocSchema.index({title: 'text', content : 'text'})
+
 qnaDocSchema.plugin(autoIncrement.plugin, {
     model : 'qnaModel',
     field : 'docId',

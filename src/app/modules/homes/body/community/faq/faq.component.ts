@@ -27,6 +27,8 @@ export class FAQComponent implements OnInit {
   private currentPage: number;
   private pages: number[];
   private totalPages: number;
+  private isSearchMode: boolean = false;
+  private searchText: string;
 
   constructor(
     private router: Router,
@@ -47,16 +49,23 @@ export class FAQComponent implements OnInit {
 
   async loadPage(currentPage: number) {
     this.docList = [];
-    this.totalDocs = await this.cmService.getDocsNum();
-    console.log(this.totalDocs);
+
+    if (this.isSearchMode) {
+      this.totalDocs = await this.cmService.getSearchDocsNum(this.searchText);
+      await this.loadSearchResults();
+    }
+    else {
+      this.totalDocs = await this.cmService.getDocsNum();
+      await this.loadDocs();
+    }
+
     let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-    await this.loadDocs();
   }
 
   async loadDocs() {
     let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(this.startIndex);
-    if (generalDocs !== null)
+    if (generalDocs.length !== 0)
       this.saveDocsInFormat(generalDocs);
   }
 
@@ -68,7 +77,7 @@ export class FAQComponent implements OnInit {
   }
 
   saveDocsInFormat(list: {}[]): void {
-    if (list == null) return;
+    if (list === null) return;
     list.forEach((doc: CommunityDocModel) => {
       doc['regDate'] = moment(doc['regDate']).format('YY-MM-DD');
       this.docList.push(doc);
@@ -87,5 +96,20 @@ export class FAQComponent implements OnInit {
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/newDoc");
   }
+
+  async loadSearchResults() {
+    let resultDocs: Array<CommunityDocModel> = await this.cmService.searchDocs(this.searchText);
+    if (resultDocs.length !== 0)
+      this.saveDocsInFormat(resultDocs);
+  }
+
+  async searchDocs($event): Promise<void> {
+    if (this.isSearchMode) return;
+    this.searchText = $event.target.value;
+    this.isSearchMode = true;
+    await this.loadPage(1);
+    this.isSearchMode = false;
+  }
+
 
 }

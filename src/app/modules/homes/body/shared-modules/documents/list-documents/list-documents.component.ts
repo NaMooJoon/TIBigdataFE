@@ -9,7 +9,6 @@ import { DocumentService } from "src/app/modules/homes/body/shared-services/docu
 import { IpService } from "src/app/ip.service";
 import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { EPAuthService } from '../../../../../communications/fe-backend-db/membership/auth.service';
-import { EventService } from "../../../../../communications/fe-backend-db/membership/event.service";
 import { AnalysisDatabaseService } from "../../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
@@ -66,7 +65,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: EPAuthService,
-    private evtSvs: EventService,
     private rcmd: RecommendationService,
     private ipService: IpService,
     private idControl: IdControlService,

@@ -21,10 +21,10 @@ export class SearchResultComponent implements OnInit {
   ) {
   }
   ngOnInit() {
-    // this.es.getCountNumChange().subscribe((num) => {
-    //   if (num == 0) this.isResultFound = false;
-    //   else this.isResultFound = true;
-    // });
+    if (this.es.getKeyword() === null || this.es.getKeyword() === undefined) {
+      window.alert('비정상적인 접근입니다.');
+      this._router.navigateByUrl('/');
+    }
   }
 
   setRelatedKeywords(keys: string[]) {
