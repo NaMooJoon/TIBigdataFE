@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CommunityDocModel } from '../community.doc.model';
 import moment from 'moment';
 
-enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE, REPLY_DELETE, READ_SINGLE }
+enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE, REPLY_DELETE, READ_SINGLE, SEARCH, SEARCH_COUNT }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
 
 @Injectable({
@@ -29,6 +29,8 @@ export class CommunityService {
   private modifyReplyUrl: string = "/registerReply";
   private getSingleDocUrl: string = "/getSingleDoc";
   private deleteReplyUrl: string = "/deleteReply";
+  private searchDocsNumUrl: string = "/searchDocsNum";
+  private searchDocsUrl: string = "/searchDocs";
 
   private boardMenuChange$: BehaviorSubject<boardMenu> = new BehaviorSubject(boardMenu.ANNOUNCE);//to stream to subscribers
   private selectedDoc: CommunityDocModel;
@@ -60,6 +62,10 @@ export class CommunityService {
       return this.dbUrl + "/" + this.currentMenu + this.deleteReplyUrl;
     if (operation === boardOperation.READ_SINGLE)
       return this.dbUrl + "/" + this.currentMenu + this.getSingleDocUrl;
+    if (operation === boardOperation.SEARCH)
+      return this.dbUrl + "/" + this.currentMenu + this.searchDocsUrl;
+    if (operation === boardOperation.SEARCH_COUNT)
+      return this.dbUrl + "/" + this.currentMenu + this.searchDocsNumUrl;
   }
 
   getCurrentMenu(): string {
@@ -76,6 +82,7 @@ export class CommunityService {
   }
 
   async registerDoc(docInfo: CommunityDocModel): Promise<Res> {
+    console.log(docInfo);
     return await this.http.post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo).toPromise();
   }
 
@@ -119,6 +126,7 @@ export class CommunityService {
   }
 
   async modifyDoc(docInfo: CommunityDocModel): Promise<boolean> {
+    console.log(docInfo);
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.UPDATE), docInfo).toPromise();
     if (res.succ) return true;
     else return false;
@@ -136,11 +144,24 @@ export class CommunityService {
     else return false;
   }
 
-  verifyPrivacyLeak(content: string): string {
-    return content;
+  async searchDocs(searchText: string): Promise<Array<CommunityDocModel>> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.SEARCH), { 'searchText': searchText }).toPromise();
+    console.log('search log: ', res);
+    if (res.succ) return res.payload['docList'];
   }
 
-  setBoardMenu(menu: boardMenu) {
+  async getSearchDocsNum(searchText: string): Promise<number> {
+    let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.SEARCH_COUNT), { 'searchText': searchText }).toPromise();
+    console.log('search count: ', res);
+    if (res.succ) return res.payload['docNum'];
+  }
+
+  verifyPrivacyLeak(content: string): string {
+    let filteredContent: string = this.prvcyService.checkAllPrivacyLeak(content);
+    return filteredContent;
+  }
+
+  setBoardMenu(menu: boardMenu): void {
     if (menu === boardMenu.ANNOUNCE) this.currentMenu = 'announcement';
     if (menu === boardMenu.FAQ) this.currentMenu = 'faq';
     if (menu === boardMenu.QNA) this.currentMenu = 'qna';
@@ -148,7 +169,7 @@ export class CommunityService {
     this.boardMenuChange$.next(menu);
   }
 
-  formatDate(date: string) {
+  formatDate(date: string): string {
     return moment(date).format('YY-MM-DD');
   }
 

@@ -18,6 +18,8 @@ router.post('/modReply', modReply);
 router.post('/registerReply', registerReply);
 router.post('/getSingleDoc', getSingleDoc);
 router.post('/deleteReply', deleteReply);
+router.post('/searchDocs', searchDocs);
+router.post('/searchDocsNum', searchDocsNum);
 
 async function getDocsNum(req, res){
     Qna.countDocuments({}, function(err, count){
@@ -157,5 +159,25 @@ async function getSingleDoc (req, res){
         return res.status(400).json(new Res(false, "failed to update doc", null));
     });
 }
+
+async function searchDocs (req, res){
+    Qna.createIndexes({title: "text", content: "text"});
+    Qna.find({$text: {$search : req.body.searchText}}).limit(10).then((result) => {
+        return res.status(200).json(new Res(true, "successfully search doc", {'docList': result}));
+    }).catch((err) => {
+        return res.status(200).json(new Res(true, "failed to search doc", null));
+    });
+}
+
+async function searchDocsNum (req, res){
+    Qna.createIndexes({title: "text", content: "text"});
+    Qna.find({$text: {$search : req.body.searchText}}).count().then((count) => {
+        return res.status(200).json(new Res(true, "successfully search doc", { docNum : count }));
+    }).catch((err) => {
+        console.log(err);
+        return res.status(200).json(new Res(true, "failed to search doc", null));
+    });
+}
+
 
 module.exports = router;

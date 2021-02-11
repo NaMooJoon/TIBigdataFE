@@ -21,6 +21,7 @@ export class SearchBarComponent implements OnInit {
   private selectedInst: string;
   private selectedTopic: string;
   private isMain: Boolean = false;
+  private isSearching: boolean = false;
 
   selectedStyleObject(flag: boolean): Object {
     if (flag) {
@@ -77,6 +78,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   async search() {
+    if (this.queryText === this.es.getKeyword()) return;
     this.es.setSearchStatus(false);
     this.es.searchKeyword(this.queryText);
     this.es.setSearchMode(SEARCHMODE.KEYWORD);

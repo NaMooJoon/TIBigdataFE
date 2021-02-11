@@ -23,7 +23,7 @@
     placeholder="제목과 내용에 개인정보(이메일, 전화번호, 주민번호, 주소 등)가 포함되면 자동으로 해당 정보는 삭제됩니다." required></textarea>
 
   <div class=buttons>
-    <button class="button-list" (click)="gotoList()">목록</button>
+    <button type="button" class="button-list" (click)="gotoList()">취소</button>
     <input type="submit" class="button-write" [disabled]="boardForm.invalid" value="작성" />
   </div>
 </form>

@@ -6,117 +6,110 @@ import { Injectable } from '@angular/core';
 export class CommunityPrivacyMaskingService {
 
   constructor() { }
-
-  checkNull(str: string): boolean {
-    if (typeof str === 'undefined' || str == null || str == "") {
-      return true;
+  maskingSocialNumber(originalText): string {
+    let regex: RegExp = /(\d{6})([\s|-]?)(\d{7})/gi;
+    if (regex.test(originalText)) {
+      let maskedText = originalText.replace(regex, '$1$2*******');
+      return maskedText;
     }
     else {
-      return false;
+      return originalText
     }
   }
 
-  checkEmail(str: string): string {
-    let originStr = str;
-    let emailStr = originStr.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
-    console.log(emailStr);
-    let strLength;
-
-    if (this.checkNull(originStr) === true || emailStr === null || this.checkNull(emailStr.toString()) === true) {
-      return originStr;
+  maskingDriverLicense(originalText: string): string {
+    let regex: RegExp = /(\d{2}|\D{2})([\s|-]?)(\d{2})([\s|-]?)(\d{6})([\s|-]?)(\d{2})/gi;
+    if (regex.test(originalText)) {
+      let maskedText = originalText.replace(regex, '$1$2$3$4******$6$7');
+      return maskedText;
     }
     else {
-      strLength = emailStr.toString().split('@')[0].length - 3;
-      return originStr.toString().replace(new RegExp('.(?=.{0,' + strLength + '}@)', 'g'), '*').replace(/.{6}$/, "******");
+      return originalText;
     }
   }
 
-  checkPhoneNum(str: string): string {
-    let originStr = str;
-    let phoneStr;
-    let maskingStr;
-
-    if (this.checkNull(originStr) == true) {
-      return originStr;
-    }
-
-    if (originStr.toString().split('-').length != 3) { // 1) -가 없는 경우 
-      phoneStr = originStr.length == 11 ? originStr.match(/\d{10}/gi) : originStr.match(/\d{11}/gi);
-      if (this.checkNull(phoneStr) == true) {
-        return originStr;
-      }
-
-      if (originStr.length < 11) {
-        maskingStr = originStr.toString().replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{3})(\d{4})/gi, '$1***$3'));
-      }
-      else { // 1.2) 01000000000 
-        maskingStr = originStr.toString().replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{4})(\d{4})/gi, '$1****$3'));
-      }
-    } else { // 2) -가 있는 경우 
-      phoneStr = originStr.match(/\d{2,3}-\d{3,4}-\d{4}/gi);
-      if (this.checkNull(phoneStr) == true) {
-        return originStr;
-      }
-      if (/-[0-9]{3}-/.test(phoneStr)) { // 2.1) 00-000-0000 
-        maskingStr = originStr.toString().replace(phoneStr, phoneStr.toString().replace(/-[0-9]{3}-/g, "-***-"));
-      } else if (/-[0-9]{4}-/.test(phoneStr)) { // 2.2) 00-0000-0000 
-        maskingStr = originStr.toString().replace(phoneStr, phoneStr.toString().replace(/-[0-9]{4}-/g, "-****-"));
-      }
-    } return maskingStr;
-  }
-
-  checkSocialNumber(str: string): string {
-    let originStr = str;
-    let rrnStr;
-    let maskingStr;
-    let strLength;
-    if (this.checkNull(originStr) == true) {
-      return originStr;
-    }
-
-    rrnStr = originStr.match(/(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))-[1-4]{1}[0-9]{6}\b/gi);
-
-    if (this.checkNull(rrnStr) == false) {
-      strLength = rrnStr.toString().split('-').length;
-      maskingStr = originStr.toString().replace(rrnStr, rrnStr.toString().replace(/(-?)([1-4]{1})([0-9]{6})\b/gi, "$1$2******"));
+  maskingPassport(originalText: string): string {
+    let regex: RegExp = /(\D{1})(\d{8})/gi;
+    if (regex.test(originalText)) {
+      let maskedText = originalText.replace(regex, '$1********');
+      return maskedText;
     }
     else {
-      rrnStr = originStr.match(/\d{13}/gi);
-      if (this.checkNull(rrnStr) == false) {
-        strLength = rrnStr.toString().split('-').length;
-        maskingStr = originStr.toString().replace(rrnStr, rrnStr.toString().replace(/([0-9]{6})$/gi, "******"));
-      } else {
-        return originStr;
-      }
-    } return maskingStr;
+      return originalText;
+    }
   }
 
-  checkName(str: string): string {
-    let originStr = str;
-    let maskingStr;
-    let strLength;
-
-    if (this.checkNull(originStr) == true) {
-      return originStr;
+  maskingBankingAccount(originalText: string): string {
+    let regex: RegExp = /(\d{3})([\s|-]?)(\d{6})([\s|-]?)(\d{2})([\s|-]?)(\d{3})/gi;
+    if (regex.test(originalText)) {
+      let maskedText = originalText.replace(regex, '$1$2******$4$5$6$7');
+      return maskedText;
     }
-
-    strLength = originStr.length;
-
-    if (strLength < 3) {
-      maskingStr = originStr.replace(/(?<=.{1})./gi, "*");
-    } else {
-      maskingStr = originStr.replace(/(?<=.{2})./gi, "*");
+    else {
+      return originalText;
     }
+  }
 
-    return maskingStr;
+  maskingCardNumber(originalText: string): string {
+    let regex: RegExp = /(\d{4})([\s|-]?)(\d{4})([\s|-]?)(\d{4})([\s|-]?)(\d{4})/gi;
+    if (regex.test(originalText)) {
+      let maskedText = originalText.replace(regex, '$1$2****$4****$6$7');
+      return maskedText;
+    }
+    else {
+      return originalText;
+    }
+  }
+
+
+  maskingMobileNumber(originalText: string): string {
+    if (originalText) {
+      let regex: RegExp = /(\d{3})([\s|-]?)(\d{2})(\d{2})([\s|-]?)(\d{2})(\d{2})/gi;
+      let maskedText = originalText.replace(regex, '$1$2$3**$5$6**');
+      return maskedText;
+    }
+  }
+
+
+  maskingTelNumber(originalText: string): string {
+    let maskedText = '';
+    let regex: RegExp = /(\d{2,4})([\s|-]?)(\d{1,2})(\d{2})([\s|-]?)(\d{2})(\d{2})/gi; // 3자리 패턴
+    if (regex.test(originalText)) {
+      maskedText = originalText.replace(regex, '$1$2$3**$5$6**');
+    }
+    else {
+      regex = /(\d{1,2})(\d{2})([\s|-]?)(\d{2})(\d{2})/gi; // 2자리 패턴
+      if (regex.test(originalText)) {
+        maskedText = originalText.replace(regex, '$1**$3$4**');
+      }
+      else {
+        return originalText;
+      }
+    }
+    return maskedText;
+  }
+
+  maskingEmail(originalText: string): string {
+    if (originalText && originalText.indexOf('@') > -1) {
+      let maskedText = '';
+      const len = originalText.split('@')[0].length - 3;
+      maskedText = originalText.replace(new RegExp('.(?=.{0,' + len + '}@)', 'g'), '*');
+      return maskedText;
+    }
+    else {
+      return originalText;
+    }
   }
 
   checkAllPrivacyLeak(str: string): string {
-    // str = this.checkName(str);
-    str = this.checkEmail(str);
-    str = this.checkPhoneNum(str);
-    str = this.checkSocialNumber(str);
-
+    str = this.maskingBankingAccount(str);
+    str = this.maskingCardNumber(str);
+    str = this.maskingDriverLicense(str);
+    str = this.maskingEmail(str);
+    str = this.maskingMobileNumber(str);
+    str = this.maskingPassport(str);
+    str = this.maskingSocialNumber(str);
+    str = this.maskingTelNumber(str);
     return str;
   }
 }
