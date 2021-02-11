@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Client } from "elasticsearch-browser";
 import * as elasticsearch from "elasticsearch-browser";
-import { ArticleSource } from "src/app/modules/homes/body/shared-modules/documents/article/article.interface";
+import { ArticleSource } from "src/app/modules/homes/body/shared-modules/documents/article.interface";
 import { Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
 import { ElasticSearchQueryModel } from "./elasticsearch.service.query.model";
@@ -191,11 +191,11 @@ export class ElasticsearchService {
 
   async saveSearchResult(queryFunc: any): Promise<void> {
     await queryFunc.then(response => {
-      this.docs2artclSrc(response.hits.hits);
+      this.docsToArticleSource(response.hits.hits);
     });
   }
 
-  docs2artclSrc(info: ArticleSource[]): void {
+  docsToArticleSource(info: ArticleSource[]): void {
     this.articleSource.next(info);
   }
 
@@ -205,6 +205,19 @@ export class ElasticsearchService {
 
   setNumDocsPerPage(num: number) {
     this.numDocsPerPage = num;
+  }
+
+  searchNext(selectedPageNum: number) {
+    let searchMode = this.getSearchMode()
+    if (searchMode === SEARCHMODE.ALL) {
+      this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    }
+    else if (searchMode === SEARCHMODE.IDS) {
+      this.multiIdSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    }
+    else if (searchMode === SEARCHMODE.KEYWORD) {
+      this.fullTextSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    }
   }
 
   private _connect() {

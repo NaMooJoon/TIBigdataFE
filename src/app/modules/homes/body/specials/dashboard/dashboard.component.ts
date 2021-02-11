@@ -7,9 +7,7 @@ import { IpService } from 'src/app/ip.service';
 import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service"
-import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -46,8 +44,6 @@ export class DashboardComponent implements OnInit {
     private ipService: IpService,
     private es: ElasticsearchService,
     private docSvc: DocumentService,
-    private rcmd: RecommendationService,
-    private idSvc: IdControlService,
     private _router: Router,
     private userDocumentService: UserDocumentService,
   ) { }
@@ -364,7 +360,7 @@ export class DashboardComponent implements OnInit {
           valArr.push(data1[i][1])
         }
       }
-      this.docSvc.convert_id_to_doc_title(idsArr).then(t => {
+      this.docSvc.convertDocIdsToTitles(idsArr).then(t => {
         console.log("ids arr :", idsArr);
         console.log("titles : ", t);
         let titles = t as [];

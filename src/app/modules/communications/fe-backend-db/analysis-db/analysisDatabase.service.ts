@@ -92,7 +92,7 @@ export class AnalysisDatabaseService {
     let _rcmdIdsRes = await this.getRelatedDocsTbl(id)
     this.debug("in db : getRelatedDocs : rcmd response id list:", _rcmdIdsRes)
     let rcmdIds = _rcmdIdsRes[0]["rcmd"];
-    let _titlesRes = await this.docControl.convert_id_to_doc_title(rcmdIds as string[])
+    let _titlesRes = await this.docControl.convertDocIdsToTitles(rcmdIds as string[])
     this.debug("in db : rcmdRes:", _titlesRes)
 
     let titles = _titlesRes as []
