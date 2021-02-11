@@ -9,10 +9,10 @@ import { UserProfile } from '../membership/user.model';
   providedIn: 'root'
 })
 export class UserDocumentService {
-  private API_URL: string = 'http://localhost:4000';
-  private KEEP_MY_DOC_URL = this.API_URL + "/myDoc/keepMyDoc";
-  private GET_MY_DOC_URL = this.API_URL + "/myDoc/getMyDoc";
-  private ERASE_ALL_MY_DOC = this.API_URL + "/myDoc/eraseAllDoc";
+  private API_URL: string = 'http://localhost:14000';
+  private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
+  private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
+  private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private currentUser: UserProfile;
 
   constructor(
@@ -22,33 +22,32 @@ export class UserDocumentService {
   ) {
     this.authService.getCurrentUserChange().subscribe(currentUser => {
       this.currentUser = currentUser;
+      console.log(this.currentUser);
     })
   }
 
-  async saveNewDoc(docIds: Array<string>): Promise<boolean> {
-    let idRes: Res = await this.httpClient.post<any>(this.GET_MY_DOC_URL, { payload: this.currentUser.email }).toPromise();
-    if (!idRes.succ) {
-      let payload = { userEmail: this.currentUser.email, docs: docIds };
-      let res = await this.httpClient.post<any>(this.KEEP_MY_DOC_URL, payload).toPromise()
-
-      return res.succ;
-    }
+  async saveNewMyDoc(docIds: Array<string>): Promise<boolean> {
+    let payload = { 'userEmail': this.currentUser.email, 'docIds': docIds };
+    let res = await this.httpClient.post<any>(this.saveMyDocUrl, payload).toPromise()
+    return res.succ;
   }
 
   async getMyDocs(): Promise<Array<{ title: string, id: string }>> {
-    let res: Res = await this.httpClient.post<any>(this.GET_MY_DOC_URL, { payload: this.currentUser.email }).toPromise();
-    let docIds: Array<string> = res.payload as Array<string>;
-
-    let titles: Array<string> = await this.documentService.convert_id_to_doc_title(docIds);
+    let res: Res = await this.httpClient.post<any>(this.getMyDocUrl, { 'userEmail': this.currentUser.email }).toPromise();
+    let docIds: Array<string> = res.payload['docIds']
+    console.log(docIds);
+    let titles: Array<string> = await this.documentService.convertDocIdsToTitles(docIds);
     let idIdx = 0;
 
+    console.log(titles);
     return titles.map(title => {
       return { 'title': title, 'id': docIds[idIdx++] }
     });
   }
 
 
-  eraseAllMyDoc(): boolean {
-    return false;
+  async eraseAllMyDocs(): Promise<boolean> {
+    let res = await this.httpClient.post<any>(this.deleteAllMyDocUrl, { 'userEmail': this.currentUser.email }).toPromise()
+    return res.succ;
   }
 }
