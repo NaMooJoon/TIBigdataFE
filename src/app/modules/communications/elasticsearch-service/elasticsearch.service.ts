@@ -219,7 +219,6 @@ export class ElasticsearchService {
 
   triggerSearch(selectedPageNum: number) {
     this.esQueryModel.setSortOption(this.sortOption);
-    console.log(this.esQueryModel.getSearchDocs())
     let searchMode = this.getSearchMode()
     this.setCurrentSearchingPage(selectedPageNum);
     if (searchMode === SEARCHMODE.ALL) {
