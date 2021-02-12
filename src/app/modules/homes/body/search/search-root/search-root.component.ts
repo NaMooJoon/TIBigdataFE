@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { navMenu, NavService } from '../../../nav/nav.service';
 
 @Component({
   selector: 'app-search-root',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchRootComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private navService: NavService,
+  ) { }
 
   ngOnInit() {
+    this.navService.setNavMenu(navMenu.NONE);
   }
 
 }

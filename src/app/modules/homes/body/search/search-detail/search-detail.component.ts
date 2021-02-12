@@ -1,13 +1,10 @@
-// import { Injectable } from '@angular/core';
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
-import { Article } from "../../shared-modules/documents/article/article.interface";
+import { Article } from "../../shared-modules/documents/article.interface";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
-import { Component, OnInit, Inject } from '@angular/core';
-// import { Article } from '../article/article.interface';
+import { Component, OnInit } from '@angular/core';
 import { WordcloudService } from '../../../graphs/wordcloud/wordcloud.service';
-import { CloudData, CloudOptions } from "angular-tag-cloud-module";
-import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
+import { CloudData } from "angular-tag-cloud-module";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
+import { DocumentService } from "../../shared-services/document-service/document.service";
 
 @Component({
   selector: 'app-search-detail',
@@ -24,8 +21,7 @@ export class SearchDetailComponent implements OnInit {
   private rcmdList: Array<string>;
   private RelatedDocBtnToggle: boolean = false;
   constructor(
-    private rcmd: RecommendationService,
-    private idControl: IdControlService,
+    private documentService: DocumentService,
     private wordcloud: WordcloudService,
     private es: ElasticsearchService,
     private db: AnalysisDatabaseService
@@ -36,7 +32,7 @@ export class SearchDetailComponent implements OnInit {
 
   }
   goToDoc(r) {
-    this.idControl.selectOneID(this.rcmdList[r]["id"]);
+    this.documentService.setSelectedId(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 
@@ -46,7 +42,7 @@ export class SearchDetailComponent implements OnInit {
     this.isCloudLoaded = 0;
     this.isDocInfoLoaded = 0;
 
-    let id = this.idControl.getOneID();
+    let id = this.documentService.getSelectedId();
     this.es.setIds([id]);
 
     this.db.loadRelatedDocs(id).then(res => {

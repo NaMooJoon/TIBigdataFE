@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import moment from 'moment';
-import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+
 import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationModel } from '../../shared-services/pagination-service/pagination.model';
 import { PaginationService } from '../../shared-services/pagination-service/pagination.service';
 import { CommunityDocModel } from '../community.doc.model';
@@ -16,7 +16,7 @@ import { CommunityDocModel } from '../community.doc.model';
 export class QnaComponent implements OnInit {
   private docList: Array<CommunityDocModel>;
   private pageInfo: PaginationModel;
-  private logStat: logStat;
+
   private pageSize = 10;
   private totalDocs: number;
   private startIndex: number;
@@ -30,14 +30,14 @@ export class QnaComponent implements OnInit {
     private router: Router,
     private cmService: CommunityService,
     private pgService: PaginationService,
-    private authService: EPAuthService,
+    private authService: AuthService,
 
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
-    this.authService.getLoginStatChange().subscribe(stat => {
-      this.logStat = stat;
-    });
+
     this.cmService.setBoardMenu(boardMenu.QNA);
     this.loadPage(1);
   }

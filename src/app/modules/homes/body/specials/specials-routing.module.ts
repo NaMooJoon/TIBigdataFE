@@ -6,12 +6,15 @@ import { SpecialsRootComponent } from './specials-root/specials-root.component';
 import { AuthGuard } from '../../../communications/fe-backend-db/membership/auth.guard';
 const routes: Routes = [
   {
-    path:"",
-    component : SpecialsRootComponent,
-    children:[
-      { path: "",
+    path: "",
+    component: SpecialsRootComponent,
+
+    children: [
+      {
+        path: "",
         component: DashboardComponent,
-        // canActivate : [AuthGuard]
+        canActivate: [AuthGuard],
+
       }
 
     ]

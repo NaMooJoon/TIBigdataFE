@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 
 @Component({
   selector: "app-search-result",
@@ -9,22 +9,14 @@ import { EPAuthService } from '../../../../communications/fe-backend-db/membersh
   styleUrls: ["./search-result.component.less"]
 })
 export class SearchResultComponent implements OnInit {
-
   public relatedKeywords = [];
-  queryText: string;
-  private isResultFound: boolean;
-
   constructor(
-    private auth: EPAuthService,
-    public _router: Router,
-    private es: ElasticsearchService,
+    public router: Router,
+    private elasticSearchService: ElasticsearchService,
   ) {
   }
   ngOnInit() {
-    if (this.es.getKeyword() === null || this.es.getKeyword() === undefined) {
-      window.alert('비정상적인 접근입니다.');
-      this._router.navigateByUrl('/');
-    }
+
   }
 
   setRelatedKeywords(keys: string[]) {
@@ -32,10 +24,10 @@ export class SearchResultComponent implements OnInit {
   }
 
   async freqAnalysis() {
-    this._router.navigateByUrl("search/freqAnalysis");
+    this.router.navigateByUrl("search/freqAnalysis");
   }
 
   relatedSearch(keyword: string) {
-    this.es.searchKeyword(keyword);
+    this.elasticSearchService.searchKeyword(keyword);
   }
 }

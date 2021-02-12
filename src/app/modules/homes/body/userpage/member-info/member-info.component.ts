@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 
 @Component({
   selector: 'app-member-info',
@@ -14,15 +14,11 @@ export class MemberInfoComponent implements OnInit {
   private inst: String;
 
   constructor(
-    private _auth: EPAuthService,
+    private _auth: AuthService,
   ) { }
 
   ngOnInit(): void {
-    
-    this.name = this._auth.getUserName();
-    this.email = this._auth.getUserEmail();
-    this.nickName = this._auth.getUserNickname();
-    this.inst = this._auth.getUserInst();
+
 
   }
 

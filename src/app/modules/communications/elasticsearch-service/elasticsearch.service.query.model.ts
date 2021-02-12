@@ -1,7 +1,11 @@
+import { SORT } from "./elasticsearch.service";
+
 export class ElasticSearchQueryModel {
 
     private ids: string[] = [];
     private searchKeyword: string = "";
+    private sortOption: {};
+
     private searchSource = [
         "post_title",
         "post_date",
@@ -20,6 +24,24 @@ export class ElasticSearchQueryModel {
         "_scroll_id"
     ]
 
+    private sortByScoreDesc: {} = {
+        "_score": {
+            "order": "desc"
+        }
+    }
+
+    private sortByDateAsc: {} = {
+        "post_date": {
+            "order": "asc"
+        }
+    }
+    private sortByDateDesc: {} = {
+        "post_date": {
+            "order": "desc"
+        }
+    }
+
+
     public getAllDocs() {
         return {
             "query": {
@@ -35,7 +57,21 @@ export class ElasticSearchQueryModel {
                     query: this.searchKeyword,
                     fields: this.searchField,
                 }
-            }
+            },
+            sort: [
+                this.sortOption
+            ]
+        };
+    }
+
+    public getSearchDocCount() {
+        return {
+            query: {
+                multi_match: {
+                    query: this.searchKeyword,
+                    fields: this.searchField,
+                }
+            },
         };
     }
 
@@ -63,5 +99,11 @@ export class ElasticSearchQueryModel {
 
     public setSearchIds(ids: string[]) {
         this.ids = ids;
+    }
+
+    public setSortOption(op) {
+        if (op === 0) this.sortOption = this.sortByDateAsc;
+        if (op === 1) this.sortOption = this.sortByDateDesc;
+        if (op === 2) this.sortOption = this.sortByScoreDesc;
     }
 }

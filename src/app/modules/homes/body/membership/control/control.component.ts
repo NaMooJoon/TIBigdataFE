@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IpService } from 'src/app/ip.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { HttpClient } from "@angular/common/http";
 import { Event } from '@angular/router';
 
@@ -11,14 +11,12 @@ import { Event } from '@angular/router';
 })
 export class ControlComponent implements OnInit {
 
-  constructor(private http: HttpClient, private auth: EPAuthService, private ipservice: IpService) { }
-  // private userEmailReqURL: string = this.ipservice.getUserServerIp() + "/??";
-  // private userGoogleReqUrl: string = this.ipservice.getUserServerIp() + ""
-  private HISTORY_URL: string = this.ipservice.getFrontDBServerIp() + "/hst/getTotalHistory";
-  private HISTORY_COUNT_URL: string = this.ipservice.getFrontDBServerIp() + "/hst/getHistoryCount";
+  constructor(private http: HttpClient, private auth: AuthService, private ipService: IpService) { }
+  private HISTORY_URL: string = this.ipService.getFrontDBServerIp() + "/hst/getTotalHistory";
+  private HISTORY_COUNT_URL: string = this.ipService.getFrontDBServerIp() + "/hst/getHistoryCount";
 
-  private E_USER_URL: string = this.ipservice.getFrontDBServerIp() + "/eUser/getEuserList";
-  private G_USER_URL: string = this.ipservice.getFrontDBServerIp() + "/gUser/getGuserList";
+  private E_USER_URL: string = this.ipService.getFrontDBServerIp() + "/eUser/getEuserList";
+  private G_USER_URL: string = this.ipService.getFrontDBServerIp() + "/gUser/getGuserList";
 
   private pageNum: number = 1;//현재 몇페이지인지
   private lastPageNum: number;//마지막 페이지의 index

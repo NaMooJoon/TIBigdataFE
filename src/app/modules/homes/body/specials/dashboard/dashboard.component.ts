@@ -4,15 +4,14 @@ import { Color, Label, BaseChartDirective } from 'ng2-charts';
 import { MultiDataSet } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
 import { IpService } from 'src/app/ip.service';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service'
 import { DocumentService } from "src/app/modules/homes/body/shared-services/document-service/document.service"
-import { RecommendationService } from "src/app/modules/homes/body/shared-services/recommendation-service/recommendation.service";
 import { AnalysisDatabaseService } from "../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service";
-import { IdControlService } from "src/app/modules/homes/body/shared-services/id-control-service/id-control.service";
 import { CloudData, CloudOptions } from "angular-tag-cloud-module";
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserDocumentService } from 'src/app/modules/communications/fe-backend-db/userDocument/userDocument.service';
 
 
 /**
@@ -40,14 +39,13 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private db: AnalysisDatabaseService,
-    private auth: EPAuthService,
+    private auth: AuthService,
     private http: HttpClient,
     private ipService: IpService,
     private es: ElasticsearchService,
     private docSvc: DocumentService,
-    private rcmd: RecommendationService,
-    private idSvc: IdControlService,
     private _router: Router,
+    private userDocumentService: UserDocumentService,
   ) { }
 
   RELATED: string = "RelatedDoc";
@@ -65,7 +63,6 @@ export class DashboardComponent implements OnInit {
   private graphYData = [];
   private graphData = [];
 
-  private ES_URL = "localhost:9200/nkdb";
   private myDocsTitles: string[] = [];
   private idList: string[] = [];
   private chosenList: string[] = [];
@@ -90,16 +87,10 @@ export class DashboardComponent implements OnInit {
   cData: CloudData[] = [];
 
   ngOnInit() {
-    this.auth.getLoginStatChange().subscribe((logInStat: number) => {
-      if (!logInStat) {
-        alert("로그인이 필요한 서비스 입니다. 로그인 해주세요.");
-        this._router.navigateByUrl("/login");
-      }
-      else {
-        this.chosenCount = 0;
-        this.getMyKeepDoc();
-      }
-    })
+
+    this.chosenCount = 0;
+    this.getMyKeepDoc();
+
   }
 
   async getKeywords(ids: string | string[]) {
@@ -107,7 +98,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getMyKeepDoc() {
-    this.auth.getMyDocs(true).then(titlesNiD => {
+    this.userDocumentService.getMyDocs().then(titlesNiD => {
       console.log("get my keep doc : ", titlesNiD)
       let temp = titlesNiD as [];
       temp.map(o => {
@@ -369,7 +360,7 @@ export class DashboardComponent implements OnInit {
           valArr.push(data1[i][1])
         }
       }
-      this.docSvc.convert_id_to_doc_title(idsArr).then(t => {
+      this.docSvc.convertDocIdsToTitles(idsArr).then(t => {
         console.log("ids arr :", idsArr);
         console.log("titles : ", t);
         let titles = t as [];

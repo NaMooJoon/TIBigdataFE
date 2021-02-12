@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { navMenu, NavService } from '../../../nav/nav.service';
 
 @Component({
   selector: 'app-intro-root',
@@ -9,26 +10,28 @@ import { Router } from '@angular/router';
 export class IntroRootComponent implements OnInit {
 
   constructor(
-    public _router: Router,
+    private router: Router,
+    private navService: NavService,
   ) { }
 
   ngOnInit() {
+    this.navService.setNavMenu(navMenu.ABOUT);
   }
 
   toSiteIntro() {
-    this._router.navigateByUrl("/introduce/intro");
+    this.router.navigateByUrl("/introduce/intro");
   }
 
   toServiceGuide() {
-    this._router.navigateByUrl("/introduce/service-guide");
+    this.router.navigateByUrl("/introduce/service-guide");
   }
 
   toCollectedInfo() {
-    this._router.navigateByUrl("/introduce/collected-info");
+    this.router.navigateByUrl("/introduce/collected-info");
   }
 
   toMemberPolicy() {
-    this._router.navigateByUrl("/introduce/member-policy");
+    this.router.navigateByUrl("/introduce/member-policy");
   }
 
 

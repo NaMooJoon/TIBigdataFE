@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './modules/communications/fe-backend-db/membership/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'KUBiC'; 
+  title = 'KUBiC';
+
+  constructor(private auth: AuthService) { }
+
+  async ngOnInit(): Promise<void> {
+    await this.auth.verifySignIn()
+  }
 }
