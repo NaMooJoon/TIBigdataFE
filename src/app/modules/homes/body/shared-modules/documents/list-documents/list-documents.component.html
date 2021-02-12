@@ -1,6 +1,8 @@
 <div class="result-header">
   <!-- Show number of result -->
-  <div *ngIf="isResultFound" class="result-count">"{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.</div>
+  <div *ngIf="isResultFound && isMainSearch" class="result-count">"{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건
+    입니다.</div>
+  <div *ngIf="isResultFound && !isMainSearch" class="result-count">검색결과는 총 {{ searchResultNum }}건 입니다.</div>
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
@@ -8,7 +10,7 @@
     </select>
 
     <!-- Set number of doc per page -->
-    <select class="amount-drop" id="amount" name="amount" (change)="searchAgain($event.target.value)">
+    <select class="amount-drop" id="amount" name="amount" (change)="docNumPerPageChange($event.target.value)">
       <option *ngFor="let amt of amounts" [value]="amt">{{amt}}건씩 보기</option>
     </select>
   </div>
@@ -39,14 +41,14 @@
   </form>
 
   <div class="page-numbers">
-    <button *ngIf="currentPage > 1" (click)="jumpPage(currentPage-10)">
-      << </button> <button *ngIf="currentPage > 1" (click)="jumpPage(currentPage-1)">
+    <button *ngIf="currentPage > 1" (click)="beginSearch(currentPage-10)">
+      << </button> <button *ngIf="currentPage > 1" (click)="beginSearch(currentPage-1)">
         < </button> <button
           [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
-          (click)="jumpPage(i)" *ngFor="let i of pages"> {{  i  }}
+          (click)="beginSearch(i)" *ngFor="let i of pages"> {{  i  }}
     </button>
-    <button *ngIf="currentPage < totalPages" (click)="jumpPage(currentPage+1)"> > </button>
-    <button *ngIf="currentPage != totalPages" (click)="jumpPage(currentPage+10)"> >> </button>
+    <button *ngIf="currentPage < totalPages" (click)="beginSearch(currentPage+1)"> > </button>
+    <button *ngIf="currentPage != totalPages" (click)="beginSearch(currentPage+10)"> >> </button>
   </div>
 </div>
 

@@ -9,15 +9,10 @@ import { AuthService } from '../../../../communications/fe-backend-db/membership
   styleUrls: ["./search-result.component.less"]
 })
 export class SearchResultComponent implements OnInit {
-
   public relatedKeywords = [];
-  queryText: string;
-  private isResultFound: boolean;
-
   constructor(
-    private auth: AuthService,
-    public _router: Router,
-    private es: ElasticsearchService,
+    public router: Router,
+    private elasticSearchService: ElasticsearchService,
   ) {
   }
   ngOnInit() {
@@ -29,10 +24,10 @@ export class SearchResultComponent implements OnInit {
   }
 
   async freqAnalysis() {
-    this._router.navigateByUrl("search/freqAnalysis");
+    this.router.navigateByUrl("search/freqAnalysis");
   }
 
   relatedSearch(keyword: string) {
-    this.es.searchKeyword(keyword);
+    this.elasticSearchService.searchKeyword(keyword);
   }
 }

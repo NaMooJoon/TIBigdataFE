@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy, } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElasticsearchService } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { ArticleSource } from "../article.interface";
@@ -22,23 +22,23 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   amounts = [10, 30, 50];
   form: FormGroup;
 
-  @Input() isKeyLoaded: boolean;//키워드 검색으로 진입할 때
-  @Output() relatedKeywordsReady = new EventEmitter<string[]>();//현재 검색어의 연관문서 완료되었을 때
-  private ResultIdList: string[] = [];
+  @Input() isKeyLoaded: boolean;
+  @Output() relatedKeywordsReady = new EventEmitter<string[]>();
 
   private relatedDocs: ArticleSource[][] = [];
-  private countNumChange$: Observable<any> = this.elasticSearchService.getCountNumChange();
-  private searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
+  private articleNumChange$: Observable<any> = this.elasticSearchService.getArticleNumChange();
   private articleChange$: Observable<ArticleSource[]> = this.elasticSearchService.getArticleChange();
+  private searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
 
-  private countNumSubs: Subscription;
-  private articleSubs: Subscription;
-
+  private articleNumSubscriber: Subscription;
+  private articleSubscriber: Subscription;
   private articleSources: ArticleSource[];
   private RelatedDocBtnToggle: Array<boolean>;
+
   private isResultFound: boolean;
   private isSearchDone: boolean;
   private isLoggedIn: boolean;
+  private isMainSearch: boolean;
 
   private searchResultNum: string = "0";
   private searchKeyword: string;
@@ -62,30 +62,28 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   ) {
 
     // Set articles when article has been changed
-    this.articleSubs = this.articleChange$.subscribe(articles => {
+    this.articleSubscriber = this.articleChange$.subscribe(articles => {
       this.articleSources = articles;
-      this.initialize_search();
-      this.createResultIdList();
-      this.setCheckboxProp();
-      this.loadRelatedKeywords();
-      this.form = this.formBuilder.group({
-        checkArray: this.formBuilder.array([])
-      });
-      if (this.articleSources !== undefined) this.isResultFound = true;
-      else this.isResultFound = false;
+      this.resetSearchOptions();
+      this.setArticleIdList();
+      this.setCheckbox();
+      this.setRelatedKeywords();
+      this.setArticleForm();
+
+      this.isResultFound = (articles !== null)
       this.elasticSearchService.setSearchStatus(true);
     });
 
     // Check if it is still searching
-    this.searchStatusChange$.subscribe(async status => {
+    this.searchStatusChange$.subscribe(status => {
       this.isSearchDone = status;
     });
 
     // Set pagination and search result number when the number of articles has been changed
-    this.countNumSubs = this.countNumChange$.subscribe(async num => {
+    this.articleNumSubscriber = this.articleNumChange$.subscribe(num => {
       this.totalDocs = num;
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadPage(1);
+      this.loadPage(this.elasticSearchService.getCurrentSearchingPage());
     });
 
     // Observe to check if user is signed out
@@ -95,25 +93,30 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.articleSubs.unsubscribe();
-    this.countNumSubs.unsubscribe();
+    this.articleSubscriber.unsubscribe();
+    this.articleNumSubscriber.unsubscribe();
   }
 
   ngOnInit() {
-    this.isResultFound = false;
-    this.isSearchDone = false;
-    this.currentPage = 1;
-    this.loadSearchResult();
+    this.resetSearchOptions();
+    this.beginSearch(this.currentPage);
   }
 
-  setCheckboxProp(): void {
+  beginSearch(pageNum: number) {
+    if (pageNum === null) pageNum = 1;
+    this.elasticSearchService.triggerSearch(pageNum);
+  }
+
+  setArticleForm(): void {
+    this.form = this.formBuilder.group({
+      checkArray: this.formBuilder.array([])
+    });
+  }
+
+  setCheckbox(): void {
     for (let i in this.articleSources) {
       this.articleSources[i]['isSelected'] = false;
     }
-  }
-
-  loadSearchResult(): void {
-    this.initialize_search();
   }
 
   setPageInfo(pageInfo: PaginationModel): void {
@@ -124,47 +127,36 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   async loadPage(currentPage: number): Promise<void> {
+    if (currentPage === null) currentPage = 1;
     let pageInfo: PaginationModel = await this.paginationService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
-  }
-
-  jumpPage(jumpPageNum: number): void {
-    this.elasticSearchService.searchNext(jumpPageNum);
-    this.loadPage(jumpPageNum);
   }
 
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();
     if (num === 0) return docCount;
-
     return docCount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  searchAgain(num: number): void {
-    this.elasticSearchService.setNumDocsPerPage(num);
-    this.elasticSearchService.searchKeyword(this.searchKeyword);
-    this.articleSubs.unsubscribe();
-    this.countNumSubs.unsubscribe();
-    this.ngOnInit();
-  }
-
-  initialize_search(): void {
-    this.isResultFound = false;
-    this.documentService.clearIDList();
-    this.ResultIdList = [];
+  resetSearchOptions(): void {
+    this.isMainSearch = (this.router.url === '/search/result');
+    this.documentService.clearList();
     this.searchKeyword = this.elasticSearchService.getKeyword();
+    this.isResultFound = false;
+    this.isSearchDone = false;
+    this.currentPage = this.elasticSearchService.getCurrentSearchingPage();
   }
 
-  createResultIdList(): void {
+  setArticleIdList(): void {
     this.RelatedDocBtnToggle = [];
     for (var i in this.articleSources) {
-      this.ResultIdList[i] = this.articleSources[i]["_id"];
+      this.documentService.addId(this.articleSources[i]["_id"]);
       this.RelatedDocBtnToggle.push(false);
     }
   }
 
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
-    this.documentService.selectOneID(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
+    this.documentService.setSelectedId(this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]);
     this.navToDocDetail();
   }
 
@@ -174,29 +166,23 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   loadRelatedDocs(idx: number): void {
-    this.analysisDatabaseService.loadRelatedDocs(this.ResultIdList[idx]).then(res => {
+    this.analysisDatabaseService.loadRelatedDocs(this.documentService.getIdByIdx(idx)).then(res => {
       this.relatedDocs[idx] = res as [];
     });
   }
 
-  async loadRelatedKeywords(): Promise<void> {
+  async setRelatedKeywords(): Promise<void> {
     let relatedKeywords: string[] = [];
-    await this.analysisDatabaseService.getTfidfVal(this.ResultIdList).then(res => {
+    await this.analysisDatabaseService.getTfidfVal(this.documentService.getList()).then(res => {
       let data = res as []
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];
-        if (relatedKeywords.length < 7 && tfVal[0] !== this.searchKeyword && !relatedKeywords.includes(tfVal[0]))
+        if (relatedKeywords.length < 6 && tfVal[0] !== this.searchKeyword && !relatedKeywords.includes(tfVal[0]))
           relatedKeywords.push(tfVal[0])
       }
       this.exportRelatedKeywords(relatedKeywords)
     })
-
-
     this.isKeyLoaded = true;
-  }
-
-  exportRelatedKeywords(relatedKeywords: string[]): void {
-    this.relatedKeywordsReady.emit(relatedKeywords);
   }
 
   saveSelectedDocs(): void {
@@ -207,6 +193,10 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
         alert("문서가 나의 문서함에 저장되었어요.")
       });
     }
+  }
+
+  exportRelatedKeywords(relatedKeywords: string[]): void {
+    this.relatedKeywordsReady.emit(relatedKeywords);
   }
 
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
@@ -248,10 +238,15 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   openDocDetail(docId: string): void {
-    this.documentService.selectOneID(docId);
+    this.documentService.setSelectedId(docId);
     this.navToDocDetail();
   }
 
+  docNumPerPageChange(num: number) {
+    this.elasticSearchService.setNumDocsPerPage(num);
+    this.elasticSearchService.setCurrentSearchingPage(1);
+    this.ngOnInit();
+  }
   navToDocDetail(): void {
     this.router.navigateByUrl("search/DocDetail");
   }

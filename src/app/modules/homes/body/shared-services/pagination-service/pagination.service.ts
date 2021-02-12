@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
 import { PaginationModel } from './pagination.model';
 
 const MAXPAGENUM = 5;
@@ -10,21 +8,8 @@ const MAXPAGENUM = 5;
 })
 
 export class PaginationService {
-  private countNumChange$: Observable<any> = this._es.getCountNumChange();
-  private countNumSubs: Subscription;
-
-
-  constructor(
-    private _es: ElasticsearchService
-
-  ) {
-  }
-
   async paginate(currentPage: number, totalDocs: number, pageSize: number): Promise<PaginationModel> {
-    if (pageSize === null) pageSize = this._es.getNumDocsPerPage();
-
     if (currentPage === null) currentPage = 1;
-
     let totalPages = Math.ceil(totalDocs / pageSize);
     if (currentPage < 1) currentPage = 1;
     else if (currentPage > totalPages) currentPage = totalPages;
