@@ -30,8 +30,10 @@
 
   <div class="selection-container inst-container">
     <h2>기관별</h2>
-    <div class="selection-buttons">
-      <button *ngFor="let cat of institutions" (click)="selectCategory($event)">{{cat}}</button>
+    <div class="selection-buttons institutions">
+      <button *ngFor="let inst of institutionList" [ngStyle]="selectedStyleObject(selectedInst === inst.key)" id="inst"
+        (click)="selectCategory($event, inst)">{{inst['key']}} |
+        {{inst['doc_count']}} 건</button>
     </div>
   </div>
 

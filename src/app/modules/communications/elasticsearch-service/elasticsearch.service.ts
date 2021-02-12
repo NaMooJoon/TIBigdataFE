@@ -6,7 +6,11 @@ import { Observable, BehaviorSubject } from "rxjs";
 import { IpService } from 'src/app/ip.service'
 import { ElasticSearchQueryModel } from "./elasticsearch.service.query.model";
 
-export enum SEARCHMODE { ALL, IDS, KEYWORD };
+
+export enum SEARCHMODE {
+  ALL, IDS, KEYWORD,
+  INST
+};
 export enum SORT { DATE_ASC, DATE_DESC, SCORE }
 
 @Injectable({
@@ -19,6 +23,7 @@ export class ElasticsearchService {
   private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
   private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
+  private selectedInst: string;
   private ids: string[] = [];
   private sortOption: SORT = SORT.SCORE;
   private numDocsPerPage: number = 10;
@@ -229,6 +234,10 @@ export class ElasticsearchService {
       this.fullTextSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
       this.countByTextComplete();
     }
+    else if (searchMode === SEARCHMODE.INST) {
+      this.searchByInstComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+      this.countByInstComplete();
+    }
   }
 
   setCurrentSearchingPage(pageNum: number) {
@@ -241,6 +250,79 @@ export class ElasticsearchService {
 
   setSortOption(op: SORT) {
     this.sortOption = op;
+  }
+
+  getInstitutionsWithTextSearch() {
+    return this.client.search({
+      body: {
+        "size": 0,
+        "aggs": {
+          "count": { "terms": { "field": "published_institution.keyword" } }
+        },
+        "query": {
+          'multi_match': {
+            'query': this.keyword,
+            'fields': ["post_title", "file_extracted_content", "post_body"]
+          }
+        }
+      }
+    });
+  }
+
+  getInstitutions() {
+    return this.client.search({
+      body: {
+        "size": 0,
+        "aggs": {
+          "count": { "terms": { "field": "published_institution.keyword" } }
+        },
+      }
+    });
+  }
+
+  searchByInst(startIndex?: number): Promise<any> {
+    return this.client.search({
+      from: startIndex,
+      size: this.numDocsPerPage,
+      body: {
+        "query": {
+          "match": {
+            "published_institution": this.selectedInst,
+          }
+        }
+      },
+      _source: this.esQueryModel.getSearchSource(),
+    });
+  }
+
+  searchByInstComplete(startIndex?: number) {
+    this.saveSearchResult(this.searchByInst(startIndex));
+  }
+
+  countByInstComplete() {
+    this.countByInst().then(articleNum => {
+      this.articleNum.next(articleNum.count);
+    });
+  }
+
+  countByInst() {
+    return this.client.count({
+      body: {
+        "query": {
+          "match": {
+            "published_institution": this.selectedInst,
+          }
+        }
+      },
+    });
+  }
+
+  setArticleNum(num: number) {
+    this.articleNum.next(num);
+  }
+
+  setSelectedInst(inst: string) {
+    this.selectedInst = inst;
   }
 
   private _connect() {

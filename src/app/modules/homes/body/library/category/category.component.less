@@ -42,11 +42,34 @@ h2 {
   width: 80%;
 }
 
+
+
 .selection-buttons>button {
   width: 60px;
   height: 35px;
   margin: 0px 5px;
   margin-bottom: 5px;
+  font-size: 15px;
+  background-color: white;
+  border-radius: 25px;
+  border: 1px solid lightgray;
+}
+
+.institutions {
+  overflow: scroll;
+  display: flex;
+}
+
+.institutions::-webkit-scrollbar {
+  display: none;
+}
+
+.institutions>button {
+  width: fit-content;
+  height: 35px;
+  margin: 0px 5px;
+  white-space: nowrap;
+  padding: 5px 10px;
   font-size: 15px;
   background-color: white;
   border-radius: 25px;

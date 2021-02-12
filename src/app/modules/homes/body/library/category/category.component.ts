@@ -24,7 +24,8 @@ export class CategoryComponent implements OnInit {
 
   private categories: string[] = ["전체", "정치", "경제", "사회", "국제", "IT", "스포츠", "문화", "과학"];
   private dict_orders_1: string[] = ["전체", "가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하"];
-  private institutions: string[] = ["전체", "기관1", "기관2", "기관3"]//bring from the fe server
+  private institutionList: string[];
+  private selectedInst: string;
 
   private ALL: string = "ALL";//전체 선택했을 경우
   private cat_choice_init = [this.ALL, this.ALL, this.ALL,];//주제, 사전편찬순, 기관순 3가지 종류
@@ -33,6 +34,28 @@ export class CategoryComponent implements OnInit {
   ngOnInit() {
     this.es.setSearchMode(SEARCHMODE.ALL);
     this.es.setCurrentSearchingPage(1);
+    this.loadInstitutions();
+  }
+
+  selectedStyleObject(flag: boolean): Object {
+    if (flag) {
+      return {
+        'color': 'white',
+        'background-color': '#0FBAFF',
+        'border': 'none'
+      }
+    }
+    else {
+      return {
+        'color': 'black',
+        'background-color': 'white'
+      };
+    }
+  }
+
+  async loadInstitutions() {
+    let res = await this.es.getInstitutions();
+    this.institutionList = res['aggregations']['count']['buckets'];
   }
 
   navToGraph(): void {
@@ -49,13 +72,13 @@ export class CategoryComponent implements OnInit {
     this._router.navigateByUrl("search/DocDetail");
   }
 
-  async selectCategory($event) {
+  async selectCategory($event, doc?) {
     this.ds.clearList();
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
 
-    console.log(id);
+    console.log(id, doc);
     switch (id) {
       case "topic": {
         console.log(ct);
@@ -81,6 +104,7 @@ export class CategoryComponent implements OnInit {
 
       case "inst": {
         this.cat_button_choice[2] = ct;
+        this.selectInstitution(doc);
         break;
       }
     }
@@ -93,6 +117,14 @@ export class CategoryComponent implements OnInit {
     docs_id.map(e => this.ds.addId(e));
     this.es.setIds(docs_id);
     this.es.multiIdSearchComplete();
+  }
+
+  async selectInstitution(institution: { key: string, doc_count: number }) {
+    this.selectedInst = institution.key;
+    this.es.setSearchMode(SEARCHMODE.INST);
+    this.es.setSelectedInst(institution.key);
+    this.es.triggerSearch(1)
+
   }
 
   get_chosen_category() {
