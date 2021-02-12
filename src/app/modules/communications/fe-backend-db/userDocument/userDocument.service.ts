@@ -14,6 +14,7 @@ export class UserDocumentService {
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private currentUser: UserProfile;
+  private docsPerPage: number = 10;
 
   constructor(
     private httpClient: HttpClient,
@@ -32,17 +33,31 @@ export class UserDocumentService {
     return res.succ;
   }
 
-  async getMyDocs(): Promise<Array<{ title: string, id: string }>> {
+  async getMyDocs(startIndex?: number): Promise<Array<{ title: string, id: string, }>> {
+    if (startIndex === undefined) startIndex = 0;
+    let currentIndex = startIndex * this.docsPerPage;
+
     let res: Res = await this.httpClient.post<any>(this.getMyDocUrl, { 'userEmail': this.currentUser.email }).toPromise();
     let docIds: Array<string> = res.payload['docIds']
-    console.log(docIds);
-    let titles: Array<string> = await this.documentService.convertDocIdsToTitles(docIds);
+
+    let titles: Array<string> = await this.documentService.convertDocIdsToTitles(docIds.slice(currentIndex, currentIndex + this.docsPerPage));
     let idIdx = 0;
 
-    console.log(titles);
-    return titles.map(title => {
+    let idsAndTitles = titles.map(title => {
       return { 'title': title, 'id': docIds[idIdx++] }
     });
+
+
+    // async ngOnInit(): Promise<void> {
+    // async 키워드 함수 앞에 붙여주고 안에서 호출 할 때는 await 키워드 붙여서 함수호출 해야함!
+    //   console.log(await this.userDocumentService.getMyDocs());
+    //   console.log(await this.userDocumentService.getMyDocs(1));
+    //   console.log(await this.userDocumentService.getMyDocs(2));
+
+
+    // }
+
+    return idsAndTitles;
   }
 
 
