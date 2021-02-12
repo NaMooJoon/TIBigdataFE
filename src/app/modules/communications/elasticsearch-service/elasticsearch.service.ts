@@ -7,20 +7,24 @@ import { IpService } from 'src/app/ip.service'
 import { ElasticSearchQueryModel } from "./elasticsearch.service.query.model";
 
 export enum SEARCHMODE { ALL, IDS, KEYWORD };
+export enum SORT { DATE_ASC, DATE_DESC, SCORE }
 
 @Injectable({
   providedIn: "root"
 })
 
 export class ElasticsearchService {
+
   private client: Client;
   private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
-  private countNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
+  private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
   private ids: string[] = [];
+  private sortOption: SORT = SORT.SCORE;
   private numDocsPerPage: number = 10;
   private searchMode: SEARCHMODE;
   private searchStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private currentSearchingPage: number = 1;
 
   constructor(
     private ipSvc: IpService,
@@ -31,9 +35,9 @@ export class ElasticsearchService {
   }
 
   searchKeyword(keyword: string) {
+    this.searchMode = SEARCHMODE.KEYWORD;
     this.setKeyword(keyword);
-    this.fullTextSearchComplete();
-    this.countByTextComplete();
+    this.triggerSearch(1);
   }
 
   getSearchMode() {
@@ -44,12 +48,12 @@ export class ElasticsearchService {
     this.searchMode = searchMode;
   }
 
-  getCountNumChange(): Observable<number> {
-    return this.countNum.asObservable();
+  getArticleNumChange(): Observable<number> {
+    return this.articleNum.asObservable();
   }
 
-  setCountNumChange(num: number) {
-    this.countNum.next(num);
+  setArticleNumChange(num: number) {
+    this.articleNum.next(num);
   }
 
   getArticleChange() {
@@ -126,20 +130,20 @@ export class ElasticsearchService {
   }
 
   allCountComplete(): void {
-    this.countAllDocs().then(countNum => {
-      this.countNum.next(countNum.count);
+    this.countAllDocs().then(articleNum => {
+      this.articleNum.next(articleNum.count);
     });
   }
 
   countByText(): Promise<any> {
     return this.client.count({
-      body: this.esQueryModel.getSearchDocs(),
+      body: this.esQueryModel.getSearchDocCount(),
     });
   }
 
   countByTextComplete(): void {
-    this.countByText().then(countNum =>
-      this.countNum.next(countNum.count)
+    this.countByText().then(articleNum =>
+      this.articleNum.next(articleNum.count)
     )
   }
 
@@ -151,12 +155,12 @@ export class ElasticsearchService {
   }
 
   countByIdsComplete(): void {
-    this.countByIds().then(countNum =>
-      this.countNum.next(countNum.count)
+    this.countByIds().then(articleNum =>
+      this.articleNum.next(articleNum.count)
     )
   }
 
-  getCountNumber(): Promise<number> {
+  getArticleNumber(): Promise<number> {
     return this.countByText().then(res => {
       return res.count;
     },
@@ -191,11 +195,12 @@ export class ElasticsearchService {
 
   async saveSearchResult(queryFunc: any): Promise<void> {
     await queryFunc.then(response => {
-      this.docsToArticleSource(response.hits.hits);
+      if (response.hits.total.value === 0) this.docsToArticleSource(null)
+      else this.docsToArticleSource(response.hits.hits);
     });
   }
 
-  docsToArticleSource(info: ArticleSource[]): void {
+  docsToArticleSource(info: Array<ArticleSource>): void {
     this.articleSource.next(info);
   }
 
@@ -207,17 +212,35 @@ export class ElasticsearchService {
     this.numDocsPerPage = num;
   }
 
-  searchNext(selectedPageNum: number) {
+  triggerSearch(selectedPageNum: number) {
+    this.esQueryModel.setSortOption(this.sortOption);
+    console.log(this.esQueryModel.getSearchDocs())
     let searchMode = this.getSearchMode()
+    this.setCurrentSearchingPage(selectedPageNum);
     if (searchMode === SEARCHMODE.ALL) {
       this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+      this.allCountComplete();
     }
     else if (searchMode === SEARCHMODE.IDS) {
       this.multiIdSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+      this.countByIdsComplete();
     }
     else if (searchMode === SEARCHMODE.KEYWORD) {
       this.fullTextSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+      this.countByTextComplete();
     }
+  }
+
+  setCurrentSearchingPage(pageNum: number) {
+    this.currentSearchingPage = pageNum;
+  }
+
+  getCurrentSearchingPage() {
+    return this.currentSearchingPage;
+  }
+
+  setSortOption(op: SORT) {
+    this.sortOption = op;
   }
 
   private _connect() {
