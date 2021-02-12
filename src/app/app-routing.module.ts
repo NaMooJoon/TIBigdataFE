@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainHomeContainerComponent } from './modules/homes/body/main-home-container/main-home-container.component';
 import { BodyContainerComponent } from './modules/homes/body/body-container/body-container.component';
+import { AuthGuard } from 'src/app/modules/communications/fe-backend-db/membership/auth.guard'
 
 const routes: Routes = [
   {

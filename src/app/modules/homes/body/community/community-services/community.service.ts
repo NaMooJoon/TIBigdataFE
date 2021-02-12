@@ -3,10 +3,11 @@ import { IpService } from 'src/app/ip.service';
 import { HttpClient } from "@angular/common/http";
 import { CommunityPrivacyMaskingService } from 'src/app/modules/homes/body/community/community-services/community-privacy-masking.service';
 import { Res } from '../../../../communications/fe-backend-db/res.model';
-import { EPAuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommunityDocModel } from '../community.doc.model';
 import moment from 'moment';
+import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 
 enum boardOperation { CREATE, READ, UPDATE, DELETE, COUNT, REPLY_UPDATE, REPLY_CREATE, REPLY_DELETE, READ_SINGLE, SEARCH, SEARCH_COUNT }
 export enum boardMenu { ANNOUNCE, QNA, FAQ }
@@ -15,8 +16,9 @@ export enum boardMenu { ANNOUNCE, QNA, FAQ }
   providedIn: 'root'
 })
 export class CommunityService {
-
-
+  getCurrentUser(): UserProfile {
+    throw new Error('Method not implemented.');
+  }
   protected dbUrl = this.ipService.getFrontDBServerIp();
   private currentMenu: string = null;
   private registerDocUrl: string = "/registerDoc";
@@ -40,8 +42,8 @@ export class CommunityService {
     protected ipService: IpService,
     private http: HttpClient,
     private prvcyService: CommunityPrivacyMaskingService,
-    private authService: EPAuthService
-  ) { }
+  ) {
+  }
 
   generateQueryUrl(operation: boardOperation): string {
     if (operation === boardOperation.CREATE)
@@ -99,6 +101,7 @@ export class CommunityService {
   async getSelectedDoc(): Promise<CommunityDocModel> {
     if (this.selectedDoc == null) return null;
     let res: Res = await this.http.post<any>(this.generateQueryUrl(boardOperation.READ_SINGLE), { 'docId': this.selectedDoc.docId }).toPromise();
+    console.log(res.payload)
     return res.payload;
   }
 
@@ -176,5 +179,4 @@ export class CommunityService {
   setSelectedDoc(doc: CommunityDocModel) {
     this.selectedDoc = doc;
   }
-
 }

@@ -1,65 +1,45 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, CanLoad, UrlSegment, ActivatedRouteSnapshot } from '@angular/router';
-import { EPAuthService } from './auth.service';
-
-// class UserToken{}
-class Permissions {
-  canActivate(isLogin, routeId: import("@angular/router").Route, segments: UrlSegment[]): boolean {
-    if (isLogin)
-      return false;
-    return true
-    // if(!isLogin && )
-    // return true;
-  }
-}
-
+import {
+  ActivatedRouteSnapshot, RouterStateSnapshot,
+  UrlTree, CanActivate, Router
+} from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: EPAuthService,
-    private _router: Router,) { }
-  // private permissions : Permissions) {}
-  // canLoad(route: import("@angular/router").Route, segments: UrlSegment[]): boolean | import("rxjs").Observable<boolean> | Promise<boolean> {
-  //   // throw new Error("Method not implemented.");
-  //   return this.permissions.canLoadCond(this.authService.getLogInStat(),route,segments);
-  // }
+  constructor(
+    public authService: AuthService,
+    public router: Router
+  ) { }
 
-  /**
-   * scenario
-   * 
-   * user : not log in -> membership/mypage : deny with alert("log in first plz"). go to login page first?
-   * user : log in -> membership/login : already login. aleart(you have already login. redirect page to main.)
-   * 
-   */
-  //
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.getPath(next) === "login"
+      || this.getPath(next) === "register"
+      || this.getPath(next) === "socReg"
+      || this.getPath(next) === "register-ok") {
+      if (localStorage.getItem("KUBIC_TOKEN")) {
+        window.alert("이미 로그인 되어있습니다!");
+        this.router.navigate(['/']);
+      }
+    }
+    else if (!localStorage.getItem("KUBIC_TOKEN")) {
+      window.alert("비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.");
+      this.router.navigate(['login'])
+    }
+
+    return true;
+  }
 
   getPath(route: ActivatedRouteSnapshot): string {
+    if (route.url.length === 0) return "";
     var p = route.url[0];
     console.log("curr path : ", p.toString());
     return p.toString()
   }
-
-  canActivate(route: ActivatedRouteSnapshot): boolean {
-    console.log(route)
-    console.log(this.getPath(route));
-    if (this.getPath(route) === "login" || this.getPath(route) === "register" || this.getPath(route) === "socReg" || this.getPath(route) === "register-ok") {//user access to login page
-      //when login stat is not login, access ok. when already login, access no.
-      console.log("curr login stat :", this.authService.getLogInStat());
-      return !this.authService.getLogInStat() ? true : false;
-    }
-
-    if (this.getPath(route) === "userpage" || this.getPath(route) === "") {
-      //when login stat is login, access ok. when user not login, access no.
-      console.log("curr login stat :", this.authService.getLogInStat());
-      return this.authService.getLogInStat() ? true : false;
-    }
-
-
-
-    return false
-  }
-
 }

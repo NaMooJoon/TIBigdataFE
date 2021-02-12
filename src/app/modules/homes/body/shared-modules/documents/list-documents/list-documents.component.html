@@ -1,6 +1,8 @@
 <div class="result-header">
   <!-- Show number of result -->
-  <div *ngIf="isResultFound" class="result-count">"{{queryText}}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.</div>
+  <div *ngIf="isResultFound && isMainSearch" class="result-count">"{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건
+    입니다.</div>
+  <div *ngIf="isResultFound && !isMainSearch" class="result-count">검색결과는 총 {{ searchResultNum }}건 입니다.</div>
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
@@ -8,7 +10,7 @@
     </select>
 
     <!-- Set number of doc per page -->
-    <select class="amount-drop" id="amount" name="amount" (change)="searchAgain($event.target.value)">
+    <select class="amount-drop" id="amount" name="amount" (change)="docNumPerPageChange($event.target.value)">
       <option *ngFor="let amt of amounts" [value]="amt">{{amt}}건씩 보기</option>
     </select>
   </div>
@@ -16,12 +18,12 @@
 
 <div *ngIf="isResultFound && isSearchDone" class="result-body">
   <form [formGroup]="form" (ngSubmit)="saveSelectedDocs()" novalidate>
-    <label *ngIf="isLogStat != 0"><input class="article-checkbox toggle-all" type="checkbox"
+    <label *ngIf="isLoggedIn"><input class="article-checkbox toggle-all" type="checkbox"
         (change)="onCheckboxChange($event)" value="toggleAll" />전체선택
     </label>
     <div *ngFor="let articleSource of articleSources; index as i" class="article">
       <label>
-        <input *ngIf="isLogStat != 0" class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected"
+        <input *ngIf="isLoggedIn" class="article-checkbox" type="checkbox" [(checked)]="articleSource.isSelected"
           name="selectDoc" [value]="articleSource['_id']" (change)="onCheckboxChange($event)" />
       </label>
       <div class="article-info-container">
@@ -35,23 +37,23 @@
         <hr class="sep" />
       </div>
     </div>
-    <input *ngIf="isLogStat != 0" type="submit" class="mydoc" value="담기" />
+    <input *ngIf="isLoggedIn" type="submit" class="mydoc" value="담기" />
   </form>
 
   <div class="page-numbers">
-    <button *ngIf="currentPage" (click)="loadPage(currentPage-10)">
-      << </button> <button *ngIf="currentPage > 1" (click)="loadPage(currentPage-1)">
+    <button *ngIf="currentPage > 1" (click)="beginSearch(currentPage-10)">
+      << </button> <button *ngIf="currentPage > 1" (click)="beginSearch(currentPage-1)">
         < </button> <button
           [ngStyle]="{'background-color': currentPage == i ? '#52b9ff' : 'transparent', 'color': currentPage == i ? 'white' : 'black'}"
-          (click)="loadPage(i)" *ngFor="let i of pages"> {{  i  }}
+          (click)="beginSearch(i)" *ngFor="let i of pages"> {{  i  }}
     </button>
-    <button *ngIf="currentPage < totalPages" (click)="loadPage(currentPage+1)"> > </button>
-    <button *ngIf="currentPage != totalPages" (click)="loadPage(currentPage+10)"> >> </button>
+    <button *ngIf="currentPage < totalPages" (click)="beginSearch(currentPage+1)"> > </button>
+    <button *ngIf="currentPage != totalPages" (click)="beginSearch(currentPage+10)"> >> </button>
   </div>
 </div>
 
 <div *ngIf="!isResultFound && isSearchDone" class="result-not-found-body">
-  <p> "{{ queryText }}"에 대한 검색결과가 없습니다.</p>
+  <p> "{{ searchKeyword }}"에 대한 검색결과가 없습니다.</p>
   <ul>
     <li>단어의 철자가 정확한지 확인해 보세요.</li>
     <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
@@ -60,6 +62,6 @@
 </div>
 
 <div *ngIf="!isSearchDone" class="result-not-found-body">
-  <p> "{{ queryText }}"에 대한 문서를 검색 중입니다. 잠시만 기다려주세요.</p>
+  <p> "{{ searchKeyword }}"에 대한 문서를 검색 중입니다. 잠시만 기다려주세요.</p>
 
 </div>

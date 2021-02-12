@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
+import { navMenu, NavService } from '../../../nav/nav.service';
 import { boardMenu, CommunityService } from '../community-services/community.service';
 
 @Component({
@@ -9,15 +10,16 @@ import { boardMenu, CommunityService } from '../community-services/community.ser
 })
 
 export class CommunityRootComponent implements OnInit {
+  private selectedMenu: boardMenu;
 
   constructor(
     private router: Router,
     private cmService: CommunityService,
+    private navService: NavService,
   ) { }
-  private selectedMenu: boardMenu;
 
   ngOnInit() {
-
+    this.navService.setNavMenu(navMenu.COMMUNITY);
   }
 
   ngAfterViewInit() {
@@ -27,7 +29,6 @@ export class CommunityRootComponent implements OnInit {
       });
     });
   }
-
 
   navToQna() {
     this.router.navigateByUrl("community/qna");

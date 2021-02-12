@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from "@angular/router";
+import { AuthGuard } from '../../communications/fe-backend-db/membership/auth.guard';
 import { BodyContainerComponent } from './body-container/body-container.component';
 
 const routes: Routes = [
@@ -13,7 +14,7 @@ const routes: Routes = [
       },
       {
         path: 'specials',
-        loadChildren: () => import('./specials/specials.module').then(m => m.SpecialsModule)
+        loadChildren: () => import('./specials/specials.module').then(m => m.SpecialsModule),
       },
       {
         path: 'library',
@@ -22,7 +23,6 @@ const routes: Routes = [
       {
         path: 'membership',
         loadChildren: () => import('../../communications/communication.module').then(m => m.CommunicationModule),
-        // canLoad : [AuthGuard]./modules/communications/communication.module
       },
       {
         path: 'community',
@@ -35,23 +35,11 @@ const routes: Routes = [
       {
         path: 'userpage',
         loadChildren: () => import('./userpage/userpage.module').then(m => m.UserpageModule),
+        canActivate: [AuthGuard],
       }
     ]
   }
-
-
-
-
-
-
 ];
-
-// @NgModule({
-//   declarations: [],
-//   imports: [
-//     CommonModule
-//   ]
-// })
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -7,8 +7,6 @@ import { CommonSearchBarModule } from './shared-modules/search-bar/common-search
 import { CommonSearchResultDocumentListModule } from './shared-modules/documents/documents.module';
 import { UserpageModule } from './userpage/userpage.module';
 
-// import { IdControlService } from './search/service/id-control-service/id-control.service';
-
 @NgModule({
   declarations: [
     BodyContainerComponent,
@@ -22,12 +20,5 @@ import { UserpageModule } from './userpage/userpage.module';
     ReactiveFormsModule,
     UserpageModule,
   ],
-  exports: [
-    // SearchResultComponent,
-    // SearchBarComponent
-  ],
-  providers: [
-    //   IdControlService
-  ]
 })
 export class BodyModule { }

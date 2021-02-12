@@ -11,7 +11,7 @@ import { PaginationService } from "../../../shared-services/pagination-service/p
 })
 export class SearchBarComponent implements OnInit {
 
-  private queryText: string = "";
+  private searchKeyword: string = "";
   private selectedDate: string;
   private dateList: Array<String> = ["전체", "1일", "1주일", "1개월", "3개월", "6개월", "1년"];
   private topicList: Array<String> = ["전체", "경제", "국제", "문화", "스포츠", "정치", "지역"];
@@ -27,7 +27,8 @@ export class SearchBarComponent implements OnInit {
     if (flag) {
       return {
         'color': 'white',
-        'background-color': '#0FBAFF'
+        'background-color': '#0FBAFF',
+        'border': 'none'
       }
     }
     else {
@@ -51,7 +52,6 @@ export class SearchBarComponent implements OnInit {
     this.isDateSelected = false;
     this.isInstSelected = false;
     this.isTopicSelected = false;
-
     this.checkRouterIsMain();
   }
   updateDate(date: string) {
@@ -70,7 +70,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   updateKeyword($event) {
-    this.queryText = $event.target.value;
+    this.searchKeyword = $event.target.value;
   }
 
   resetFilters() {
@@ -78,11 +78,11 @@ export class SearchBarComponent implements OnInit {
   }
 
   async search() {
-    if (this.queryText === this.es.getKeyword()) return;
-    this.es.setSearchStatus(false);
-    this.es.searchKeyword(this.queryText);
     this.es.setSearchMode(SEARCHMODE.KEYWORD);
-    this._router.navigateByUrl("body/search/result");
+    this.es.setSearchStatus(false);
+    this.es.searchKeyword(this.searchKeyword);
+    this.es.setCurrentSearchingPage(1);
+    this._router.navigateByUrl("/search/result");
   }
 
   gotoMain() {

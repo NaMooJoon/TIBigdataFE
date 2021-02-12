@@ -3,10 +3,11 @@ import { Router } from "@angular/router";
 import { boardMenu, CommunityService } from 'src/app/modules/homes/body/community/community-services/community.service';
 import { Location } from '@angular/common';
 import { Res } from 'src/app/modules/communications/fe-backend-db/res.model';
-import { EPAuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
-import { logStat } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
+import { AuthService } from 'src/app/modules/communications/fe-backend-db/membership/auth.service';
+
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommunityDocModel } from '../community.doc.model';
+import { UserProfile } from 'src/app/modules/communications/fe-backend-db/membership/user.model';
 
 @Component({
   selector: 'app-write-community-doc',
@@ -18,19 +19,19 @@ export class WriteCommunityDocComponent {
   constructor(
     private router: Router,
     private cmService: CommunityService,
-    private auth: EPAuthService,
-    private _location: Location) { }
+    private auth: AuthService,
+    private _location: Location) {
+    this.auth.getCurrentUserChange().subscribe(currentUser => {
+      this.currentUser = currentUser;
+    });
+  }
 
   private selectedBoard: boardMenu = 0;
   private boardForm: FormGroup;
   private isMainAnnounce = false;
+  private currentUser: UserProfile;
 
   ngOnInit() {
-    if (this.auth.getLogInStat() == logStat.unsigned) {
-      window.alert('비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.');
-      this.router.navigateByUrl('/community/announcement');
-    }
-
     if (this.cmService.getCurrentMenu() === null) {
       window.alert('비정상적인 접근입니다. 공지사항 페이지로 이동합니다.');
       this.router.navigateByUrl('/community/announcement');
@@ -75,8 +76,8 @@ export class WriteCommunityDocComponent {
   generateAnnounceQueryBody(): CommunityDocModel {
     console.log(this.isMainAnnounce)
     return {
-      userEmail: this.auth.getUserEmail(),
-      userName: this.auth.getUserName(),
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
       title: this.cmService.verifyPrivacyLeak(this.boardForm.controls['title'].value),
       content: this.cmService.verifyPrivacyLeak(this.boardForm.controls['content'].value),
       isMainAnnounce: this.boardForm.controls['isMainAnnounce'].value,
@@ -85,8 +86,8 @@ export class WriteCommunityDocComponent {
 
   generateFaqQueryBody(): CommunityDocModel {
     return {
-      userEmail: this.auth.getUserEmail(),
-      userName: this.auth.getUserName(),
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
       title: this.cmService.verifyPrivacyLeak(this.boardForm.controls['title'].value),
       content: this.cmService.verifyPrivacyLeak(this.boardForm.controls['content'].value),
       category: this.boardForm.controls['category'].value,
@@ -95,8 +96,8 @@ export class WriteCommunityDocComponent {
 
   generateQnaQueryBody(): CommunityDocModel {
     return {
-      userEmail: this.auth.getUserEmail(),
-      userName: this.auth.getUserName(),
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
       title: this.cmService.verifyPrivacyLeak(this.boardForm.controls['title'].value),
       content: this.cmService.verifyPrivacyLeak(this.boardForm.controls['content'].value),
     };
