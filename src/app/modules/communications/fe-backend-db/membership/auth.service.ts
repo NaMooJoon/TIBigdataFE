@@ -35,6 +35,7 @@ export class AuthService {
   }
 
   setCurrentUser(userProfile: UserProfile): void {
+    this.currentUser = userProfile;
     this.currentUserChange$.next(userProfile);
   }
 
@@ -126,5 +127,10 @@ export class AuthService {
 
   isUserLoggedIn(): boolean {
     return this.isLoggedIn;
+  }
+
+  async deleteUser(): Promise<void> {
+    console.log(this.currentUser);
+    let res: Res = await this.httpClient.post<any>(`${this.API_URL}/users/deleteUser`, { 'email': this.currentUser.email }).toPromise();
   }
 }

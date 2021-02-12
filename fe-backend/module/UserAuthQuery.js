@@ -1,5 +1,7 @@
 const express = require('express');
+const moment = require('moment');
 const User = require('../models/user');
+const UserStatus = require('../models/userStatus');
 const Res = require("../models/Res");
 const { OAuth2Client } = require('google-auth-library');
 
@@ -9,6 +11,7 @@ router.post('/verifyUser', verifyUser);
 router.post('/registerUser', registerUser);
 router.post('/getUserInfo', getUserInfo);
 router.post('/verifyToken', verifyToken);
+router.post('/deleteUser', deleteUser);
 
 function verifyToken(req, res) {
     var token = req.body.token;
@@ -64,7 +67,20 @@ async function registerUser(req, res) {
     let userData = new User(req.body);
     userData.save((error, registeredUser) => {
         if (error) res.status(400).json(new Res(false, "Registration Failed"));
-        else res.status(200).json(new Res(true, "Registration Success"));
+        else {
+            userStatusData = new UserStatus({
+                "userId" : registeredUser._id,
+                "registeredDate" : moment(),
+                "modifiedDate" : moment(),
+                "isActive": true,
+                "isAdmin": false,
+            })
+            userStatusData.save((err, user)=>{
+                if(err) return  res.status(400).json(new Res(false, "Registration Failed"));
+                else return res.status(200).json(new Res(true, "Registration Success"));
+            })
+            
+        }
     });
 }
 
@@ -84,6 +100,35 @@ async function getUserInfo (req, res) {
             'isApiUser': user.isApiUser }
         }));
     });
+}
+
+async function deleteUser (req, res) {
+    let userEmail = req.body.email;
+    let userId;
+    console.log('email', userEmail);
+    User.findOne({ 'email': userEmail}).then((result) =>{
+        userId = result['_id'];
+        if(result){
+            User.deleteOne({ 'email' : userEmail}).then((deleteResult) => {
+                if (deleteResult){
+                    UserStatus.updateOne(
+                        { 'userId': userId },
+                        {
+                            "modifiedDate" : moment(),
+                            "isActive" : false,
+                        }).then((result) => {
+                            console.log(result);
+                            return  res.status(200).json(new Res(true, "deletion succ")); 
+                    }).catch((err) => {
+                        console.log(err);
+                            return res.status(400).json(new Res(false, "deletion Failed")); 
+                        });;
+                }
+            })
+        }
+    }).catch((error)=>{
+        console.log(error);
+    })    
 }
 
 module.exports = router;
