@@ -31,10 +31,8 @@ export class CategoryComponent implements OnInit {
   cat_button_choice: string[] = this.cat_choice_init;
 
   ngOnInit() {
-    this.es.setKeyword("전체문서");
     this.es.setSearchMode(SEARCHMODE.ALL);
-    this.es.allSearchComplete();
-    this.es.allCountComplete();
+    this.es.setCurrentSearchingPage(1);
   }
 
   navToGraph(): void {
@@ -46,15 +44,13 @@ export class CategoryComponent implements OnInit {
   }
 
   navToDetail(doc) {
-    // console.log(doc);
     let id = doc["idList"];
-    this.ds.selectOneID(id);
+    this.ds.setSelectedId(id);
     this._router.navigateByUrl("search/DocDetail");
-
   }
 
   async selectCategory($event) {
-    this.ds.clearIDList();
+    this.ds.clearList();
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
@@ -64,8 +60,8 @@ export class CategoryComponent implements OnInit {
       case "topic": {
         console.log(ct);
         let docIDs = await this.getDocIDsFromTopic(ct);
-        docIDs.map(e => this.ds.pushIDList(e));
-        let partialIDs: Object[] = this.ds.getIDList().slice(0, this.es.getNumDocsPerPage());
+        docIDs.map(e => this.ds.addId(e));
+        let partialIDs: Object[] = this.ds.getList().slice(0, this.es.getNumDocsPerPage());
         const ids: string[] = [];
         for (let i = 0; i < partialIDs.length; i++) {
           ids.push(partialIDs[i]['docId'])
@@ -73,7 +69,7 @@ export class CategoryComponent implements OnInit {
 
         this.es.setKeyword(ct)
         this.es.setSearchMode(SEARCHMODE.IDS);
-        this.es.setCountNumChange(docIDs.length);
+        this.es.setArticleNumChange(docIDs.length);
         this.es.setIds(ids);
         this.es.multiIdSearchComplete();
       }
@@ -91,10 +87,10 @@ export class CategoryComponent implements OnInit {
   }
 
   async search_category() {
-    this.ds.clearIDList();
+    this.ds.clearList();
     let category = this.get_chosen_category();
     let docs_id = await this.getDocIDsFromTopic(category)//현재 토픽에 해당하는 내용을 불러온다.
-    docs_id.map(e => this.ds.pushIDList(e));
+    docs_id.map(e => this.ds.addId(e));
     this.es.setIds(docs_id);
     this.es.multiIdSearchComplete();
   }

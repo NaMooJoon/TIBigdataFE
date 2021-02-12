@@ -32,7 +32,7 @@ export class SearchDetailComponent implements OnInit {
 
   }
   goToDoc(r) {
-    this.documentService.selectOneID(this.rcmdList[r]["id"]);
+    this.documentService.setSelectedId(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 
@@ -42,7 +42,7 @@ export class SearchDetailComponent implements OnInit {
     this.isCloudLoaded = 0;
     this.isDocInfoLoaded = 0;
 
-    let id = this.documentService.getOneID();
+    let id = this.documentService.getSelectedId();
     this.es.setIds([id]);
 
     this.db.loadRelatedDocs(id).then(res => {

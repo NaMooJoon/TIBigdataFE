@@ -38,14 +38,13 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   openDocDetail(): void {
-    this.documentService.selectOneID(this.docId);
+    this.documentService.setSelectedId(this.docId);
     this.navToDocDetail();
   }
 
   load_top_keywords() {
     this.db.getTfidfVal(this.docId).then(res => {
       let data = res as []
-
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];
         this.keywords.push(tfVal)

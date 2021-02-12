@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { ElasticsearchService } from "src/app/modules/communications/elasticsearch-service/elasticsearch.service"
 import { ArticleSource } from '../../shared-modules/documents/article.interface';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
-  private oneID: string = "";
-  private idList: string[] = [];
+  private selectedId: string;
+  private idList: Array<string>;
   private article: ArticleSource;
 
   constructor(
@@ -29,41 +28,25 @@ export class DocumentService {
     return docTitles;
   }
 
-  clearAll() {
+  clearList() {
     this.idList = [];
-    this.oneID = "";
+    this.selectedId = "";
   }
 
-  pushIDList(id: string) {
+  addId(id: string) {
     this.idList.push(id);
   }
 
-  popIDList() {
-    this.idList.pop();
-  }
-
-  clearIDList() {
-    this.idList = [];
-  }
-
-  getIDList() {
+  getList() {
     return this.idList;
   }
 
-  clearIds() {
-    this.idList = [];
+  setSelectedId(id: string) {
+    this.selectedId = id;
   }
 
-  selectOneID(id: string) {
-    this.oneID = id;
-  }
-
-  getOneID() {
-    return this.oneID;
-  }
-
-  clearOneID() {
-    this.oneID = "";
+  getSelectedId() {
+    return this.selectedId;
   }
 
   getArticle() {
@@ -72,5 +55,9 @@ export class DocumentService {
 
   setArticle(art: ArticleSource) {
     this.article = art;
+  }
+
+  getIdByIdx(index: number): string {
+    return this.idList[index];
   }
 }
