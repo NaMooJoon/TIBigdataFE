@@ -103,8 +103,11 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   beginSearch(pageNum: number) {
-    if (pageNum === null) pageNum = 1;
-    this.elasticSearchService.triggerSearch(pageNum);
+    this.currentPage = pageNum;
+    if (this.currentPage === null) this.currentPage = 1;
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
+    if (this.currentPage < 1) this.currentPage = 1;
+    this.elasticSearchService.triggerSearch(this.currentPage);
   }
 
   setArticleForm(): void {
@@ -127,7 +130,6 @@ export class ListDocumentsComponent implements OnInit, OnDestroy {
   }
 
   async loadPage(currentPage: number): Promise<void> {
-    if (currentPage === null) currentPage = 1;
     let pageInfo: PaginationModel = await this.paginationService.paginate(currentPage, this.totalDocs, this.pageSize);
     this.setPageInfo(pageInfo);
   }
