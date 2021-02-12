@@ -120,11 +120,16 @@ export class CategoryComponent implements OnInit {
   }
 
   async selectInstitution(institution: { key: string, doc_count: number }) {
-    this.selectedInst = institution.key;
-    this.es.setSearchMode(SEARCHMODE.INST);
-    this.es.setSelectedInst(institution.key);
-    this.es.triggerSearch(1)
-
+    if (institution === null) {
+      this.es.setSearchMode(SEARCHMODE.ALL);
+      this.selectedInst = "전체";
+    }
+    else {
+      this.selectedInst = institution.key;
+      this.es.setSearchMode(SEARCHMODE.INST);
+      this.es.setSelectedInst(institution.key);
+      this.es.triggerSearch(1)
+    }
   }
 
   get_chosen_category() {

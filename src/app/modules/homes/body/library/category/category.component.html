@@ -31,6 +31,8 @@
   <div class="selection-container inst-container">
     <h2>기관별</h2>
     <div class="selection-buttons institutions">
+      <button *ngIf="institutionList !== undefined" [ngStyle]="selectedStyleObject(selectedInst === '전체')" id="inst"
+        (click)="selectCategory($event, null)"> 전체 </button>
       <button *ngFor="let inst of institutionList" [ngStyle]="selectedStyleObject(selectedInst === inst.key)" id="inst"
         (click)="selectCategory($event, inst)">{{inst['key']}} |
         {{inst['doc_count']}} 건</button>
