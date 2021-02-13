@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ConfigService } from "../category-graph/category-graph.service";
 import { Router } from "@angular/router";
 import { AnalysisDatabaseService } from '../../../../communications/fe-backend-db/analysis-db/analysisDatabase.service';
 import { ElasticsearchService, SEARCHMODE } from 'src/app/modules/communications/elasticsearch-service/elasticsearch.service';
@@ -77,6 +76,8 @@ export class CategoryComponent implements OnInit {
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
+
+    
 
     console.log(id, doc);
     switch (id) {
