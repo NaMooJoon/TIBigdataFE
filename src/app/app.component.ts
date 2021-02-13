@@ -10,14 +10,14 @@ import { AuthService } from "./modules/communications/fe-backend-db/membership/a
 export class AppComponent {
   title = "KUBiC";
   private isUserLoaded = false;
-  private isBackendAvailable = false;
+  private isBackendAvailable;
 
   constructor(
     private authService: AuthService,
     private elasticsearchSearvice: ElasticsearchService
   ) {
     this.isUserLoaded = false;
-    this.isBackendAvailable = false;
+    this.isBackendAvailable = null;
   }
 
   async ngOnInit(): Promise<void> {

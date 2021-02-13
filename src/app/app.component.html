@@ -10,7 +10,7 @@
   <app-footer></app-footer>
 </div>
 
-<div *ngIf="!isBackendAvailable" class="no-connection">
+<div *ngIf="isBackendAvailable === false" class="no-connection">
   더 나은 서비스를 위해 서버를 점검 중입니다. <br />이후에 다시 새로고침 하거나
   관리자에게 문의해주세요.
 </div>
