@@ -39,7 +39,6 @@ export class AuthGuard implements CanActivate {
   getPath(route: ActivatedRouteSnapshot): string {
     if (route.url.length === 0) return "";
     var p = route.url[0];
-    console.log("curr path : ", p.toString());
     return p.toString()
   }
 }

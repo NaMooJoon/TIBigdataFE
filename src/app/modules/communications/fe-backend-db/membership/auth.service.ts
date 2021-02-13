@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Res } from "../res.model";
 import { UserProfile } from "./user.model";
 import { SocialAuthService, GoogleLoginProvider, SocialUser } from 'angularx-social-login';
-// import { PROVIDER_ID } from "../../communication.module";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,6 @@ export class AuthService {
   private currentUser: UserProfile;
   private isLoggedIn: boolean;
   private UPDATE_API_AUTH = this.API_URL + "/users/apiRegister";
-  private GOOGLE_VERIFY_TOKEN_URL = this.API_URL + "/users/verifyToken";
   private PROVIDER_ID: string = "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com";
 
   constructor(
@@ -129,8 +127,11 @@ export class AuthService {
     return this.isLoggedIn;
   }
 
-  async deleteUser(): Promise<void> {
+  async deleteUser(): Promise<boolean> {
     console.log(this.currentUser);
-    let res: Res = await this.httpClient.post<any>(`${this.API_URL}/users/deleteUser`, { 'email': this.currentUser.email }).toPromise();
+    let userDeleteRes: Res = await this.httpClient.post<any>(`${this.API_URL}/users/deleteUser`, { 'email': this.currentUser.email }).toPromise();
+    let myDocDeleteRes: Res = await this.httpClient.post<any>(`${this.API_URL}/myDoc/deleteAllMyDocs`, { 'userEmail': this.currentUser.email }).toPromise()
+
+    return (userDeleteRes.succ === true && myDocDeleteRes.succ === true);
   }
 }

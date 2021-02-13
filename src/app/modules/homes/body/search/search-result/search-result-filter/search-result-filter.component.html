@@ -42,10 +42,8 @@
   <div class="filter">
     <span class="filter-title">기관별</span>
     <div class="input-container inst-list">
-      <button>기관이름 | 문서개수</button>
-      <button>기관이름 | 문서개수</button>
-      <button>기관이름 | 문서개수</button>
-      <button>기관이름 | 문서개수</button>
+      <button *ngFor="let inst of institutionList" [ngStyle]="selectedStyleObject(selectedInst === inst.key)" id="inst"
+        (click)="selectInst(inst)">{{inst['key']}} {{inst['doc_count']}}</button>
     </div>
   </div>
 
