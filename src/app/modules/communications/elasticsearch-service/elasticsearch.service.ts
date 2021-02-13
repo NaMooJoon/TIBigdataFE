@@ -3,24 +3,29 @@ import { Client } from "elasticsearch-browser";
 import * as elasticsearch from "elasticsearch-browser";
 import { ArticleSource } from "src/app/modules/homes/body/shared-modules/documents/article.interface";
 import { Observable, BehaviorSubject } from "rxjs";
-import { IpService } from 'src/app/ip.service'
+import { IpService } from "src/app/ip.service";
 import { ElasticSearchQueryModel } from "./elasticsearch.service.query.model";
 
-
 export enum SEARCHMODE {
-  ALL, IDS, KEYWORD,
-  INST
-};
-export enum SORT { DATE_ASC, DATE_DESC, SCORE }
+  ALL,
+  IDS,
+  KEYWORD,
+  INST,
+}
+export enum SORT {
+  DATE_ASC,
+  DATE_DESC,
+  SCORE,
+}
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
-
 export class ElasticsearchService {
-
   private client: Client;
-  private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
+  private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<
+    ArticleSource[]
+  >(undefined);
   private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
   private selectedInst: string;
@@ -28,12 +33,15 @@ export class ElasticsearchService {
   private sortOption: SORT = SORT.SCORE;
   private numDocsPerPage: number = 10;
   private searchMode: SEARCHMODE;
-  private searchStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private searchStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   private currentSearchingPage: number = 1;
 
   constructor(
     private ipSvc: IpService,
-    private esQueryModel: ElasticSearchQueryModel) {
+    private esQueryModel: ElasticSearchQueryModel
+  ) {
     if (!this.client) {
       this._connect();
     }
@@ -88,10 +96,8 @@ export class ElasticsearchService {
   }
 
   searchAllDocs(startIndex?: number, docSize?: number): any {
-    if (!startIndex)
-      startIndex = 0;
-    if (!docSize)
-      docSize = this.numDocsPerPage;
+    if (!startIndex) startIndex = 0;
+    if (!docSize) docSize = this.numDocsPerPage;
 
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
@@ -100,7 +106,7 @@ export class ElasticsearchService {
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
       _source: this.esQueryModel.getSearchSource(),
-    })
+    });
   }
 
   allSearchComplete(startIndex?: number): void {
@@ -113,10 +119,8 @@ export class ElasticsearchService {
   }
 
   searchByText(startIndex?: number, docSize?: number): Promise<any> {
-    if (!startIndex)
-      startIndex = 0;
-    if (!docSize)
-      docSize = this.numDocsPerPage;
+    if (!startIndex) startIndex = 0;
+    if (!docSize) docSize = this.numDocsPerPage;
 
     return this.client.search({
       from: startIndex,
@@ -124,18 +128,18 @@ export class ElasticsearchService {
       filterPath: this.esQueryModel.getFilterPath(),
       body: this.esQueryModel.getSearchDocs(),
       _source: this.esQueryModel.getSearchSource(),
-    })
+    });
   }
 
   countAllDocs() {
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
       body: this.esQueryModel.getAllDocs(),
-    })
+    });
   }
 
   allCountComplete(): void {
-    this.countAllDocs().then(articleNum => {
+    this.countAllDocs().then((articleNum) => {
       this.articleNum.next(articleNum.count);
     });
   }
@@ -147,9 +151,9 @@ export class ElasticsearchService {
   }
 
   countByTextComplete(): void {
-    this.countByText().then(articleNum =>
+    this.countByText().then((articleNum) =>
       this.articleNum.next(articleNum.count)
-    )
+    );
   }
 
   countByIds(): Promise<any> {
@@ -160,16 +164,17 @@ export class ElasticsearchService {
   }
 
   countByIdsComplete(): void {
-    this.countByIds().then(articleNum =>
+    this.countByIds().then((articleNum) =>
       this.articleNum.next(articleNum.count)
-    )
+    );
   }
 
   getArticleNumber(): Promise<number> {
-    return this.countByText().then(res => {
-      return res.count;
-    },
-      err => console.error(err)
+    return this.countByText().then(
+      (res) => {
+        return res.count;
+      },
+      (err) => console.error(err)
     );
   }
 
@@ -199,8 +204,8 @@ export class ElasticsearchService {
   }
 
   async saveSearchResult(queryFunc: any): Promise<void> {
-    await queryFunc.then(response => {
-      if (response.hits.total.value === 0) this.docsToArticleSource(null)
+    await queryFunc.then((response) => {
+      if (response.hits.total.value === 0) this.docsToArticleSource(null);
       else this.docsToArticleSource(response.hits.hits);
     });
   }
@@ -219,22 +224,25 @@ export class ElasticsearchService {
 
   triggerSearch(selectedPageNum: number) {
     this.esQueryModel.setSortOption(this.sortOption);
-    let searchMode = this.getSearchMode()
+    let searchMode = this.getSearchMode();
     this.setCurrentSearchingPage(selectedPageNum);
     if (searchMode === SEARCHMODE.ALL) {
       this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
       this.allCountComplete();
-    }
-    else if (searchMode === SEARCHMODE.IDS) {
-      this.multiIdSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    } else if (searchMode === SEARCHMODE.IDS) {
+      this.multiIdSearchComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
       this.countByIdsComplete();
-    }
-    else if (searchMode === SEARCHMODE.KEYWORD) {
-      this.fullTextSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    } else if (searchMode === SEARCHMODE.KEYWORD) {
+      this.fullTextSearchComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
       this.countByTextComplete();
-    }
-    else if (searchMode === SEARCHMODE.INST) {
-      this.searchByInstComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
+    } else if (searchMode === SEARCHMODE.INST) {
+      this.searchByInstComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
       this.countByInstComplete();
     }
   }
@@ -254,28 +262,28 @@ export class ElasticsearchService {
   getInstitutionsWithTextSearch() {
     return this.client.search({
       body: {
-        "size": 0,
-        "aggs": {
-          "count": { "terms": { "field": "published_institution.keyword" } }
+        size: 0,
+        aggs: {
+          count: { terms: { field: "published_institution.keyword" } },
         },
-        "query": {
-          'multi_match': {
-            'query': this.keyword,
-            'fields': ["post_title", "file_extracted_content", "post_body"]
-          }
-        }
-      }
+        query: {
+          multi_match: {
+            query: this.keyword,
+            fields: ["post_title", "file_extracted_content", "post_body"],
+          },
+        },
+      },
     });
   }
 
   getInstitutions() {
     return this.client.search({
       body: {
-        "size": 0,
-        "aggs": {
-          "count": { "terms": { "field": "published_institution.keyword" } }
+        size: 0,
+        aggs: {
+          count: { terms: { field: "published_institution.keyword" } },
         },
-      }
+      },
     });
   }
 
@@ -284,11 +292,11 @@ export class ElasticsearchService {
       from: startIndex,
       size: this.numDocsPerPage,
       body: {
-        "query": {
-          "match": {
-            "published_institution": this.selectedInst,
-          }
-        }
+        query: {
+          match: {
+            published_institution: this.selectedInst,
+          },
+        },
       },
       _source: this.esQueryModel.getSearchSource(),
     });
@@ -299,7 +307,7 @@ export class ElasticsearchService {
   }
 
   countByInstComplete() {
-    this.countByInst().then(articleNum => {
+    this.countByInst().then((articleNum) => {
       this.articleNum.next(articleNum.count);
     });
   }
@@ -307,11 +315,11 @@ export class ElasticsearchService {
   countByInst() {
     return this.client.count({
       body: {
-        "query": {
-          "match": {
-            "published_institution": this.selectedInst,
-          }
-        }
+        query: {
+          match: {
+            published_institution: this.selectedInst,
+          },
+        },
       },
     });
   }
@@ -326,23 +334,26 @@ export class ElasticsearchService {
 
   private _connect() {
     this.client = new elasticsearch.Client({
-      host: [{
-        host: this.ipSvc.getBackEndServerIp(),
-        auth: this.ipSvc.getESAuth(),
-        protocol: 'http',
-        port: this.ipSvc.ES_PORT,
-        index: this.ipSvc.ES_INDEX
-      }],
+      host: [
+        {
+          host: this.ipSvc.getBackEndServerIp(),
+          auth: this.ipSvc.getESAuth(),
+          protocol: "http",
+          port: this.ipSvc.ES_PORT,
+          index: this.ipSvc.ES_INDEX,
+        },
+      ],
       headers: {
-        'Access-Control-Allow-Origin': this.ipSvc.getFrontEndServerIP() + this.ipSvc.getAngularPort()
-      }
+        "Access-Control-Allow-Origin":
+          this.ipSvc.getFrontEndServerIP() + this.ipSvc.getAngularPort(),
+      },
     });
   }
 
   isAvailable(): any {
     return this.client.ping({
       requestTimeout: Infinity,
-      body: "ElasticSearch Works!"
+      body: "ElasticSearch Works!",
     });
   }
 }
