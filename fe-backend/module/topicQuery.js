@@ -3,22 +3,20 @@
 const express = require("express");
 const router = express.Router();
 const topic = require("../models/topic");
+const Res = require('../models/Res');
 
 router.get("/", (req, res) => {
     res.send("topicQuery");
 });
 
-router.get("/test", (req, res) => {
-    // console.log("work!");
-    let id = "5de1134ab53863d63aa55309";
-    topic.findOne({ docID: id }, (error, val) => {
-        if (error) {
-            console.log(error);
-        }
-        // console.log(val)
-        res.json(val);
+router.post("/getTopicCounts", (req, res) =>{
+    topic.aggregate([{"$group":{  "_id":  "$topic"  , "count": { "$sum":1 } }}]).then(result=>{
+        return res.status(200).json(new Res(true, "successfully get topic counts", result))  
+    }).catch(err=>{
+        console.log(err);
+        return res.status(400).json(new Res(false, "failed to get topic counts", null))  
     });
-});
+})
 
 router.get("/getTopicTblPlain", (req, res) => {
     topic.find({}, (err, docs) => {
@@ -97,20 +95,8 @@ router.post("/getTopicTbl", (req, res) => {
             // {$}
 
         ])
+}),
 
-
-    // findOne({ topic: topicReq }, (err, docs) => {
-    //     /**
-    //      * 여기서부터 아무런 반응이 없다. 도대체 왜??????????????????????????????????????????????/
-    //      * 
-    //      */
-    //     console.log("Work?")
-    //     if (err)
-    //         console.log(err);
-    //     console.log(docs)
-    //     res.json(docs);
-    // })
-})
 
 module.exports = router;
 // module.exports = {getTopicTbl,getOneTopicDocs};
