@@ -18,6 +18,7 @@
       id="amount"
       name="amount"
       (change)="docNumPerPageChange($event.target.value)"
+      [(ngModel)]="pageSize"
     >
       <option *ngFor="let amt of amounts" [value]="amt">
         {{ amt }}건씩 보기
