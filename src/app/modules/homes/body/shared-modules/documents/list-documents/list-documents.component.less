@@ -5,7 +5,7 @@
   border-color: gray;
   color: gray;
   height: 40px;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 400;
   vertical-align: middle;
   text-align-last: center;
@@ -42,10 +42,15 @@ select::-ms-expand {
 
 .result-header {
   display: flex;
-  height: 40px;
+  flex-flow: wrap;
   margin-bottom: 20px;
   margin-left: 20px;
   justify-content: space-between;
+}
+
+.dropdown-menus {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .result-body {
@@ -94,6 +99,7 @@ label {
 }
 
 .related-doc-toggle {
+  color: black;
 }
 
 .toggle-all {
