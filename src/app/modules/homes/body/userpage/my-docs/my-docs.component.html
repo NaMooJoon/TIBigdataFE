@@ -29,9 +29,50 @@
             </div>
         </div>
         <br>
-        <div *ngFor="let doc of myDocs; index as d">
-            <input type="checkbox" (change)="this.boxChange(i)" />
-            <a> {{ doc }} </a>
-        </div>
+        <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+            <ul>
+            <li *ngFor="let doc of savedDocs; index as idx">
+              <input
+                class="checkbox"
+                type="checkbox"
+                id="{{ idx }}"
+              />
+              <label for="{{ idx }}"> {{ doc["title"] }}</label>
+            </li>
+            </ul>
+            <div class="page-numbers">
+            <button
+              *ngIf="pageInfo.currentPage > 1"
+              (click)="loadSavedDocs(pageInfo.currentPage - 10)"
+            >
+              <<
+            </button>
+            <button
+              *ngIf="pageInfo.currentPage > 1"
+              (click)="loadSavedDocs(pageInfo.currentPage - 1)"
+            >
+              <
+            </button>
+            <button
+              [ngStyle]="selectedStyleObject(pageInfo.currentPage === i)"
+              (click)="loadSavedDocs(i)"
+              *ngFor="let i of pageInfo.pages"
+            >
+              {{ i }}
+            </button>
+            <button
+              *ngIf="pageInfo.currentPage < pageInfo.totalPages"
+              (click)="loadSavedDocs(pageInfo.currentPage + 1)"
+            >
+              >
+            </button>
+            <button
+              *ngIf="pageInfo.currentPage != pageInfo.totalPages"
+              (click)="loadSavedDocs(pageInfo.currentPage + 10)"
+            >
+              >>
+            </button>
+            </div>
+        </section>
     </div>
 </div>
