@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ArticleSource } from "../../../body/shared-modules/documents/article.interface";
 import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
 import { PaginationService } from "src/app/modules/homes/body/shared-services/pagination-service/pagination.service"
 import { DocumentService } from 'src/app/modules/homes/body/shared-services/document-service/document.service';
 import { UserDocumentService } from '../../../../communications/fe-backend-db/userDocument/userDocument.service';
 import { PaginationModel } from "../../shared-services/pagination-service/pagination.model";
+import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-my-docs',
@@ -12,11 +14,22 @@ import { PaginationModel } from "../../shared-services/pagination-service/pagina
 })
 export class MyDocsComponent implements OnInit {
 
+  form: FormGroup;
+
+  private articleSources: ArticleSource[];
+  private RelatedDocBtnToggle: Array<boolean>;
+
   constructor(
     private _auth: AuthService,
     private paginationService: PaginationService,
     private userDocumentService: UserDocumentService,
-  ) { }
+    private documentService: DocumentService,
+    private formBuilder: FormBuilder,
+  ) { 
+
+    this.setCheckbox();
+
+  }
 
   private isSavedDocsLoaded = false;
   private savedDocs: Array<{ title: string; id: string }>;
@@ -52,7 +65,6 @@ export class MyDocsComponent implements OnInit {
     return pageNum;
   }
 
-
   selectedStyleObject(flag: boolean): Object {
     if (flag) {
       return {
@@ -67,6 +79,70 @@ export class MyDocsComponent implements OnInit {
         "background-color": "white",
       };
     }
+  }
+
+  setArticleIdList(): void {
+    this.RelatedDocBtnToggle = [];
+    for (var i in this.articleSources) {
+      this.documentService.addId(this.articleSources[i]["_id"]);
+      this.RelatedDocBtnToggle.push(false);
+    }
+  }
+
+  setArticleForm(): void {
+    this.form = this.formBuilder.group({
+      checkArray: this.formBuilder.array([]),
+    });
+  }
+
+  setCheckbox(): void {
+    for (let i in this.articleSources) {
+      this.articleSources[i]["isSelected"] = false;
+    }
+  }
+
+  checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
+    if (isCheckAll) {
+      for (let i = 0; i < this.articleSources.length; i++) {
+        checkArray.push(new FormControl(this.articleSources[i]["_id"]));
+      }
+    } else {
+      checkArray.clear();
+    }
+
+    for (let i = 0; i < this.articleSources.length; i++) {
+      this.articleSources[i]["isSelected"] = isCheckAll;
+    }
+
+    return checkArray;
+  }
+
+  onCheckboxChange(e): void {
+    let checkArray: FormArray = this.form.get("checkArray") as FormArray;
+    if (e.target.value === "toggleAll") {
+      checkArray = this.checkUncheckAll(e.target.checked, checkArray);
+    } else {
+      if (e.target.checked) {
+        checkArray.push(new FormControl(e.target.value));
+      } else {
+        let i: number = 0;
+        checkArray.controls.forEach((item: FormControl) => {
+          if (item.value == e.target.value) {
+            checkArray.removeAt(i);
+            return;
+          }
+          i++;
+        });
+      }
+    }
+  }
+
+  deleteAllMyDocs() {
+    console.log("문서 지우기")
+    this.userDocumentService.eraseAllMyDocs().then(
+      () => this.loadSavedDocs(1)
+    );
+
   }
 
 }
