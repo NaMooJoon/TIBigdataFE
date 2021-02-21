@@ -4,18 +4,14 @@
 
 <div>
     <div class="bundle">
-        <h5> {{ name }} 님의 회원정보입니다. </h5>
+        <h5> {{ currentUser.name }} 님의 회원정보입니다. </h5>
         <br>
-        이름 : {{ name }}
+        이름 : {{ currentUser.name }}
         <br>
-        이메일 : {{ email }}
+        이메일 : {{ currentUser.email }}
         <br>
-        닉네임 : {{ nickName }}
+        기관 : {{ currentUser.inst }}
         <br>
-        신분 : {{ inst }}
-        <br>
-
-        <!-- <button class="fix-info">회원정보 수정</button> -->
 
     </div>
 </div>

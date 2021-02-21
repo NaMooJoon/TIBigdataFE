@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../communications/fe-backend-db/membership/auth.service';
+import { UserProfile } from "../../../../communications/fe-backend-db/membership/user.model";
 
 @Component({
   selector: 'app-member-info',
@@ -8,17 +9,18 @@ import { AuthService } from '../../../../communications/fe-backend-db/membership
 })
 export class MemberInfoComponent implements OnInit {
 
-  private name: String;
-  private email: String;
-  private nickName: String;
-  private inst: String;
+  private currentUser: UserProfile;
 
   constructor(
-    private _auth: AuthService,
-  ) { }
+    private authService: AuthService,
+  ) { 
+    this.authService.getCurrentUserChange().subscribe((currentUser) => {
+      this.currentUser = currentUser;
+      console.log(this.currentUser);
+    });
+  }
 
   ngOnInit(): void {
-
 
   }
 
