@@ -12,4 +12,8 @@ export class SecessionComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  secession() {
+    
+  }
+
 }
