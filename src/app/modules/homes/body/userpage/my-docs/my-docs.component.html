@@ -8,20 +8,25 @@
 
 <br>
 <div>
-    <div class="folders">
+    <!-- <div class="folders">
         <a>
             폴더1
         </a>
         <a>
             폴더2
         </a>
-    </div>
+    </div> -->
         
     <div class="bundle">
+        <form [formGroup]="form">
         <div class="upside">
             <div class="upside2">
-                <input type="checkbox" (change)="this.boxChange(i)"/>
-                전체선택
+                <input
+                class="checkbox toggle-all"
+                type="checkbox"
+                (change)="onCheckboxChange($event)"
+                value="toggleAll"
+                />전체선택
             </div>
             <div *ngIf="!isDocEmpty" class="upside3"> 
                 <button> 선택삭제 </button>
@@ -74,5 +79,6 @@
             </button>
             </div>
         </section>
+        </form>
     </div>
 </div>
