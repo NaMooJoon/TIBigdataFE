@@ -66,7 +66,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "KUBiC:build"
+            "browserTarget": "KUBiC:build",
+            "port": 8080
           },
           "configurations": {
             "production": {
