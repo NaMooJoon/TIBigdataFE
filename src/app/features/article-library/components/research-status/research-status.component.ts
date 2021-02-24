@@ -28,6 +28,9 @@ export class ResearchStatusComponent implements OnInit {
     await this.getTopicCounts();
   }
 
+  /**
+   * @description Get topics to show with chart 
+   */
   async getTopicCounts() {
     await this.httpClient
       .post<any>(this.GET_TOPIC_URL, {})

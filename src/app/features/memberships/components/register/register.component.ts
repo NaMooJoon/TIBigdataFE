@@ -40,6 +40,9 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  /**
+   * @description Register the user with information of user 
+   */
   async registerUser(): Promise<void> {
     let userData: UserProfile = new UserProfile();
     userData.inst = this.registerForm.get("inst").value;

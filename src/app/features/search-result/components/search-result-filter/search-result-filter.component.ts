@@ -22,8 +22,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private institutionList: Array<Object>;
   private articleSubscriber: Subscription;
   private selectedInst: string;
-  constructor(private elasticSearchService: ElasticsearchService) {
-    this.articleSubscriber = this.elasticSearchService
+  constructor(private elasticsearchService: ElasticsearchService) {
+    this.articleSubscriber = this.elasticsearchService
       .getArticleChange()
       .subscribe(() => {
         this.loadInstitutions();
@@ -36,8 +36,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.articleSubscriber.unsubscribe();
   }
 
+  /** 
+   * @description Load institutions list of documents 
+   */
   async loadInstitutions() {
-    let res = await this.elasticSearchService.getInstitutionsWithTextSearch();
+    let res = await this.elasticsearchService.getInstitutionsWithTextSearch();
     this.institutionList = res["aggregations"]["count"]["buckets"];
   }
 
@@ -56,6 +59,10 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Select institutions and set as user selected 
+   * @param inst 
+   */
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
   }

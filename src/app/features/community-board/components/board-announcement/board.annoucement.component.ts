@@ -32,9 +32,9 @@ export class AnnouncementComponent implements OnInit {
     private router: Router,
     private communityBoardService: CommunityBoardService,
     private paginationService: PaginationService,
-    private authService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
-    this.authService.getCurrentUserChange().subscribe((currentUser) => {
+    this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;
       if (currentUser !== null && currentUser.isAdmin === true)
         this.isAdmin = true;

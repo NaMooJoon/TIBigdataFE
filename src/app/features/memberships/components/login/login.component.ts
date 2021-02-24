@@ -15,6 +15,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() { }
 
+  /**
+   * @description Check if sign in is success and move to appropriate page 
+   */
   async signIn() {
     let isSuccess = await this.authService.signIn();
     if (isSuccess) {

@@ -9,26 +9,38 @@ import { Router } from '@angular/router';
 export class CollectedInfoComponent implements OnInit {
 
   constructor(
-    public _router: Router,
+    public router: Router,
   ) { }
 
   ngOnInit(): void {
   }
 
+  /**
+   * @description Router to intro page
+   */
   toSiteIntro() {
-    this._router.navigateByUrl("/introduce/intro");
+    this.router.navigateByUrl("/introduce/intro");
   }
 
+  /**
+   * @description Router to service guide page 
+   */
   toServiceGuide() {
-    this._router.navigateByUrl("/introduce/service-guide");
+    this.router.navigateByUrl("/introduce/service-guide");
   }
 
+  /**
+   * @description Router to collected info page 
+   */
   toCollectedInfo() {
-    this._router.navigateByUrl("/introduce/collected-info");
+    this.router.navigateByUrl("/introduce/collected-info");
   }
 
+  /**
+   * @description Router to member policy page 
+   */
   toMemberPolicy() {
-    this._router.navigateByUrl("/introduce/member-policy");
+    this.router.navigateByUrl("/introduce/member-policy");
   }
 
 }

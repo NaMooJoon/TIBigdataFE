@@ -15,10 +15,16 @@ export class RegisterOkComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * @description Router to home page 
+   */
   toHome() {
     this._router.navigateByUrl("/homes");
   }
 
+  /**
+   * @description Router to login page
+   */
   toLogIn() {
     this._router.navigateByUrl("/login");
   }

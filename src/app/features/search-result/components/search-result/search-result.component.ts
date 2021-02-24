@@ -10,7 +10,7 @@ import { ElasticsearchService } from "src/app/core/services/elasticsearch-servic
 export class SearchResultComponent implements OnInit {
   constructor(
     public router: Router,
-    private elasticSearchService: ElasticsearchService
+    private elasticsearchService: ElasticsearchService
   ) { }
   ngOnInit() { }
 }

@@ -21,19 +21,23 @@ export class ReadArticle implements OnInit {
   private RelatedDocBtnToggle: boolean = false;
   constructor(
     private articleService: ArticleService,
-    private wordcloud: WordcloudService,
-    private es: ElasticsearchService,
-    private db: AnalysisDatabaseService
+    private wordcloudService: WordcloudService,
+    private elasticsearchService: ElasticsearchService,
+    private analysisDatabaseService: AnalysisDatabaseService
   ) { }
 
   ngOnInit() {
     this.load_new_document();
   }
+  
   goToDoc(r) {
     this.articleService.setSelectedId(this.rcmdList[r]["id"]);
     this.load_new_document();
   }
 
+  /**
+   * @description Load new document for related documents 
+   */
   async load_new_document() {
     // this.isLoaded = 0;
     this.isRelatedLoaded = 0;
@@ -41,25 +45,29 @@ export class ReadArticle implements OnInit {
     this.isDocInfoLoaded = 0;
 
     let id = this.articleService.getSelectedId();
-    this.es.setIds([id]);
+    this.elasticsearchService.setIds([id]);
 
-    this.db.loadRelatedDocs(id).then((res) => {
+    this.analysisDatabaseService.loadRelatedDocs(id).then((res) => {
       this.rcmdList = res as [];
       this.isRelatedLoaded++;
     });
 
-    await this.es.searchById().then((res) => {
+    await this.elasticsearchService.searchById().then((res) => {
       this.article = res["hits"]["hits"][0]["_source"];
 
       this.isDocInfoLoaded++;
     });
 
-    this.wordcloud.createCloud(id).then((data) => {
+    this.wordcloudService.createCloud(id).then((data) => {
       this.cData = data as CloudData[];
       this.isCloudLoaded++;
     });
   }
 
+  /**
+   * @description Check if the data is empty 
+   * @param data 
+   */
   isDataEmpty(data: any) {
     if (data === undefined || data === null || data === " ") return true;
     else return false;

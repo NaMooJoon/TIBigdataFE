@@ -13,10 +13,10 @@ import { PaginationService } from "src/app/core/services/pagination-service/pagi
 })
 export class ArticleLibraryComponent implements OnInit {
   constructor(
-    private db: AnalysisDatabaseService,
+    private analysisDatabaseService: AnalysisDatabaseService,
     private elasticsearchService: ElasticsearchService,
-    private ds: ArticleService,
-    private pg: PaginationService,
+    private articleService: ArticleService,
+    private paginationService: PaginationService,
     public _router: Router
   ) {}
 
@@ -79,11 +79,17 @@ export class ArticleLibraryComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Load institutions list 
+   */
   async loadInstitutions() {
     let res = await this.elasticsearchService.getInstitutions();
     this.institutionList = res["aggregations"]["count"]["buckets"];
   }
 
+  /**
+   * @description Router to library/research-status 
+   */
   navToGraph(): void {
     this._router.navigateByUrl("library/research-status");
   }
@@ -94,12 +100,17 @@ export class ArticleLibraryComponent implements OnInit {
 
   navToDetail(doc) {
     let id = doc["idList"];
-    this.ds.setSelectedId(id);
+    this.articleService.setSelectedId(id);
     this._router.navigateByUrl("search/read");
   }
 
+  /**
+   * @description Select category of topic ot dictionary order or institution 
+   * @param $event 
+   * @param doc 
+   */
   async selectCategory($event, doc?) {
-    this.ds.clearList();
+    this.articleService.clearList();
 
     let ct = $event.target.innerText;
     let id = $event.target.id;
@@ -109,8 +120,8 @@ export class ArticleLibraryComponent implements OnInit {
       case "topic": {
 
         let docIDs = await this.getDocIDsFromTopic(ct);
-        docIDs.map((e) => this.ds.addId(e));
-        let partialIDs: Object[] = this.ds
+        docIDs.map((e) => this.articleService.addId(e));
+        let partialIDs: Object[] = this.articleService
           .getList()
           .slice(0, this.elasticsearchService.getNumDocsPerPage());
         const ids: string[] = [];
@@ -139,14 +150,18 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   async search_category() {
-    this.ds.clearList();
+    this.articleService.clearList();
     let category = this.get_chosen_category();
     let docs_id = await this.getDocIDsFromTopic(category); //현재 토픽에 해당하는 내용을 불러온다.
-    docs_id.map((e) => this.ds.addId(e));
+    docs_id.map((e) => this.articleService.addId(e));
     this.elasticsearchService.setIds(docs_id);
     this.elasticsearchService.multiIdSearchComplete();
   }
 
+  /**
+   * @description Select institutions and set search mode as selected 
+   * @param institution 
+   */
   async selectInstitution(institution: { key: string; doc_count: number }) {
     if (institution === null || this.selectedInst === institution.key) {
       this.elasticsearchService.setSearchMode(SearchMode.ALL);
@@ -164,8 +179,11 @@ export class ArticleLibraryComponent implements OnInit {
     return this.cat_button_choice[0];
   }
 
+  /**
+   * @description Return document ID from topic category 
+   * @param category 
+   */
   async getDocIDsFromTopic(category) {
-
-    return (await this.db.getOneTopicDocs(category)) as [];
+    return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
   }
 }

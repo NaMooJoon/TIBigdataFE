@@ -32,6 +32,10 @@ export class ArticleAnalysisComponent implements OnInit {
     this.initializeSettings();
   }
 
+  /**
+   * @description Load saved documents from userSavedDocumentService
+   * @param pageNum 
+   */
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
     this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
@@ -48,6 +52,10 @@ export class ArticleAnalysisComponent implements OnInit {
     this.isSavedDocsLoaded = true;
   }
 
+  /**
+   * @description Helper function for page number to handle the page overflow 
+   * @param pageNum 
+   */
   handlePageOverflow(pageNum: number): number {
     if (pageNum < 0) pageNum = 1;
     else if (pageNum > this.totalSavedDocsNum) pageNum = this.totalSavedDocsNum;
@@ -55,6 +63,9 @@ export class ArticleAnalysisComponent implements OnInit {
     return pageNum;
   }
 
+  /**
+   * @description Reset the analysis settings 
+   */
   initializeSettings() {
     this.resetSelections();
     this.analysisDocIdsList = [];
@@ -77,24 +88,43 @@ export class ArticleAnalysisComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Set the chart type as input 
+   * @param type 
+   */
   setChartType(type: ChartOption): void {
     this.selectedChartType = type;
   }
 
+  /**
+   * @description Set the analysis type as input
+   * @param type 
+   */
   setAnalysisType(type: AnalysisOption): void {
     this.selectedAnalysisType = type;
   }
 
+  /**
+   * @description Set the number of selected data as input
+   * @param num 
+   */
   setSelectedDataNum(num: number): void {
     this.selectedDataNum = num;
   }
 
+  /**
+   * @description Reset the selected setting 
+   */
   resetSelections(): void {
     this.selectedAnalysisType = null;
     this.selectedChartType = null;
     this.selectedDataNum = 0;
   }
 
+  /**
+   * @description Add selected documents to analysis document list
+   * @param idx 
+   */
   addDocToAnalysis(idx: number) {
     this.analysisDocIdsList.push(this.savedDocs[idx].id);
 

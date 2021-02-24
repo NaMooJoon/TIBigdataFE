@@ -32,6 +32,10 @@ export class AboutSideMenuComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Set title according to current address 
+   * @param currentAddress 
+   */
   setTitle(currentAddress: string) {
     if (currentAddress === "intro") this.title = "홈페이지소개";
     if (currentAddress === "service-guide") this.title = "서비스안내";
