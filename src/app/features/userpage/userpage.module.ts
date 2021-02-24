@@ -6,6 +6,9 @@ import { MyDocsComponent } from "./components/my-docs/my-docs.component";
 import { SecessionComponent } from "./components/secession/secession.component";
 import { UserpageRoutingModule } from "./userpage-routing.module";
 import { UserpageRootComponent } from './components/userpage-root/userpage-root.component';
+import { UserpageSidebarComponent } from './components/userpage-sidebar/userpage-sidebar.component';
+import { UserpageHeaderComponent } from './components/userpage-header/userpage-header.component';
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,7 +17,9 @@ import { UserpageRootComponent } from './components/userpage-root/userpage-root.
     MyAnalysisComponent,
     MemberInfoComponent,
     SecessionComponent,
+    UserpageSidebarComponent,
+    UserpageHeaderComponent,
   ],
-  imports: [CommonModule, UserpageRoutingModule],
+  imports: [CommonModule, UserpageRoutingModule, ReactiveFormsModule],
 })
 export class UserpageModule { }

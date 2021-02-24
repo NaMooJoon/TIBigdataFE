@@ -15,12 +15,12 @@ const routes: Routes = [
   {
     path: "register-ok",
     component: RegisterOkComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "api-register",
     component: ApiRegisterComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: "login",

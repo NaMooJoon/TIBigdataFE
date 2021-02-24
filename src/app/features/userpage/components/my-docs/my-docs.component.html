@@ -1,75 +1,69 @@
-<div class="where">
-  <h4><strong> 내 보관함 </strong></h4>
-  <div class="folder-menu">
-    <button class="button1">새폴더생성</button>
-    <button class="button2">폴더편집</button>
+<form [formGroup]="form" novalidate>
+  <div class="upside">
+    <div class="upside2">
+      <label
+        ><input
+          class="article-checkbox toggle-all"
+          type="checkbox"
+          (change)="onCheckboxChange($event)"
+          value="toggleAll"
+        />전체선택
+      </label>
+    </div>
+    <div *ngIf="!isDocEmpty" class="upside3">
+      <button>선택삭제</button>
+      <button (click)="deleteAllMyDocs()">전체삭제</button>
+    </div>
   </div>
-</div>
-
-<br />
-<div>
-  <!-- <div class="folders">
-        <a>
-            폴더1
-        </a>
-        <a>
-            폴더2
-        </a>
-    </div> -->
-
-  <div class="bundle">
-    <form [formGroup]="form">
-      <div class="upside">
-        <div class="upside2">
-          <input class="checkbox" type="checkbox" />전체선택
-        </div>
-        <div *ngIf="!isDocEmpty" class="upside3">
-          <button>선택삭제</button>
-          <button (click)="deleteAllMyDocs()">전체삭제</button>
-        </div>
-      </div>
-      <br />
-      <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
-        <ul>
-          <li *ngFor="let doc of savedDocs; index as idx">
-            <input class="checkbox" type="checkbox" id="{{ idx }}" />
-            <label for="{{ idx }}"> {{ doc["title"] }}</label>
-          </li>
-        </ul>
-        <div class="page-numbers">
-          <button
-            *ngIf="paginationModel.currentPage > 1"
-            (click)="loadSavedDocs(paginationModel.currentPage - 10)"
-          >
-            <<
-          </button>
-          <button
-            *ngIf="paginationModel.currentPage > 1"
-            (click)="loadSavedDocs(paginationModel.currentPage - 1)"
-          >
-            <
-          </button>
-          <button
-            [ngStyle]="selectedStyleObject(paginationModel.currentPage === i)"
-            (click)="loadSavedDocs(i)"
-            *ngFor="let i of paginationModel.pages"
-          >
-            {{ i }}
-          </button>
-          <button
-            *ngIf="paginationModel.currentPage < paginationModel.totalPages"
-            (click)="loadSavedDocs(paginationModel.currentPage + 1)"
-          >
-            >
-          </button>
-          <button
-            *ngIf="paginationModel.currentPage != paginationModel.totalPages"
-            (click)="loadSavedDocs(paginationModel.currentPage + 10)"
-          >
-            >>
-          </button>
-        </div>
-      </section>
-    </form>
-  </div>
+  <br />
+  <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+    <ul>
+      <li *ngFor="let doc of savedDocs; index as idx">
+        <input
+          class="article-checkbox"
+          type="checkbox"
+          [(checked)]="doc.isSelected"
+          name="selectDoc"
+          [value]="doc['id']"
+          (change)="onCheckboxChange($event)"
+        />
+        <!-- <input class="checkbox" type="checkbox" id="{{ idx }}" /> -->
+        <label>
+          <a (click)="openDocDetail(doc.id)">{{ doc["title"] }}</a>
+        </label>
+      </li>
+    </ul>
+  </section>
+</form>
+<div *ngIf="isSavedDocsLoaded" class="page-numbers">
+  <button
+    id="page-multiprev"
+    *ngIf="currentPage > 1"
+    (click)="loadSavedDocs(pageInfo.currentPage - 10)"
+  ></button>
+  <button
+    id="page-prev"
+    *ngIf="currentPage > 1"
+    (click)="loadSavedDocs(currentPage - 1)"
+  ></button>
+  <button
+    [ngStyle]="{
+      'background-color': currentPage == i ? '#52b9ff' : 'transparent',
+      color: currentPage == i ? 'white' : 'black'
+    }"
+    (click)="loadSavedDocs(i)"
+    *ngFor="let i of pages"
+  >
+    {{ i }}
+  </button>
+  <button
+    id="page-next"
+    *ngIf="currentPage < pageInfo.endPage"
+    (click)="loadSavedDocs(pageInfo.currentPage + 1)"
+  ></button>
+  <button
+    id="page-multinext"
+    *ngIf="currentPage != pageInfo.endPage"
+    (click)="loadSavedDocs(pageInfo.currentPage + 10)"
+  ></button>
 </div>

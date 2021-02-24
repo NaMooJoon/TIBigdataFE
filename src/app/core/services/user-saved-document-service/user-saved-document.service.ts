@@ -41,10 +41,8 @@ export class UserSavedDocumentService {
     let res: QueryResponse = await this.httpClient
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
       .toPromise();
-    let docIds: Array<string> = res.payload["docIds"];
-    let titles: Array<string> = await this.articleService.convertDocIdsToTitles(
-      docIds.slice(currentIndex, currentIndex + this.docsPerPage)
-    );
+    let docIds: Array<string> = res.payload["docIds"].slice(currentIndex, currentIndex + this.docsPerPage);
+    let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docIds);
     let idIdx = 0;
 
     let idsAndTitles = titles.map((title) => {

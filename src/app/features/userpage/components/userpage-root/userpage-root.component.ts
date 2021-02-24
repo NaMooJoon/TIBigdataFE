@@ -22,42 +22,5 @@ export class UserpageRootComponent implements OnInit {
     this.router.navigateByUrl("/userpage/my-docs");
   }
 
-  /**
-   * @description router to my-docs in user page  
-   */
-  toMyDocs() {
-    this.router.navigateByUrl("/userpage/my-docs");
-    this.where = "내 보관함";
-  }
 
-  /**
-   * @description router to my-analysis in user page 
-   */
-  toMyAnalysis() {
-    this.router.navigateByUrl("/userpage/my-analysis");
-    this.where = "내 분석함";
-  }
-
-  /**
-   * @description router to member-info in user page 
-   */
-  toMemberInfo() {
-    this.router.navigateByUrl("/userpage/member-info");
-    this.where = "회원정보관리";
-  }
-
-  /**
-   * @description router to api register page in userpage 
-   */
-  toOpenAPI() {
-    this.router.navigateByUrl("/api-register");
-  }
-
-  /**
-   * @description router to secession page in userpage 
-   */
-  toSecession() {
-    this.router.navigateByUrl("/userpage/secession");
-    this.where = "회원탈퇴";
-  }
 }

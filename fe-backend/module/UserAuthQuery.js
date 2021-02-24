@@ -150,4 +150,25 @@ async function deleteUser(req, res) {
     });
 }
 
+router.post("/apiRegister", (req, res) => {
+  let userEmail = req.body.payload;
+
+  console.log(userEmail);
+
+  User.updateOne(
+    { email: userEmail },
+    { $set: { isApiUser: true } },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "Wrong attempt"));
+        }
+        res.json(new Res(true, "api auth is given!"));
+      }
+    }
+  );
+});
+
 module.exports = router;

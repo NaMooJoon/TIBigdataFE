@@ -39,6 +39,10 @@ export class AuthenticationService {
     return this.currentUserChange$.asObservable();
   }
 
+  getCurrentUser() {
+    return this.currentUser;
+  }
+
   setCurrentUser(userProfile: UserProfile): void {
     this.currentUser = userProfile;
     this.currentUserChange$.next(userProfile);
@@ -54,7 +58,7 @@ export class AuthenticationService {
     userData.status = user.status;
 
     let res: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/users/registerUser`, userData)
+      .post<any>(`${ this.API_URL }/users/registerUser`, userData)
       .toPromise();
 
     return res.isSuccess;
@@ -81,7 +85,7 @@ export class AuthenticationService {
 
   async getUserProfile(email: string): Promise<UserProfile> {
     let res: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/users/getUserInfo`, {
+      .post<any>(`${ this.API_URL }/users/getUserInfo`, {
         email: email,
         headers: this.headers,
       })
@@ -91,7 +95,7 @@ export class AuthenticationService {
 
   async verifyUser(email: string): Promise<boolean> {
     let res: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/users/verifyUser`, { email: email })
+      .post<any>(`${ this.API_URL }/users/verifyUser`, { email: email })
       .toPromise();
     return res.payload["isRegistered"];
   }
@@ -109,7 +113,7 @@ export class AuthenticationService {
   async verifyToken(token: string): Promise<QueryResponse> {
     var client = this.PROVIDER_ID;
     return await this.httpClient
-      .post<any>(`${this.API_URL}/users/verifyToken`, {
+      .post<any>(`${ this.API_URL }/users/verifyToken`, {
         token: token,
         client: client,
       })
@@ -146,12 +150,12 @@ export class AuthenticationService {
   async deleteUser(): Promise<boolean> {
 
     let userDeleteRes: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/users/deleteUser`, {
+      .post<any>(`${ this.API_URL }/users/deleteUser`, {
         email: this.currentUser.email,
       })
       .toPromise();
     let myDocDeleteRes: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/myDoc/deleteAllMyDocs`, {
+      .post<any>(`${ this.API_URL }/myDoc/deleteAllMyDocs`, {
         userEmail: this.currentUser.email,
       })
       .toPromise();

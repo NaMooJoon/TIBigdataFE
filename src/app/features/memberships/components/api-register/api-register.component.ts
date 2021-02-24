@@ -14,11 +14,26 @@ export class ApiRegisterComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private _router: Router
-  ) { }
+  ) {
 
-  async ngOnInit() { }
+  }
+
+  async ngOnInit() {
+    if (this.authenticationService.getCurrentUser().isApiUser) {
+      window.alert("이미 가입된 회원입니다.");
+      this._router.navigateByUrl("/");
+    }
+  }
 
   async registerApi(): Promise<void> {
-    await this.authenticationService.apiRegister();
+    let res = await this.authenticationService.apiRegister();
+    if (res) {
+      window.alert("가입이 완료되었습니다!");
+      this._router.navigateByUrl("/");
+    }
+    else {
+      window.alert("가입에 실패했습니다. 다시 시도해주세요");
+      this.ngOnInit();
+    }
   }
 }

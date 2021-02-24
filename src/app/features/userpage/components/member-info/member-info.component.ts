@@ -18,6 +18,7 @@ export class MemberInfoComponent implements OnInit {
       this.userProfile = currentUser;
       console.log(this.userProfile);
     });
+
   }
 
   ngOnInit(): void {
