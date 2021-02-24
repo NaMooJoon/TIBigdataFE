@@ -5,16 +5,24 @@ import { PaginationService } from "src/app/core/services/pagination-service/pagi
 import { ChartOption } from "src/app/core/enums/chart-option";
 import { AnalysisOption } from "src/app/core/enums/analysis-option";
 
+const keywordIconUrl: string = "../../../assets/icons/keyword-analysis";
+const relatedIconUrl: string = "../../../assets/icons/related-doc";
+const doughnutIconUrl: string = "../../../assets/icons/chart-doughnut";
+const barIconUrl: string = "../../../assets/icons/chart-bar";
+const lineIconUrl: string = "../../../assets/icons/chart-line-graph";
+const wordcloudIconUrl: string = "../../../assets/icons/chart-word-cloud";
+
 @Component({
   selector: "app-article-analysis",
   templateUrl: "./article-analysis.html",
   styleUrls: ["./article-analysis.less"],
 })
 export class ArticleAnalysisComponent implements OnInit {
+
   constructor(
     private paginationService: PaginationService,
     private userSavedDocumentService: UserSavedDocumentService
-  ) {}
+  ) { }
 
   private isChartLoaded = false;
   private isSavedDocsLoaded = false;
@@ -25,6 +33,9 @@ export class ArticleAnalysisComponent implements OnInit {
   private analysisDocIdsList: Array<string> = [];
   private pageInfo: PaginationModel;
   private totalSavedDocsNum: number;
+  private iconUrls: Array<string> = [keywordIconUrl, relatedIconUrl, doughnutIconUrl, lineIconUrl, wordcloudIconUrl, barIconUrl]
+  currentPage: number;
+  pages: number[];
 
   ngOnInit(): void {
     this.selectedDataNum = 0;
@@ -40,15 +51,10 @@ export class ArticleAnalysisComponent implements OnInit {
     this.isSavedDocsLoaded = false;
     this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
     pageNum = this.handlePageOverflow(pageNum);
+    this.currentPage = pageNum;
     this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
-    this.pageInfo = await this.paginationService.paginate(
-      pageNum,
-      this.totalSavedDocsNum,
-      10,
-      3
-    );
-
-
+    this.pageInfo = await this.paginationService.paginate(pageNum, this.totalSavedDocsNum, 10, 3);
+    this.pages = this.pageInfo.pages;
     this.isSavedDocsLoaded = true;
   }
 
@@ -58,8 +64,7 @@ export class ArticleAnalysisComponent implements OnInit {
    */
   handlePageOverflow(pageNum: number): number {
     if (pageNum < 0) pageNum = 1;
-    else if (pageNum > this.totalSavedDocsNum) pageNum = this.totalSavedDocsNum;
-
+    else if (pageNum * 10 > this.totalSavedDocsNum) pageNum = this.totalSavedDocsNum / 10;
     return pageNum;
   }
 
@@ -72,18 +77,20 @@ export class ArticleAnalysisComponent implements OnInit {
     this.isChartLoaded = false;
   }
 
-  selectedStyleObject(flag: boolean): Object {
+  selectedStyleObject(flag: boolean, backgroundIdx: number): Object {
     if (flag) {
       return {
-        color: "white",
+        "color": "white",
         "background-color": "#0FBAFF",
-        border: "none",
+        "border": "none",
         "font-weight": "700",
+        "background-image": "url(" + this.iconUrls[backgroundIdx] + "-white.png" + ")"
       };
     } else {
       return {
-        color: "black",
+        "color": "black",
         "background-color": "white",
+        "background-image": "url(" + this.iconUrls[backgroundIdx] + ".png" + ")"
       };
     }
   }
@@ -130,7 +137,7 @@ export class ArticleAnalysisComponent implements OnInit {
 
   }
 
-  generateChartAnalysisResult(): void {}
+  generateChartAnalysisResult(): void { }
 
-  generateWordCloud() {}
+  generateWordCloud() { }
 }

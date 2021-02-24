@@ -35,12 +35,9 @@ export class UserSavedDocumentService {
     return res.succ;
   }
 
-  async getMyDocs(
-    startIndex?: number
-  ): Promise<Array<{ title: string; id: string }>> {
+  async getMyDocs(startIndex?: number): Promise<Array<{ title: string; id: string }>> {
     if (startIndex === undefined) startIndex = 0;
     let currentIndex = (startIndex - 1) * this.docsPerPage;
-
     let res: QueryResponse = await this.httpClient
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
       .toPromise();
@@ -53,14 +50,6 @@ export class UserSavedDocumentService {
     let idsAndTitles = titles.map((title) => {
       return { title: title, id: docIds[idIdx++] };
     });
-
-    // async ngOnInit(): Promise<void> {
-    // async 키워드 함수 앞에 붙여주고 안에서 호출 할 때는 await 키워드 붙여서 함수호출 해야함!
-
-
-
-
-    // }
 
     return idsAndTitles;
   }

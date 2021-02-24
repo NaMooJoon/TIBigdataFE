@@ -40,13 +40,19 @@ export class AppComponent {
 
   async ngOnInit(): Promise<void> {
     this.isBackendAvailable = await this.elasticsearchSearvice.isAvailable();
-    let isSuccess = await this.authenticationService.verifySignIn();
-    if (!isSuccess) {
-      this.isUserLoaded = false;
-      alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
-      this.authenticationService.signOut();
-      this.router.navigate(["/"]);
+
+    if (localStorage.getItem("KUBIC_TOKEN") != null) {
+      let isSuccess = await this.authenticationService.verifySignIn();
+      if (!isSuccess) {
+        this.isUserLoaded = false;
+        alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+        this.authenticationService.signOut();
+        this.router.navigate(["/"]);
+      }
+      this.isUserLoaded = true;
     }
-    this.isUserLoaded = true;
+    else {
+      this.isUserLoaded = true;
+    }
   }
 }

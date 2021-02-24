@@ -1,4 +1,8 @@
-<input class=search-bar (keyup.enter)="searchDocs($event)" placeholder="검색" />
+<input
+  class="search-bar"
+  (keyup.enter)="searchDocs($event)"
+  placeholder="검색"
+/>
 
 <div class="submenu-container">
   <table>
@@ -20,15 +24,21 @@
           <div *ngIf="!isAnswered(doc)" class="qna-button ongoing">검토중</div>
         </td>
 
-        <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
-        <td class="doc-writer"> <a>{{ doc["userName"] }}</a></td>
+        <td class="doc-title">
+          <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a>
+        </td>
+        <td class="doc-writer">
+          <a>{{ doc["userName"] }}</a>
+        </td>
         <td class="doc-postdate">{{ doc["regDate"] }}</td>
       </tr>
     </tbody>
 
     <tbody *ngIf="!docList.length">
       <tr>
-        <td class="no-docs" rowspan="5" colspan="5">등록된 게시물이 없습니다.</td>
+        <td class="no-docs" rowspan="5" colspan="5">
+          등록된 게시물이 없습니다.
+        </td>
       </tr>
     </tbody>
   </table>
@@ -38,15 +48,35 @@
   </div>
 
   <div class="page-numbers">
-    <button id="page-multiprev" *ngIf="currentPage > 1" (click)="loadPage(currentPage - 10)"></button>
-    <button id="page-prev" *ngIf="currentPage > 1" (click)="loadPage(currentPage - 1)"></button>
-    <button [ngStyle]="{
-      'background-color': currentPage == i ? '#52b9ff' : 'transparent',
-      color: currentPage == i ? 'white' : 'black'
-    }" (click)="loadPage(i)" *ngFor="let i of pages">
+    <button
+      id="page-multiprev"
+      *ngIf="currentPage > 1"
+      (click)="loadPage(currentPage - 10)"
+    ></button>
+    <button
+      id="page-prev"
+      *ngIf="currentPage > 1"
+      (click)="loadPage(currentPage - 1)"
+    ></button>
+    <button
+      [ngStyle]="{
+        'background-color': currentPage == i ? '#52b9ff' : 'transparent',
+        color: currentPage == i ? 'white' : 'black'
+      }"
+      (click)="loadPage(i)"
+      *ngFor="let i of pages"
+    >
       {{ i }}
     </button>
-    <button id="page-next" *ngIf="currentPage < totalPages" (click)="loadPage(currentPage + 1)"></button>
-    <button id="page-multinext" *ngIf="currentPage != totalPages" (click)="loadPage(currentPage + 10)"> </button>
+    <button
+      id="page-next"
+      *ngIf="currentPage < totalPages"
+      (click)="loadPage(currentPage + 1)"
+    ></button>
+    <button
+      id="page-multinext"
+      *ngIf="currentPage != totalPages"
+      (click)="loadPage(currentPage + 10)"
+    ></button>
   </div>
 </div>

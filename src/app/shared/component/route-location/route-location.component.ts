@@ -45,5 +45,6 @@ export class RouteLocationComponent implements OnInit {
     if (routeName === "announcement") return "공지사항"
     if (routeName === "new") return "새 글 작성"
     if (routeName === "modify") return "글 수정"
+    if (routeName === "analysis") return "자료분석"
   }
 }
