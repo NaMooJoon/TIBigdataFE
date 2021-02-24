@@ -13,7 +13,7 @@ export class MemberInfoComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
-  ) { 
+  ) {
     this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
       this.userProfile = currentUser;
       console.log(this.userProfile);

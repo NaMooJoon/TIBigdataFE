@@ -17,4 +17,4 @@ import { UserpageRootComponent } from './components/userpage-root/userpage-root.
   ],
   imports: [CommonModule, UserpageRoutingModule],
 })
-export class UserpageModule {}
+export class UserpageModule { }

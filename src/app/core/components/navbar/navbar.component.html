@@ -9,7 +9,8 @@
     <li *ngIf="isApiUser"><a>OpenAPI</a></li>
     <li
       [ngStyle]="selectedStyleObject(selectedMenu == 'community')"
-      class="community-menu">
+      class="community-menu"
+    >
       <div class="dropdown-container">
         <a (click)="toCommunity()">커뮤니티</a>
         <ul class="community-dropdown-menu">
@@ -21,7 +22,8 @@
     </li>
     <li
       [ngStyle]="selectedStyleObject(selectedMenu === 'about')"
-      class="about-menu">
+      class="about-menu"
+    >
       <div class="dropdown-container">
         <a>홈페이지소개</a>
         <ul class="about-dropdown-menu">

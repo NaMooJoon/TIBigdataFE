@@ -8,25 +8,25 @@ import { UserpageRootComponent } from "./components/userpage-root/userpage-root.
 
 const routes: Routes = [
   {
-    path :"",
-    component : UserpageRootComponent,
-    children : [
-        {
-          path :"my-docs",
-          component : MyDocsComponent
-        },
-        {
-          path :"my-analysis",
-          component : MyAnalysisComponent
-        },
-        {
-          path :"member-info",
-          component : MemberInfoComponent
-        },
-        {
-          path :"secession",
-          component : SecessionComponent
-        }
+    path: "",
+    component: UserpageRootComponent,
+    children: [
+      {
+        path: "my-docs",
+        component: MyDocsComponent
+      },
+      {
+        path: "my-analysis",
+        component: MyAnalysisComponent
+      },
+      {
+        path: "member-info",
+        component: MemberInfoComponent
+      },
+      {
+        path: "secession",
+        component: SecessionComponent
+      }
     ]
   }
 
@@ -36,4 +36,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UserpageRoutingModule {}
+export class UserpageRoutingModule { }

@@ -23,4 +23,4 @@ import { SearchBarComponent } from "./component/search-bar/search-bar.component"
   providers: [],
   bootstrap: [],
 })
-export class SharedModule {}
+export class SharedModule { }

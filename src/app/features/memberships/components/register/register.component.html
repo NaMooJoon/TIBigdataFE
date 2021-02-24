@@ -4,7 +4,8 @@
     <form
       class="form-field"
       [formGroup]="registerForm"
-      (ngSubmit)="registerUser()">
+      (ngSubmit)="registerUser()"
+    >
       <section class="policy-box">
         <p class="policy-title">KUBiC 개인정보 수집정책</p>
         <div class="policy-cont" tabindex="0">
@@ -15,30 +16,32 @@
           &nbsp;&nbsp;&nbsp;- 아이디, 신분, 소속기관, 비밀번호, 이메일<br />
           ② 서비스 이용과정에서 아래와 같은 정보들이 자동으로 생성되어 수집될 수
           있습니다.<br />
-          &nbsp;&nbsp;&nbsp;- IP Address, 쿠키, 방문 일시, 서비스 이용 기록, 불량
-          이용 기록, 기기정보<br />
-          ⑤ 민감한 개인 정보는 기본적으로 수집하지 않으나, 다만 불가피하게 수집이
-          필요한 경우 별도의 동의를 구하도록 합니다.
+          &nbsp;&nbsp;&nbsp;- IP Address, 쿠키, 방문 일시, 서비스 이용 기록,
+          불량 이용 기록, 기기정보<br />
+          ⑤ 민감한 개인 정보는 기본적으로 수집하지 않으나, 다만 불가피하게
+          수집이 필요한 경우 별도의 동의를 구하도록 합니다.
           <br /><br />
 
           <strong>제2조 개인정보의 수집 및 이용 목적</strong><br />
 
           ① 이용자관리<br />
           &nbsp;&nbsp;&nbsp;- 이용자제 서비스 이용 및 제한적 본인 확인제에 따른
-          본인확인, 개인식별, 부정 이용방지와 비인가 사용방지, 가입의사 확인, 가입
-          및 가입횟수 제한, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추후 법정 대리인
+          본인확인, 개인식별, 부정 이용방지와 비인가 사용방지, 가입의사 확인,
+          가입 및 가입횟수 제한, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;추후 법정 대리인
           본인확인, 분쟁 조정을 위한 기록보존, 불만처리 등 민원처리, 고지사항
           전달<br />
           ② 신규 서비스 개발에의 활용<br />
-          &nbsp;&nbsp;&nbsp;- 신규 서비스 개발, 통계학적 특성에 따른 서비스 제공,
-          서비스의 유효성 확인, 접속빈도 파악, 이용자의 서비스 이용에 대한 통계<br /><br />
+          &nbsp;&nbsp;&nbsp;- 신규 서비스 개발, 통계학적 특성에 따른 서비스
+          제공, 서비스의 유효성 확인, 접속빈도 파악, 이용자의 서비스 이용에 대한
+          통계<br /><br />
 
           <strong>제3조 개인정보의 보유 및 이용기간</strong><br />
 
           이용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면
           지체 없이 파기합니다.<br />
 
-          <strong>제4조 동의를 거부할 권리 및 동의 거부에 따른 불이익</strong><br />
+          <strong>제4조 동의를 거부할 권리 및 동의 거부에 따른 불이익</strong
+          ><br />
 
           회원 가입 신청자는 개인정보 제공 등에 관해 동의하지 않을 권리가
           있습니다. <br />
@@ -78,8 +81,9 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;암호화 하거나 파일 잠금 기능을 사용하는
           등의 별도 보안기능을 사용하고 있습니다.<br />
           ⑥ 해킹 등에 대비한 기술적 대책<br />
-          &nbsp;&nbsp;&nbsp;- 해킹이나 컴퓨터 바이러스 등에 의한 개인정보 유출 및
-          훼손을 막기 위하여 보안프로그램을 설치하고 주기적인 갱신, 점검을 하며<br />
+          &nbsp;&nbsp;&nbsp;- 해킹이나 컴퓨터 바이러스 등에 의한 개인정보 유출
+          및 훼손을 막기 위하여 보안프로그램을 설치하고 주기적인 갱신, 점검을
+          하며<br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;외부로부터 접근이 통제된 구역에 시스템을
           설치하고 기술적/물리적으로 감시 및 차단하고 있습니다.<br />
           ⑦ 비인가자에 대한 출입 통제<br />
@@ -103,10 +107,11 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;● 다른 사람의 생명·신체를 해할 우려가
           있거나 다른 사람의 재산과 그 밖의 이익을 부당하게 침해할 우려가 있는
           경우<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;● 공공기관이 개인정보를 처리하지 아니하면
-          다른 법률에서 정하는 소관업무를 수행할 수 없는 경우<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;● 개인정보를 처리하지 아니하면 정보주체와
-          약정한 서비스를 제공하지 못하는 등 계약의 이행이 곤란한 경우로서 <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;● 공공기관이 개인정보를 처리하지
+          아니하면 다른 법률에서 정하는 소관업무를 수행할 수 없는 경우<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;● 개인정보를 처리하지 아니하면
+          정보주체와 약정한 서비스를 제공하지 못하는 등 계약의 이행이 곤란한
+          경우로서 <br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;정보주체가 그 계약의 해지
           의사를 명확하게 밝히지 아니한 경우<br />
           ② 개인정보 정정 및 삭제 요구<br />
@@ -116,11 +121,14 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다만, 다른 법령에서 그 개인정보가 수집
           대상으로 명시되어 있는 경우에는 그 삭제를 요구할 수 없습니다.<br /><br />
         </div>
-        <label for="agreement1-check"><input
+        <label for="agreement1-check"
+          ><input
             type="checkbox"
             id="agreement1-check"
-            formControlName="policy1Agreed" />
-          약관에 동의합니다</label>
+            formControlName="policy1Agreed"
+          />
+          약관에 동의합니다</label
+        >
       </section>
       <section class="policy-box">
         <p class="policy-title">KUBiC 회원정책</p>
@@ -147,9 +155,9 @@
           가입해야한다.<br /><br />
 
           <strong>제6조(회원가입의 승낙)</strong><br />
-          KUBiC의 회원 가입 신청 양식에 가입 희망 회원이 인터넷으로 제 5조와 같이
-          신청하면 KUBiC은 바로 가입을 승인하며 KUBiC에서 운영하는 기타 웹서비스를
-          이용할 수 있다.<br /><br />
+          KUBiC의 회원 가입 신청 양식에 가입 희망 회원이 인터넷으로 제 5조와
+          같이 신청하면 KUBiC은 바로 가입을 승인하며 KUBiC에서 운영하는 기타
+          웹서비스를 이용할 수 있다.<br /><br />
 
           <strong>제7조(회원의 의무)</strong><br />
           회원의 아이디와 비밀번호의 관리와 책임은 회원에게 있으며 관리소홀과
@@ -162,22 +170,22 @@
           KUBiC은 서비스제공과 관련된 이용회원의 정보를 회원의 허락없이 타인에게
           누설하지 않는다.<br />
           다만 KUBiC의 서비스 이용약관을 위배하는 사람이나 KUBiC의 서비스를
-          이용하여 타인에게 법적인 피해를 주거나 미풍양속을 해치는 행위를 한 사람
-          등에게 법적인 조치를 취하기 위하여 개인정보를 공개해야 한다고 판단되는
-          충분한 근거가 있는 경우는 예외로 한다.<br />
-          이 경우에도 개인에게는 제공되지 않으며 규정된 절차에 따라서 수사기관에만
-          제공할 수 있다.<br /><br />
+          이용하여 타인에게 법적인 피해를 주거나 미풍양속을 해치는 행위를 한
+          사람 등에게 법적인 조치를 취하기 위하여 개인정보를 공개해야 한다고
+          판단되는 충분한 근거가 있는 경우는 예외로 한다.<br />
+          이 경우에도 개인에게는 제공되지 않으며 규정된 절차에 따라서
+          수사기관에만 제공할 수 있다.<br /><br />
 
           <strong>제9조(개인정보 보호)</strong><br />
           ① KUBiC는 적법하고 공정한 수단에 의하여 사용자 관리에 필요한 최소한의
           범위 내에서 이용고객의 회원정보를 수집한다.<br />
-          ② KUBiC는 관계법령이 정하는 바에 따라 회원의 회원정보를 보호하기 위하여
-          "개인정보보호정책"을 제정하여 운영한다.<br /><br />
+          ② KUBiC는 관계법령이 정하는 바에 따라 회원의 회원정보를 보호하기
+          위하여 "개인정보보호정책"을 제정하여 운영한다.<br /><br />
 
           <strong>제10조(서비스 이용시간)</strong><br />
           KUBiC의 인터넷 서비스는 년중무휴로 1일 24시간 운영된다.<br />
-          단, KUBiC의 설비 보수 공사등의 사유나 운영상의 이유로 서비스를 일시중지
-          할 수 있다.<br />
+          단, KUBiC의 설비 보수 공사등의 사유나 운영상의 이유로 서비스를
+          일시중지 할 수 있다.<br />
           이 때 KUBiC은 사전에 공지를 하여 회원들에게 알린다.<br /><br />
 
           <strong>제11조(동의 거부)</strong><br />
@@ -189,44 +197,52 @@
           있습니다.<br /><br />
 
           <strong>제12조(관할 법원)</strong><br />
-          KUBiC과 회원간의 분쟁이 발생할 경우 KUBiC의 소재지 법원을 관할 법원으로
-          한다.<br /><br />
+          KUBiC과 회원간의 분쟁이 발생할 경우 KUBiC의 소재지 법원을 관할
+          법원으로 한다.<br /><br />
 
           <strong>[부칙]</strong><br />
           이 약관은 사이트 가입시점 부터 시행한다.
         </div>
 
-        <label for="agreement2-check"><input
+        <label for="agreement2-check"
+          ><input
             type="checkbox"
             id="agreement2-check"
-            formControlName="policy2Agreed" />
-          약관에 동의합니다</label>
+            formControlName="policy2Agreed"
+          />
+          약관에 동의합니다</label
+        >
       </section>
       <section class="info-input">
         <div class="field status-field">
           <select formControlName="status">
-            <option class="dropdown-default" value="">신분을 선택해주세요</option>
+            <option class="dropdown-default" value="">
+              신분을 선택해주세요
+            </option>
             <option *ngFor="let status of statusList">{{ status }}</option>
           </select>
           <div
             class="required"
             *ngIf="
-            registerForm.get('status').touched &&
-            registerForm.get('status').errors?.required
-          ">
+              registerForm.get('status').touched &&
+              registerForm.get('status').errors?.required
+            "
+          >
             신분을 선택해주세요.
           </div>
         </div>
         <div class="field inst-field">
           <input
             formControlName="inst"
-            placeholder="소속된 기관을 입력해주세요." />
+            placeholder="소속된 기관을 입력해주세요."
+          />
           <div
             class="required"
             *ngIf="
-            registerForm.get('inst').touched &&
-            registerForm.get('inst').errors?.required
-          ">
+              registerForm.get('inst').touched &&
+              registerForm.get('inst').errors?.required
+            "
+          >
             소속된 기관을 입력해주세요.
           </div>
         </div>
@@ -234,7 +250,8 @@
           <button
             class="submit-button"
             [disabled]="!registerForm.valid"
-            type="submit">
+            type="submit"
+          >
             구글 계정으로 가입하기
           </button>
         </div>

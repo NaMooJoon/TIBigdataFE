@@ -7,8 +7,12 @@
     <div class="filter">
       <section>
         <h2>
-          검색필터<img (click)="resetFilters()" class="reset-btn" src="../../../../../assets/icons/reset-filter.png"
-            alt="filter-reset" />
+          검색필터<img
+            (click)="resetFilters()"
+            class="reset-btn"
+            src="../../../../../assets/icons/reset-filter.png"
+            alt="filter-reset"
+          />
         </h2>
       </section>
       <section class="keyword-search">
@@ -42,8 +46,12 @@
       <section class="inst">
         <h3>기관별</h3>
         <div class="inst-button-container">
-          <button *ngFor="let inst of institutionList" [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
-            id="inst" (click)="selectInst(inst)">
+          <button
+            *ngFor="let inst of institutionList"
+            [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
+            id="inst"
+            (click)="selectInst(inst)"
+          >
             {{ inst["key"] }} {{ inst["doc_count"] }}
           </button>
         </div>

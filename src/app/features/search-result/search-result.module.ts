@@ -23,4 +23,4 @@ import { SearchResultComponent } from "./components/search-result/search-result.
     SharedModule,
   ],
 })
-export class SearchResultModule {}
+export class SearchResultModule { }

@@ -8,9 +8,9 @@ describe('ApiRegisterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApiRegisterComponent ]
+      declarations: [ApiRegisterComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -15,7 +15,7 @@ export class ArticleCardViewComponent implements OnInit {
     private db: AnalysisDatabaseService,
     public _router: Router,
     private documentService: ArticleService
-  ) {}
+  ) { }
 
   readonly DEBUG: boolean = false;
   private keywords: any[] = [];

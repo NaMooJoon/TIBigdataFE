@@ -30,7 +30,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.articleSubscriber.unsubscribe();

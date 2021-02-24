@@ -14,9 +14,9 @@ export class ApiRegisterComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private _router: Router
-  ) {}
+  ) { }
 
-  async ngOnInit() {}
+  async ngOnInit() { }
 
   async registerApi(): Promise<void> {
     await this.authenticationService.apiRegister();

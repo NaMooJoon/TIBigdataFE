@@ -35,4 +35,4 @@ import { CoreModule } from "src/app/core/core.module";
   ],
   providers: [],
 })
-export class MembershipModule {}
+export class MembershipModule { }

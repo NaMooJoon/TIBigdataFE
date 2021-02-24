@@ -11,6 +11,6 @@ export class SearchResultComponent implements OnInit {
   constructor(
     public router: Router,
     private elasticSearchService: ElasticsearchService
-  ) {}
-  ngOnInit() {}
+  ) { }
+  ngOnInit() { }
 }

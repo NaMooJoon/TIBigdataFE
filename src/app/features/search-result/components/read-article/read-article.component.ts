@@ -24,7 +24,7 @@ export class ReadArticle implements OnInit {
     private wordcloud: WordcloudService,
     private es: ElasticsearchService,
     private db: AnalysisDatabaseService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.load_new_document();

@@ -27,7 +27,7 @@ export class DocumentWriteComponent {
   private boardForm: FormGroup;
   private isMainAnnounce = false;
   private currentUser: UserProfile;
-  private selectedBoard:string;
+  private selectedBoard: string;
 
   ngOnInit() {
     if (this.communityBoardService.getCurrentMenu() === null) {
@@ -71,11 +71,11 @@ export class DocumentWriteComponent {
     this.boardForm.controls["isMainAnnounce"].setValue(
       !this.boardForm.controls["isMainAnnounce"].value
     );
-    
+
   }
 
   generateAnnounceQueryBody(): CommunityDocModel {
-    
+
     return {
       userEmail: this.currentUser.email,
       userName: this.currentUser.name,

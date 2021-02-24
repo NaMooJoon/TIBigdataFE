@@ -8,9 +8,9 @@ describe('RouteLocationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RouteLocationComponent ]
+      declarations: [RouteLocationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

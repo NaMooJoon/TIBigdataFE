@@ -49,7 +49,7 @@ export class CommunityBoardService {
     private http: HttpClient,
     private router: Router,
     private prvcyService: CommunityPrivacyMaskingService
-  ) {}
+  ) { }
 
   generateQueryUrl(operation: boardOperation): string {
     let currentMenu = this.getCurrentMenu();
@@ -89,7 +89,7 @@ export class CommunityBoardService {
   }
 
   async registerDoc(docInfo: CommunityDocModel): Promise<QueryResponse> {
-    
+
     return await this.http
       .post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo)
       .toPromise();
@@ -109,14 +109,14 @@ export class CommunityBoardService {
   }
 
   async getSelectedDoc(): Promise<CommunityDocModel> {
-    
+
     if (this.selectedDoc == null) return null;
     let res: QueryResponse = await this.http
       .post<any>(this.generateQueryUrl(boardOperation.READ_SINGLE), {
         docId: this.selectedDoc.docId,
       })
       .toPromise();
-    
+
     return res.payload;
   }
 
@@ -127,7 +127,7 @@ export class CommunityBoardService {
         ""
       )
       .toPromise();
-    
+
     if (res.isSuccess) {
       return res.payload["docList"];
     } else {
@@ -154,7 +154,7 @@ export class CommunityBoardService {
   }
 
   async modifyDoc(docInfo: CommunityDocModel): Promise<boolean> {
-    
+
     let res: QueryResponse = await this.http
       .post<any>(this.generateQueryUrl(boardOperation.UPDATE), docInfo)
       .toPromise();
@@ -184,7 +184,7 @@ export class CommunityBoardService {
         searchText: searchText,
       })
       .toPromise();
-    
+
     if (res.isSuccess) return res.payload["docList"];
   }
 
@@ -194,7 +194,7 @@ export class CommunityBoardService {
         searchText: searchText,
       })
       .toPromise();
-    
+
     if (res.isSuccess) return res.payload["docNum"];
   }
 

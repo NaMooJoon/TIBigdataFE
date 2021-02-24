@@ -19,7 +19,7 @@ export class MyDocsComponent implements OnInit {
     private paginationService: PaginationService,
     private userSavedDocumentService: UserSavedDocumentService,
     private articleService: ArticleService,
-  ) { 
+  ) {
   }
 
   private isSavedDocsLoaded = false;

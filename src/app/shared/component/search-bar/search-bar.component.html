@@ -1,15 +1,35 @@
 <section class="search-bar-container">
-  <img (click)="gotoMain()" *ngIf="!isMain" src="../../../../assets/logos/logo_sub.png" alt="kubic_logo"
-    class="logo-img" />
-  <img (click)="gotoMain()" *ngIf="isMain" src="../../../../assets/logos/logo_main.png" alt="main_logo" width="200px" />
+  <img
+    (click)="gotoMain()"
+    *ngIf="!isMain"
+    src="../../../../assets/logos/logo_sub.png"
+    alt="kubic_logo"
+    class="logo-img"
+  />
+  <img
+    (click)="gotoMain()"
+    *ngIf="isMain"
+    src="../../../../assets/logos/logo_main.png"
+    alt="main_logo"
+    width="200px"
+  />
 
-  <input class="search-bar" type="text" (keyup)="updateKeyword($event)" (keyup.enter)="search()"
-    value="{{ searchKeyword }}" />
+  <input
+    class="search-bar"
+    type="text"
+    (keyup)="updateKeyword($event)"
+    (keyup.enter)="search()"
+    value="{{ searchKeyword }}"
+  />
   <div class="search-filter-container">
     <div class="reset-filter">
       <span>검색조건</span>
-      <img (click)="resetFilters()" class="reset-btn" src="../../../../assets/icons/reset-filter.png"
-        alt="filter-reset" />
+      <img
+        (click)="resetFilters()"
+        class="reset-btn"
+        src="../../../../assets/icons/reset-filter.png"
+        alt="filter-reset"
+      />
     </div>
     <button [ngStyle]="selectedStyleObject(isDateSelected)" type="button">
       {{ selectedDate }}
@@ -62,11 +82,19 @@
     </div> -->
     <div class="search-helper">
       <span>검색도움말</span>
-      <img (click)="resetFilters()" class="reset-btn" src="../../../../assets/icons/help-gray.png" alt="filter-reset" />
+      <img
+        (click)="resetFilters()"
+        class="reset-btn"
+        src="../../../../assets/icons/help-gray.png"
+        alt="filter-reset"
+      />
     </div>
   </div>
 
-  <div *ngIf="isKeyLoaded && relatedKeywords.length != 0" class="related-keywords-container">
+  <div
+    *ngIf="isKeyLoaded && relatedKeywords.length != 0"
+    class="related-keywords-container"
+  >
     <p>연관검색어</p>
     <ul class="keyword-list">
       <li *ngFor="let keyword of relatedKeywords">
@@ -74,5 +102,4 @@
       </li>
     </ul>
   </div>
-
 </section>

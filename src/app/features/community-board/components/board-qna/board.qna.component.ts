@@ -36,7 +36,7 @@ export class QnaComponent implements OnInit {
   }
 
   async loadPage(currentPage: number) {
-    
+
     this.docList = [];
 
     if (this.isSearchMode) {
@@ -51,11 +51,11 @@ export class QnaComponent implements OnInit {
       await this.loadDocs();
     }
 
-    
+
   }
 
   async loadDocs() {
-    
+
     let generalDocs: Array<CommunityDocModel> = await this.communityBoardService.getDocs(
       this.startIndex
     );

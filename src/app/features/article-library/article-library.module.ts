@@ -10,4 +10,4 @@ import { SharedModule } from "src/app/shared/shared.module";
   declarations: [ArticleLibraryComponent, ResearchStatusComponent],
   imports: [CommonModule, ChartsModule, LibraryRoutingModule, SharedModule],
 })
-export class ArticleLibraryModule {}
+export class ArticleLibraryModule { }

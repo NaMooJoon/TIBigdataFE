@@ -13,7 +13,8 @@
         <button
           *ngFor="let cat of categories"
           id="topic"
-          (click)="selectCategory($event)">
+          (click)="selectCategory($event)"
+        >
           {{ cat }}
         </button>
       </div>
@@ -26,7 +27,8 @@
       <div class="selection-buttons">
         <button
           *ngFor="let cat of dict_orders_1"
-          (click)="selectCategory($event)">
+          (click)="selectCategory($event)"
+        >
           {{ cat }}
         </button>
       </div>
@@ -41,14 +43,16 @@
           *ngIf="institutionList !== undefined"
           [ngStyle]="selectedStyleObject(selectedInst === '전체')"
           id="inst"
-          (click)="selectCategory($event, null)">
+          (click)="selectCategory($event, null)"
+        >
           전체
         </button>
         <button
           *ngFor="let inst of institutionList"
           [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
           id="inst"
-          (click)="selectCategory($event, inst)">
+          (click)="selectCategory($event, inst)"
+        >
           {{ inst["key"] }} {{ inst["doc_count"] }}
         </button>
       </div>
