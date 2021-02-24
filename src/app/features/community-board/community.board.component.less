@@ -1,0 +1,49 @@
+.community-board-container {
+  grid-area: main;
+  display: grid;
+  align-content: stretch;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  grid-template-rows: min-content;
+  gap: 20px 20px;
+  grid-template-areas: ". . . body body body body body body body body body body body body";
+}
+
+.community-board{
+  grid-area: body;
+}
+
+*:not(h1>*){
+  font-size: 1.523rem;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+
+
+.community-nav>ul>li {
+  display: inline-block;
+  margin-right: 40px;
+}
+
+.nav-separator {
+  margin-top: 0;
+}
+
+.menu-info {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

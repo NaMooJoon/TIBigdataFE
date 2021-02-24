@@ -1,0 +1,14 @@
+.home-page-container {
+  grid-area: main;
+  display: grid;
+  align-content: stretch;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+  gap: 20px 20px;
+  grid-template-areas: ". . . . . . body body body body body body . . . ";
+  height: 100%;
+}
+
+app-search-bar {
+  grid-area: body;
+}
