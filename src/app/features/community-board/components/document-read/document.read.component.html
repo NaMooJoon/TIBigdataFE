@@ -1,0 +1,109 @@
+<div
+  *ngIf="(currentMenu === 'announcement' || currentMenu === 'faq') && isLoaded"
+>
+  <p class="doc-title">{{ doc["title"] }}</p>
+  <div class="doc-date-writer announcement">
+    <p class="doc-writer">작성자: {{ doc["userName"] }}</p>
+    <p class="doc-regDate">등록일: {{ doc["regDate"] }}</p>
+  </div>
+  <div class="doc-content-announce">
+    <p>{{ doc["content"] }}</p>
+  </div>
+</div>
+
+<div *ngIf="currentMenu === 'qna' && isLoaded" class="question-container">
+  <div class="doc-date-writer">
+    <p class="doc-writer">{{ doc["userName"] }}</p>
+    <p class="doc-regDate">{{ doc["regDate"] }}</p>
+  </div>
+  <div class="doc-content-question">
+    <p class="doc-title">{{ doc["title"] }}</p>
+    <p>{{ doc["content"] }}</p>
+  </div>
+</div>
+
+<div
+  *ngIf="currentMenu === 'qna' && !isReplyMode && isAnswered && isLoaded"
+  class="answer-container"
+>
+  <div class="doc-content-answer">
+    <p class="doc-title">{{ doc["reply"].title }}</p>
+    <p>{{ doc["reply"].content }}</p>
+  </div>
+  <div class="info-container">
+    <button
+      *ngIf="isAdmin && isReplyWriter"
+      class="button-reply"
+      (click)="changeReplyMode()"
+    >
+      수정
+    </button>
+    <button
+      *ngIf="isAdmin && isReplyWriter"
+      class="button-reply"
+      (click)="deleteReply()"
+    >
+      삭제
+    </button>
+    <div class="doc-date-writer">
+      <p class="doc-writer">{{ doc["reply"].userName }}</p>
+      <p class="doc-regDate">{{ doc["reply"].regDate }}</p>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="currentMenu === 'qna' && isReplyMode && isLoaded"
+  class="answer-container"
+>
+  <div class="doc-content-answer">
+    <form
+      [formGroup]="replyForm"
+      (ngSubmit)="registerReply()"
+      class="reply-form"
+    >
+      <div class="form-container">
+        <input
+          formControlName="title"
+          class="input-answer doc-title"
+          type="text"
+          placeholder="제목을 입력하세요"
+        />
+        <textarea
+          formControlName="content"
+          (keyup)="autoGrowTextZone($event)"
+          class="input-answer"
+          name=""
+          id=""
+          placeholder="답변 내용을 입력하세요"
+        ></textarea>
+      </div>
+      <div class="info-container">
+        <button class="button-reply" type="submit">등록</button>
+        <button class="button-reply" type="button" (click)="changeReplyMode()">
+          취소
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="buttons">
+  <button class="button-list" (click)="goToList()">목록</button>
+  <button
+    *ngIf="!isAnswered && isPostWriter"
+    class="button-mod"
+    (click)="navigateToModDoc()"
+  >
+    수정
+  </button>
+  <button *ngIf="isPostWriter" class="button-del" (click)="deleteDoc()">
+    삭제
+  </button>
+  <button
+    *ngIf="!isAnswered && isAdmin && currentMenu == 'qna'"
+    (click)="changeReplyMode()"
+  >
+    답변 등록
+  </button>
+</div>

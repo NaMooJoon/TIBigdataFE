@@ -1,0 +1,69 @@
+<form [formGroup]="form" novalidate>
+  <div class="upside">
+    <div class="upside2">
+      <label
+        ><input
+          class="article-checkbox toggle-all"
+          type="checkbox"
+          (change)="onCheckboxChange($event)"
+          value="toggleAll"
+        />전체선택
+      </label>
+    </div>
+    <div *ngIf="!isDocEmpty" class="upside3">
+      <button>선택삭제</button>
+      <button (click)="deleteAllMyDocs()">전체삭제</button>
+    </div>
+  </div>
+  <br />
+  <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+    <ul>
+      <li *ngFor="let doc of savedDocs; index as idx">
+        <input
+          class="article-checkbox"
+          type="checkbox"
+          [(checked)]="doc.isSelected"
+          name="selectDoc"
+          [value]="doc['id']"
+          (change)="onCheckboxChange($event)"
+        />
+        <!-- <input class="checkbox" type="checkbox" id="{{ idx }}" /> -->
+        <label>
+          <a (click)="openDocDetail(doc.id)">{{ doc["title"] }}</a>
+        </label>
+      </li>
+    </ul>
+  </section>
+</form>
+<div *ngIf="isSavedDocsLoaded" class="page-numbers">
+  <button
+    id="page-multiprev"
+    *ngIf="currentPage > 1"
+    (click)="loadSavedDocs(pageInfo.currentPage - 10)"
+  ></button>
+  <button
+    id="page-prev"
+    *ngIf="currentPage > 1"
+    (click)="loadSavedDocs(currentPage - 1)"
+  ></button>
+  <button
+    [ngStyle]="{
+      'background-color': currentPage == i ? '#52b9ff' : 'transparent',
+      color: currentPage == i ? 'white' : 'black'
+    }"
+    (click)="loadSavedDocs(i)"
+    *ngFor="let i of pages"
+  >
+    {{ i }}
+  </button>
+  <button
+    id="page-next"
+    *ngIf="currentPage < pageInfo.endPage"
+    (click)="loadSavedDocs(pageInfo.currentPage + 1)"
+  ></button>
+  <button
+    id="page-multinext"
+    *ngIf="currentPage != pageInfo.endPage"
+    (click)="loadSavedDocs(pageInfo.currentPage + 10)"
+  ></button>
+</div>

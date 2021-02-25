@@ -1,0 +1,42 @@
+@media all and (min-width: 1441px) {
+  .home-page-container {
+    grid-area: main;
+    display: grid;
+    align-content: stretch;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    gap: 20px 20px;
+    grid-template-areas: ". . . . . . body body body body body body . . . ";
+    height: 100%;
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .home-page-container {
+    grid-area: main;
+    display: grid;
+    align-content: stretch;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    gap: 20px 20px;
+    grid-template-areas: " . . . . . body body body body body body . . .  ";
+    height: 100%;
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .home-page-container {
+    grid-area: main;
+    display: grid;
+    align-content: stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    gap: 20px 20px;
+    grid-template-areas: " . . . . body body body body body body . . . ";
+    height: 100%;
+  }
+}
+
+app-search-bar {
+  grid-area: body;
+}

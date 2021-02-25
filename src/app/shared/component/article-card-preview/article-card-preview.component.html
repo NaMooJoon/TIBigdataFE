@@ -1,0 +1,10 @@
+<div *ngIf="article" class="article-info">
+  <a class="post-title" (click)="openDocDetail()"> {{ article.post_title }} </a>
+  <div class="post-preview">{{ article.post_body }}</div>
+  <div class="post-detail-container">
+    <span class="post-date"> {{ article.post_date }} </span>
+    <span class="post-writer"> {{ article.post_writer }} </span>
+    <span class="post-keywords"> 키워드 </span>
+    <span>{{ keywords[0] }}</span>
+  </div>
+</div>

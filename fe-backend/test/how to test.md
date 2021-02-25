@@ -10,7 +10,7 @@
         return new Promise(r => {
             comDoc.find({}).limit(DOC_NUMBERS).exec((err, res) => {
                 if (err)
-                    console.log("/loadFirstDocList failed");
+
                 else {
                     r(new Res(true, "/loadFirstDocList ok", res))
                 }
