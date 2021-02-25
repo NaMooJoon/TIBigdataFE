@@ -1,28 +1,81 @@
-aside {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 20px 20px;
-  grid-template-rows: min-content min-content;
-  grid-template-areas:
-    ". . . title title"
-    "outline outline outline outline outline";
+@media all and (min-width: 1441px) {
+  aside {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content min-content;
+    grid-template-areas:
+      ". . . title title"
+      "outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area: outline;
+    border: 1px solid #606060;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-left: none;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content;
+    grid-template-areas: ". . . menu menu";
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  aside {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content min-content;
+    grid-template-areas:
+      ". .  title title"
+      " outline outline outline outline";
+  }
+
+  .outline {
+    grid-area: outline;
+    border: 1px solid #606060;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-left: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content;
+    grid-template-areas: ". .  menu menu";
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  aside {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content min-content;
+    grid-template-areas:
+      ". title title"
+      " outline outline outline";
+  }
+
+  .outline {
+    grid-area: outline;
+    border: 1px solid #606060;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-left: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 20px;
+    grid-template-rows: min-content;
+    grid-template-areas: ".  menu menu";
+  }
 }
 
 h1 {
   grid-area: title;
-}
-
-.outline {
-  grid-area: outline;
-  border: 1px solid #606060;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-  border-left: none;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 20px 20px;
-  grid-template-rows: min-content;
-  grid-template-areas: ". . . menu menu";
+  text-align: center;
 }
 
 ul {
@@ -31,8 +84,8 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: fit-content;
-  margin: 20px;
+  width: 100%;
+  margin: 20px 20px 20px 0;
   padding: 0;
 }
 

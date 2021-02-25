@@ -340,10 +340,14 @@ export class ElasticsearchService {
     });
   }
 
-  isAvailable(): any {
-    return this.client.ping({
-      requestTimeout: Infinity,
-      body: "ElasticSearch Works!",
-    });
+  async isAvailable(): Promise<boolean> {
+    try {
+      return await this.client.ping({
+        requestTimeout: 3000,
+        body: "ElasticSearch Works!",
+      });
+    } catch (error) {
+      return false;
+    }
   }
 }

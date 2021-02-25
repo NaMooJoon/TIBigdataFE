@@ -1,12 +1,39 @@
-.userpage-container {
-    grid-area            : main;
-    display              : grid;
-    align-content        : stretch;
-    grid-template-columns: repeat(15, minmax(0, 1fr));
-    grid-template-rows   : min-content;
-    gap                  : 20px 20px;
-    grid-template-areas  : "menu menu menu menu menu body body body body body body body body body body ";
+@media all and (min-width: 1441px) {
+    .userpage-container {
+        grid-area            : main;
+        display              : grid;
+        align-content        : stretch;
+        grid-template-columns: repeat(15, minmax(0, 1fr));
+        grid-template-rows   : min-content;
+        gap                  : 20px 20px;
+        grid-template-areas  : "menu menu menu menu menu body body body body body body body body body body ";
+    }
 }
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+    .userpage-container {
+        grid-area            : main;
+        display              : grid;
+        align-content        : stretch;
+        grid-template-columns: repeat(14, minmax(0, 1fr));
+        grid-template-rows   : min-content;
+        gap                  : 20px 20px;
+        grid-template-areas  : "menu menu menu menu  body body body body body body body body body body ";
+    }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+    .userpage-container {
+        grid-area            : main;
+        display              : grid;
+        align-content        : stretch;
+        grid-template-columns: repeat(13, minmax(0, 1fr));
+        grid-template-rows   : min-content;
+        gap                  : 20px 20px;
+        grid-template-areas  : "menu menu menu body body body body body body body body body body";
+    }
+}
+
 
 .side-bar {
     grid-area: menu;

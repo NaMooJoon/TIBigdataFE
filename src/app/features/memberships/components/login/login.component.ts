@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
   async signIn() {
     let isSuccess = await this.authService.signIn();
     if (isSuccess) {
-      window.alert("환영합니다 :)");
       this.router.navigateByUrl("/");
     } else {
       window.alert("가입되지 않은 회원입니다. 가입 후 이용해주세요 :)");

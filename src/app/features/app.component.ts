@@ -40,7 +40,7 @@ export class AppComponent {
 
   async ngOnInit(): Promise<void> {
     this.isBackendAvailable = await this.elasticsearchSearvice.isAvailable();
-
+    // this.isBackendAvailable = true;
     if (localStorage.getItem("KUBIC_TOKEN") != null) {
       let isSuccess = await this.authenticationService.verifySignIn();
       if (!isSuccess) {

@@ -1,16 +1,179 @@
-.article-analysis-container {
-  grid-area            : main;
-  display              : grid;
-  align-content        : stretch;
-  grid-template-columns: repeat(18, minmax(0, 1fr));
-  grid-template-rows   : min-content;
-  gap                  : 20px 20px;
-  grid-template-areas  : "menu menu menu menu menu menu menu body body body body body body body body body body body";
-  width                : 100vw;
+@media all and (min-width: 1441px) {
+  .article-analysis-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : "menu menu menu menu menu menu menu body body body body body body body body body body body";
+    width                : 100vw;
+  }
+
+  .article-analysis {
+    grid-area            : body;
+    display              : grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows   : repeat(2, minmax(0, 1fr));
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      "select select select select select select select select select select select"
+      "result result result result result result result result result result result";
+  }
+
+  .select-outline {
+    grid-area            : select;
+    display              : grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows   : auto;
+    gap                  : 20px 20px;
+    grid-template-areas  : "options options options options options options options options . . . ";
+  }
+
+  aside {
+    grid-area            : menu;
+    display              : grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows   : minmax(0, min-content) 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      ". . . title title title title"
+      "outline outline outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area                 : outline;
+    display                   : grid;
+    grid-template-columns     : repeat(7, minmax(0, 1fr));
+    grid-template-rows        : auto;
+    gap                       : 20px 20px;
+    grid-template-areas       : ". . . list list list list";
+    border                    : 1px solid #606060;
+    border-left               : none;
+    border-top-right-radius   : 50px;
+    border-bottom-right-radius: 50px;
+    padding                   : 20px
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .article-analysis-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(16, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " menu menu menu menu menu menu body body body body body body body body body body ";
+    width                : 100vw;
+  }
+
+  .article-analysis {
+    grid-area            : body;
+    display              : grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows   : repeat(2, minmax(0, 1fr));
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      " select select select select select select select select select "
+      " result result result result result result result result result ";
+  }
+
+  .select-outline {
+    grid-area            : select;
+    display              : grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows   : auto;
+    gap                  : 20px 20px;
+    grid-template-areas  : " options options options options options options options . .  ";
+  }
+
+  aside {
+    grid-area            : menu;
+    display              : grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows   : minmax(0, min-content) 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      ". . title title title title"
+      "outline outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area                 : outline;
+    display                   : grid;
+    grid-template-columns     : repeat(6, minmax(0, 1fr));
+    grid-template-rows        : auto;
+    gap                       : 20px 20px;
+    grid-template-areas       : ". .  list list list list";
+    border                    : 1px solid #606060;
+    border-left               : none;
+    border-top-right-radius   : 50px;
+    border-bottom-right-radius: 50px;
+    padding                   : 20px
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .article-analysis-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " menu menu menu menu menu body body body body body body body body body ";
+    width                : 100vw;
+  }
+
+  .article-analysis {
+    grid-area            : body;
+    display              : grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows   : repeat(2, minmax(0, 1fr));
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      "select select select select select select select "
+      "result result result result result result result ";
+  }
+
+  .select-outline {
+    grid-area            : select;
+    display              : grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows   : auto;
+    gap                  : 20px 20px;
+    grid-template-areas  : " options options options options options options .  ";
+  }
+
+  aside {
+    grid-area            : menu;
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : minmax(0, min-content) 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  :
+      ".  title title title title"
+      " outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area                 : outline;
+    display                   : grid;
+    grid-template-columns     : repeat(5, minmax(0, 1fr));
+    grid-template-rows        : auto;
+    gap                       : 20px 20px;
+    grid-template-areas       : ". list list list list";
+    border                    : 1px solid #606060;
+    border-left               : none;
+    border-top-right-radius   : 50px;
+    border-bottom-right-radius: 50px;
+    padding                   : 20px
+  }
 }
 
 * {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 h1 {
@@ -21,58 +184,17 @@ ul {
   padding: 0;
 }
 
-aside {
-  grid-area            : menu;
-  display              : grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  grid-template-rows   : minmax(0, min-content) 1fr;
-  gap                  : 20px 20px;
-  grid-template-areas  :
-    ". . . title title title title"
-    "outline outline outline outline outline outline outline";
-}
+
 
 .title {
   grid-area: title;
 }
 
-.outline {
-  grid-area                 : outline;
-  display                   : grid;
-  grid-template-columns     : repeat(7, minmax(0, 1fr));
-  grid-template-rows        : auto;
-  gap                       : 20px 20px;
-  grid-template-areas       : ". . . list list list list";
-  border                    : 1px solid #606060;
-  border-left               : none;
-  border-top-right-radius   : 50px;
-  border-bottom-right-radius: 50px;
-  padding                   : 20px
-}
 
 .saved-document-list {
   grid-area: list;
 }
 
-.article-analysis {
-  grid-area            : body;
-  display              : grid;
-  grid-template-columns: repeat(11, minmax(0, 1fr));
-  grid-template-rows   : repeat(2, minmax(0, 1fr));
-  gap                  : 20px 20px;
-  grid-template-areas  :
-    "select select select select select select select select select select select"
-    "result result result result result result result result result result result";
-}
-
-.select-outline {
-  grid-area            : select;
-  display              : grid;
-  grid-template-columns: repeat(11, minmax(0, 1fr));
-  grid-template-rows   : auto;
-  gap                  : 20px 20px;
-  grid-template-areas  : "options options options options options options options options . . . ";
-}
 
 .result-outline {
   grid-area: result;
@@ -115,8 +237,8 @@ aside {
 
 .select-analysis-graph {
   width        : fit-content;
-  flex-basis   : 32rem;
-  margin-bottom: 20px;
+  flex-basis   : 20em;
+  margin-bottom: 10px;
 }
 
 .select-analysis-form {
@@ -130,27 +252,25 @@ aside {
   width          : 100%;
   flex-wrap      : wrap;
   justify-content: flex-start;
-  align-items    : flex-end;
 }
 
 .select-analysis-type {
   display        : flex;
   flex-direction : column;
   justify-content: center;
-  margin-right   : 20px;
-  margin-bottom  : 20px;
+  margin-right   : 10px;
+  margin-bottom  : 10px;
 }
 
 .select-analysis-data-num {
-  margin-bottom: 20px;
-  margin-right : 2rem;
+  margin-bottom: 10px;
 }
 
 .select-analysis-data-num>select,
 div>input {
   width           : 9em;
   height          : 2.5em;
-  margin          : 10px 20px 10px 0px;
+  margin          : 10px 10px 10px 0px;
   background-color: white;
   border-radius   : 25px;
   border          : 1px solid #606060;
@@ -200,7 +320,9 @@ div>input {
 }
 
 .submit-container {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  display      : flex;
+  align-items  : flex-end;
 }
 
 .submit-container>input {

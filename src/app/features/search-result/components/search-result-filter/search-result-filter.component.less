@@ -1,27 +1,84 @@
-.filter-container {
-  display              : grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-template-rows   : max-content min-content;
-  gap                  : 20px 20px;
-  height               : 100%;
-  grid-template-areas  :
-    ". . . analysis analysis analysis"
-    "outline outline outline outline outline outline";
+@media all and (min-width: 1441px) {
+  .filter-container {
+    display              : grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows   : max-content min-content;
+    gap                  : 20px 20px;
+    height               : 100%;
+    grid-template-areas  :
+      ". . . analysis analysis analysis"
+      "outline outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area            : outline;
+    display              : grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    height               : 100%;
+    grid-template-areas  : " . . . filter filter filter";
+    border               : 1px solid #3d3d3d;
+    gap                  : 20px 20px;
+    border-radius        : 0 100px 100px 0;
+    border-left          : none;
+    padding-right        : 20px;
+  }
 }
 
-.outline {
-  grid-area            : outline;
-  display              : grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-template-rows   : min-content;
-  height               : 100%;
-  grid-template-areas  : ". . . filter filter filter";
-  border               : 1px solid #3d3d3d;
-  gap                  : 20px 20px;
-  border-radius        : 0 100px 100px 0;
-  border-left          : none;
-  padding-right        : 20px;
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .filter-container {
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : max-content min-content;
+    gap                  : 20px 20px;
+    height               : 100%;
+    grid-template-areas  :
+      " . . analysis analysis analysis "
+      " outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area            : outline;
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    height               : 100%;
+    grid-template-areas  : " . . filter filter filter";
+    border               : 1px solid #3d3d3d;
+    gap                  : 20px 20px;
+    border-radius        : 0 100px 100px 0;
+    border-left          : none;
+    padding-right        : 20px;
+  }
 }
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .filter-container {
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : max-content min-content;
+    gap                  : 20px 20px;
+    height               : 100%;
+    grid-template-areas  :
+      " . . analysis analysis analysis "
+      " outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area            : outline;
+    display              : grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    height               : 100%;
+    grid-template-areas  : " .  filter filter filter";
+    border               : 1px solid #3d3d3d;
+    gap                  : 20px 20px;
+    border-radius        : 0 100px 100px 0;
+    border-left          : none;
+    padding-right        : 20px;
+  }
+}
+
 
 .filter {
   grid-area: filter;

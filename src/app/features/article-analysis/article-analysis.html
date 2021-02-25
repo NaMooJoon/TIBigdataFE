@@ -56,7 +56,7 @@
         <form class="select-analysis-form">
           <div class="select-analysis-up-menu">
             <div class="select-analysis-type">
-              <h2>원하는 분석 선택</h2>
+              <h3>원하는 분석 선택</h3>
               <input
                 [ngStyle]="selectedStyleObject(selectedAnalysisType === 0, 0)"
                 (click)="setAnalysisType(0)"
@@ -75,7 +75,7 @@
               />
             </div>
             <div class="select-analysis-graph">
-              <h2>원하는 그래프 선택</h2>
+              <h3>원하는 그래프 선택</h3>
               <input
                 [ngStyle]="selectedStyleObject(selectedChartType === 0, 2)"
                 (click)="setChartType(0)"
@@ -112,7 +112,7 @@
           </div>
           <div class="select-analysis-down-menu">
             <div class="select-analysis-data-num">
-              <h2>출력할 데이터의 숫자</h2>
+              <h3>출력할 데이터의 숫자</h3>
               <select
                 [ngStyle]="selectedStyleObject(selectedDataNum !== 0)"
                 (change)="setSelectedDataNum($event.target.value)"

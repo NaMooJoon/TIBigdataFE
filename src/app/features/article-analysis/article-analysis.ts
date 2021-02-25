@@ -4,6 +4,7 @@ import { PaginationModel } from "src/app/core/models/pagination.model";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { ChartOption } from "src/app/core/enums/chart-option";
 import { AnalysisOption } from "src/app/core/enums/analysis-option";
+import { NONE_TYPE } from "@angular/compiler";
 
 const keywordIconUrl: string = "../../../assets/icons/keyword-analysis";
 const relatedIconUrl: string = "../../../assets/icons/related-doc";
@@ -78,7 +79,17 @@ export class ArticleAnalysisComponent implements OnInit {
   }
 
   selectedStyleObject(flag: boolean, backgroundIdx: number): Object {
-    if (flag) {
+    if (backgroundIdx == null && flag) return {
+      "color": "white",
+      "background-color": "#0FBAFF",
+      "border": "none",
+      "font-weight": "700",
+    }
+    else if (backgroundIdx == null && !flag) return {
+      "color": "black",
+      "background-color": "white",
+    }
+    else if (flag) {
       return {
         "color": "white",
         "background-color": "#0FBAFF",

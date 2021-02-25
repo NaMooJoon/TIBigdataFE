@@ -9,7 +9,7 @@
     required
   />
   <div class="options">
-    <div *ngIf="selectedBoard == 0" class="announce-checkbox">
+    <div *ngIf="selectedBoard === 'announcement'" class="announce-checkbox">
       <input
         type="checkbox"
         formControlName="isMainAnnounce"
@@ -19,7 +19,7 @@
       />
       <label class="is-main-checkbox" for="isMain"> 상단 공지 노출</label>
     </div>
-    <div *ngIf="selectedBoard == 2" class="faq-radios">
+    <div *ngIf="selectedBoard === 'faq'" class="faq-radios">
       <input
         formControlName="category"
         type="radio"

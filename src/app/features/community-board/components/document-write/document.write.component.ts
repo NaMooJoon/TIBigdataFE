@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { CommunityBoardService } from "../../services/community-board-service/community.board.service";
 import { CommunityDocModel } from "src/app/features/community-board/models/community.doc.model";
@@ -23,6 +23,12 @@ export class DocumentWriteComponent {
     this.auth.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;
     });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.selectedBoard = this.communityBoardService.getCurrentMenu();
+      }
+    })
   }
   private boardForm: FormGroup;
   private isMainAnnounce = false;
@@ -34,9 +40,6 @@ export class DocumentWriteComponent {
       window.alert("비정상적인 접근입니다. 공지사항 페이지로 이동합니다.");
       this.router.navigateByUrl("/community/announcement");
     }
-
-    this.selectedBoard = this.communityBoardService.getCurrentMenu();
-
     this.boardForm = new FormGroup({
       title: new FormControl("", Validators.required),
       content: new FormControl("", Validators.required),
