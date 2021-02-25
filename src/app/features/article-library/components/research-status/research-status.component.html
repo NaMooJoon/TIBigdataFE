@@ -1,0 +1,19 @@
+<div class="research-status-container">
+  <section class="research-status">
+    <div class="header">
+      <h1>통일 연구 동향 그래프</h1>
+      <button class="save-graph-button">담기</button>
+    </div>
+    <section *ngIf="isChartLoaded" class="chart-wrapper">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [labels]="chartLabels"
+        [chartType]="chartType"
+        [options]="chartOptions"
+        [plugins]="chartPlugins"
+        [legend]="chartLegend">
+      </canvas>
+    </section>
+  </section>
+</div>

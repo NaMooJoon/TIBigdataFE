@@ -40,3 +40,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+src/app/ip.service.ts
+src/app/core/services/ip-service/ip.service.ts

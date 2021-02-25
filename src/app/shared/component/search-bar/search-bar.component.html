@@ -1,0 +1,106 @@
+<section class="search-bar-container">
+  <img
+    (click)="gotoMain()"
+    *ngIf="!isMain"
+    src="../../../../assets/logos/logo_sub.png"
+    alt="kubic_logo"
+    class="logo-img"
+  />
+  <img
+    (click)="gotoMain()"
+    *ngIf="isMain"
+    src="../../../../assets/logos/logo_main.png"
+    alt="main_logo"
+    width="200px"
+    class="logo-img"
+  />
+
+  <input
+    class="search-bar"
+    type="text"
+    (keyup)="updateKeyword($event)"
+    (keyup.enter)="search()"
+    value="{{ searchKeyword }}"
+  />
+  <div class="search-filter-container">
+    <div class="reset-filter">
+      <span>검색조건</span>
+      <img
+        (click)="resetFilters()"
+        class="reset-btn"
+        src="../../../../assets/icons/reset-filter.png"
+        alt="filter-reset"
+      />
+    </div>
+    <button [ngStyle]="selectedStyleObject(isDateSelected)" type="button">
+      {{ selectedDate }}
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li *ngFor="let date of dateList">
+          <a (click)="updateDate(date)">{{ date }}</a>
+        </li>
+        <li class="direct-date">
+          <span> 직접입력 </span>
+          <input type="date" id="start-date" name="start-date" class="date" />
+          <input type="date" id="end-date" name="end-date" class="date" />
+        </li>
+      </ul>
+    </div>
+
+    <button type="button">기관별</button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li><a href="#">국회 외교통일위원회</a></li>
+        <li><a href="#">남북사회통합연구원</a></li>
+        <li><a href="#">남북교류협력지원협회</a></li>
+        <li><a href="#">남북물류포럼</a></li>
+      </ul>
+    </div>
+
+    <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">
+      {{ selectedTopic }}
+    </button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li *ngFor="let topic of topicList">
+          <a (click)="updateTopic(topic)">{{ topic }}</a>
+        </li>
+      </ul>
+    </div>
+    <!-- 
+    <button type="button">상세검색</button>
+    <div uk-dropdown="pos: bottom-justify">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li class="uk-active"><a href="#">Active</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-header">Header</li>
+        <li><a href="#">Item</a></li>
+        <li><a href="#">Item</a></li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="#">Item</a></li>
+      </ul>
+    </div> -->
+    <div class="search-helper">
+      <span>검색도움말</span>
+      <img
+        (click)="resetFilters()"
+        class="reset-btn"
+        src="../../../../assets/icons/help-gray.png"
+        alt="filter-reset"
+      />
+    </div>
+  </div>
+
+  <div
+    *ngIf="isKeyLoaded && relatedKeywords.length != 0"
+    class="related-keywords-container"
+  >
+    <p>연관검색어</p>
+    <ul class="keyword-list">
+      <li *ngFor="let keyword of relatedKeywords">
+        <a (click)="relatedSearch(keyword)">{{ keyword }}</a>
+      </li>
+    </ul>
+  </div>
+</section>

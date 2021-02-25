@@ -1,0 +1,238 @@
+@media all and (min-width: 1441px) {
+  .read-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : ". . . body body body body body body body body body body body body";
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .read-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : ". . body body body body body body body body body body body body";
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .read-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " . body body body body body body body body body body body body";
+  }
+}
+
+
+
+* {
+  font-size: 1.938rem;
+}
+
+.section-title {
+  margin     : 1rem 1rem 2em 1rem;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ul,
+li {
+  margin : 0;
+  padding: 0;
+}
+
+hr {
+  margin          : 10px 0px;
+  background-color: #3d3d3d;
+}
+
+.read-body {
+  grid-area: body;
+}
+
+.location {
+  text-align  : right;
+  margin-right: 15%;
+  font-size   : 15px;
+}
+
+.article-header {
+  display        : flex;
+  align-items    : flex-end;
+  justify-content: space-between;
+}
+
+.header-title {
+  font-size  : 2.5rem;
+  font-weight: 600;
+  margin     : 0;
+}
+
+.header-writer {
+  font-weight: 400;
+  margin     : 0;
+}
+
+.inst-url-container {
+  display        : flex;
+  justify-content: flex-end;
+}
+
+.inst-url {
+  color: gray;
+}
+
+.article-info {
+  margin-bottom: 100px;
+}
+
+.info {
+  margin-bottom: 0.3rem;
+  display      : flex;
+  width        : 100%;
+  flex-flow    : nowrap;
+}
+
+.info-title {
+  margin-right    : 1em;
+  width           : 10em;
+  text-align      : center;
+  background-color: #e4e4e4;
+  padding         : 0.5rem 0;
+}
+
+.info-content {
+  display    : flex;
+  align-items: center;
+  width      : 100%;
+  overflow   : hidden;
+}
+
+.info-content a {
+  white-space  : nowrap;
+  overflow     : hidden;
+  text-overflow: ellipsis;
+}
+
+.article-content-subtitle {
+  color        : gray;
+  margin-left  : 0.5em;
+  margin-bottom: 0.5em;
+  margin-top   : 2em;
+}
+
+.detail-body {
+  margin: 20px 4em;
+}
+
+.empty-data {
+  text-align: center;
+}
+
+.wordcloud {
+  display        : flex;
+  justify-content: center;
+  border         : 0.5px solid lightgray;
+  border-radius  : 15px;
+  padding        : 50px;
+}
+
+/* font sizes */
+::ng-deep angular-tag-cloud.custom-css span.w10 {
+  font-size: 380%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w9 {
+  font-size: 330%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w8 {
+  font-size: 280%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w7 {
+  font-size: 240%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w6 {
+  font-size: 210%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w5 {
+  font-size: 180%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w4 {
+  font-size: 160%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w3 {
+  font-size: 140%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w2 {
+  font-size: 120%;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w1 {
+  font-size: 100%;
+}
+
+::ng-deep angular-tag-cloud.custom-css .tooltiptext {
+  font-size: 12px;
+}
+
+/* colors */
+angular-tag-cloud span.w10 {
+  color: #1679ed;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w9 {
+  color: #fff;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w8 {
+  color: rgb(255, 0, 195);
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w7 {
+  color: rgb(36, 154, 116);
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w6 {
+  color: #e8f090;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w5 {
+  color: #c3dd90;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w4 {
+  color: #f09090;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w3 {
+  color: #f2ea10;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w2 {
+  color: #ee99e7;
+}
+
+::ng-deep angular-tag-cloud.custom-css span.w1 {
+  color: #18cb42;
+}

@@ -1,0 +1,57 @@
+.footer-contents {
+  display        : flex;
+  justify-content: space-between;
+  align-items    : flex-start;
+  margin         : 20px 0px;
+}
+
+.handong-logo {
+  display    : flex;
+  align-items: center;
+  width      : 10rem;
+  height     : 100%;
+  margin     : 0 10px;
+}
+
+.policy {
+  display        : flex;
+  justify-content: center;
+  align-content  : center;
+  font-weight    : 500;
+  font-size      : 1rem;
+  margin         : 0 2rem;
+}
+
+ul li {
+  display   : inline;
+  list-style: none;
+}
+
+ul li:nth-child(n + 2)::before {
+  content: " | ";
+  margin : 0px 5px;
+  color  : darkgray;
+}
+
+.contact {
+  display        : flex;
+  flex-direction : column;
+  justify-content: flex-start;
+  align-items    : flex-end;
+  font-size      : 1rem;
+  font-weight    : 300;
+}
+
+.contact-info {
+  margin: 0px;
+}
+
+a {
+  text-decoration: none;
+  color          : black;
+}
+
+ul {
+  padding: 0px;
+  margin : 0px;
+}

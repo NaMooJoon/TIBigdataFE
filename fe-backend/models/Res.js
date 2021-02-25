@@ -1,10 +1,9 @@
-class Res {
-    //there is no type restriction in typescript.
-    constructor(succ, msg, payload) {
-        this.succ = succ;//try to be booelan //request success or fail!
-        this.msg = msg;//try to be string
-        this.payload = payload;//try to be object
-    }
+class QueryResponse {
+  constructor(isSuccess, responseMessage, payload) {
+    this.isSuccess = isSuccess;
+    this.responseMessage = responseMessage;
+    this.payload = payload;
+  }
 }
 
-module.exports = Res;
+module.exports = QueryResponse;

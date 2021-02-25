@@ -1,1 +1,0 @@
-홈 화면에 wordrank 대신에 들어갈 textrank에 사용되는 데이터 파일. textrank사용 중단 시 필요 없다.

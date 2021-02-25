@@ -1,0 +1,90 @@
+*:focus {
+  outline: none;
+}
+
+@media all and (min-width: 1441px) {
+  .register-ok-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : ". . . body body body body body body body body body body body body";
+
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .register-ok-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " . . body body body body body body body body body body body body";
+
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .register-ok-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " . body body body body body body body body body body body body";
+
+  }
+}
+
+
+.register-ok {
+  grid-area      : body;
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  align-items    : center;
+}
+
+span {
+  font-size  : 2rem;
+  font-weight: 300;
+}
+
+.message-box {
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  align-items    : center;
+  padding        : 0px 15px;
+}
+
+.message-box>.buttons {
+  display: flex;
+
+}
+
+.message-box>.buttons>button {
+  margin-top   : 2rem;
+  width        : 10rem;
+  border       : none;
+  border-radius: 25px;
+  height       : 35px;
+  font-weight  : bold;
+  color        : white;
+  font-size    : 1.5rem;
+  background   : #0FBAFF;
+  margin-right : 1rem;
+}
+
+.message-box>.buttons>button:not(:last-child) {
+  font-size: 1.5rem;
+}
+
+.message-box>.buttons>button:last-child {
+  background: #de5246;
+}

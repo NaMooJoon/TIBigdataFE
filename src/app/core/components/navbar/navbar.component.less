@@ -1,0 +1,94 @@
+nav {
+  display        : flex;
+  justify-content: space-between;
+  width          : 100%;
+  align-items    : flex-end;
+  margin-top     : 1rem;
+}
+
+:hover,
+:active {
+  text-decoration: none;
+}
+
+ul {
+  margin : 0;
+  padding: 0;
+}
+
+.common-menu li:first {
+  margin-left : 0px;
+  padding-left: 0px;
+}
+
+.common-menu,
+.login-menu,
+.user-menu {
+  font-weight: 500;
+  display    : flex;
+  margin     : 0px;
+  align-items: center;
+}
+
+.common-menu>li,
+.login-menu>li,
+.user-menu>li {
+  border       : 2px solid transparent;
+  padding      : 0.2em 0.6em;
+  border-radius: 2em;
+}
+
+.common-menu>li:hover,
+.login-menu>li:hover,
+.user-menu>li:hover {
+  border: 2px solid #3db2e9;
+}
+
+.common-menu>li:not(:last-child),
+.login-menu>li:not(:last-child),
+.user-menu>li:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.community-menu {
+  font-weight: 500;
+  display    : flex;
+  margin     : 0px;
+  padding    : 0px;
+  align-items: flex-end;
+}
+
+.dropdown-container {
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+}
+
+.community-dropdown-menu {
+  display: none;
+}
+
+.about-dropdown-menu {
+  display: none;
+}
+
+div>ul>li {
+  text-align: center;
+  margin-top: 0.2rem;
+}
+
+div>ul>li>a {
+  color      : gray;
+  font-weight: 300;
+  margin     : 0px;
+  padding    : 0px;
+}
+
+.about-menu:hover .about-dropdown-menu,
+.community-menu:hover .community-dropdown-menu {
+  display    : block;
+  position   : absolute;
+  padding    : 0px;
+  padding-top: 3rem;
+  z-index    : 1;
+}
