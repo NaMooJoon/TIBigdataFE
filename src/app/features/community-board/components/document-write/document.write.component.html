@@ -1,0 +1,75 @@
+<h3>글쓰기</h3>
+<hr />
+<form (ngSubmit)="saveNewDocument()" class="inputs" [formGroup]="boardForm">
+  <input
+    class="title"
+    formControlName="title"
+    type="text"
+    placeholder="제목을 입력하세요."
+    required
+  />
+  <div class="options">
+    <div *ngIf="selectedBoard === 'announcement'" class="announce-checkbox">
+      <input
+        type="checkbox"
+        formControlName="isMainAnnounce"
+        [checked]="onCheckboxChange()"
+        name="isMain"
+        id="isMain"
+      />
+      <label class="is-main-checkbox" for="isMain"> 상단 공지 노출</label>
+    </div>
+    <div *ngIf="selectedBoard === 'faq'" class="faq-radios">
+      <input
+        formControlName="category"
+        type="radio"
+        name="category"
+        id="error"
+        value="오류보고"
+        checked
+      />
+      <label class="category-radio" for="error">오류보고</label>
+      <input
+        formControlName="category"
+        type="radio"
+        name="category"
+        id="data"
+        value="데이터"
+      />
+      <label class="category-radio" for="data"> 데이터</label>
+      <input
+        formControlName="category"
+        type="radio"
+        name="category"
+        id="membership"
+        value="회원관련"
+      />
+      <label class="category-radio" for="membership">회원관련</label>
+      <input
+        formControlName="category"
+        type="radio"
+        name="category"
+        id="etc"
+        value="기타"
+      />
+      <label class="category-radio" for="etc">기타</label>
+    </div>
+  </div>
+
+  <textarea
+    formControlName="content"
+    class="content"
+    placeholder="제목과 내용에 개인정보(이메일, 전화번호, 주민번호, 주소 등)가 포함되면 자동으로 해당 정보는 삭제됩니다."
+    required
+  ></textarea>
+
+  <div class="buttons">
+    <button type="button" class="button-list" (click)="gotoList()">취소</button>
+    <input
+      type="submit"
+      class="button-write"
+      [disabled]="boardForm.invalid"
+      value="작성"
+    />
+  </div>
+</form>

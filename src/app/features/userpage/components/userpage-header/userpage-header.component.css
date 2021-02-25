@@ -1,0 +1,32 @@
+.where {
+  display: flex;
+  flex-direction: row;
+  padding-left: 40px;
+  justify-content: space-between;
+}
+
+.folder-menu {
+  display: flex;
+}
+
+.button1,
+.button2 {
+  background-image: url("../../../../../assets/icons/folder-add-new.png");
+  margin-right: 10px;
+  background-color: #52b9ff;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  width: 7.5em;
+  height: 2em;
+  background-repeat: no-repeat;
+  background-position: left 0.9em center;
+  background-size: 1.2em;
+  padding: 0px 0px 0px 1.5em;
+  font-size: 1.5rem;
+}
+
+.button2 {
+  background-image: url("../../../../../assets/icons/folder-modify.png");
+  background-position: left 1.3em center;
+}

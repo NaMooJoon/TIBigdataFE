@@ -1,0 +1,51 @@
+a {
+  display: inline-block;
+}
+
+.article-info {
+  display       : flex;
+  flex-direction: column;
+}
+
+.article-info>* {
+  margin-bottom: 10px;
+}
+
+.post-preview {
+  text-overflow: ellipsis;
+  overflow     : hidden;
+  font-size    : 1.5rem;
+}
+
+.post-title {
+  white-space: normal;
+  font-size  : 2.5rem;
+  font-weight: 500;
+}
+
+.post-detail-container {
+  display        : flex;
+  justify-content: flex-end;
+  width          : 100%;
+  flex-wrap      : wrap;
+  font-size      : 1.5rem;
+}
+
+.post-keywords {
+  font-weight: 500;
+}
+
+.post-date::after {
+  content    : " | ";
+  white-space: pre;
+}
+
+.post-writer::after {
+  content    : "  ";
+  white-space: pre;
+}
+
+.post-keywords::after {
+  content    : " ";
+  white-space: pre;
+}
