@@ -11,6 +11,11 @@ import { CommunityDocModel } from "src/app/features/community-board/models/commu
   styleUrls: ["document.modify.component.css"],
 })
 export class DocumentModifyComponent implements OnInit {
+
+  private _selectedBoard: string;
+  private _boardForm: FormGroup;
+  private _selectedDoc: CommunityDocModel;
+
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
@@ -23,10 +28,6 @@ export class DocumentModifyComponent implements OnInit {
       isMainAnnounce: new FormControl(""),
     });
   }
-
-  private selectedBoard: string;
-  private boardForm: FormGroup;
-  private selectedDoc: CommunityDocModel;
 
   ngOnInit() {
     this.loadDoc();
@@ -112,5 +113,25 @@ export class DocumentModifyComponent implements OnInit {
       return this.generateFaqQueryBody();
     if (this.communityBoardService.getCurrentMenu() == "qna")
       return this.generateQnaQueryBody();
+  }
+
+  // getters and setters
+  public get selectedBoard(): string {
+    return this._selectedBoard;
+  }
+  public set selectedBoard(value: string) {
+    this._selectedBoard = value;
+  }
+  public get boardForm(): FormGroup {
+    return this._boardForm;
+  }
+  public set boardForm(value: FormGroup) {
+    this._boardForm = value;
+  }
+  public get selectedDoc(): CommunityDocModel {
+    return this._selectedDoc;
+  }
+  public set selectedDoc(value: CommunityDocModel) {
+    this._selectedDoc = value;
   }
 }

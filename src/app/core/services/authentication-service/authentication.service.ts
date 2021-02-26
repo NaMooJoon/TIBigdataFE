@@ -9,12 +9,13 @@ import {
   GoogleLoginProvider,
   SocialUser,
 } from "angularx-social-login";
+import { IpService } from "../ip-service/ip.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthenticationService {
-  private API_URL: string = "http://localhost:14000";
+  private API_URL: string = this.ipService.getFrontDBServerIp();
   private headers = new HttpHeaders().set("Content-Type", "application/json");
   private currentUserChange$: BehaviorSubject<UserProfile> = new BehaviorSubject(
     null
@@ -28,6 +29,7 @@ export class AuthenticationService {
   constructor(
     private httpClient: HttpClient,
     public router: Router,
+    private ipService: IpService,
     private socialAuthService: SocialAuthService
   ) {
     this.currentUserChange$.subscribe((currentUser: UserProfile) => {

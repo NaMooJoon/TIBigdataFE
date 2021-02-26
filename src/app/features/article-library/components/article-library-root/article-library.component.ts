@@ -4,7 +4,6 @@ import { AnalysisDatabaseService } from "src/app/core/services/analysis-database
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 
 @Component({
   selector: "app-category-library",
@@ -16,14 +15,16 @@ export class ArticleLibraryComponent implements OnInit {
     private analysisDatabaseService: AnalysisDatabaseService,
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
-    private paginationService: PaginationService,
     public _router: Router
-  ) {}
+  ) { }
 
-  private data: any;
-  private toggleTopics: boolean[];
-
-  private categories: string[] = [
+  private _toggleTopics: boolean[];
+  private _institutionList: string[];
+  private _selectedInst: string;
+  private _all: string = "ALL"; //전체 선택했을 경우
+  private _cat_choice_init = [this.all, this.all, this.all]; //주제, 사전편찬순, 기관순 3가지 종류
+  private _cat_button_choice: string[] = this.cat_choice_init;
+  private _categories: string[] = [
     "전체",
     "정치",
     "경제",
@@ -34,7 +35,7 @@ export class ArticleLibraryComponent implements OnInit {
     "문화",
     "과학",
   ];
-  private dict_orders_1: string[] = [
+  private _dict_orders_1: string[] = [
     "전체",
     "가",
     "나",
@@ -51,12 +52,7 @@ export class ArticleLibraryComponent implements OnInit {
     "파",
     "하",
   ];
-  private institutionList: string[];
-  private selectedInst: string;
 
-  private ALL: string = "ALL"; //전체 선택했을 경우
-  private cat_choice_init = [this.ALL, this.ALL, this.ALL]; //주제, 사전편찬순, 기관순 3가지 종류
-  cat_button_choice: string[] = this.cat_choice_init;
 
   ngOnInit() {
     this.elasticsearchService.setSearchMode(SearchMode.ALL);
@@ -185,5 +181,55 @@ export class ArticleLibraryComponent implements OnInit {
    */
   async getDocIDsFromTopic(category) {
     return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
+  }
+
+  // getters and setters
+  public get toggleTopics(): boolean[] {
+    return this._toggleTopics;
+  }
+  public set toggleTopics(value: boolean[]) {
+    this._toggleTopics = value;
+  }
+  public get institutionList(): string[] {
+    return this._institutionList;
+  }
+  public set institutionList(value: string[]) {
+    this._institutionList = value;
+  }
+  public get selectedInst(): string {
+    return this._selectedInst;
+  }
+  public set selectedInst(value: string) {
+    this._selectedInst = value;
+  }
+  public get all(): string {
+    return this._all;
+  }
+  public set all(value: string) {
+    this._all = value;
+  }
+  public get cat_choice_init() {
+    return this._cat_choice_init;
+  }
+  public set cat_choice_init(value) {
+    this._cat_choice_init = value;
+  }
+  public get cat_button_choice(): string[] {
+    return this._cat_button_choice;
+  }
+  public set cat_button_choice(value: string[]) {
+    this._cat_button_choice = value;
+  }
+  public get categories(): string[] {
+    return this._categories;
+  }
+  public set categories(value: string[]) {
+    this._categories = value;
+  }
+  public get dict_orders_1(): string[] {
+    return this._dict_orders_1;
+  }
+  public set dict_orders_1(value: string[]) {
+    this._dict_orders_1 = value;
   }
 }

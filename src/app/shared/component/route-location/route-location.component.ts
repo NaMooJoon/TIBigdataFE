@@ -52,4 +52,8 @@ export class RouteLocationComponent implements OnInit {
     if (routeName === "member-info") return "회원 정보"
     if (routeName === "secession") return "회원 탈퇴"
   }
+
+  getDir(): string {
+    return this.dir
+  }
 }

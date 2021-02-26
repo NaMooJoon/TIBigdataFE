@@ -1,12 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
-import { ArticleSource } from "src/app/core/models/article.model";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service"
-import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
-import { PaginationModel } from "src/app/core/models/pagination.model";
-import { Router } from "@angular/router";
 import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { PaginationModel } from "src/app/core/models/pagination.model";
+import { ArticleService } from "src/app/core/services/article-service/article.service";
+import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
+import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
 
 @Component({
   selector: "app-my-docs",
@@ -15,12 +13,16 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 })
 
 export class MyDocsComponent implements OnInit {
-  currentPage: number;
-  pageInfo: PaginationModel;
-  pages: number[];
+  private _currentPage: number;
+  private _pageInfo: PaginationModel;
+  private _pages: number[];
+  private _isSavedDocsLoaded = false;
+  private _savedDocs: Array<{ title: string; id: string; }>;
+  private _paginationModel: PaginationModel;
+  private _totalSavedDocsNum: number;
+  private _form: FormGroup;
 
   constructor(
-    private authenticationService: AuthenticationService,
     private paginationService: PaginationService,
     private userSavedDocumentService: UserSavedDocumentService,
     private articleService: ArticleService,
@@ -29,12 +31,6 @@ export class MyDocsComponent implements OnInit {
   ) {
     this.setArticleForm();
   }
-
-  private isSavedDocsLoaded = false;
-  private savedDocs: Array<{ title: string; id: string }>;
-  private paginationModel: PaginationModel;
-  private totalSavedDocsNum: number;
-  private form: FormGroup;
 
   ngOnInit(): void {
     this.loadSavedDocs(1);
@@ -149,5 +145,55 @@ export class MyDocsComponent implements OnInit {
     this.userSavedDocumentService.eraseAllMyDocs().then(
       () => this.loadSavedDocs(1)
     );
+  }
+
+  // getters and setters
+  public get currentPage(): number {
+    return this._currentPage;
+  }
+  public set currentPage(value: number) {
+    this._currentPage = value;
+  }
+  public get pageInfo(): PaginationModel {
+    return this._pageInfo;
+  }
+  public set pageInfo(value: PaginationModel) {
+    this._pageInfo = value;
+  }
+  public get pages(): number[] {
+    return this._pages;
+  }
+  public set pages(value: number[]) {
+    this._pages = value;
+  }
+  public get isSavedDocsLoaded() {
+    return this._isSavedDocsLoaded;
+  }
+  public set isSavedDocsLoaded(value) {
+    this._isSavedDocsLoaded = value;
+  }
+  public get savedDocs(): Array<{ title: string; id: string; }> {
+    return this._savedDocs;
+  }
+  public set savedDocs(value: Array<{ title: string; id: string; }>) {
+    this._savedDocs = value;
+  }
+  public get paginationModel(): PaginationModel {
+    return this._paginationModel;
+  }
+  public set paginationModel(value: PaginationModel) {
+    this._paginationModel = value;
+  }
+  public get totalSavedDocsNum(): number {
+    return this._totalSavedDocsNum;
+  }
+  public set totalSavedDocsNum(value: number) {
+    this._totalSavedDocsNum = value;
+  }
+  public get form(): FormGroup {
+    return this._form;
+  }
+  public set form(value: FormGroup) {
+    this._form = value;
   }
 }

@@ -14,18 +14,17 @@ import { UserProfile } from "src/app/core/models/user.model";
   styleUrls: ["./document.read.component.less"],
 })
 export class DocumentReadComponent implements OnInit {
-  private doc: CommunityDocModel;
-  private currentUser: UserProfile;
-  private currentMenu: string;
-  private isReplyMode: boolean;
-  private replyForm: FormGroup;
-  private isAnswered: boolean;
-  private isLoaded: boolean = false;
-  private currentUserEmail: string;
-  private isPostWriter: boolean;
-  private isReplyWriter: boolean;
-
-  isAdmin: boolean;
+  private _doc: CommunityDocModel;
+  private _currentUser: UserProfile;
+  private _currentMenu: string;
+  private _isReplyMode: boolean;
+  private _replyForm: FormGroup;
+  private _isAnswered: boolean;
+  private _isLoaded: boolean = false;
+  private _currentUserEmail: string;
+  private _isPostWriter: boolean;
+  private _isReplyWriter: boolean;
+  private _isAdmin: boolean;
 
   constructor(
     private communityBoardService: CommunityBoardService,
@@ -44,7 +43,7 @@ export class DocumentReadComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.currentMenu = this.router.url.split('/')[2];
-    
+
     this.doc = await this.communityBoardService.getSelectedDoc();
     if (this.currentUserEmail === this.doc.userEmail) this.isPostWriter = true;
     else this.isPostWriter = false;
@@ -54,7 +53,7 @@ export class DocumentReadComponent implements OnInit {
     )
       this.isReplyWriter = true;
     else this.isReplyWriter = false;
-    
+
     this.isReplyMode = false;
 
     if (this.doc === undefined || this.doc === null) {
@@ -122,7 +121,7 @@ export class DocumentReadComponent implements OnInit {
   }
 
   navigateToModDoc(): void {
-    this.router.navigateByUrl("/community/"+ this.currentMenu + "/modify");
+    this.router.navigateByUrl("/community/" + this.currentMenu + "/modify");
   }
 
   autoGrowTextZone(e): void {
@@ -167,5 +166,73 @@ export class DocumentReadComponent implements OnInit {
 
   goToList() {
     this._location.back();
+  }
+
+  //getters and setters
+  public get doc(): CommunityDocModel {
+    return this._doc;
+  }
+  public set doc(value: CommunityDocModel) {
+    this._doc = value;
+  }
+  public get currentUser(): UserProfile {
+    return this._currentUser;
+  }
+  public set currentUser(value: UserProfile) {
+    this._currentUser = value;
+  }
+  public get currentMenu(): string {
+    return this._currentMenu;
+  }
+  public set currentMenu(value: string) {
+    this._currentMenu = value;
+  }
+  public get isReplyMode(): boolean {
+    return this._isReplyMode;
+  }
+  public set isReplyMode(value: boolean) {
+    this._isReplyMode = value;
+  }
+  public get replyForm(): FormGroup {
+    return this._replyForm;
+  }
+  public set replyForm(value: FormGroup) {
+    this._replyForm = value;
+  }
+  public get isAnswered(): boolean {
+    return this._isAnswered;
+  }
+  public set isAnswered(value: boolean) {
+    this._isAnswered = value;
+  }
+  public get isLoaded(): boolean {
+    return this._isLoaded;
+  }
+  public set isLoaded(value: boolean) {
+    this._isLoaded = value;
+  }
+  public get currentUserEmail(): string {
+    return this._currentUserEmail;
+  }
+  public set currentUserEmail(value: string) {
+    this._currentUserEmail = value;
+  }
+  public get isPostWriter(): boolean {
+    return this._isPostWriter;
+  }
+  public set isPostWriter(value: boolean) {
+    this._isPostWriter = value;
+  }
+  public get isReplyWriter(): boolean {
+    return this._isReplyWriter;
+  }
+  public set isReplyWriter(value: boolean) {
+    this._isReplyWriter = value;
+  }
+  public get isAdmin(): boolean {
+    return this._isAdmin;
+  }
+  public set isAdmin(value: boolean) {
+    this._isAdmin = value;
   }
 }

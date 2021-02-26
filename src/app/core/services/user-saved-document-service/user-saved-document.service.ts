@@ -4,12 +4,13 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 import { QueryResponse } from "src/app/core/models/query.response.model";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import { UserProfile } from "src/app/core/models/user.model";
+import { IpService } from "../ip-service/ip.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class UserSavedDocumentService {
-  private API_URL: string = "http://localhost:14000";
+  private API_URL: string = this.ipService.getFrontDBServerIp();
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
@@ -19,7 +20,8 @@ export class UserSavedDocumentService {
   constructor(
     private httpClient: HttpClient,
     private authService: AuthenticationService,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private ipService: IpService
   ) {
     this.authService.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;

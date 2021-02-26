@@ -14,6 +14,12 @@ import { UserProfile } from "src/app/core/models/user.model";
   styleUrls: ["./document.write.component.less"],
 })
 export class DocumentWriteComponent {
+
+  private _boardForm: FormGroup;
+  private _isMainAnnounce = false;
+  private _currentUser: UserProfile;
+  private _selectedBoard: string;
+
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
@@ -30,10 +36,6 @@ export class DocumentWriteComponent {
       }
     })
   }
-  private boardForm: FormGroup;
-  private isMainAnnounce = false;
-  private currentUser: UserProfile;
-  private selectedBoard: string;
 
   ngOnInit() {
     if (this.communityBoardService.getCurrentMenu() === null) {
@@ -126,5 +128,31 @@ export class DocumentWriteComponent {
       return this.generateFaqQueryBody();
     if (this.communityBoardService.getCurrentMenu() == "qna")
       return this.generateQnaQueryBody();
+  }
+
+  // getters and setters
+  public get boardForm(): FormGroup {
+    return this._boardForm;
+  }
+  public set boardForm(value: FormGroup) {
+    this._boardForm = value;
+  }
+  public get isMainAnnounce() {
+    return this._isMainAnnounce;
+  }
+  public set isMainAnnounce(value) {
+    this._isMainAnnounce = value;
+  }
+  public get currentUser(): UserProfile {
+    return this._currentUser;
+  }
+  public set currentUser(value: UserProfile) {
+    this._currentUser = value;
+  }
+  public get selectedBoard(): string {
+    return this._selectedBoard;
+  }
+  public set selectedBoard(value: string) {
+    this._selectedBoard = value;
   }
 }

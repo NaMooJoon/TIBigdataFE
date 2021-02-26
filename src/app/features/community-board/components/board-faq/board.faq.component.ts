@@ -14,19 +14,18 @@ import { CommunityBoardService } from "../../services/community-board-service/co
   styleUrls: ["./board.faq.component.less"],
 })
 export class FaqComponent implements OnInit {
-  private docList: Array<CommunityDocModel>;
-  private pageInfo: PaginationModel;
-
-  private pageSize = 10;
-  private totalDocs: number;
-  private startIndex: number = 0;
-  private currentPage: number;
-  private pages: number[];
-  private totalPages: number;
-  private isSearchMode: boolean = false;
-  private searchText: string;
-  private isAdmin: boolean = false;
-  private currentUser: UserProfile;
+  private _docList: Array<CommunityDocModel>;
+  private _pageInfo: PaginationModel;
+  private _pageSize = 10;
+  private _totalDocs: number;
+  private _startIndex: number = 0;
+  private _currentPage: number;
+  private _pages: number[];
+  private _totalPages: number;
+  private _isSearchMode: boolean = false;
+  private _searchText: string;
+  private _isAdmin: boolean = false;
+  private _currentUser: UserProfile;
 
   constructor(
     private router: Router,
@@ -113,5 +112,79 @@ export class FaqComponent implements OnInit {
     this.isSearchMode = true;
     await this.loadPage(1);
     this.isSearchMode = false;
+  }
+
+  // getters and setters
+  public get docList(): Array<CommunityDocModel> {
+    return this._docList;
+  }
+  public set docList(value: Array<CommunityDocModel>) {
+    this._docList = value;
+  }
+  public get pageInfo(): PaginationModel {
+    return this._pageInfo;
+  }
+  public set pageInfo(value: PaginationModel) {
+    this._pageInfo = value;
+  }
+  public get pageSize() {
+    return this._pageSize;
+  }
+  public set pageSize(value) {
+    this._pageSize = value;
+  }
+  public get totalDocs(): number {
+    return this._totalDocs;
+  }
+  public set totalDocs(value: number) {
+    this._totalDocs = value;
+  }
+  public get startIndex(): number {
+    return this._startIndex;
+  }
+  public set startIndex(value: number) {
+    this._startIndex = value;
+  }
+  public get currentPage(): number {
+    return this._currentPage;
+  }
+  public set currentPage(value: number) {
+    this._currentPage = value;
+  }
+  public get pages(): number[] {
+    return this._pages;
+  }
+  public set pages(value: number[]) {
+    this._pages = value;
+  }
+  public get totalPages(): number {
+    return this._totalPages;
+  }
+  public set totalPages(value: number) {
+    this._totalPages = value;
+  }
+  public get isSearchMode(): boolean {
+    return this._isSearchMode;
+  }
+  public set isSearchMode(value: boolean) {
+    this._isSearchMode = value;
+  }
+  public get searchText(): string {
+    return this._searchText;
+  }
+  public set searchText(value: string) {
+    this._searchText = value;
+  }
+  public get isAdmin(): boolean {
+    return this._isAdmin;
+  }
+  public set isAdmin(value: boolean) {
+    this._isAdmin = value;
+  }
+  public get currentUser(): UserProfile {
+    return this._currentUser;
+  }
+  public set currentUser(value: UserProfile) {
+    this._currentUser = value;
   }
 }

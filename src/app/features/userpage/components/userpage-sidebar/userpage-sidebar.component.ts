@@ -10,8 +10,9 @@ import { IpService } from 'src/app/core/services/ip-service/ip.service';
   styleUrls: ['./userpage-sidebar.component.css']
 })
 export class UserpageSidebarComponent implements OnInit {
-  private title: string = "";
-  private currentMenu: string = "";
+  private _title: string = "";
+  private _currentMenu: string = "";
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -96,5 +97,19 @@ export class UserpageSidebarComponent implements OnInit {
    */
   toSecession() {
     this.router.navigateByUrl("/userpage/secession");
+  }
+
+  // getters and setters
+  public get title(): string {
+    return this._title;
+  }
+  public set title(value: string) {
+    this._title = value;
+  }
+  public get currentMenu(): string {
+    return this._currentMenu;
+  }
+  public set currentMenu(value: string) {
+    this._currentMenu = value;
   }
 }

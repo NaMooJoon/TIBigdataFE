@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import { AnalysisOption } from "src/app/core/enums/analysis-option";
+import { ChartOption } from "src/app/core/enums/chart-option";
 import { PaginationModel } from "src/app/core/models/pagination.model";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
-import { ChartOption } from "src/app/core/enums/chart-option";
-import { AnalysisOption } from "src/app/core/enums/analysis-option";
-import { NONE_TYPE } from "@angular/compiler";
+import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
 const keywordIconUrl: string = "../../../assets/icons/keyword-analysis";
 const relatedIconUrl: string = "../../../assets/icons/related-doc";
@@ -20,23 +19,23 @@ const wordcloudIconUrl: string = "../../../assets/icons/chart-word-cloud";
 })
 export class ArticleAnalysisComponent implements OnInit {
 
+  private _isChartLoaded = false;
+  private _isSavedDocsLoaded = false;
+  private _savedDocs: Array<{ title: string; id: string; }>;
+  private _selectedChartType: ChartOption;
+  private _selectedAnalysisType: AnalysisOption;
+  private _selectedDataNum: number;
+  private _analysisDocIdsList: Array<string> = [];
+  private _pageInfo: PaginationModel;
+  private _totalSavedDocsNum: number;
+  private _iconUrls: Array<string> = [keywordIconUrl, relatedIconUrl, doughnutIconUrl, lineIconUrl, wordcloudIconUrl, barIconUrl];
+  private _currentPage: number;
+  private _pages: number[];
+
   constructor(
     private paginationService: PaginationService,
     private userSavedDocumentService: UserSavedDocumentService
   ) { }
-
-  private isChartLoaded = false;
-  private isSavedDocsLoaded = false;
-  private savedDocs: Array<{ title: string; id: string }>;
-  private selectedChartType: ChartOption;
-  private selectedAnalysisType: AnalysisOption;
-  private selectedDataNum: number;
-  private analysisDocIdsList: Array<string> = [];
-  private pageInfo: PaginationModel;
-  private totalSavedDocsNum: number;
-  private iconUrls: Array<string> = [keywordIconUrl, relatedIconUrl, doughnutIconUrl, lineIconUrl, wordcloudIconUrl, barIconUrl]
-  currentPage: number;
-  pages: number[];
 
   ngOnInit(): void {
     this.selectedDataNum = 0;
@@ -151,4 +150,78 @@ export class ArticleAnalysisComponent implements OnInit {
   generateChartAnalysisResult(): void { }
 
   generateWordCloud() { }
+
+  // getters and setters
+  public get isChartLoaded() {
+    return this._isChartLoaded;
+  }
+  public set isChartLoaded(value) {
+    this._isChartLoaded = value;
+  }
+  public get isSavedDocsLoaded() {
+    return this._isSavedDocsLoaded;
+  }
+  public set isSavedDocsLoaded(value) {
+    this._isSavedDocsLoaded = value;
+  }
+  public get savedDocs(): Array<{ title: string; id: string; }> {
+    return this._savedDocs;
+  }
+  public set savedDocs(value: Array<{ title: string; id: string; }>) {
+    this._savedDocs = value;
+  }
+  public get selectedChartType(): ChartOption {
+    return this._selectedChartType;
+  }
+  public set selectedChartType(value: ChartOption) {
+    this._selectedChartType = value;
+  }
+  public get selectedAnalysisType(): AnalysisOption {
+    return this._selectedAnalysisType;
+  }
+  public set selectedAnalysisType(value: AnalysisOption) {
+    this._selectedAnalysisType = value;
+  }
+  public get selectedDataNum(): number {
+    return this._selectedDataNum;
+  }
+  public set selectedDataNum(value: number) {
+    this._selectedDataNum = value;
+  }
+  public get analysisDocIdsList(): Array<string> {
+    return this._analysisDocIdsList;
+  }
+  public set analysisDocIdsList(value: Array<string>) {
+    this._analysisDocIdsList = value;
+  }
+  public get pageInfo(): PaginationModel {
+    return this._pageInfo;
+  }
+  public set pageInfo(value: PaginationModel) {
+    this._pageInfo = value;
+  }
+  public get totalSavedDocsNum(): number {
+    return this._totalSavedDocsNum;
+  }
+  public set totalSavedDocsNum(value: number) {
+    this._totalSavedDocsNum = value;
+  }
+  public get iconUrls(): Array<string> {
+    return this._iconUrls;
+  }
+  public set iconUrls(value: Array<string>) {
+    this._iconUrls = value;
+  }
+  public get currentPage(): number {
+    return this._currentPage;
+  }
+  public set currentPage(value: number) {
+    this._currentPage = value;
+  }
+  public get pages(): number[] {
+    return this._pages;
+  }
+  public set pages(value: number[]) {
+    this._pages = value;
+  }
 }

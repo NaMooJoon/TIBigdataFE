@@ -8,7 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class UserpageHeaderComponent implements OnInit {
 
-  private currentMenu: string = "";
+  private _currentMenu: string = "";
 
   constructor(
     private router: Router
@@ -29,6 +29,13 @@ export class UserpageHeaderComponent implements OnInit {
     if (routename === "my-analysis") return "내 분석함";
     if (routename === "secession") return "회원 탈퇴"
     if (routename === "member-info") return "회원 정보"
+  }
+
+  public get currentMenu(): string {
+    return this._currentMenu;
+  }
+  public set currentMenu(value: string) {
+    this._currentMenu = value;
   }
 
 }

@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { NavigationEnd, NavigationStart, Router } from "@angular/router";
-import { Observable, Subscriber } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
+import { Observable } from "rxjs";
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
@@ -12,9 +12,20 @@ import { ElasticsearchService } from "src/app/core/services/elasticsearch-servic
   styleUrls: ["./search-bar.component.less"],
 })
 export class SearchBarComponent implements OnInit {
-  private searchKeyword: string = "";
-  private selectedDate: string;
-  private dateList: Array<String> = [
+  private _searchKeyword: string = "";
+  private _selectedDate: string;
+  private _isDateSelected: boolean = false;
+  private _isInstSelected: boolean = false;
+  private _isTopicSelected: boolean = false;
+  private _selectedInst: string;
+  private _selectedTopic: string;
+  private _isMain: boolean = false;
+  private _isSearching: boolean = false;
+  private _isKeyLoaded: boolean;
+  public relatedKeywords = [];
+  private searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
+
+  private _dateList: Array<String> = [
     "전체",
     "1일",
     "1주일",
@@ -23,7 +34,8 @@ export class SearchBarComponent implements OnInit {
     "6개월",
     "1년",
   ];
-  private topicList: Array<String> = [
+
+  private _topicList: Array<String> = [
     "전체",
     "경제",
     "국제",
@@ -32,16 +44,7 @@ export class SearchBarComponent implements OnInit {
     "정치",
     "지역",
   ];
-  private isDateSelected: boolean = false;
-  private isInstSelected: boolean = false;
-  private isTopicSelected: boolean = false;
-  private selectedInst: string;
-  private selectedTopic: string;
-  private isMain: Boolean = false;
-  private isSearching: boolean = false;
-  public relatedKeywords = [];
-  private searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
-  isKeyLoaded: boolean;
+
 
   selectedStyleObject(flag: boolean): Object {
     if (flag) {
@@ -163,5 +166,80 @@ export class SearchBarComponent implements OnInit {
       });
 
     this.isKeyLoaded = true;
+  }
+
+
+  // getters and setters
+  public get isDateSelected(): boolean {
+    return this._isDateSelected;
+  }
+  public set isDateSelected(value: boolean) {
+    this._isDateSelected = value;
+  }
+  public get isInstSelected(): boolean {
+    return this._isInstSelected;
+  }
+  public set isInstSelected(value: boolean) {
+    this._isInstSelected = value;
+  }
+  public get isTopicSelected(): boolean {
+    return this._isTopicSelected;
+  }
+  public set isTopicSelected(value: boolean) {
+    this._isTopicSelected = value;
+  }
+  public get selectedInst(): string {
+    return this._selectedInst;
+  }
+  public set selectedInst(value: string) {
+    this._selectedInst = value;
+  }
+  public get selectedTopic(): string {
+    return this._selectedTopic;
+  }
+  public set selectedTopic(value: string) {
+    this._selectedTopic = value;
+  }
+  public get isMain(): boolean {
+    return this._isMain;
+  }
+  public set isMain(value: boolean) {
+    this._isMain = value;
+  }
+  public get isSearching(): boolean {
+    return this._isSearching;
+  }
+  public set isSearching(value: boolean) {
+    this._isSearching = value;
+  }
+  public get isKeyLoaded(): boolean {
+    return this._isKeyLoaded;
+  }
+  public set isKeyLoaded(value: boolean) {
+    this._isKeyLoaded = value;
+  }
+  public get dateList(): Array<String> {
+    return this._dateList;
+  }
+  public set dateList(value: Array<String>) {
+    this._dateList = value;
+  }
+  public get selectedDate(): string {
+    return this._selectedDate;
+  }
+  public set selectedDate(value: string) {
+    this._selectedDate = value;
+  }
+  public get searchKeyword(): string {
+    return this._searchKeyword;
+  }
+  public set searchKeyword(value: string) {
+    this._searchKeyword = value;
+  }
+  public get topicList(): Array<String> {
+    return this._topicList;
+  }
+  public set topicList(value: Array<String>) {
+    this._topicList = value;
   }
 }

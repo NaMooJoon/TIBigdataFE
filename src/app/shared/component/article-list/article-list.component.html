@@ -1,12 +1,12 @@
 <div class="result-header">
   <!-- Show number of result -->
-  <div *ngIf="isResultFound && isMainSearch" class="result-count">
+  <div *ngIf="getIsResultFound() && getIsMainSearch()" class="result-count">
     "{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.
   </div>
-  <div *ngIf="isResultFound && !isMainSearch" class="result-count">
+  <div *ngIf="getIsResultFound() && !getIsMainSearch()" class="result-count">
     검색결과는 총 {{ searchResultNum }}건 입니다.
   </div>
-  <div *ngIf="isResultFound" class="dropdown-menus">
+  <div *ngIf="getIsResultFound()" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
       <option *ngFor="let ord of orders" [value]="ord">{{ ord }}</option>
@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<div *ngIf="isResultFound && isSearchDone" class="result-body">
+<div *ngIf="getIsResultFound() && getIsSearchDone()" class="result-body">
   <form [formGroup]="form" (ngSubmit)="saveSelectedDocs()" novalidate>
     <label *ngIf="isLoggedIn"
       ><input
@@ -113,7 +113,10 @@
   </div>
 </div>
 
-<div *ngIf="!isResultFound && isSearchDone" class="result-not-found-body">
+<div
+  *ngIf="!getIsResultFound() && getIsSearchDone()"
+  class="result-not-found-body"
+>
   <p>"{{ searchKeyword }}"에 대한 검색결과가 없습니다.</p>
   <ul>
     <li>단어의 철자가 정확한지 확인해 보세요.</li>
@@ -124,6 +127,6 @@
   </ul>
 </div>
 
-<div *ngIf="!isSearchDone" class="result-not-found-body">
+<div *ngIf="!getIsSearchDone()" class="result-not-found-body">
   <p>"{{ searchKeyword }}"에 대한 문서를 검색 중입니다. 잠시만 기다려주세요.</p>
 </div>

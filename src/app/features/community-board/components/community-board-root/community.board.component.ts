@@ -7,20 +7,20 @@ import { NavigationEnd, Router } from "@angular/router";
   styleUrls: ["./community.board.component.less"],
 })
 export class CommunityBoardComponent implements OnInit {
-  private selectedMenu: string = this.router.url.split("/")[2];
+  private _selectedMenu: string = this.router.url.split("/")[2];
 
   constructor(
     private router: Router,
   ) {
-    this.router.events.subscribe((event)=>{
-      if (event instanceof NavigationEnd){
-        
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+
         this.selectedMenu = this.router.url.split("/")[2];
       }
     })
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   navToQna() {
     this.router.navigateByUrl("community/qna");
@@ -34,7 +34,14 @@ export class CommunityBoardComponent implements OnInit {
     this.router.navigateByUrl("community/faq");
   }
 
-  isNavbarNeeded(){
+  isNavbarNeeded() {
     return !(this.router.url.includes('new') || this.router.url.includes('read') || this.router.url.includes('modify'))
+  }
+
+  public get selectedMenu(): string {
+    return this._selectedMenu;
+  }
+  public set selectedMenu(value: string) {
+    this._selectedMenu = value;
   }
 }

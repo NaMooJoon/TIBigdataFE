@@ -9,7 +9,7 @@ import { UserProfile } from "src/app/core/models/user.model";
 })
 export class MemberInfoComponent implements OnInit {
 
-  private userProfile: UserProfile;
+  private _userProfile: UserProfile;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -23,6 +23,13 @@ export class MemberInfoComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  public get userProfile(): UserProfile {
+    return this._userProfile;
+  }
+  public set userProfile(value: UserProfile) {
+    this._userProfile = value;
   }
 
 }

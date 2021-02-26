@@ -248,4 +248,16 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       };
     }
   }
+
+  getIsResultFound(): boolean {
+    return this.isResultFound;
+  }
+
+  getIsMainSearch(): boolean {
+    return this.isMainSearch;
+  }
+
+  getIsSearchDone(): boolean {
+    return this.isSearchDone;
+  }
 }
