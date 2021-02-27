@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { CloudData } from "angular-tag-cloud-module";
 import { AnalysisDatabaseService } from "../analysis-database-service/analysis.database.service";
 
@@ -7,10 +6,12 @@ import { AnalysisDatabaseService } from "../analysis-database-service/analysis.d
   providedIn: "root",
 })
 export class WordcloudService {
-  // private cloudData: CloudData[] = [];
-  // private
-  constructor(private http: HttpClient, private db: AnalysisDatabaseService) { }
+  constructor(private db: AnalysisDatabaseService) { }
 
+  /**
+   * @description create wordcloud data for given article id
+   * @param id article id to generate wordcloud data
+   */
   async createCloud(id: string) {
     let cloudData = new Array<CloudData>();
     let data = await this.db.getTfidfVal(id, 15, true);
