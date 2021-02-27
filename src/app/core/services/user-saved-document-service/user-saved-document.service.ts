@@ -29,6 +29,11 @@ export class UserSavedDocumentService {
     });
   }
 
+  /**
+   * @description Send query of saving list of article ids into saved document list 
+   * @param docIds list of article ids to save
+   * @returns returns true if the saving success, else return false.
+   */
   async saveNewMyDoc(docIds: Array<string>): Promise<boolean> {
     let payload = { userEmail: this.currentUser.email, docIds: docIds };
     let res = await this.httpClient
@@ -37,6 +42,11 @@ export class UserSavedDocumentService {
     return res.succ;
   }
 
+  /**
+   * @description Send query to get list of saved articles.
+   * @param startIndex A index to indicate where to start search.
+   * @returns Array of object that holds article title and article id.
+   */
   async getMyDocs(startIndex?: number): Promise<Array<{ title: string; id: string }>> {
     if (startIndex === undefined) startIndex = 0;
     let currentIndex = (startIndex - 1) * this.docsPerPage;
@@ -54,6 +64,10 @@ export class UserSavedDocumentService {
     return idsAndTitles;
   }
 
+  /**
+   * @description Send query to delete all saved ariticles.
+   * @returns Result of deleting operation.
+   */
   async eraseAllMyDocs(): Promise<boolean> {
     let res = await this.httpClient
       .post<any>(this.deleteAllMyDocUrl, { userEmail: this.currentUser.email })
@@ -61,6 +75,10 @@ export class UserSavedDocumentService {
     return res.succ;
   }
 
+  /**
+   * @description Send query to get total number of saved articles.
+   * @retursn Number of saved articles.
+   */
   async getTotalDocNum(): Promise<number> {
     let res: QueryResponse = await this.httpClient
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
