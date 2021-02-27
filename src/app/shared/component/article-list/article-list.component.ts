@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import { Observable, Subscription } from "rxjs";
 import { ArticleSource } from "src/app/core/models/article.model";
-import { Subscription, Observable } from "rxjs";
-import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { PaginationModel } from "src/app/core/models/pagination.model";
-import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
+import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
+import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
+import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
+import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
 @Component({
   selector: "app-article-list",
@@ -22,9 +22,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   private _form: FormGroup;
 
   private _relatedDocs: ArticleSource[][] = [];
-  private _articleNumChange$: Observable<any> = this.elasticSearchService.getArticleNumChange();
-  private _articleChange$: Observable<ArticleSource[]> = this.elasticSearchService.getArticleChange();
-  private _searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
+  private _articleNumChange$: Observable<any> = this.elasticsearchService.getArticleNumChange();
+  private _articleChange$: Observable<ArticleSource[]> = this.elasticsearchService.getArticleChange();
+  private _searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
 
   private _articleNumSubscriber: Subscription;
   private _articleSubscriber: Subscription;
@@ -48,11 +48,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     private userSavedDocumentService: UserSavedDocumentService,
     private articleService: ArticleService,
     private router: Router,
-    private elasticSearchService: ElasticsearchService,
+    private elasticsearchService: ElasticsearchService,
     private analysisDatabaseService: AnalysisDatabaseService,
     private formBuilder: FormBuilder,
     private paginationService: PaginationService,
-    private authService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
     // Set articles when article has been changed
     this.articleSubscriber = this.articleChange$.subscribe((articles) => {
@@ -63,7 +63,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.setArticleForm();
 
       this.isResultFound = articles !== null;
-      this.elasticSearchService.setSearchStatus(true);
+      this.elasticsearchService.setSearchStatus(true);
     });
 
     // Check if it is still searching
@@ -75,11 +75,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.articleNumSubscriber = this.articleNumChange$.subscribe((num) => {
       this.totalDocs = num;
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadPage(this.elasticSearchService.getCurrentSearchingPage());
+      this.loadPage(this.elasticsearchService.getCurrentSearchingPage());
     });
 
     // Observe to check if user is signed out
-    this.authService.getCurrentUserChange().subscribe((user) => {
+    this.authenticationService.getCurrentUserChange().subscribe((user) => {
       this.isLoggedIn = user != null;
     });
   }
@@ -94,26 +94,40 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.beginSearch(this.currentPage);
   }
 
-  beginSearch(pageNum: number) {
+  /**
+   * @description Set configurations of search and call search logic in elasticsearchService.
+   * @param pageNum Number of articles to display in one page.
+   */
+  beginSearch(pageNum: number): void {
     this.currentPage = pageNum;
     if (this.currentPage === null) this.currentPage = 1;
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
     if (this.currentPage < 1) this.currentPage = 1;
-    this.elasticSearchService.triggerSearch(this.currentPage);
+    this.elasticsearchService.triggerSearch(this.currentPage);
   }
 
+  /**
+   * @description Create form to set checkbox for each article in the list. 
+   */
   setArticleForm(): void {
     this.form = this.formBuilder.group({
       checkArray: this.formBuilder.array([]),
     });
   }
 
+  /**
+   * @description Add property of checkbox value into article.
+   */
   setCheckbox(): void {
     for (let i in this.articleSources) {
       this.articleSources[i]["isSelected"] = false;
     }
   }
 
+  /**
+   * @description Update paging-related variable with given pagination model object.
+   * @param pageInfo Pagination model object created by pagination service.
+   */
   setPageInfo(pageInfo: PaginationModel): void {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
@@ -121,6 +135,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.totalPages = pageInfo.totalPages;
   }
 
+  /**
+   * @description Update paging information based on current page information.
+   * @param currentPage current page to display 
+   */
   async loadPage(currentPage: number): Promise<void> {
     let pageInfo: PaginationModel = await this.paginationService.paginate(
       currentPage,
@@ -130,21 +148,31 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.setPageInfo(pageInfo);
   }
 
+  /**
+   * @description Convert number format by inserting ',' for each 3 digits. i.e. 1234567 will be converted into 1,234,567
+   * @param num Number to convert. 
+   */
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();
     if (num === 0) return docCount;
     return docCount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  /**
+   * @description Reset all search options set before. 
+   */
   resetSearchOptions(): void {
-    this.isMainSearch = this.router.url === "/search/result";
+    this.isMainSearch = (this.router.url === "/search/result");
     this.articleService.clearList();
-    this.searchKeyword = this.elasticSearchService.getKeyword();
+    this.searchKeyword = this.elasticsearchService.getKeyword();
     this.isResultFound = false;
     this.isSearchDone = false;
-    this.currentPage = this.elasticSearchService.getCurrentSearchingPage();
+    this.currentPage = this.elasticsearchService.getCurrentSearchingPage();
   }
 
+  /**
+   * @description Set list of article ids by reading id field of each element in articleSource.
+   */
   setArticleIdList(): void {
     this.relatedDocBtnToggle = [];
     for (var i in this.articleSources) {
@@ -153,6 +181,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Open selected related-article that user choose.
+   * @param articleSourceIdx Index of article from articleSouce.
+   * @param RelatedDocIdx Index of related articles from relatedDocs.
+   */
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
     this.articleService.setSelectedId(
       this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]
@@ -160,11 +193,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.navToDocDetail();
   }
 
+  /**
+   * @description Open list of related articles when user click on related article toggle.
+   * @param i index of related articles.
+   */
   openRelatedDocList(i: number): void {
     this.loadRelatedDocs(i);
     this.relatedDocBtnToggle[i] = !this.relatedDocBtnToggle[i];
   }
 
+  /**
+   * @description Load related articles of selected article.
+   * @param idx Index number of article from relatedDocs.
+   */
   loadRelatedDocs(idx: number): void {
     this.analysisDatabaseService
       .loadRelatedDocs(this.articleService.getIdByIdx(idx))
@@ -173,6 +214,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * @description Save checked articles into database.
+   */
   saveSelectedDocs(): void {
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
@@ -185,6 +229,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Toggle check all checkbox.
+   * @param isCheckAll If all checkboxes are currently checked, marked as true, otherwise, marked as false.
+   * @param checkArray FormArray to update into checked all or unchecked all.
+   */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.articleSources.length; i++) {
@@ -193,14 +242,16 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     } else {
       checkArray.clear();
     }
-
     for (let i = 0; i < this.articleSources.length; i++) {
       this.articleSources[i]["isSelected"] = isCheckAll;
     }
-
     return checkArray;
   }
 
+  /**
+   * @description Listen to event in DOM and update value of each article's 'isSelected' field.
+   * @param e DOM event.
+   */
   onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get("checkArray") as FormArray;
     if (e.target.value === "toggleAll") {
@@ -221,21 +272,30 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Set selected article and navigate to article detail.
+   * @param docId 
+   */
   openDocDetail(docId: string): void {
     this.articleService.setSelectedId(docId);
     this.navToDocDetail();
   }
 
+  /**
+   * @description Change value of number of articles in one page and load the result list again.
+   * @param num new number of articles in one page.
+   */
   docNumPerPageChange(num: number) {
     this.pageSize = num;
-    this.elasticSearchService.setNumDocsPerPage(num);
-    this.elasticSearchService.setCurrentSearchingPage(1);
+    this.elasticsearchService.setNumDocsPerPage(num);
+    this.elasticsearchService.setCurrentSearchingPage(1);
     this.ngOnInit();
   }
-  navToDocDetail(): void {
-    this.router.navigateByUrl("search/DocDetail");
-  }
 
+  /**
+   * @description Chage arrow icon when user click on related article toggle.
+   * @param idx 
+   */
   toggleArrowStyle(idx: number) {
     if (this.relatedDocBtnToggle[idx] !== true) {
       return {
@@ -245,16 +305,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
-  getIsResultFound(): boolean {
-    return this.isResultFound;
-  }
-
-  getIsMainSearch(): boolean {
-    return this.isMainSearch;
-  }
-
-  getIsSearchDone(): boolean {
-    return this.isSearchDone;
+  navToDocDetail(): void {
+    this.router.navigateByUrl("search/read");
   }
 
   // getters and setters

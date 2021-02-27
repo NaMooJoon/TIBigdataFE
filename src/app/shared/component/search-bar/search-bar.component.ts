@@ -91,30 +91,52 @@ export class SearchBarComponent implements OnInit {
     this.checkRouterIsMain();
   }
 
-  updateDate(date: string) {
+  /**
+   * @description Update filter value.
+   * @param date User selected value from filter.
+   */
+  updateDate(date: string): void {
     this.selectedDate = date;
     this.isDateSelected = true;
   }
 
-  updateInst(inst: string) {
+  /**
+   * @description Update filter value.
+   * @param date User selected value from filter.
+   */
+  updateInst(inst: string): void {
     this.selectedInst = inst;
     this.isInstSelected = true;
   }
 
-  updateTopic(topic: string) {
+  /**
+   * @description Update filter value.
+   * @param date User selected value from filter.
+   */
+  updateTopic(topic: string): void {
     this.selectedTopic = topic;
     this.isTopicSelected = true;
   }
 
-  updateKeyword($event: { target: { value: string } }) {
+  /**
+   * @description Update filter value.
+   * @param date User selected value from filter.
+   */
+  updateKeyword($event: { target: { value: string } }): void {
     this.searchKeyword = $event.target.value;
   }
 
-  resetFilters() {
+  /**
+   * @description Reset filter selection by reloading component.
+   */
+  resetFilters(): void {
     this.ngOnInit();
   }
 
-  async search() {
+  /**
+   * @description set search configuration and navigate to search result page. 
+   */
+  async search(): Promise<void> {
     this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
     this.elasticsearchService.setSearchStatus(false);
     this.elasticsearchService.searchKeyword(this.searchKeyword);
@@ -122,11 +144,14 @@ export class SearchBarComponent implements OnInit {
     this._router.navigateByUrl("/search/result");
   }
 
-  gotoMain() {
+  gotoMain(): void {
     this._router.navigateByUrl("");
   }
 
-  checkRouterIsMain() {
+  /**
+   * @description Check if current url is home 
+   */
+  checkRouterIsMain(): void {
     if (this._router.routerState.snapshot.url === "/") {
       this.isMain = true;
     } else {
@@ -134,7 +159,10 @@ export class SearchBarComponent implements OnInit {
     }
   }
 
-  checkSearchRoute() {
+  /**
+   * @description Check if current url is search/result
+   */
+  checkSearchRoute(): void {
     if (this._router.routerState.snapshot.url === "search/result") {
       this.isKeyLoaded = true;
     } else {
@@ -142,10 +170,17 @@ export class SearchBarComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Trigger search with given keyword. 
+   * @param keyword Search keyword selected by user.
+   */
   relatedSearch(keyword: string) {
     this.elasticsearchService.searchKeyword(keyword);
   }
 
+  /**
+   * @description Set related keywords for current search keyword.
+   */
   async setRelatedKeywords(): Promise<void> {
     if (this._router.url.split("/")[2] !== "result") return;
     this.isKeyLoaded = false;
@@ -164,7 +199,6 @@ export class SearchBarComponent implements OnInit {
             this.relatedKeywords.push(tfVal[0]);
         }
       });
-
     this.isKeyLoaded = true;
   }
 
