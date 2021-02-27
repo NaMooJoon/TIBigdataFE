@@ -17,36 +17,32 @@ import { ArticleService } from "src/app/core/services/article-service/article.se
   styleUrls: ["./article-list.component.less"],
 })
 export class ArticleListComponent implements OnInit, OnDestroy {
-  orders = ["최신순", "과거순"];
-  amounts = [10, 30, 50];
-  form: FormGroup;
+  public orders = ["최신순", "과거순"];
+  public amounts = [10, 30, 50];
+  private _form: FormGroup;
 
-  private relatedDocs: ArticleSource[][] = [];
-  private articleNumChange$: Observable<any> = this.elasticSearchService.getArticleNumChange();
-  private articleChange$: Observable<
-    ArticleSource[]
-  > = this.elasticSearchService.getArticleChange();
-  private searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
+  private _relatedDocs: ArticleSource[][] = [];
+  private _articleNumChange$: Observable<any> = this.elasticSearchService.getArticleNumChange();
+  private _articleChange$: Observable<ArticleSource[]> = this.elasticSearchService.getArticleChange();
+  private _searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
 
-  private articleNumSubscriber: Subscription;
-  private articleSubscriber: Subscription;
-  private articleSources: ArticleSource[];
-  private RelatedDocBtnToggle: Array<boolean>;
+  private _articleNumSubscriber: Subscription;
+  private _articleSubscriber: Subscription;
+  private _articleSources: ArticleSource[];
+  private _relatedDocBtnToggle: Array<boolean>;
+  private _isResultFound: boolean;
+  private _isSearchDone: boolean;
+  private _isLoggedIn: boolean;
+  private _isMainSearch: boolean;
 
-  private isResultFound: boolean;
-  private isSearchDone: boolean;
-  private isLoggedIn: boolean;
-  private isMainSearch: boolean;
-
-  private searchResultNum: string = "0";
-  private searchKeyword: string;
-
-  private currentPage: number = 1;
-  private pages: number[];
-  private startIndex: number;
-  private totalPages: number = 1;
-  private totalDocs: number;
-  private pageSize: number = 10;
+  private _searchResultNum: string = "0";
+  private _searchKeyword: string;
+  private _currentPage: number = 1;
+  private _pages: number[];
+  private _startIndex: number;
+  private _totalPages: number = 1;
+  private _totalDocs: number;
+  private _pageSize: number = 10;
 
   constructor(
     private userSavedDocumentService: UserSavedDocumentService,
@@ -150,10 +146,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   setArticleIdList(): void {
-    this.RelatedDocBtnToggle = [];
+    this.relatedDocBtnToggle = [];
     for (var i in this.articleSources) {
       this.articleService.addId(this.articleSources[i]["_id"]);
-      this.RelatedDocBtnToggle.push(false);
+      this.relatedDocBtnToggle.push(false);
     }
   }
 
@@ -166,7 +162,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   openRelatedDocList(i: number): void {
     this.loadRelatedDocs(i);
-    this.RelatedDocBtnToggle[i] = !this.RelatedDocBtnToggle[i];
+    this.relatedDocBtnToggle[i] = !this.relatedDocBtnToggle[i];
   }
 
   loadRelatedDocs(idx: number): void {
@@ -241,7 +237,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   toggleArrowStyle(idx: number) {
-    if (this.RelatedDocBtnToggle[idx] !== true) {
+    if (this.relatedDocBtnToggle[idx] !== true) {
       return {
         "background-image":
           "url(../../../../assets/icons/arrow-down_3d3d3d.png)",
@@ -259,5 +255,135 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   getIsSearchDone(): boolean {
     return this.isSearchDone;
+  }
+
+  // getters and setters
+  public get form(): FormGroup {
+    return this._form;
+  }
+  public set form(value: FormGroup) {
+    this._form = value;
+  }
+
+  public get relatedDocs(): ArticleSource[][] {
+    return this._relatedDocs;
+  }
+  public set relatedDocs(value: ArticleSource[][]) {
+    this._relatedDocs = value;
+  }
+  public get articleNumChange$(): Observable<any> {
+    return this._articleNumChange$;
+  }
+  public set articleNumChange$(value: Observable<any>) {
+    this._articleNumChange$ = value;
+  }
+  public get articleChange$(): Observable<ArticleSource[]> {
+    return this._articleChange$;
+  }
+  public set articleChange$(value: Observable<ArticleSource[]>) {
+    this._articleChange$ = value;
+  }
+  public get searchStatusChange$(): Observable<boolean> {
+    return this._searchStatusChange$;
+  }
+  public set searchStatusChange$(value: Observable<boolean>) {
+    this._searchStatusChange$ = value;
+  }
+  public get articleNumSubscriber(): Subscription {
+    return this._articleNumSubscriber;
+  }
+  public set articleNumSubscriber(value: Subscription) {
+    this._articleNumSubscriber = value;
+  }
+  public get articleSubscriber(): Subscription {
+    return this._articleSubscriber;
+  }
+  public set articleSubscriber(value: Subscription) {
+    this._articleSubscriber = value;
+  }
+  public get articleSources(): ArticleSource[] {
+    return this._articleSources;
+  }
+  public set articleSources(value: ArticleSource[]) {
+    this._articleSources = value;
+  }
+  public get relatedDocBtnToggle(): Array<boolean> {
+    return this._relatedDocBtnToggle;
+  }
+  public set relatedDocBtnToggle(value: Array<boolean>) {
+    this._relatedDocBtnToggle = value;
+  }
+
+  public get isResultFound(): boolean {
+    return this._isResultFound;
+  }
+  public set isResultFound(value: boolean) {
+    this._isResultFound = value;
+  }
+  public get isSearchDone(): boolean {
+    return this._isSearchDone;
+  }
+  public set isSearchDone(value: boolean) {
+    this._isSearchDone = value;
+  }
+  public get isLoggedIn(): boolean {
+    return this._isLoggedIn;
+  }
+  public set isLoggedIn(value: boolean) {
+    this._isLoggedIn = value;
+  }
+  public get isMainSearch(): boolean {
+    return this._isMainSearch;
+  }
+  public set isMainSearch(value: boolean) {
+    this._isMainSearch = value;
+  }
+  public get searchResultNum(): string {
+    return this._searchResultNum;
+  }
+  public set searchResultNum(value: string) {
+    this._searchResultNum = value;
+  }
+  public get searchKeyword(): string {
+    return this._searchKeyword;
+  }
+  public set searchKeyword(value: string) {
+    this._searchKeyword = value;
+  }
+  public get currentPage(): number {
+    return this._currentPage;
+  }
+  public set currentPage(value: number) {
+    this._currentPage = value;
+  }
+  public get pages(): number[] {
+    return this._pages;
+  }
+  public set pages(value: number[]) {
+    this._pages = value;
+  }
+  public get startIndex(): number {
+    return this._startIndex;
+  }
+  public set startIndex(value: number) {
+    this._startIndex = value;
+  }
+  public get totalPages(): number {
+    return this._totalPages;
+  }
+  public set totalPages(value: number) {
+    this._totalPages = value;
+  }
+  public get totalDocs(): number {
+    return this._totalDocs;
+  }
+  public set totalDocs(value: number) {
+    this._totalDocs = value;
+  }
+  public get pageSize(): number {
+    return this._pageSize;
+  }
+  public set pageSize(value: number) {
+    this._pageSize = value;
   }
 }
