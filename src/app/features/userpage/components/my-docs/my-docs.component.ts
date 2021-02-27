@@ -78,17 +78,26 @@ export class MyDocsComponent implements OnInit {
     }
   }
 
+  /**
+   * @description 
+   * @param docId 
+   */
   openDocDetail(docId: string): void {
     console.log(docId);
     this.articleService.setSelectedId(docId);
     this.navToDocDetail();
   }
 
+  /**
+   * @description Navigate to doc detail 
+   */
   navToDocDetail(): void {
     this.router.navigateByUrl("search/read");
   }
 
-
+  /**
+   * @description Set the checkbox of saved docs 
+   */
   setCheckbox(): void {
     for (let i in this.savedDocs) {
       this.savedDocs[i]["isSelected"] = false;
@@ -101,7 +110,11 @@ export class MyDocsComponent implements OnInit {
     });
   }
 
-
+  /**
+   * @description Check or uncheck all documents 
+   * @param isCheckAll 
+   * @param checkArray 
+   */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.savedDocs.length; i++) {
@@ -118,6 +131,10 @@ export class MyDocsComponent implements OnInit {
     return checkArray;
   }
 
+  /**
+   * @description Change check box 
+   * @param e 
+   */
   onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get("checkArray") as FormArray;
     if (e.target.value === "toggleAll") {

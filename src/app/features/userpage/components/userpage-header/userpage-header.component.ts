@@ -24,6 +24,10 @@ export class UserpageHeaderComponent implements OnInit {
     this.currentMenu = this.convertRouteToKor(this.router.url.split('/')[2]);
   }
 
+  /**
+   * @description Return route name to Korean 
+   * @param routename 
+   */
   convertRouteToKor(routename: string) {
     if (routename === "my-docs") return "내 보관함";
     if (routename === "my-analysis") return "내 분석함";
