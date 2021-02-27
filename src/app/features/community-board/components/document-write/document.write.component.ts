@@ -50,6 +50,9 @@ export class DocumentWriteComponent {
     });
   }
 
+  /**
+   * @description Register new document
+   */
   async saveNewDocument(): Promise<void> {
     let res: QueryResponse = await this.communityBoardService.registerDoc(
       this.generateQueryBody()
@@ -60,6 +63,72 @@ export class DocumentWriteComponent {
     } else {
       window.alert("오류가 발생했습니다. 다시 시도해주세요");
     }
+  }
+
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
+  generateAnnounceQueryBody(): CommunityDocModel {
+    return {
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
+      title: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["title"].value
+      ),
+      content: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["content"].value
+      ),
+      isMainAnnounce: this.boardForm.controls["isMainAnnounce"].value,
+    };
+  }
+
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
+  generateFaqQueryBody(): CommunityDocModel {
+    return {
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
+      title: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["title"].value
+      ),
+      content: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["content"].value
+      ),
+      category: this.boardForm.controls["category"].value,
+    };
+  }
+
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
+  generateQnaQueryBody(): CommunityDocModel {
+    return {
+      userEmail: this.currentUser.email,
+      userName: this.currentUser.name,
+      title: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["title"].value
+      ),
+      content: this.communityBoardService.verifyPrivacyLeak(
+        this.boardForm.controls["content"].value
+      ),
+    };
+  }
+
+  /**
+   * @description Call query body genreation according to current menu.
+   * @returns generated query body
+   */
+  generateQueryBody(): CommunityDocModel {
+    if (this.communityBoardService.getCurrentMenu() == "announcement")
+      return this.generateAnnounceQueryBody();
+    if (this.communityBoardService.getCurrentMenu() == "faq")
+      return this.generateFaqQueryBody();
+    if (this.communityBoardService.getCurrentMenu() == "qna")
+      return this.generateQnaQueryBody();
   }
 
   toCommunity(): void {
@@ -76,58 +145,6 @@ export class DocumentWriteComponent {
     this.boardForm.controls["isMainAnnounce"].setValue(
       !this.boardForm.controls["isMainAnnounce"].value
     );
-
-  }
-
-  generateAnnounceQueryBody(): CommunityDocModel {
-
-    return {
-      userEmail: this.currentUser.email,
-      userName: this.currentUser.name,
-      title: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["title"].value
-      ),
-      content: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["content"].value
-      ),
-      isMainAnnounce: this.boardForm.controls["isMainAnnounce"].value,
-    };
-  }
-
-  generateFaqQueryBody(): CommunityDocModel {
-    return {
-      userEmail: this.currentUser.email,
-      userName: this.currentUser.name,
-      title: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["title"].value
-      ),
-      content: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["content"].value
-      ),
-      category: this.boardForm.controls["category"].value,
-    };
-  }
-
-  generateQnaQueryBody(): CommunityDocModel {
-    return {
-      userEmail: this.currentUser.email,
-      userName: this.currentUser.name,
-      title: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["title"].value
-      ),
-      content: this.communityBoardService.verifyPrivacyLeak(
-        this.boardForm.controls["content"].value
-      ),
-    };
-  }
-
-  generateQueryBody(): CommunityDocModel {
-    if (this.communityBoardService.getCurrentMenu() == "announcement")
-      return this.generateAnnounceQueryBody();
-    if (this.communityBoardService.getCurrentMenu() == "faq")
-      return this.generateFaqQueryBody();
-    if (this.communityBoardService.getCurrentMenu() == "qna")
-      return this.generateQnaQueryBody();
   }
 
   // getters and setters

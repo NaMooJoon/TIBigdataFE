@@ -47,10 +47,7 @@ export class DocumentReadComponent implements OnInit {
     this.doc = await this.communityBoardService.getSelectedDoc();
     if (this.currentUserEmail === this.doc.userEmail) this.isPostWriter = true;
     else this.isPostWriter = false;
-    if (
-      "reply" in this.doc &&
-      this.currentUserEmail === this.doc.reply.userEmail
-    )
+    if ("reply" in this.doc && this.currentUserEmail === this.doc.reply.userEmail)
       this.isReplyWriter = true;
     else this.isReplyWriter = false;
 
@@ -68,9 +65,7 @@ export class DocumentReadComponent implements OnInit {
 
     if (this.doc != null && "reply" in this.doc) {
       this.isAnswered = true;
-      this.doc.reply.regDate = moment(this.doc.reply.regDate).format(
-        "YY-MM-DD"
-      );
+      this.doc.reply.regDate = moment(this.doc.reply.regDate).format("YY-MM-DD");
       this.doc.regDate = moment(this.doc.regDate).format("YY-MM-DD");
       this.replyForm.controls["title"].setValue(this.doc.reply.title);
       this.replyForm.controls["content"].setValue(this.doc.reply.content);
@@ -84,6 +79,9 @@ export class DocumentReadComponent implements OnInit {
     this.isLoaded = true;
   }
 
+  /**
+   * @description Delete current document
+   */
   async deleteDoc(): Promise<void> {
     let confirm = window.confirm("정말로 삭제하시겠습니까?");
     let res: boolean;
@@ -92,16 +90,17 @@ export class DocumentReadComponent implements OnInit {
     }
     if (res) {
       window.alert("게시글이 삭제되었습니다.");
-      this.router.navigateByUrl(
-        "/community/" + this.communityBoardService.getCurrentMenu()
+      this.router.navigateByUrl("/community/" + this.communityBoardService.getCurrentMenu()
       );
     } else {
-      window.alert(
-        "게시글이 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요."
+      window.alert("게시글이 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요."
       );
     }
   }
 
+  /**
+   * @description delete current reply
+   */
   async deleteReply(): Promise<void> {
     let confirm = window.confirm("정말로 삭제하시겠습니까?");
     let res: boolean;
@@ -110,29 +109,31 @@ export class DocumentReadComponent implements OnInit {
     }
     if (res) {
       window.alert("게시글이 삭제되었습니다.");
-      this.router.navigateByUrl(
-        "/community/" + this.communityBoardService.getCurrentMenu()
-      );
+      this.router.navigateByUrl("/community/" + this.communityBoardService.getCurrentMenu());
     } else {
-      window.alert(
-        "게시글이 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요."
-      );
+      window.alert("게시글이 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요.");
     }
   }
 
-  navigateToModDoc(): void {
-    this.router.navigateByUrl("/community/" + this.currentMenu + "/modify");
-  }
-
+  /**
+   * @description automatically grow height of input box when user writes.
+   * @param e DOM event
+   */
   autoGrowTextZone(e): void {
     e.target.style.height = "0px";
     e.target.style.height = e.target.scrollHeight + 25 + "px";
   }
 
+  /**
+   * @description Toggle reply mode into ture/false
+   */
   changeReplyMode(): void {
     this.isReplyMode = !this.isReplyMode;
   }
 
+  /**
+   * @description Register new reply on the document.
+   */
   async registerReply(): Promise<void> {
     let queryBody: CommunityDocModel = {
       docId: this.doc["docId"],
@@ -144,18 +145,14 @@ export class DocumentReadComponent implements OnInit {
       },
     };
     if ("reply" in this.doc) {
-      let res: boolean = await this.communityBoardService.modifyReply(
-        queryBody
-      );
+      let res: boolean = await this.communityBoardService.modifyReply(queryBody);
       if (res) {
         window.alert("수정이 완료되었습니다.");
       }
       this.isAnswered = true;
       this.ngOnInit();
     } else {
-      let res: boolean = await this.communityBoardService.registerReply(
-        queryBody
-      );
+      let res: boolean = await this.communityBoardService.registerReply(queryBody);
       if (res) {
         window.alert("수정이 완료되었습니다.");
       }
@@ -166,6 +163,10 @@ export class DocumentReadComponent implements OnInit {
 
   goToList() {
     this._location.back();
+  }
+
+  navigateToModDoc(): void {
+    this.router.navigateByUrl("/community/" + this.currentMenu + "/modify");
   }
 
   //getters and setters

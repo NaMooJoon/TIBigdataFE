@@ -22,22 +22,35 @@ export class CommunityBoardComponent implements OnInit {
 
   ngOnInit() { }
 
-  navToQna() {
+  /**
+   * @description Navigate to qna page.
+   */
+  navToQna(): void {
     this.router.navigateByUrl("community/qna");
   }
 
-  navToAnnouncement() {
+  /**
+   * @description Navigate to announcement page.
+   */
+  navToAnnouncement(): void {
     this.router.navigateByUrl("community/announcement");
   }
 
-  navToFaq() {
+  /**
+   * @description Navigate to faq page.
+   */
+  navToFaq(): void {
     this.router.navigateByUrl("community/faq");
   }
 
-  isNavbarNeeded() {
+  /**
+   * @description Check current route and hide community board navigation bar if it is not needed
+   */
+  isNavbarNeeded(): boolean {
     return !(this.router.url.includes('new') || this.router.url.includes('read') || this.router.url.includes('modify'))
   }
 
+  // getters and setters
   public get selectedMenu(): string {
     return this._selectedMenu;
   }
