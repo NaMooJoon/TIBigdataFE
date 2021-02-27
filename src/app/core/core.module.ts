@@ -23,6 +23,7 @@ import {
 } from "angularx-social-login";
 import { ElasticSearchQueryModel } from "./models/elasticsearch.service.query.model";
 
+// Google API ID
 export const PROVIDER_ID: string =
   "576807286455-35sjp2v8leqpfeg3qj7k2rfr3avns7a5.apps.googleusercontent.com";
 

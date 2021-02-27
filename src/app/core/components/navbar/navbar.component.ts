@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
     private httpClient: HttpClient,
     private ipService: IpService
   ) {
+    // subscriber to get user infomation 
     this.authService.getCurrentUserChange().subscribe((user) => {
       if (user !== null) {
         this.isApiUser = user.isApiUser;

@@ -1,21 +1,23 @@
 import { Injectable } from "@angular/core";
-import { Client } from "elasticsearch-browser";
 import * as elasticsearch from "elasticsearch-browser";
-import { ArticleSource } from "src/app/core/models/article.model";
-import { Observable, BehaviorSubject } from "rxjs";
-import { IpService } from "src/app/core/services/ip-service/ip.service";
-import { ElasticSearchQueryModel } from "../../models/elasticsearch.service.query.model";
+import { Client } from "elasticsearch-browser";
+import { BehaviorSubject, Observable } from "rxjs";
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { SortOption } from "src/app/core/enums/serch-result-sort-option";
+import { ArticleSource } from "src/app/core/models/article.model";
+import { IpService } from "src/app/core/services/ip-service/ip.service";
+import { ElasticSearchQueryModel } from "../../models/elasticsearch.service.query.model";
 
 @Injectable({
   providedIn: "root",
 })
+
+/**
+ * ElasticsearchService takes control of seding and getting query to ElasticSearch server. All articles used in our web-service are get by this service.
+ */
 export class ElasticsearchService {
   private client: Client;
-  private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<
-    ArticleSource[]
-  >(undefined);
+  private articleSource: BehaviorSubject<ArticleSource[]> = new BehaviorSubject<ArticleSource[]>(undefined);
   private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
   private selectedInst: string;
