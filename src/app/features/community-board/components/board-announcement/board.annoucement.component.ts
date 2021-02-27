@@ -46,6 +46,10 @@ export class AnnouncementComponent implements OnInit {
     await this.loadPage(1);
   }
 
+  /**
+   * @description load documents of current page.
+   * @param currentPage current page to display
+   */
   async loadPage(currentPage: number): Promise<void> {
     this.docList = [];
 
@@ -68,6 +72,9 @@ export class AnnouncementComponent implements OnInit {
     this.setPageInfo(pageInfo);
   }
 
+  /**
+   * @description Load documents and save them into array with proper date format.
+   */
   async loadAnnouncements() {
     this.mainAnnounceNum = 0;
     let announceDocs: Array<CommunityDocModel> = await this.communityBoardService.getMainAnnounceDocs();
@@ -79,6 +86,9 @@ export class AnnouncementComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Load documents and save them into array with proper date format.
+   */
   async loadGenerals() {
     let generalDocs: Array<CommunityDocModel> = await this.communityBoardService.getDocs(
       this.startIndex
@@ -86,6 +96,9 @@ export class AnnouncementComponent implements OnInit {
     if (generalDocs.length !== 0) this.saveDocsInFormat(generalDocs);
   }
 
+  /**
+   * @description Load search result and save them into array with proper date format.
+   */
   async loadSearchResults() {
     let resultDocs: Array<CommunityDocModel> = await this.communityBoardService.searchDocs(
       this.searchText
@@ -93,6 +106,10 @@ export class AnnouncementComponent implements OnInit {
     if (resultDocs.length !== 0) this.saveDocsInFormat(resultDocs);
   }
 
+  /**
+   * @description Run search document with search keyword that user put in search bar.
+   * @param $event DOM event
+   */
   async searchDocs($event): Promise<void> {
     if (this.isSearchMode) return;
     this.searchText = $event.target.value;
@@ -101,6 +118,10 @@ export class AnnouncementComponent implements OnInit {
     this.isSearchMode = false;
   }
 
+  /**
+   * @description Update page information with given pagination model.
+   * @param pageInfo 
+   */
   setPageInfo(pageInfo: PaginationModel) {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
@@ -108,6 +129,10 @@ export class AnnouncementComponent implements OnInit {
     this.totalPages = pageInfo.totalPages;
   }
 
+  /**
+   * @description Save documents into list with converting date format 
+   * @param list 
+   */
   saveDocsInFormat(list: {}[]): void {
     if (list == null) return;
     list.forEach((doc: CommunityDocModel) => {
@@ -116,11 +141,19 @@ export class AnnouncementComponent implements OnInit {
     });
   }
 
+  /**
+   * @description Navigate to read document page
+   * @param i Index of selected document
+   */
   navToReadThisDoc(i: number) {
     this.communityBoardService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/announcement/read");
   }
 
+  /**
+   * @description Navigate to write document page
+   * @param i Index of selected document
+   */
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/announcement/new");
   }

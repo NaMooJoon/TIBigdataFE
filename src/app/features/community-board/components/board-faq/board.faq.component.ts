@@ -45,6 +45,10 @@ export class FaqComponent implements OnInit {
     this.loadPage(1);
   }
 
+  /**
+   * @description load documents of current page.
+   * @param currentPage current page to display
+   */
   async loadPage(currentPage: number) {
     this.docList = [];
 
@@ -64,6 +68,9 @@ export class FaqComponent implements OnInit {
     this.setPageInfo(pageInfo);
   }
 
+  /**
+   * @description Load documents and save them into array with proper date format.
+   */
   async loadDocs() {
     let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(
       this.startIndex
@@ -71,6 +78,10 @@ export class FaqComponent implements OnInit {
     if (generalDocs.length !== 0) this.saveDocsInFormat(generalDocs);
   }
 
+  /**
+   * @description Update page information with given pagination model.
+   * @param pageInfo 
+   */
   setPageInfo(pageInfo: PaginationModel) {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
@@ -78,6 +89,10 @@ export class FaqComponent implements OnInit {
     this.totalPages = pageInfo.totalPages;
   }
 
+  /**
+   * @description Save documents into list with converting date format 
+   * @param list 
+   */
   saveDocsInFormat(list: {}[]): void {
     if (list === null) return;
     list.forEach((doc: CommunityDocModel) => {
@@ -86,19 +101,26 @@ export class FaqComponent implements OnInit {
     });
   }
 
+  /**
+   * @description Navigate to read document page
+   * @param i Index of selected document
+   */
   navToReadThisDoc(i: number) {
     this.cmService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/faq/read");
   }
 
-  updateSearchKey($event: { target: { value: any } }) {
-    let keyword = $event.target.value;
-  }
-
+  /**
+   * @description Navigate to write document page
+   * @param i Index of selected document
+   */
   navToWriteNewDoc() {
     this.router.navigateByUrl("community/faq/new");
   }
 
+  /**
+   * @description Load search result and save them into array with proper date format.
+   */
   async loadSearchResults() {
     let resultDocs: Array<CommunityDocModel> = await this.cmService.searchDocs(
       this.searchText
@@ -106,6 +128,10 @@ export class FaqComponent implements OnInit {
     if (resultDocs.length !== 0) this.saveDocsInFormat(resultDocs);
   }
 
+  /**
+   * @description Run search document with search keyword that user put in search bar.
+   * @param $event DOM event
+   */
   async searchDocs($event): Promise<void> {
     if (this.isSearchMode) return;
     this.searchText = $event.target.value;

@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import moment from "moment";
 import { PaginationModel } from "src/app/core/models/pagination.model";
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { CommunityDocModel } from "../../models/community.doc.model";
 import { CommunityBoardService } from "../../services/community-board-service/community.board.service";
@@ -28,17 +27,18 @@ export class QnaComponent implements OnInit {
     private router: Router,
     private communityBoardService: CommunityBoardService,
     private pgService: PaginationService,
-    private authService: AuthenticationService
   ) { }
 
   ngOnInit() {
     this.loadPage(1);
   }
 
-  async loadPage(currentPage: number) {
-
+  /**
+   * @description load documents of current page.
+   * @param currentPage current page to display
+   */
+  async loadPage(currentPage: number): Promise<void> {
     this.docList = [];
-
     if (this.isSearchMode) {
       this.totalDocs = await this.communityBoardService.getSearchDocsNum(this.searchText);
       let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
@@ -50,25 +50,28 @@ export class QnaComponent implements OnInit {
       this.setPageInfo(pageInfo);
       await this.loadDocs();
     }
-
-
   }
 
-  async loadDocs() {
-
-    let generalDocs: Array<CommunityDocModel> = await this.communityBoardService.getDocs(
-      this.startIndex
-    );
+  /**
+   * @description Load documents and save them into array with proper date format.
+   */
+  async loadDocs(): Promise<void> {
+    let generalDocs: Array<CommunityDocModel> = await this.communityBoardService.getDocs(this.startIndex);
     if (generalDocs.length !== 0) this.saveDocsInFormat(generalDocs);
   }
 
-  async loadSearchResults() {
-    let resultDocs: Array<CommunityDocModel> = await this.communityBoardService.searchDocs(
-      this.searchText
-    );
+  /**
+  * @description Load search result and save them into array with proper date format.
+  */
+  async loadSearchResults(): Promise<void> {
+    let resultDocs: Array<CommunityDocModel> = await this.communityBoardService.searchDocs(this.searchText);
     if (resultDocs.length !== 0) this.saveDocsInFormat(resultDocs);
   }
 
+  /**
+   * @description Run search document with search keyword that user put in search bar.
+   * @param $event DOM event
+   */
   async searchDocs($event): Promise<void> {
     if (this.isSearchMode) return;
     this.searchText = $event.target.value;
@@ -77,6 +80,10 @@ export class QnaComponent implements OnInit {
     this.isSearchMode = false;
   }
 
+  /**
+   * @description Update page information with given pagination model.
+   * @param pageInfo 
+   */
   setPageInfo(pageInfo: PaginationModel) {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
@@ -84,6 +91,10 @@ export class QnaComponent implements OnInit {
     this.totalPages = pageInfo.totalPages;
   }
 
+  /**
+   * @description Save documents into list with converting date format 
+   * @param list 
+   */
   saveDocsInFormat(list: {}[]): void {
     if (list === null) return;
     list.forEach((doc: CommunityDocModel) => {
@@ -92,19 +103,28 @@ export class QnaComponent implements OnInit {
     });
   }
 
-  navToReadThisDoc(i: number) {
+  /**
+   * @description Navigate to read document page
+   * @param i Index of selected document
+   */
+  navToReadThisDoc(i: number): void {
     this.communityBoardService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/qna/read");
   }
 
-  updateSearchKey($event: { target: { value: any } }) {
-    let keyword = $event.target.value;
-  }
-
-  navToWriteNewDoc() {
+  /**
+   * @description Navigate to write document page
+   * @param i Index of selected document
+   */
+  navToWriteNewDoc(): void {
     this.router.navigateByUrl("community/qna/new");
   }
 
+  /**
+   * @description Check if given document has property with 'reply' key.
+   * @param doc Community document to check.
+   * @returns Check result. return true if there is a property.
+   */
   isAnswered(doc: CommunityDocModel): boolean {
     return "reply" in doc;
   }
