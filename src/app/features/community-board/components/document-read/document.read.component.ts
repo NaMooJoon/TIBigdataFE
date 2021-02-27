@@ -29,10 +29,10 @@ export class DocumentReadComponent implements OnInit {
   constructor(
     private communityBoardService: CommunityBoardService,
     private router: Router,
-    private authService: AuthenticationService,
+    private authenticationService: AuthenticationService,
     private _location: Location
   ) {
-    this.authService.getCurrentUserChange().subscribe((currentUser) => {
+    this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;
       if (currentUser !== null) {
         this.currentUserEmail = currentUser.email;

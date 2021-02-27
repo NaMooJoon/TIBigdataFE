@@ -23,10 +23,10 @@ export class DocumentWriteComponent {
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
-    private auth: AuthenticationService,
+    private authenticationService: AuthenticationService,
     private _location: Location
   ) {
-    this.auth.getCurrentUserChange().subscribe((currentUser) => {
+    this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;
     });
 
