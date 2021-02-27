@@ -14,7 +14,6 @@ export class AboutSideMenuComponent implements OnInit {
   ngOnInit(): void {
     let url = this.router.url.split("/");
     this.currentMenu = url[url.length - 1];
-
     this.setTitle(this.currentMenu);
   }
 

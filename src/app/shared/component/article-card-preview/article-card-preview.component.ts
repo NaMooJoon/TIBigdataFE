@@ -16,30 +16,30 @@ export class ArticleCardViewComponent implements OnInit {
     public _router: Router,
     private documentService: ArticleService
   ) { }
-
-  readonly DEBUG: boolean = false;
   private keywords: any[] = [];
   private docId: string;
-
-  debug(...arg: any[]) {
-
-  }
 
   ngOnInit() {
     this.docId = this.article._id;
     this.article = this.article._source;
-    this.load_top_keywords();
+    this.loadTopKeywords();
     if (this.article.file_download_url === undefined) {
       this.article.file_download_url = this.article.published_institution_url;
     }
   }
 
+  /**
+   * @description Update selected article and navigate to read article page. 
+   */
   openDocDetail(): void {
     this.documentService.setSelectedId(this.docId);
     this.navToDocDetail();
   }
 
-  load_top_keywords() {
+  /**
+   * @description Load list of top keywords of current article
+   */
+  loadTopKeywords(): void {
     this.db.getTfidfVal(this.docId).then((res) => {
       let data = res as [];
       for (let n = 0; n < data.length; n++) {
@@ -49,7 +49,7 @@ export class ArticleCardViewComponent implements OnInit {
     });
   }
 
-  navToDocDetail() {
+  navToDocDetail(): void {
     this._router.navigateByUrl("search/read");
   }
 }
