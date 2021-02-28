@@ -118,3 +118,30 @@ _**All dependencies are recommended to be up-to-date**_
 
 2. `dist` directory will be created in the project root directory.
 3. Copy `dist` into server as a resource.
+
+## Work Flow of Major Services
+
+1. Searching Logic
+
+   1. User Type keyword on SearchbarComponent and press enter.
+   2. SearchbarComponent updates search keyword and search mode on ElasticsearchService.
+   3. After setting search configuration, ElasticsearchService triggers searching logic by sending query to backend server. At this time, according to the search configuration, EalsticsearchService get query from ElasticsearchQueryModel.
+
+2. Display Search Result
+
+   1. When user press enter, the router moves to search/result page immediately.
+   2. When searching logic has been done in ElasticsearchService, the service update the list of articles with new search list. At this time ElasticsearchService send the updated data to all subscribers. SearchResultComponent is one of the subscribers.
+   3. Whenever SearchResultComponent get updated ArticleSource data, SearchResultComponent read the data and create list of current search result.
+
+3. Sign-in
+
+   1. Sign-in process will be done by `angularx-social-login` module.
+   2. Our domain is registered in Google API, so that we can request user sign-in by google account.
+   3. When sign-in with google account is complete, we need to request MongoDB API server to check the user is registered in our system.
+   4. If the user is not registered, make the google account sign-out.
+   5. If the user is registered, get extra information of the users saved in our database and save token named 'KUBIC' into local storage of the user's browser for session maintainance.
+
+4. User Authentication in Session
+
+   1. When the angular appliacation is initialized(Web page is first loaded), the root component checks if there is a saved token in user's browser local storage. If there is a token named with KUBIC, request AuthenticationService to verify current user.
+   2. The verification is done by checking the token is alive. If it is valid, the web application maintain user information in session. Otherwise, it deletes the token from the local storage and current user information saved in AuthenticationService.
