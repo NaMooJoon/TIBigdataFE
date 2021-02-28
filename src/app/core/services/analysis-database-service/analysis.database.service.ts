@@ -8,7 +8,6 @@ import { ArticleService } from "src/app/core/services/article-service/article.se
 })
 export class AnalysisDatabaseService {
   private URL = this.ipService.getFrontDBServerIp();
-
   private GET_KEYWORDS_URL = this.URL + "/keyword/getKeyVal";
   private GET_RCMD_URL = this.URL + "/rcmd/getRcmdTbl";
   private GET_TOPIC_URL = this.URL + "/topic/getTopicTbl";
@@ -19,7 +18,7 @@ export class AnalysisDatabaseService {
     private ipService: IpService,
     private http: HttpClient,
     private docControl: ArticleService
-  ) {}
+  ) { }
   readonly DEBUG: boolean = false;
 
   async getTopicTable(isPlain?: boolean) {

@@ -114,7 +114,7 @@
             <div class="select-analysis-data-num">
               <h3>출력할 데이터의 숫자</h3>
               <select
-                [ngStyle]="selectedStyleObject(selectedDataNum !== 0)"
+                [ngStyle]="selectedStyleObject(selectedDataNum !== 0, null)"
                 (change)="setSelectedDataNum($event.target.value)"
               >
                 <option value="5">5</option>

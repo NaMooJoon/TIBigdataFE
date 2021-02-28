@@ -1,0 +1,127 @@
+@media all and (min-width: 1441px) {
+  .library-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-template-rows   : 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  : ". . . body body body body body body body body body body body body ";
+    height               : 100%;
+  }
+}
+
+@media all and (min-width: 1025px) and (max-width: 1440px) {
+  .library-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows   : 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  : " . . body body body body body body body body body body body ";
+    height               : 100%;
+  }
+}
+
+@media all and (min-width: 769px) and (max-width: 1024px) {
+  .library-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows   : 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  : "  . body body body body body body body body body body ";
+    height               : 100%;
+  }
+}
+
+
+
+* {
+  font-size: 1.438rem;
+}
+
+hr {
+  margin          : 40px 0px;
+  background-color: #8a8d8e;
+}
+
+h2 {
+  font-weight: 500 !important;
+  width      : 6em;
+  text-align : center;
+  display    : inline-block;
+}
+
+.library {
+  grid-area: body;
+}
+
+.library-header {
+  display        : flex;
+  justify-content: space-between;
+  align-items    : center;
+}
+
+.library-header>button {
+  width              : fit-content;
+  /* height          : 40px; */
+  height             : 2em;
+  padding            : 0px 0.5em;
+  background-color   : #52b9ff;
+  border             : none;
+  border-radius      : 30px;
+  color              : white;
+  display            : flex;
+  flex-direction     : column;
+  justify-content    : center;
+  align-items        : center;
+  background-image   : url("../../../../../assets/icons/research-topics.png");
+  background-position: left 0.5em center;
+  background-repeat  : no-repeat;
+  background-size    : 1.4em;
+  padding-left       : 2.2em;
+}
+
+.selection-container {
+  display    : flex;
+  align-items: center;
+}
+
+.selection-container>p {
+  font-size  : 1.938rem;
+  width      : 8em;
+  white-space: nowrap;
+  text-align : center;
+}
+
+.selection-buttons {
+  display  : flex;
+  flex-wrap: wrap;
+  width    : fit-content;
+}
+
+.selection-buttons>button {
+  width           : 4em;
+  height          : 2em;
+  margin          : 0.5em 1em;
+  background-color: white;
+  border-radius   : 25px;
+  border          : 1px solid lightgray;
+}
+
+.institutions::-webkit-scrollbar {
+  display: none;
+}
+
+.institutions>button {
+  min-width       : 13em;
+  height          : 2em;
+  white-space     : nowrap;
+  padding         : 5px 10px;
+  background-color: white;
+  border-radius   : 25px;
+  border          : 1px solid lightgray;
+}

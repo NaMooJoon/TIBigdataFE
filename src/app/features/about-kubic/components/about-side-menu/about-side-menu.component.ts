@@ -7,14 +7,13 @@ import { Router } from "@angular/router";
   styleUrls: ["./about-side-menu.component.css"],
 })
 export class AboutSideMenuComponent implements OnInit {
-  private title: string = "";
-  private currentMenu: string = "";
-  constructor(private router: Router) {}
+  private _title: string = "";
+  private _currentMenu: string = "";
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     let url = this.router.url.split("/");
     this.currentMenu = url[url.length - 1];
-
     this.setTitle(this.currentMenu);
   }
 
@@ -61,5 +60,18 @@ export class AboutSideMenuComponent implements OnInit {
   toMemberPolicy() {
     this.router.navigateByUrl("/about/member-policy");
     this.ngOnInit();
+  }
+
+  public get currentMenu(): string {
+    return this._currentMenu;
+  }
+  public set currentMenu(value: string) {
+    this._currentMenu = value;
+  }
+  public get title(): string {
+    return this._title;
+  }
+  public set title(value: string) {
+    this._title = value;
   }
 }

@@ -1,14 +1,14 @@
 <nav>
   <ul class="common-menu">
-    <li [ngStyle]="selectedStyleObject(selectedMenu == 'library')">
+    <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
       <a (click)="navigateLibrary()">자료열람</a>
     </li>
-    <li [ngStyle]="selectedStyleObject(selectedMenu == 'analysis')">
+    <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
       <a (click)="navigateSpecials()">자료분석</a>
     </li>
-    <li *ngIf="isApiUser"><a>OpenAPI</a></li>
+    <li *ngIf="getIsApiUser()"><a>OpenAPI</a></li>
     <li
-      [ngStyle]="selectedStyleObject(selectedMenu == 'community')"
+      [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
       class="community-menu"
     >
       <div class="dropdown-container">
@@ -21,7 +21,7 @@
       </div>
     </li>
     <li
-      [ngStyle]="selectedStyleObject(selectedMenu === 'about')"
+      [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
       class="about-menu"
     >
       <div class="dropdown-container">
@@ -36,17 +36,17 @@
     </li>
   </ul>
 
-  <ul *ngIf="!isSignedIn" class="login-menu">
-    <li [ngStyle]="selectedStyleObject(selectedMenu === 'login')">
+  <ul *ngIf="!getIsSignedIn()" class="login-menu">
+    <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
       <a (click)="toLogin()">로그인</a>
     </li>
-    <li [ngStyle]="selectedStyleObject(selectedMenu === 'register')">
+    <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
       <a (click)="toRegister()">회원가입</a>
     </li>
   </ul>
 
-  <ul *ngIf="isSignedIn" class="user-menu">
-    <li [ngStyle]="selectedStyleObject(selectedMenu === 'userpage')">
+  <ul *ngIf="getIsSignedIn()" class="user-menu">
+    <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
       <a (click)="toUserPage()">마이페이지</a>
     </li>
     <li><a (click)="logOut()">로그아웃</a></li>

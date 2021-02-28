@@ -1,11 +1,10 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from "src/app/core/guards/auth-guard/auth.guard";
-
 import { AnnouncementComponent } from "./components/board-announcement/board.annoucement.component";
 import { QnaComponent } from "./components/board-qna/board.qna.component";
 import { FaqComponent } from "./components/board-faq/board.faq.component";
-import { CommunityBoardComponent } from "./community.board.component";
+import { CommunityBoardComponent } from "./components/community-board-root/community.board.component";
 import { DocumentWriteComponent } from "./components/document-write/document.write.component";
 import { DocumentReadComponent } from "./components/document-read/document.read.component";
 import { DocumentModifyComponent } from "./components/document-modify/document.modify.component";
@@ -70,7 +69,7 @@ const routes: Routes = [
         component: DocumentReadComponent,
       },
     ],
-    
+
   },
 ];
 
@@ -78,4 +77,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class CommunityRoutingModule {}
+export class CommunityRoutingModule { }

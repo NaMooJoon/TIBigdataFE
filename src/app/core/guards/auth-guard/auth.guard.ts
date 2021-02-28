@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
 
+    // do not allow below pages when user is logged in.
     if (
       this.getPath(next) === "login" ||
       this.getPath(next) === "register" ||
@@ -32,6 +33,7 @@ export class AuthGuard implements CanActivate {
         window.alert("이미 로그인 되어있습니다!");
         this.router.navigate(["/"]);
       }
+    // other pages follows canActivate policy set in routing module
     } else if (!localStorage.getItem("KUBIC_TOKEN")) {
       window.alert("비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.");
       this.router.navigate(["login"]);

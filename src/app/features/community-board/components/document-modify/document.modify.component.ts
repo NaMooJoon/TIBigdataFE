@@ -11,10 +11,15 @@ import { CommunityDocModel } from "src/app/features/community-board/models/commu
   styleUrls: ["document.modify.component.css"],
 })
 export class DocumentModifyComponent implements OnInit {
+
+  private _selectedBoard: string;
+  private _boardForm: FormGroup;
+  private _selectedDoc: CommunityDocModel;
+
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
-    private auth: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
     this.boardForm = new FormGroup({
       title: new FormControl("", Validators.required),
@@ -24,14 +29,13 @@ export class DocumentModifyComponent implements OnInit {
     });
   }
 
-  private selectedBoard: string;
-  private boardForm: FormGroup;
-  private selectedDoc: CommunityDocModel;
-
   ngOnInit() {
     this.loadDoc();
   }
 
+  /**
+   * @description load document to modify and set initial value of form
+   */
   async loadDoc() {
     this.selectedDoc = await this.communityBoardService.getSelectedDoc();
     this.selectedBoard = this.communityBoardService.getCurrentMenu();
@@ -43,10 +47,11 @@ export class DocumentModifyComponent implements OnInit {
     );
   }
 
+  /**
+   * @description Modify current document
+   */
   async modifyDocument(): Promise<void> {
-    let res: boolean = await this.communityBoardService.modifyDoc(
-      this.generateQueryBody()
-    );
+    let res: boolean = await this.communityBoardService.modifyDoc(this.generateQueryBody());
     if (res) {
       window.alert("수정이 완료되었습니다.");
       this.toCommunity();
@@ -55,18 +60,16 @@ export class DocumentModifyComponent implements OnInit {
     }
   }
 
-  toCommunity(): void {
-    this.router.navigateByUrl(
-      "/community/" + this.communityBoardService.getCurrentMenu()
-    );
-  }
-
   onCheckboxChange(): void {
     this.boardForm.controls["isMainAnnounce"].setValue(
       !this.boardForm.controls["isMainAnnounce"].value
     );
   }
 
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
   generateAnnounceQueryBody(): CommunityDocModel {
     return {
       docId: this.selectedDoc["docId"],
@@ -80,6 +83,10 @@ export class DocumentModifyComponent implements OnInit {
     };
   }
 
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
   generateFaqQueryBody(): CommunityDocModel {
     return {
       docId: this.selectedDoc["docId"],
@@ -93,6 +100,10 @@ export class DocumentModifyComponent implements OnInit {
     };
   }
 
+  /**
+   * @description Create query body by adding user information and filter content
+   * @returns query model for community document
+   */
   generateQnaQueryBody(): CommunityDocModel {
     return {
       docId: this.selectedDoc["docId"],
@@ -105,6 +116,10 @@ export class DocumentModifyComponent implements OnInit {
     };
   }
 
+  /**
+   * @description Call query body genreation according to current menu.
+   * @returns generated query body
+   */
   generateQueryBody(): CommunityDocModel {
     if (this.communityBoardService.getCurrentMenu() == "announcement")
       return this.generateAnnounceQueryBody();
@@ -112,5 +127,32 @@ export class DocumentModifyComponent implements OnInit {
       return this.generateFaqQueryBody();
     if (this.communityBoardService.getCurrentMenu() == "qna")
       return this.generateQnaQueryBody();
+  }
+
+  toCommunity(): void {
+    this.router.navigateByUrl(
+      "/community/" + this.communityBoardService.getCurrentMenu()
+    );
+  }
+
+
+  // getters and setters
+  public get selectedBoard(): string {
+    return this._selectedBoard;
+  }
+  public set selectedBoard(value: string) {
+    this._selectedBoard = value;
+  }
+  public get boardForm(): FormGroup {
+    return this._boardForm;
+  }
+  public set boardForm(value: FormGroup) {
+    this._boardForm = value;
+  }
+  public get selectedDoc(): CommunityDocModel {
+    return this._selectedDoc;
+  }
+  public set selectedDoc(value: CommunityDocModel) {
+    this._selectedDoc = value;
   }
 }

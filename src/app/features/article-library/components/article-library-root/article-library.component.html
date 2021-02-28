@@ -1,0 +1,64 @@
+<div class="library-container">
+  <section class="library">
+    <div class="library-header">
+      <h1>자료열람</h1>
+      <button (click)="navToGraph()">통일연구 동향 그래프</button>
+    </div>
+
+    <hr />
+
+    <div class="selection-container topic-container">
+      <p>주제별</p>
+      <div class="selection-buttons">
+        <button
+          *ngFor="let cat of categories"
+          id="topic"
+          (click)="selectCategory($event)"
+        >
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="selection-container dict-container">
+      <p>사전편찬별</p>
+      <div class="selection-buttons">
+        <button
+          *ngFor="let cat of dict_orders_1"
+          (click)="selectCategory($event)"
+        >
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="selection-container inst-container">
+      <p>기관별</p>
+      <div class="selection-buttons institutions">
+        <button
+          *ngIf="institutionList !== undefined"
+          [ngStyle]="selectedStyleObject(selectedInst === '전체')"
+          id="inst"
+          (click)="selectCategory($event, null)"
+        >
+          전체
+        </button>
+        <button
+          *ngFor="let inst of institutionList"
+          [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
+          id="inst"
+          (click)="selectCategory($event, inst)"
+        >
+          {{ inst["key"] }} {{ inst["doc_count"] }}
+        </button>
+      </div>
+    </div>
+
+    <hr />
+    <app-article-list></app-article-list>
+  </section>
+</div>

@@ -11,9 +11,9 @@ import { Router, NavigationEnd } from "@angular/router";
 export class AppComponent {
   title = "KUBiC";
 
-  private isUserLoaded = false;
-  private isBackendAvailable;
-  private isSearchbarNeeded = true;
+  private _isUserLoaded = false;
+  private _isBackendAvailable;
+  private _isSearchbarNeeded = true;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -39,8 +39,8 @@ export class AppComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    this.isBackendAvailable = await this.elasticsearchSearvice.isAvailable();
-    // this.isBackendAvailable = true;
+    // this.isBackendAvailable = await this.elasticsearchSearvice.isAvailable();
+    this.isBackendAvailable = true;
     if (localStorage.getItem("KUBIC_TOKEN") != null) {
       let isSuccess = await this.authenticationService.verifySignIn();
       if (!isSuccess) {
@@ -54,5 +54,25 @@ export class AppComponent {
     else {
       this.isUserLoaded = true;
     }
+  }
+
+  // getters and setters
+  public get isUserLoaded() {
+    return this._isUserLoaded;
+  }
+  public set isUserLoaded(value) {
+    this._isUserLoaded = value;
+  }
+  public get isBackendAvailable() {
+    return this._isBackendAvailable;
+  }
+  public set isBackendAvailable(value) {
+    this._isBackendAvailable = value;
+  }
+  public get isSearchbarNeeded() {
+    return this._isSearchbarNeeded;
+  }
+  public set isSearchbarNeeded(value) {
+    this._isSearchbarNeeded = value;
   }
 }
