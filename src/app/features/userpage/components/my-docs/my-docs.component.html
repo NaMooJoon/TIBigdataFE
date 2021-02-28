@@ -10,7 +10,7 @@
         />전체선택
       </label>
     </div>
-    <div *ngIf="!isDocEmpty" class="upside3">
+    <div *ngIf="savedDocs.length !== 0" class="upside3">
       <button>선택삭제</button>
       <button (click)="deleteAllMyDocs()">전체삭제</button>
     </div>

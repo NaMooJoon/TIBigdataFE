@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LibraryRoutingModule } from "./article-library-routing.module";
 import { ResearchStatusComponent } from "./components/research-status/research-status.component";
-import { ArticleLibraryComponent } from "./article-library.component";
+import { ArticleLibraryComponent } from "./components/article-library-root/article-library.component";
 import { ChartsModule } from "ng2-charts";
 import { SharedModule } from "src/app/shared/shared.module";
 

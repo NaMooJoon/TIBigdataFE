@@ -1,0 +1,54 @@
+<div class="community-board-container">
+  <section class="community-board">
+    <div *ngIf="isNavbarNeeded()" class="board-nav-container">
+      <nav class="community-nav">
+        <ul>
+          <li>
+            <h1
+              [ngStyle]="{
+                color: selectedMenu === 'announcement' ? 'black' : 'lightgray'
+              }"
+            >
+              <a (click)="navToAnnouncement()">공지사항</a>
+            </h1>
+          </li>
+          <li>
+            <h1
+              [ngStyle]="{
+                color: selectedMenu === 'faq' ? 'black' : 'lightgray'
+              }"
+            >
+              <a (click)="navToFaq()">FAQ</a>
+            </h1>
+          </li>
+          <li>
+            <h1
+              [ngStyle]="{
+                color: selectedMenu === 'qna' ? 'black' : 'lightgray'
+              }"
+            >
+              <a (click)="navToQna()">Q&A</a>
+            </h1>
+          </li>
+        </ul>
+      </nav>
+
+      <hr class="nav-separator" />
+      <section class="menu-info">
+        <div
+          *ngIf="selectedMenu === 'announcement'"
+          class="menu-info-announcement"
+        >
+          공지사항을 알려드립니다.
+        </div>
+        <div *ngIf="selectedMenu === 'faq'" class="menu-info-faq">
+          이용자분들께서 자주하시는 질문들 입니다.
+        </div>
+        <div *ngIf="selectedMenu === 'qna'" class="menu-info-qna">
+          KUBiC에 대해 궁금하신 것을 남겨주세요.
+        </div>
+      </section>
+    </div>
+    <router-outlet></router-outlet>
+  </section>
+</div>

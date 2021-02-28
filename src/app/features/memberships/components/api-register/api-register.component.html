@@ -380,7 +380,7 @@
             type="checkbox"
             name=""
             id="agreement-check"
-            [(ngModel)]="agreement"
+            [(ngModel)]="isAgreed"
           />
           약관에 동의합니다</label
         >
@@ -388,7 +388,7 @@
     </section>
     <button
       class="submit-button"
-      [disabled]="!agreement"
+      [disabled]="!isAgreed"
       (click)="registerApi()"
     >
       회원가입 및 인증키 발급 페이지로 이동

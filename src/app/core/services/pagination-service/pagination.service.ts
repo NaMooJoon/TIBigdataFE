@@ -7,6 +7,25 @@ const MAX_PAGE_NUM = 5;
   providedIn: "root",
 })
 export class PaginationService {
+  /**
+   * @description Run pagination logic to get page information.
+   * @param currentPage Current page to display.
+   * @param totalDocs Number of total articles to show.
+   * @param pageSize Number of articles per one page 
+   * @param maxPageNum Number of pages to display at once.
+   * 
+   * @returns [
+   * totalDocs: total number of articles to display, 
+      currentPage: current page to display, 
+      pageSize: number of articles per page, 
+      totalPages: total pages to display,
+      startPage: begging number of current page number block,
+      endPage: last number of current page page number block,
+      startIndex: start index to search in this page number block,
+      endIndex: last inedx to search in this page number block,
+      pages: page numbers of current page number block,
+    };
+   */
   async paginate(
     currentPage: number,
     totalDocs: number,

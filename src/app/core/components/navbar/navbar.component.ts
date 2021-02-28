@@ -10,8 +10,8 @@ import { IpService } from "src/app/core/services/ip-service/ip.service";
   styleUrls: ["./navbar.component.less"],
 })
 export class NavbarComponent implements OnInit {
-  private isApiUser: Boolean = false;
-  private isSignedIn: Boolean = false;
+  private isApiUser: boolean = false;
+  private isSignedIn: boolean = false;
   private selectedMenu: string = "";
   private userEmail: string;
 
@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
     private httpClient: HttpClient,
     private ipService: IpService
   ) {
+    // subscriber to get user infomation 
     this.authService.getCurrentUserChange().subscribe((user) => {
       if (user !== null) {
         this.isApiUser = user.isApiUser;
@@ -124,5 +125,17 @@ export class NavbarComponent implements OnInit {
 
   toMemberPolicy(): void {
     this.router.navigateByUrl("/about/member-policy");
+  }
+
+  getSelectedMenu(): string {
+    return this.selectedMenu;
+  }
+
+  getIsApiUser(): boolean {
+    return this.isApiUser;
+  }
+
+  getIsSignedIn(): boolean {
+    return this.isSignedIn;
   }
 }

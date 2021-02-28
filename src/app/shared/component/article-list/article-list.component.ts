@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import { Observable, Subscription } from "rxjs";
 import { ArticleSource } from "src/app/core/models/article.model";
-import { Subscription, Observable } from "rxjs";
-import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { PaginationModel } from "src/app/core/models/pagination.model";
-import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
+import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
+import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
+import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
+import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
 @Component({
   selector: "app-article-list",
@@ -17,46 +17,42 @@ import { ArticleService } from "src/app/core/services/article-service/article.se
   styleUrls: ["./article-list.component.less"],
 })
 export class ArticleListComponent implements OnInit, OnDestroy {
-  orders = ["최신순", "과거순"];
-  amounts = [10, 30, 50];
-  form: FormGroup;
+  public orders = ["최신순", "과거순"];
+  public amounts = [10, 30, 50];
+  private _form: FormGroup;
 
-  private relatedDocs: ArticleSource[][] = [];
-  private articleNumChange$: Observable<any> = this.elasticSearchService.getArticleNumChange();
-  private articleChange$: Observable<
-    ArticleSource[]
-  > = this.elasticSearchService.getArticleChange();
-  private searchStatusChange$: Observable<boolean> = this.elasticSearchService.getSearchStatus();
+  private _relatedDocs: ArticleSource[][] = [];
+  private _articleNumChange$: Observable<any> = this.elasticsearchService.getArticleNumChange();
+  private _articleChange$: Observable<ArticleSource[]> = this.elasticsearchService.getArticleChange();
+  private _searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
 
-  private articleNumSubscriber: Subscription;
-  private articleSubscriber: Subscription;
-  private articleSources: ArticleSource[];
-  private RelatedDocBtnToggle: Array<boolean>;
+  private _articleNumSubscriber: Subscription;
+  private _articleSubscriber: Subscription;
+  private _articleSources: ArticleSource[];
+  private _relatedDocBtnToggle: Array<boolean>;
+  private _isResultFound: boolean;
+  private _isSearchDone: boolean;
+  private _isLoggedIn: boolean;
+  private _isMainSearch: boolean;
 
-  private isResultFound: boolean;
-  private isSearchDone: boolean;
-  private isLoggedIn: boolean;
-  private isMainSearch: boolean;
-
-  private searchResultNum: string = "0";
-  private searchKeyword: string;
-
-  private currentPage: number = 1;
-  private pages: number[];
-  private startIndex: number;
-  private totalPages: number = 1;
-  private totalDocs: number;
-  private pageSize: number = 10;
+  private _searchResultNum: string = "0";
+  private _searchKeyword: string;
+  private _currentPage: number = 1;
+  private _pages: number[];
+  private _startIndex: number;
+  private _totalPages: number = 1;
+  private _totalDocs: number;
+  private _pageSize: number = 10;
 
   constructor(
     private userSavedDocumentService: UserSavedDocumentService,
     private articleService: ArticleService,
     private router: Router,
-    private elasticSearchService: ElasticsearchService,
+    private elasticsearchService: ElasticsearchService,
     private analysisDatabaseService: AnalysisDatabaseService,
     private formBuilder: FormBuilder,
     private paginationService: PaginationService,
-    private authService: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
     // Set articles when article has been changed
     this.articleSubscriber = this.articleChange$.subscribe((articles) => {
@@ -67,7 +63,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.setArticleForm();
 
       this.isResultFound = articles !== null;
-      this.elasticSearchService.setSearchStatus(true);
+      this.elasticsearchService.setSearchStatus(true);
     });
 
     // Check if it is still searching
@@ -79,11 +75,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.articleNumSubscriber = this.articleNumChange$.subscribe((num) => {
       this.totalDocs = num;
       this.searchResultNum = this.convertNumberFormat(num);
-      this.loadPage(this.elasticSearchService.getCurrentSearchingPage());
+      this.loadPage(this.elasticsearchService.getCurrentSearchingPage());
     });
 
     // Observe to check if user is signed out
-    this.authService.getCurrentUserChange().subscribe((user) => {
+    this.authenticationService.getCurrentUserChange().subscribe((user) => {
       this.isLoggedIn = user != null;
     });
   }
@@ -98,26 +94,40 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.beginSearch(this.currentPage);
   }
 
-  beginSearch(pageNum: number) {
+  /**
+   * @description Set configurations of search and call search logic in elasticsearchService.
+   * @param pageNum Number of articles to display in one page.
+   */
+  beginSearch(pageNum: number): void {
     this.currentPage = pageNum;
     if (this.currentPage === null) this.currentPage = 1;
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
     if (this.currentPage < 1) this.currentPage = 1;
-    this.elasticSearchService.triggerSearch(this.currentPage);
+    this.elasticsearchService.triggerSearch(this.currentPage);
   }
 
+  /**
+   * @description Create form to set checkbox for each article in the list. 
+   */
   setArticleForm(): void {
     this.form = this.formBuilder.group({
       checkArray: this.formBuilder.array([]),
     });
   }
 
+  /**
+   * @description Add property of checkbox value into article.
+   */
   setCheckbox(): void {
     for (let i in this.articleSources) {
       this.articleSources[i]["isSelected"] = false;
     }
   }
 
+  /**
+   * @description Update paging-related variable with given pagination model object.
+   * @param pageInfo Pagination model object created by pagination service.
+   */
   setPageInfo(pageInfo: PaginationModel): void {
     this.pages = pageInfo.pages;
     this.currentPage = pageInfo.currentPage;
@@ -125,6 +135,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.totalPages = pageInfo.totalPages;
   }
 
+  /**
+   * @description Update paging information based on current page information.
+   * @param currentPage current page to display 
+   */
   async loadPage(currentPage: number): Promise<void> {
     let pageInfo: PaginationModel = await this.paginationService.paginate(
       currentPage,
@@ -134,29 +148,44 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.setPageInfo(pageInfo);
   }
 
+  /**
+   * @description Convert number format by inserting ',' for each 3 digits. i.e. 1234567 will be converted into 1,234,567
+   * @param num Number to convert. 
+   */
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();
     if (num === 0) return docCount;
     return docCount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  /**
+   * @description Reset all search options set before. 
+   */
   resetSearchOptions(): void {
-    this.isMainSearch = this.router.url === "/search/result";
+    this.isMainSearch = (this.router.url === "/search/result");
     this.articleService.clearList();
-    this.searchKeyword = this.elasticSearchService.getKeyword();
+    this.searchKeyword = this.elasticsearchService.getKeyword();
     this.isResultFound = false;
     this.isSearchDone = false;
-    this.currentPage = this.elasticSearchService.getCurrentSearchingPage();
+    this.currentPage = this.elasticsearchService.getCurrentSearchingPage();
   }
 
+  /**
+   * @description Set list of article ids by reading id field of each element in articleSource.
+   */
   setArticleIdList(): void {
-    this.RelatedDocBtnToggle = [];
+    this.relatedDocBtnToggle = [];
     for (var i in this.articleSources) {
       this.articleService.addId(this.articleSources[i]["_id"]);
-      this.RelatedDocBtnToggle.push(false);
+      this.relatedDocBtnToggle.push(false);
     }
   }
 
+  /**
+   * @description Open selected related-article that user choose.
+   * @param articleSourceIdx Index of article from articleSouce.
+   * @param RelatedDocIdx Index of related articles from relatedDocs.
+   */
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
     this.articleService.setSelectedId(
       this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]
@@ -164,11 +193,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.navToDocDetail();
   }
 
+  /**
+   * @description Open list of related articles when user click on related article toggle.
+   * @param i index of related articles.
+   */
   openRelatedDocList(i: number): void {
     this.loadRelatedDocs(i);
-    this.RelatedDocBtnToggle[i] = !this.RelatedDocBtnToggle[i];
+    this.relatedDocBtnToggle[i] = !this.relatedDocBtnToggle[i];
   }
 
+  /**
+   * @description Load related articles of selected article.
+   * @param idx Index number of article from relatedDocs.
+   */
   loadRelatedDocs(idx: number): void {
     this.analysisDatabaseService
       .loadRelatedDocs(this.articleService.getIdByIdx(idx))
@@ -177,6 +214,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * @description Save checked articles into database.
+   */
   saveSelectedDocs(): void {
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
@@ -189,6 +229,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Toggle check all checkbox.
+   * @param isCheckAll If all checkboxes are currently checked, marked as true, otherwise, marked as false.
+   * @param checkArray FormArray to update into checked all or unchecked all.
+   */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.articleSources.length; i++) {
@@ -197,14 +242,16 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     } else {
       checkArray.clear();
     }
-
     for (let i = 0; i < this.articleSources.length; i++) {
       this.articleSources[i]["isSelected"] = isCheckAll;
     }
-
     return checkArray;
   }
 
+  /**
+   * @description Listen to event in DOM and update value of each article's 'isSelected' field.
+   * @param e DOM event.
+   */
   onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get("checkArray") as FormArray;
     if (e.target.value === "toggleAll") {
@@ -225,27 +272,170 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @description Set selected article and navigate to article detail.
+   * @param docId 
+   */
   openDocDetail(docId: string): void {
     this.articleService.setSelectedId(docId);
     this.navToDocDetail();
   }
 
+  /**
+   * @description Change value of number of articles in one page and load the result list again.
+   * @param num new number of articles in one page.
+   */
   docNumPerPageChange(num: number) {
     this.pageSize = num;
-    this.elasticSearchService.setNumDocsPerPage(num);
-    this.elasticSearchService.setCurrentSearchingPage(1);
+    this.elasticsearchService.setNumDocsPerPage(num);
+    this.elasticsearchService.setCurrentSearchingPage(1);
     this.ngOnInit();
   }
-  navToDocDetail(): void {
-    this.router.navigateByUrl("search/DocDetail");
-  }
 
+  /**
+   * @description Chage arrow icon when user click on related article toggle.
+   * @param idx 
+   */
   toggleArrowStyle(idx: number) {
-    if (this.RelatedDocBtnToggle[idx] !== true) {
+    if (this.relatedDocBtnToggle[idx] !== true) {
       return {
         "background-image":
           "url(../../../../assets/icons/arrow-down_3d3d3d.png)",
       };
     }
+  }
+
+  navToDocDetail(): void {
+    this.router.navigateByUrl("search/read");
+  }
+
+  // getters and setters
+  public get form(): FormGroup {
+    return this._form;
+  }
+  public set form(value: FormGroup) {
+    this._form = value;
+  }
+
+  public get relatedDocs(): ArticleSource[][] {
+    return this._relatedDocs;
+  }
+  public set relatedDocs(value: ArticleSource[][]) {
+    this._relatedDocs = value;
+  }
+  public get articleNumChange$(): Observable<any> {
+    return this._articleNumChange$;
+  }
+  public set articleNumChange$(value: Observable<any>) {
+    this._articleNumChange$ = value;
+  }
+  public get articleChange$(): Observable<ArticleSource[]> {
+    return this._articleChange$;
+  }
+  public set articleChange$(value: Observable<ArticleSource[]>) {
+    this._articleChange$ = value;
+  }
+  public get searchStatusChange$(): Observable<boolean> {
+    return this._searchStatusChange$;
+  }
+  public set searchStatusChange$(value: Observable<boolean>) {
+    this._searchStatusChange$ = value;
+  }
+  public get articleNumSubscriber(): Subscription {
+    return this._articleNumSubscriber;
+  }
+  public set articleNumSubscriber(value: Subscription) {
+    this._articleNumSubscriber = value;
+  }
+  public get articleSubscriber(): Subscription {
+    return this._articleSubscriber;
+  }
+  public set articleSubscriber(value: Subscription) {
+    this._articleSubscriber = value;
+  }
+  public get articleSources(): ArticleSource[] {
+    return this._articleSources;
+  }
+  public set articleSources(value: ArticleSource[]) {
+    this._articleSources = value;
+  }
+  public get relatedDocBtnToggle(): Array<boolean> {
+    return this._relatedDocBtnToggle;
+  }
+  public set relatedDocBtnToggle(value: Array<boolean>) {
+    this._relatedDocBtnToggle = value;
+  }
+
+  public get isResultFound(): boolean {
+    return this._isResultFound;
+  }
+  public set isResultFound(value: boolean) {
+    this._isResultFound = value;
+  }
+  public get isSearchDone(): boolean {
+    return this._isSearchDone;
+  }
+  public set isSearchDone(value: boolean) {
+    this._isSearchDone = value;
+  }
+  public get isLoggedIn(): boolean {
+    return this._isLoggedIn;
+  }
+  public set isLoggedIn(value: boolean) {
+    this._isLoggedIn = value;
+  }
+  public get isMainSearch(): boolean {
+    return this._isMainSearch;
+  }
+  public set isMainSearch(value: boolean) {
+    this._isMainSearch = value;
+  }
+  public get searchResultNum(): string {
+    return this._searchResultNum;
+  }
+  public set searchResultNum(value: string) {
+    this._searchResultNum = value;
+  }
+  public get searchKeyword(): string {
+    return this._searchKeyword;
+  }
+  public set searchKeyword(value: string) {
+    this._searchKeyword = value;
+  }
+  public get currentPage(): number {
+    return this._currentPage;
+  }
+  public set currentPage(value: number) {
+    this._currentPage = value;
+  }
+  public get pages(): number[] {
+    return this._pages;
+  }
+  public set pages(value: number[]) {
+    this._pages = value;
+  }
+  public get startIndex(): number {
+    return this._startIndex;
+  }
+  public set startIndex(value: number) {
+    this._startIndex = value;
+  }
+  public get totalPages(): number {
+    return this._totalPages;
+  }
+  public set totalPages(value: number) {
+    this._totalPages = value;
+  }
+  public get totalDocs(): number {
+    return this._totalDocs;
+  }
+  public set totalDocs(value: number) {
+    this._totalDocs = value;
+  }
+  public get pageSize(): number {
+    return this._pageSize;
+  }
+  public set pageSize(value: number) {
+    this._pageSize = value;
   }
 }

@@ -14,7 +14,6 @@ const qnaDocSchema = new Schema({
   regDate: Date,
   modDate: Date,
   isAnswered: Boolean,
-  Answer: String,
   reply: {
     userName: String,
     userEmail: String,

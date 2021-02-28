@@ -8,6 +8,10 @@ import { ElasticsearchService } from "src/app/core/services/elasticsearch-servic
   styleUrls: ["./search-result-filter.component.less"],
 })
 export class SearchResultFilterComponent implements OnInit, OnDestroy {
+
+  private _institutionList: Array<Object>;
+  private articleSubscriber: Subscription;
+  private _selectedInst: string;
   public topics = [
     "전체",
     "정치",
@@ -19,9 +23,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     "스포츠",
   ];
 
-  private institutionList: Array<Object>;
-  private articleSubscriber: Subscription;
-  private selectedInst: string;
   constructor(private elasticsearchService: ElasticsearchService) {
     this.articleSubscriber = this.elasticsearchService
       .getArticleChange()
@@ -66,4 +67,23 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
   }
+
+  resetFilters() {
+    this.selectInst = null;
+  }
+
+  // getters and setters
+  public get institutionList(): Array<Object> {
+    return this._institutionList;
+  }
+  public set institutionList(value: Array<Object>) {
+    this._institutionList = value;
+  }
+  public get selectedInst(): string {
+    return this._selectedInst;
+  }
+  public set selectedInst(value: string) {
+    this._selectedInst = value;
+  }
+
 }

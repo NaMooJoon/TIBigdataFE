@@ -7,20 +7,7 @@ import { CommunityDocModel } from "src/app/features/community-board/models/commu
 import moment from "moment";
 import { UserProfile } from "src/app/core/models/user.model";
 import { Router } from "@angular/router";
-
-enum boardOperation {
-  CREATE,
-  READ,
-  UPDATE,
-  DELETE,
-  COUNT,
-  REPLY_UPDATE,
-  REPLY_CREATE,
-  REPLY_DELETE,
-  READ_SINGLE,
-  SEARCH,
-  SEARCH_COUNT,
-}
+import { boardOperation } from "src/app/features/community-board/enums/boardOperation";
 
 @Injectable({
   providedIn: "root",
@@ -46,11 +33,15 @@ export class CommunityBoardService {
 
   constructor(
     protected ipService: IpService,
-    private http: HttpClient,
+    private httpClient: HttpClient,
     private router: Router,
-    private prvcyService: CommunityPrivacyMaskingService
+    private communityPrivacyMaskingService: CommunityPrivacyMaskingService
   ) { }
 
+  /**
+   * @description Generate query api url according to the operation and current menu
+   * @param operation Operation to do.
+   */
   generateQueryUrl(operation: boardOperation): string {
     let currentMenu = this.getCurrentMenu();
     if (operation === boardOperation.CREATE)
@@ -77,26 +68,42 @@ export class CommunityBoardService {
       return this.dbUrl + "/" + currentMenu + this.searchDocsNumUrl;
   }
 
+  /**
+   * @description Parse current route url and get current menu.
+   * @returns current menu
+   */
   getCurrentMenu(): string {
     return this.router.url.split('/')[2];
   }
 
+  /**
+   * @description Send query to get number of documents
+   * @returns number of documents
+   */
   async getDocsNum(): Promise<number> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.COUNT), "")
       .toPromise();
     return res.payload["docNum"];
   }
 
+  /**
+   * @description Send query to register new document.
+   * @returns query result
+   */
   async registerDoc(docInfo: CommunityDocModel): Promise<QueryResponse> {
-
-    return await this.http
+    return await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.CREATE), docInfo)
       .toPromise();
   }
 
+  /**
+   * @description Send query to get list of documents.
+   * @param startIndex Index that indicates where to start search.
+   * @returns list of documents
+   */
   async getDocs(startIndex: number): Promise<Array<CommunityDocModel>> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.READ), {
         startIndex: startIndex,
       })
@@ -108,10 +115,13 @@ export class CommunityBoardService {
     }
   }
 
+  /**
+   * @description Send query to get single document.
+   * @returns document object
+   */
   async getSelectedDoc(): Promise<CommunityDocModel> {
-
     if (this.selectedDoc == null) return null;
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.READ_SINGLE), {
         docId: this.selectedDoc.docId,
       })
@@ -120,8 +130,12 @@ export class CommunityBoardService {
     return res.payload;
   }
 
+  /**
+   * @description Send query to get documents that are marked as a main announcement.
+   * @returns list of main announcement documents
+   */
   async getMainAnnounceDocs(): Promise<Array<CommunityDocModel>> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(
         this.dbUrl + "/" + this.getCurrentMenu() + this.getMainAnnounceDocsUrl,
         ""
@@ -135,16 +149,26 @@ export class CommunityBoardService {
     }
   }
 
+  /**
+   * @description Send query to delete selected document.
+   * @param docId id of document to delete.
+   * @returns deleting result. Return true if the deletion successfully done. It not, return false.
+   */
   async deleteDocs(docId: number): Promise<boolean> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.DELETE), { docId: docId })
       .toPromise();
     if (res.isSuccess) return true;
     else return false;
   }
 
+  /**
+   * @description Send query to delete selected reply.
+   * @param docId id of document that has reply to delete.
+   * @returns deleting result. Return true if the deletion successfully done. It not, return false.
+   */
   async deleteReply(docId: number): Promise<boolean> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.REPLY_DELETE), {
         docId: docId,
       })
@@ -153,33 +177,52 @@ export class CommunityBoardService {
     else return false;
   }
 
+  /**
+   * @description Send query to modify selected document.
+   * @param docId id of document to modify.
+   * @returns modifying result. Return true if the modification successfully done. It not, return false.
+   */
   async modifyDoc(docInfo: CommunityDocModel): Promise<boolean> {
-
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.UPDATE), docInfo)
       .toPromise();
     if (res.isSuccess) return true;
     else return false;
   }
 
+  /**
+   * @description Send query to register new reply on selected document.
+   * @param docInfo Document to register new reply. 
+   * @returns registration result. Return true if the registration successfully done. It not, return false.
+   */
   async registerReply(docInfo: CommunityDocModel): Promise<boolean> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.REPLY_CREATE), docInfo)
       .toPromise();
     if (res.isSuccess) return true;
     else return false;
   }
 
+  /**
+   * @description Send query to modify selected reply.
+   * @param docInfo Document that has reply to modify.
+   * @returns modifying result. Return true if the modification successfully done. It not, return false.
+   */
   async modifyReply(docInfo: CommunityDocModel): Promise<boolean> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.REPLY_UPDATE), docInfo)
       .toPromise();
     if (res.isSuccess) return true;
     else return false;
   }
 
+  /**
+   * @description Send query to get list of documents that matches with given search keyword.
+   * @param searchText keyword to search.
+   * @returns list of matching documents
+   */
   async searchDocs(searchText: string): Promise<Array<CommunityDocModel>> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.SEARCH), {
         searchText: searchText,
       })
@@ -188,8 +231,13 @@ export class CommunityBoardService {
     if (res.isSuccess) return res.payload["docList"];
   }
 
+  /**
+   * @description Send query to get number of documents that matches with search keyword.
+   * @param searchText keyword to search.
+   * @returns number of documents
+   */
   async getSearchDocsNum(searchText: string): Promise<number> {
-    let res: QueryResponse = await this.http
+    let res: QueryResponse = await this.httpClient
       .post<any>(this.generateQueryUrl(boardOperation.SEARCH_COUNT), {
         searchText: searchText,
       })
@@ -198,17 +246,20 @@ export class CommunityBoardService {
     if (res.isSuccess) return res.payload["docNum"];
   }
 
+  /**
+   * @description Verify document content to filter all privacy leak.
+   * @param content document content to apply filter
+   * @returns filtered content
+   */
   verifyPrivacyLeak(content: string): string {
-    let filteredContent: string = this.prvcyService.checkAllPrivacyLeak(
-      content
-    );
+    let filteredContent: string = this.communityPrivacyMaskingService.checkAllPrivacyLeak(content);
     return filteredContent;
   }
 
-  formatDate(date: string): string {
-    return moment(date).format("YY-MM-DD");
-  }
-
+  /**
+   * @description Update selected document.
+   * @param doc selected document model.
+   */
   setSelectedDoc(doc: CommunityDocModel) {
     this.selectedDoc = doc;
   }

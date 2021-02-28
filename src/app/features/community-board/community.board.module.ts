@@ -1,10 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { CoreModule } from "src/app/core/core.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { CommunityRoutingModule } from "./community.board-routing.module";
-import { CommunityBoardComponent } from "./community.board.component";
+import { CommunityBoardComponent } from "./components/community-board-root/community.board.component";
 import { AnnouncementComponent } from "./components/board-announcement/board.annoucement.component";
 import { FaqComponent } from "./components/board-faq/board.faq.component";
 import { QnaComponent } from "./components/board-qna/board.qna.component";
@@ -29,4 +28,4 @@ import { DocumentWriteComponent } from "./components/document-write/document.wri
     SharedModule,
   ],
 })
-export class CommunityBoardModule {}
+export class CommunityBoardModule { }

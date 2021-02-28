@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { ArticleLibraryComponent } from "./article-library.component";
+import { ArticleLibraryComponent } from "./components/article-library-root/article-library.component";
 import { ResearchStatusComponent } from "./components/research-status/research-status.component";
 const routes: Routes = [
   {

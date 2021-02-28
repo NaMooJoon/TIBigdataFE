@@ -8,15 +8,12 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
   styleUrls: ["./api-register.component.less"],
 })
 export class ApiRegisterComponent implements OnInit {
-  private _userAuthType = null;
-  private isLogIn: Boolean;
+  private _isAgreed: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
-    private _router: Router
-  ) {
-
-  }
+    private _router: Router,
+  ) { }
 
   async ngOnInit() {
     if (this.authenticationService.getCurrentUser().isApiUser) {
@@ -25,6 +22,9 @@ export class ApiRegisterComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Register api and navigate to right page 
+   */
   async registerApi(): Promise<void> {
     let res = await this.authenticationService.apiRegister();
     if (res) {
@@ -35,5 +35,12 @@ export class ApiRegisterComponent implements OnInit {
       window.alert("가입에 실패했습니다. 다시 시도해주세요");
       this.ngOnInit();
     }
+  }
+
+  public get isAgreed(): boolean {
+    return this._isAgreed;
+  }
+  public set isAgreed(value: boolean) {
+    this._isAgreed = value;
   }
 }
