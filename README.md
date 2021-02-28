@@ -127,13 +127,19 @@ _**All dependencies are recommended to be up-to-date**_
    2. `SearchbarComponent` updates search keyword and search mode on `ElasticsearchService`.
    3. After setting search configuration, `ElasticsearchService` triggers searching logic by sending query to backend server. At this time, according to the search configuration, `EalsticsearchService` get query from `ElasticsearchQueryModel`.
 
-2. **Display Search Result**
+2. **Searching Logic with Analysis Data Filter**
+
+   1. Since analysis data is saved in database, we need to use the data as a filter when sending query to `Elasticsearch`.
+   2. For topic filter, searching logic send query to `MongoDB API server` to get document ids of specific topic.
+   3. After getting the document ids, searching logic use the list of ids to send searching query to `Elasticsearch`.
+
+3. **Display Search Result**
 
    1. When user press enter, the router moves to search/result page immediately.
    2. When searching logic has been done in `ElasticsearchService`, the service update the list of articles with new search list. At this time `ElasticsearchService` send the updated data to all subscribers. `SearchResultComponent` is one of the subscribers.
    3. Whenever `SearchResultComponent` get updated ArticleSource data, `SearchResultComponent` read the data and create list of current search result.
 
-3. **Sign-in**
+4. **Sign-in**
 
    1. Sign-in process will be done by `angularx-social-login` module.
    2. Our domain is registered in Google API, so that we can request user sign-in by google account.
@@ -141,7 +147,28 @@ _**All dependencies are recommended to be up-to-date**_
    4. If the user is not registered, make the google account sign-out.
    5. If the user is registered, get extra information of the users saved in our database and save token named `'KUBIC'` into local storage of the user's browser for session maintainance.
 
-4. **User Authentication in Session**
+5. **User Authentication in Session**
 
    1. When the angular appliacation is initialized(Web page is first loaded), the root component checks if there is a saved token in user's browser local storage. If there is a token named with `'KUBIC'`, request `AuthenticationService` to verify current user.
    2. The verification is done by checking the token is alive. If it is valid, the web application maintain user information in session. Otherwise, it deletes the token from the local storage and current user information saved in `AuthenticationService`.
+
+6. **AuthGuard to Prevent User From Specific Page**
+
+   1. To prevent non-signed user from specific url, such as userpage, login, register, etc, we use `AuthGuard`.
+   2. `AuthGuard` check user's token in browser and allow the url only if the TOKEN is available.
+
+7. **Applying Paging**
+
+   1. To apply pagination, we need to know the number of total documents in result and current page number.
+   2. By passing current page, total number of document, and number of document to display in one page, `PaginationService` calculates page information and returns `PaginationModel`
+   3. `PaginationModel` has all information needed for paging as belows:
+
+      - totalDocs: total number of articles to display,
+      - currentPage: current page to display,
+      - pageSize: number of articles per page,
+      - totalPages: total pages to display,
+      - startPage: begging number of current page number block,
+      - endPage: last number of current page page number block,
+      - startIndex: start index to search in this page number block,
+      - endIndex: last inedx to search in this page number block,
+      - pages: page numbers of current page number block,
