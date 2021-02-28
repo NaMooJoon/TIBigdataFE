@@ -70,10 +70,10 @@ _**All dependencies are recommended to be up-to-date**_
 
       - components
 
-      - article-card-view : 문서의 미리보기를 커드형태로 출력하는 컴포넌트
-      - article-list-component : 문서 리스트를 출력하는 컴포넌트
-      - route-location : 현재 사용중인 페이지 경로를 표시하는 컴포넌트
-      - search-bar : 검색 바 컴포넌트
+        - article-card-view : 문서의 미리보기를 커드형태로 출력하는 컴포넌트
+        - article-list-component : 문서 리스트를 출력하는 컴포넌트
+        - route-location : 현재 사용중인 페이지 경로를 표시하는 컴포넌트
+        - search-bar : 검색 바 컴포넌트
 
 3.  assets
 
