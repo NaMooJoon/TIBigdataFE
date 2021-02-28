@@ -39,6 +39,8 @@ This server is used as API server between Angular on FrontEnd side and MongoDB. 
 
 3. module
 
+   쿼리를 요청하고 응답을 처리
+
    - annoucnemtnDocsQuery.js
    - faqDocsQuery.js
    - keepMyDocQuery.js
@@ -50,6 +52,11 @@ This server is used as API server between Angular on FrontEnd side and MongoDB. 
    - userAuthQuery.js
 
 4. labs
+
+   서버에 영향을 주지 않는 static data 처리를 위한 utils나 test code들을 저장
+
+   - saveTFIDFintoMongo : tfidf 분석 결과를 MongoDB에 저장
+   - saveTOPICSintoMongo : 주제 분석 결과를 MongoDB에 저장
 
 ## Collection Schema
 
