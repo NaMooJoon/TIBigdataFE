@@ -275,9 +275,9 @@ This server is used as API server between Angular on FrontEnd side and MongoDB. 
 
 8. `/topic` : 주제 분석 결과에 대한 쿼리 처리. topicQuery로 연결
 
-   - `/getTopicCounts` : 주제별 문서 개수를 요청
-   - `/getTopicTblPlain` : 전체 주제 분석 결과를 요청
-   - `/getOneTopicDocs` : 특정 주제를 가진 문서들을 요청
+   - `/getTopicCounts` [POST] : 주제별 문서 개수를 요청
+   - `/getTopicTblPlain` [POST] : 전체 주제 분석 결과를 요청
+   - `/getOneTopicDocs` [POST] : 특정 주제를 가진 문서들을 요청
 
 ## Getting Started
 
@@ -304,9 +304,5 @@ node server.js
 ```
 
 node server.js --trace-warnings
-
-```
-
-```
 
 ```
