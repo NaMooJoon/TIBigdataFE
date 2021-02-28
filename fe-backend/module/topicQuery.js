@@ -57,45 +57,13 @@ router.post("/getOneTopicDocs", (req, res) => {
   );
 });
 
-function getTopicTbl(req, res) {
-  topic.aggregate(
-    [
-      {
-        $group: {
-          _id: "$topic",
-          info: {
-            $addToSet: { docID: "$docID", name: "$docTitle", value: 10 },
-          },
-        },
-      },
-      {
-        $project: {
-          info: 1,
-        },
-      },
-      // { $addField : {value : 1} }
-    ],
-    (err, docs) => {
-      /**
-       * 여기서부터 아무런 반응이 없다. 도대체 왜??????????????????????????????????????????????/
-       *
-       */
-      if (err) console.log(err);
-      // console.log(docs)
-      res.json(docs);
-    }
-  );
-}
-
 router.get("/getTopicTbl", getTopicTbl);
 
 router.post("/getTopicTbl", (req, res) => {
   let topicReq = req.body["topic"];
-  // console.log("get topic tbl init.");
   topic.aggregate([
     { $match: { topic: topicReq } },
-    // {$}
   ]);
 }),
-  (module.exports = router);
-// module.exports = {getTopicTbl,getOneTopicDocs};
+
+(module.exports = router);
