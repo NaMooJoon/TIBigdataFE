@@ -29,11 +29,11 @@ export class FaqComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private cmService: CommunityBoardService,
-    private pgService: PaginationService,
-    private authService: AuthenticationService
+    private communityBoardService: CommunityBoardService,
+    private paginationService: PaginationService,
+    private authenticationService: AuthenticationService
   ) {
-    this.authService.getCurrentUserChange().subscribe((currentUser) => {
+    this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
       this.currentUser = currentUser;
       if (currentUser !== null && currentUser.isAdmin === true)
         this.isAdmin = true;
@@ -53,14 +53,14 @@ export class FaqComponent implements OnInit {
     this.docList = [];
 
     if (this.isSearchMode) {
-      this.totalDocs = await this.cmService.getSearchDocsNum(this.searchText);
+      this.totalDocs = await this.communityBoardService.getSearchDocsNum(this.searchText);
       await this.loadSearchResults();
     } else {
-      this.totalDocs = await this.cmService.getDocsNum();
+      this.totalDocs = await this.communityBoardService.getDocsNum();
       await this.loadDocs();
     }
 
-    let pageInfo: PaginationModel = await this.pgService.paginate(
+    let pageInfo: PaginationModel = await this.paginationService.paginate(
       currentPage,
       this.totalDocs,
       this.pageSize
@@ -72,7 +72,7 @@ export class FaqComponent implements OnInit {
    * @description Load documents and save them into array with proper date format.
    */
   async loadDocs() {
-    let generalDocs: Array<CommunityDocModel> = await this.cmService.getDocs(
+    let generalDocs: Array<CommunityDocModel> = await this.communityBoardService.getDocs(
       this.startIndex
     );
     if (generalDocs.length !== 0) this.saveDocsInFormat(generalDocs);
@@ -106,7 +106,7 @@ export class FaqComponent implements OnInit {
    * @param i Index of selected document
    */
   navToReadThisDoc(i: number) {
-    this.cmService.setSelectedDoc(this.docList[i]);
+    this.communityBoardService.setSelectedDoc(this.docList[i]);
     this.router.navigateByUrl("community/faq/read");
   }
 
@@ -122,7 +122,7 @@ export class FaqComponent implements OnInit {
    * @description Load search result and save them into array with proper date format.
    */
   async loadSearchResults() {
-    let resultDocs: Array<CommunityDocModel> = await this.cmService.searchDocs(
+    let resultDocs: Array<CommunityDocModel> = await this.communityBoardService.searchDocs(
       this.searchText
     );
     if (resultDocs.length !== 0) this.saveDocsInFormat(resultDocs);

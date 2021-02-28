@@ -19,7 +19,7 @@ export class DocumentModifyComponent implements OnInit {
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
-    private auth: AuthenticationService
+    private authenticationService: AuthenticationService
   ) {
     this.boardForm = new FormGroup({
       title: new FormControl("", Validators.required),

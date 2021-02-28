@@ -22,6 +22,9 @@ export class ApiRegisterComponent implements OnInit {
     }
   }
 
+  /**
+   * @description Register api and navigate to right page 
+   */
   async registerApi(): Promise<void> {
     let res = await this.authenticationService.apiRegister();
     if (res) {

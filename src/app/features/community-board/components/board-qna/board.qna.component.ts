@@ -26,7 +26,7 @@ export class QnaComponent implements OnInit {
   constructor(
     private router: Router,
     private communityBoardService: CommunityBoardService,
-    private pgService: PaginationService,
+    private paginationService: PaginationService,
   ) { }
 
   ngOnInit() {
@@ -41,12 +41,12 @@ export class QnaComponent implements OnInit {
     this.docList = [];
     if (this.isSearchMode) {
       this.totalDocs = await this.communityBoardService.getSearchDocsNum(this.searchText);
-      let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
+      let pageInfo: PaginationModel = await this.paginationService.paginate(currentPage, this.totalDocs, this.pageSize);
       this.setPageInfo(pageInfo);
       await this.loadSearchResults();
     } else {
       this.totalDocs = await this.communityBoardService.getDocsNum();
-      let pageInfo: PaginationModel = await this.pgService.paginate(currentPage, this.totalDocs, this.pageSize);
+      let pageInfo: PaginationModel = await this.paginationService.paginate(currentPage, this.totalDocs, this.pageSize);
       this.setPageInfo(pageInfo);
       await this.loadDocs();
     }
