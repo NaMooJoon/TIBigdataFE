@@ -1,4 +1,4 @@
-<form [formGroup]="form" novalidate>
+<form *ngIf="!isSavedDocsEmpty" [formGroup]="form" novalidate>
   <div class="upside">
     <div class="upside2">
       <label
@@ -10,7 +10,7 @@
         />전체선택
       </label>
     </div>
-    <div *ngIf="savedDocs.length !== 0" class="upside3">
+    <div *ngIf="!isSavedDocsEmpty" class="upside3">
       <button>선택삭제</button>
       <button (click)="deleteAllMyDocs()">전체삭제</button>
     </div>
@@ -35,7 +35,7 @@
     </ul>
   </section>
 </form>
-<div *ngIf="isSavedDocsLoaded" class="page-numbers">
+<div *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="page-numbers">
   <button
     id="page-multiprev"
     *ngIf="currentPage > 1"
@@ -67,3 +67,5 @@
     (click)="loadSavedDocs(pageInfo.currentPage + 10)"
   ></button>
 </div>
+
+<p class="no-saved-doc" *ngIf="isSavedDocsEmpty" > 저장된 문서가 없습니다.</p>
