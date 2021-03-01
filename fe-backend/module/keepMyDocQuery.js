@@ -8,15 +8,26 @@ router.post("/getMyDoc", (req, res) => {
   myDoc
     .findOne({ userEmail: userEmail }, { savedDocIds: 1, _id: 0 })
     .then((result) => {
-      return res
+      if (result)
+        return res
+          .status(200)
+          .json(
+            new Res(true, "successfully saved doc ids", {
+              docIds: result.savedDocIds,
+            })
+          );
+      else{
+        return res
         .status(200)
         .json(
-          new Res(true, "successfully saved doc ids", {
-            docIds: result.savedDocIds,
+          new Res(false, "no saved docs", {
+            docIds: [],
           })
         );
+      }
     })
     .catch((err) => {
+      console.log(err);
       return res
         .status(400)
         .json(new Res(false, "successfully saved doc ids", null));

@@ -21,6 +21,8 @@ export class MyDocsComponent implements OnInit {
   private _paginationModel: PaginationModel;
   private _totalSavedDocsNum: number;
   private _form: FormGroup;
+  private _isSavedDocsEmpty: boolean;
+
 
   constructor(
     private paginationService: PaginationService,
@@ -43,6 +45,8 @@ export class MyDocsComponent implements OnInit {
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
     this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
+    this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
+    if (this.isSavedDocsEmpty) return;
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
     this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
@@ -212,5 +216,11 @@ export class MyDocsComponent implements OnInit {
   }
   public set form(value: FormGroup) {
     this._form = value;
+  }
+  public get isSavedDocsEmpty(): boolean {
+    return this._isSavedDocsEmpty;
+  }
+  public set isSavedDocsEmpty(value: boolean) {
+    this._isSavedDocsEmpty = value;
   }
 }

@@ -57,8 +57,6 @@ router.post("/getOneTopicDocs", (req, res) => {
   );
 });
 
-router.get("/getTopicTbl", getTopicTbl);
-
 router.post("/getTopicTbl", (req, res) => {
   let topicReq = req.body["topic"];
   topic.aggregate([
