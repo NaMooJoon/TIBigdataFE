@@ -1,11 +1,11 @@
 <div class="article-analysis-container">
-  <aside>
+  <aside >
     <div class="title">
       <h1>자료 분석</h1>
       <h2>내 보관 자료</h2>
     </div>
     <div class="outline">
-      <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+      <section *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="saved-document-list">
         <ul>
           <li *ngFor="let doc of savedDocs; index as idx">
             <input
@@ -47,6 +47,7 @@
           ></button>
         </div>
       </section>
+      <p *ngIf="isSavedDocsEmpty" class="saved-document-list no-saved-doc">저장된 문서가 없습니다.</p>
     </div>
   </aside>
 

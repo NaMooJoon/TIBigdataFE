@@ -62,7 +62,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.setCheckbox();
       this.setArticleForm();
 
-      this.isResultFound = articles !== null;
+      this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
     });
 

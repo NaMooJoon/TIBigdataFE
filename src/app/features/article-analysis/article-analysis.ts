@@ -31,6 +31,7 @@ export class ArticleAnalysisComponent implements OnInit {
   private _iconUrls: Array<string> = [keywordIconUrl, relatedIconUrl, doughnutIconUrl, lineIconUrl, wordcloudIconUrl, barIconUrl];
   private _currentPage: number;
   private _pages: number[];
+  private _isSavedDocsEmpty: boolean;
 
   constructor(
     private paginationService: PaginationService,
@@ -50,6 +51,8 @@ export class ArticleAnalysisComponent implements OnInit {
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
     this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
+    this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
+    if (this.isSavedDocsEmpty) return;
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
     this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
@@ -223,5 +226,11 @@ export class ArticleAnalysisComponent implements OnInit {
   }
   public set pages(value: number[]) {
     this._pages = value;
+  }
+  public get isSavedDocsEmpty(): boolean {
+    return this._isSavedDocsEmpty;
+  }
+  public set isSavedDocsEmpty(value: boolean) {
+    this._isSavedDocsEmpty = value;
   }
 }
