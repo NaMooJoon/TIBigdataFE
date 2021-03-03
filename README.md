@@ -216,7 +216,7 @@ _**Use these methods only in development phase.**_
    2. Run command to open google chrome without CORS policy
 
       ```
-       open -a Google\ Chrome --args --disable-web-security --user-data-dir
+       open /Applications/Google\ Chrome.app --args --user-data-dir="/var/tmp/Chrome dev session" --disable-web-security
       ```
 
    If you are using Windows:
