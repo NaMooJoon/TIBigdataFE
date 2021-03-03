@@ -114,8 +114,8 @@ export class ArticleLibraryComponent implements OnInit {
 
     switch (id) {
       case "topic": {
-
         let docIDs = await this.getDocIDsFromTopic(ct);
+        console.log(docIDs);
         docIDs.map((e) => this.articleService.addId(e));
         let partialIDs: Object[] = this.articleService
           .getList()
@@ -124,6 +124,7 @@ export class ArticleLibraryComponent implements OnInit {
         for (let i = 0; i < partialIDs.length; i++) {
           ids.push(partialIDs[i]["docId"]);
         }
+
 
         this.elasticsearchService.setKeyword(ct);
         this.elasticsearchService.setSearchMode(SearchMode.IDS);

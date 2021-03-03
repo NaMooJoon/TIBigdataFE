@@ -3,9 +3,7 @@ import os
 import pymongo
 from pymongo import MongoClient
 
-TFIDF_DATA_DIR = "/Users/yeohunjeon/Desktop/topics.json"
-
-
+TFIDF_DATA_DIR = "../data/topics.json"
 
 print("reading data...")
 dataAll = [json.loads(line) for line in open(TFIDF_DATA_DIR, 'r')]
@@ -15,6 +13,6 @@ db = client.analysis
 collection = db.topics
 i = 0
 for data in dataAll:
-    print("input: " + str(i))
+    data['topic']
     inputJson = { "topic" : data['topic'], "docTitle" : data['doc_title'], "docId" : data['doc_id']}
     collection.insert(inputJson)
