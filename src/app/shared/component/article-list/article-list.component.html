@@ -65,7 +65,7 @@
         >
           연관문서
         </button>
-        <div *ngIf="RelatedDocBtnToggle[i] == true">
+        <div *ngIf="relatedDocBtnToggle[i]">
           <div
             class="related-docs-link"
             *ngFor="let rcmd of relatedDocs[i]; index as r"
@@ -113,7 +113,7 @@
   </div>
 </div>
 
-<div *ngIf="isResultFound && isSearchDone" class="result-not-found-body">
+<div *ngIf="!isResultFound && isSearchDone" class="result-not-found-body">
   <p>"{{ searchKeyword }}"에 대한 검색결과가 없습니다.</p>
   <ul>
     <li>단어의 철자가 정확한지 확인해 보세요.</li>
