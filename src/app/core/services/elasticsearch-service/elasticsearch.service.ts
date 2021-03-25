@@ -41,7 +41,7 @@ export class ElasticsearchService {
 
   /**
    * @description Search articles with keyword. Set search mode and search keyword, then run searching logic.
-   * @param keyword 
+   * @param keyword
    */
   searchKeyword(keyword: string): void {
     this.searchMode = SearchMode.KEYWORD;
@@ -59,7 +59,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update current search mode.
-   * @param searchMode 
+   * @param searchMode
    */
   setSearchMode(searchMode: SearchMode): void {
     this.searchMode = searchMode;
@@ -75,7 +75,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update article numbers and send the data to all subscribers.
-   * @param num 
+   * @param num
    */
   setArticleNumChange(num: number): void {
     this.articleNum.next(num);
@@ -91,7 +91,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update search keyword
-   * @param keyword 
+   * @param keyword
    */
   setKeyword(keyword: string): void {
     this.esQueryModel.setSearchKeyword(keyword);
@@ -124,7 +124,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update article ids to search
-   * @param ids 
+   * @param ids
    */
   setIds(ids: string[]): void {
     this.esQueryModel.setSearchIds(ids);
@@ -151,7 +151,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source. 
+   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
    * @param startIndex A index to indicate where to start search.
    */
   allSearchComplete(startIndex?: number): void {
@@ -159,7 +159,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source. 
+   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
    * @param startIndex A index to indicate where to start search.
    * @param docSize Number of articles to search at one time.
    */
@@ -257,8 +257,8 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source. 
-   * @param startIndex 
+   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
+   * @param startIndex
    */
   multiIdSearchComplete(startIndex?: number): void {
     this.saveSearchResult(this.searchByManyId(startIndex));
@@ -279,7 +279,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Based on query logiv passed to this function, this function reads the result of the query and save the article data into articleSource data. 
+   * @description Based on query logiv passed to this function, this function reads the result of the query and save the article data into articleSource data.
    * @param queryFunc Function that holds query for ElasticSearch.
    */
   async saveSearchResult(queryFunc: any): Promise<void> {
@@ -344,14 +344,14 @@ export class ElasticsearchService {
 
   /**
    * @description Update current search page number
-   * @param pageNum 
+   * @param pageNum
    */
   setCurrentSearchingPage(pageNum: number): void {
     this.currentSearchingPage = pageNum;
   }
 
   /**
-   * @description get current search page number 
+   * @description get current search page number
    * @returns value of currentSearchingPage
    */
   getCurrentSearchingPage(): number {
@@ -360,7 +360,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update current sort option.
-   * @param op sort option to update 
+   * @param op sort option to update
    */
   setSortOption(op: SortOption): void {
     this.sortOption = op;
@@ -423,8 +423,8 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source. 
-   * @param startIndex 
+   * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
+   * @param startIndex
    */
   searchByInstComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByInst(startIndex));
@@ -457,7 +457,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update number of articles for subscribers
-   * @param num 
+   * @param num
    */
   setArticleNum(num: number) {
     this.articleNum.next(num);
@@ -465,7 +465,7 @@ export class ElasticsearchService {
 
   /**
    * @description Update selected institution.
-   * @param inst 
+   * @param inst
    */
   setSelectedInst(inst: string) {
     this.selectedInst = inst;
@@ -480,7 +480,7 @@ export class ElasticsearchService {
         {
           host: this.ipSvc.getBackEndServerIp(),
           auth: this.ipSvc.getESAuth(),
-          protocol: "http",
+          protocol: "https",
           port: this.ipSvc.ES_PORT,
           index: this.ipSvc.ES_INDEX,
         },
