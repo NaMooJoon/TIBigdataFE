@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
     private httpClient: HttpClient,
     private ipService: IpService
   ) {
-    // subscriber to get user infomation 
+    // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
       if (user !== null) {
         this.isApiUser = user.isApiUser;
@@ -55,6 +55,11 @@ export class NavbarComponent implements OnInit {
         "background-color": "transparent",
       };
     }
+  }
+///////////////////////////////////
+  selectedMobileMenu(): void {
+    document.getElementById('nav').className += ' on';
+    alert(document.getElementById('nav').className);
   }
 
   async logOut() {
