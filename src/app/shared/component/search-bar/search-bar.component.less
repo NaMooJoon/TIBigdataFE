@@ -65,6 +65,7 @@ button {
 .reset-filter img,
 .search-helper img {
     width: 1.338rem;
+    padding-left : 3px;
 }
 
 .related-keywords-container {
@@ -98,5 +99,25 @@ button {
 @media (min-width: 426px) and (max-width: 567px){
   .search-filter-container * {
     font-size : 13px;
+  }
+}
+
+/*mobile*/
+@media (max-width: 425px){
+  .search-filter-container>div>span,
+  .search-filter-container>div>img{
+    position: relative;
+    top : 35px;
+    font-size: 15px;
+  }
+
+  .reset-filter>span,
+  .reset-filter>img{
+    left : 80px;
+  }
+
+  .search-helper>span,
+  .search-helper>img{
+    right : 90px;
   }
 }

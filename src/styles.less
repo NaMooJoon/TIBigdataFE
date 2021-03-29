@@ -182,6 +182,28 @@ h4 {
   }
 }
 
+/*mobile L*/
+@media all and (max-width: 425px){
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(16, minmax(0, 1fr));
+    grid-template-rows: auto 120px auto 1fr auto;
+    gap: 20px 20px;
+    grid-template-areas:
+      " nav nav nav nav nav nav nav nav nav nav nav nav nav nav nav nav "
+      " . . . . search-bar search-bar search-bar search-bar search-bar search-bar search-bar search-bar . . . . "
+      " . loc loc loc loc loc loc loc loc loc loc loc loc loc . . "
+      " . main main main main main main main main main main main main main main . "
+      " . footer footer footer footer footer footer footer footer footer footer footer footer footer footer . ";
+    height: 100vh;
+    width: 100vw;
+  }
+
+  html {
+    font-size: 12px;
+  }
+}
+
 app-nav {
   grid-area: nav;
   font-size: 1.563rem;
