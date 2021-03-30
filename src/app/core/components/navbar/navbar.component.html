@@ -1,10 +1,10 @@
 <header>
   <div class="left">
-    <a href="#a"
+    <a
        class="all"
        (click)="selectedMobileMenu()"
     > all menu</a>
-    <div class="nav">
+    <div [ngClass]="isHamburger ? 'nav on' : 'nav'" >
       <nav>
         <ul class="common-menu">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
@@ -43,7 +43,10 @@
           </li>
         </ul>
       </nav>
-      <a href="#a" class="close"></a>
+      <a
+         class="close"
+         (click)="selectedMobileMenu()"
+      ></a>
     </div>
   </div>
   <ul *ngIf="!getIsSignedIn()" class="login-menu">

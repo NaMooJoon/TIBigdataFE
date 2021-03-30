@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   private isSignedIn: boolean = false;
   private selectedMenu: string = "";
   private userEmail: string;
+  private isHamburger: boolean = false;
 
   constructor(
     public router: Router,
@@ -56,10 +57,9 @@ export class NavbarComponent implements OnInit {
       };
     }
   }
-///////////////////////////////////
+
   selectedMobileMenu(): void {
-    document.getElementById('nav').className += ' on';
-    alert(document.getElementById('nav').className);
+    this.isHamburger = !this.isHamburger;
   }
 
   async logOut() {

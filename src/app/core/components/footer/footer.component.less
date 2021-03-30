@@ -13,6 +13,10 @@
   margin     : 0 10px;
 }
 
+.handong-logo-mobile{
+  display: none;
+}
+
 .policy {
   display        : flex;
   justify-content: center;
@@ -95,6 +99,7 @@ ul {
   }
 }
 
+/*mobile*/
 @media (max-width: 425px){
   .footer-contents > div{
     float : none;
@@ -102,25 +107,36 @@ ul {
     margin: 5px auto;
   }
 
-  footer div:nth-child(1) {
+  footer div:nth-child(1) { //logo
+    position: relative;
     width: 90px;
     padding: 0 0 5px;
   }
-  footer div:nth-child(2) {
+  footer div:nth-child(2) { //policy
     padding : 0;
   }
-  footer div:nth-child(3) {
+  footer div:nth-child(3) { //contact
     text-align: center;
-    padding-right : 15vw;
+    padding-right : 9vw;
   }
 
-  //.policy li > a{
-  //  font-size: 2vw;;
-  //}
-  //
-  //.contact-info > li a,
-  //.contact-info > li,
-  //.contact span{
-  //  font-size : 1.7vw;
-  //}
+  footer div:nth-child(2)>ul>li>a{
+    font-size: 10px;
+  }
+
+  footer div:nth-child(3) *{
+    font-size: 8px;
+  }
+
+  .handong-logo{
+    display: none;
+  }
+  .handong-logo-mobile{
+    display    : flex;
+    align-items: center;
+    width      : 10rem;
+    height     : 100%;
+    margin     : 0 10px;
+  }
+
 }
