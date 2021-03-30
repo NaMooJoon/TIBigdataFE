@@ -1,15 +1,12 @@
 <section class="filter-container">
   <div class="keyword-analysis">
-    <button class="keyword-analysis-run">키워드분석
-    </button>
+    <button class="keyword-analysis-run">키워드분석</button>
     <button class="helper"></button>
+    <button
+      class="research-result-mobile-run"
+      (click)="selectSearchFilter()"
+    >검색필터</button>
   </div>
-    <div class="research-result-mobile">
-      <button
-        class="research-result-mobile-run"
-        (click)="selectSearchFilter()"
-      >검색필터</button>
-    </div>
   <div class="outline">
     <div [ngClass]="isSearchFilter ? 'filter on' : 'filter'">
       <div class="title-box">
