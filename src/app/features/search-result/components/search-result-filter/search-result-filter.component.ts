@@ -12,6 +12,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _institutionList: Array<Object>;
   private articleSubscriber: Subscription;
   private _selectedInst: string;
+  private isSearchFilter: boolean = false;
   public topics = [
     "전체",
     "정치",
@@ -37,8 +38,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.articleSubscriber.unsubscribe();
   }
 
-  /** 
-   * @description Load institutions list of documents 
+  /**
+   * @description Load institutions list of documents
    */
   async loadInstitutions() {
     let res = await this.elasticsearchService.getInstitutionsWithTextSearch();
@@ -61,8 +62,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description Select institutions and set as user selected 
-   * @param inst 
+   * @description Select institutions and set as user selected
+   * @param inst
    */
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
@@ -70,6 +71,10 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   resetFilters() {
     this.selectInst = null;
+  }
+
+  selectSearchFilter(): void {
+    this.isSearchFilter = !this.isSearchFilter;
   }
 
   // getters and setters

@@ -2,7 +2,7 @@
   <div class="left">
     <a
        class="all"
-       (click)="selectedMobileMenu()"
+       (click)="selectMobileMenu()"
     > all menu</a>
     <div [ngClass]="isHamburger ? 'nav on' : 'nav'" >
       <nav>
@@ -45,7 +45,7 @@
       </nav>
       <a
          class="close"
-         (click)="selectedMobileMenu()"
+         (click)="selectMobileMenu()"
       ></a>
     </div>
   </div>

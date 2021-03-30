@@ -58,7 +58,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  selectedMobileMenu(): void {
+  selectMobileMenu(): void {
     this.isHamburger = !this.isHamburger;
   }
 
