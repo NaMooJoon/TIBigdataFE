@@ -79,7 +79,6 @@
   }
 }
 
-
 .filter {
   grid-area: filter;
 }
@@ -240,4 +239,73 @@ h3 {
 
 .topics-container {
   margin-bottom: 4rem;
+}
+
+.research-result-mobile{
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .research-result-mobile{
+    position: relative;
+    display: block;
+    grid-area      : analysis;
+  }
+  .keyword-analysis{
+    position : relative;
+    justify-content : left;
+  }
+
+  .filter-container {
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : max-content min-content;
+    gap                  : 20px 20px;
+    height               : 100%;
+    grid-template-areas  :
+      " . . analysis analysis analysis "
+      " outline outline outline outline outline";
+  }
+
+  .outline {
+    grid-area            : outline;
+    display              : grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    height               : 100%;
+    grid-template-areas  : " . filter filter filter filter filter filter filter filter filter .";
+    gap                  : 20px 20px;
+  }
+
+  .research-result-mobile-run {
+    width              : 136px;
+    font-size          : 8px;
+    background-color   : #52b9ff;
+    color              : white;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    font-weight        : 400;
+    border             : none;
+    text-align: center;
+  }
+
+  .keyword-analysis-run{
+    width              : 136px;
+    font-size          : 8px;
+    background-size    : 1.1em;
+    font-weight        : 400;
+    padding: 0.2em 0.4em 0.2em 1.8em;
+  }
+}
+
+@media (max-width: 425px) {
+  .outline {
+    grid-area            : outline;
+    display              : grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    height               : 100%;
+    grid-template-areas  : " filter filter filter filter filter filter ";
+    gap                  : 20px 20px;
+  }
 }
