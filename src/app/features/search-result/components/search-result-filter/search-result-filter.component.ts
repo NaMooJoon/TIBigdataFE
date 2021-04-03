@@ -77,6 +77,10 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.isSearchFilter = !this.isSearchFilter;
   }
 
+  public get isSelectSearchFilter(): boolean {
+    return this.isSearchFilter;
+  }
+
   // getters and setters
   public get institutionList(): Array<Object> {
     return this._institutionList;

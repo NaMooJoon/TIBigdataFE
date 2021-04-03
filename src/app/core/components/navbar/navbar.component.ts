@@ -64,6 +64,10 @@ export class NavbarComponent implements OnInit {
     this.isHamburger = !this.isHamburger;
   }
 
+  public get isSelectMobileMenu(): boolean {
+    return this.isHamburger;
+  }
+
   async logOut() {
     this.authService.signOut();
   }
@@ -100,8 +104,16 @@ export class NavbarComponent implements OnInit {
     this.isDropdownCommunity = !this.isDropdownCommunity;
   }
 
+  public get isDropDownCommunity(): boolean {
+    return this.isDropdownCommunity;
+  }
+
   clickDropDownSiteInfo(): void {
     this.isDropdownSiteInfo = !this.isDropdownSiteInfo;
+  }
+
+  public get isDropDownSiteInfo(): boolean {
+    return this.isDropdownSiteInfo;
   }
 
   toAnnouncement(): void {
