@@ -14,7 +14,7 @@ describe("ListDocumentsComponent", () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ArticleListComponent);
-    component = fixture.componentInstance;
+    cƒomponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 

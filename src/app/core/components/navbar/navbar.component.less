@@ -106,10 +106,43 @@ div>ul>li>a {
   z-index    : 1;
 }
 
+.dropdown-container-tablet{
+  display: none;
+}
+
 /*tablet, mobile*/
 @media (max-width: 768px) {
   header nav{
     display: block;
+  }
+
+  .dropdown-container{
+    display: none;
+  }
+
+  .dropdown-container-tablet{
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+    border-radius  : 50px;
+    border-color   : #606060;
+    background-image   : url(../../../../assets/icons/arrow-down_3d3d3d.png);
+    background-size    : 1rem;
+    background-repeat  : no-repeat;
+    background-position: right;
+  }
+
+  .dropdown-container-tablet>a{
+    width    : 200px;
+    z-index: 2;
+  }
+
+  .dropdown-toggle{
+    background-image   : url(../../../../assets/icons/arrow-down_3d3d3d.png);
+    background-size    : 1rem;
+    background-repeat  : no-repeat;
+    background-position: center;
+    border             : none;
   }
 
   /*mobile menu*/

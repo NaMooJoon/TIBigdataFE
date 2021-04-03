@@ -34,7 +34,22 @@
   }
 }
 
+@media all and (max-width: 768px) {
+  .read-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows   : min-content;
+    gap                  : 20px 20px;
+    grid-template-areas  : " body body body body body body body body body body body body";
+  }
 
+  * {
+    font-size: 1.2rem;
+  }
+
+}
 
 * {
   font-size: 1.938rem;

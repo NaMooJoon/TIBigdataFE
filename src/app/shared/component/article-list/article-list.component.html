@@ -3,9 +3,7 @@
   <div *ngIf="isResultFound && isMainSearch" class="result-count">
     "{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.
   </div>
-  <div *ngIf="isResultFound && !isMainSearch" class="result-count">
-    검색결과는 총 {{ searchResultNum }}건 입니다.
-  </div>
+
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
@@ -25,6 +23,10 @@
       </option>
     </select>
   </div>
+</div>
+
+<div *ngIf="isResultFound && isMainSearch" class="result-count-tablet">
+  "{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.
 </div>
 
 <div *ngIf="isResultFound && isSearchDone" class="result-body">

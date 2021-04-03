@@ -15,6 +15,8 @@ export class NavbarComponent implements OnInit {
   private selectedMenu: string = "";
   private userEmail: string;
   private isHamburger: boolean = false;
+  private isDropdownCommunity: boolean = false;
+  private isDropdownSiteInfo: boolean = false;
 
   constructor(
     public router: Router,
@@ -92,6 +94,14 @@ export class NavbarComponent implements OnInit {
 
   toCommunity(): void {
     this.router.navigateByUrl("/community/qna");
+  }
+
+  clickDropDownCommunity(): void {
+    this.isDropdownCommunity = !this.isDropdownCommunity;
+  }
+
+  clickDropDownSiteInfo(): void {
+    this.isDropdownSiteInfo = !this.isDropdownSiteInfo;
   }
 
   toAnnouncement(): void {
