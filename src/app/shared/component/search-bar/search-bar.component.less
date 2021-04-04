@@ -65,6 +65,7 @@ button {
 .reset-filter img,
 .search-helper img {
     width: 1.338rem;
+    padding-left : 3px;
 }
 
 .related-keywords-container {
@@ -86,4 +87,41 @@ button {
 
 .related-keywords-container>ul>li:not(:last-child) {
     margin-right: 3rem;
+}
+
+/*tablet*/
+@media (min-width: 568px) and (max-width: 768px){
+  .search-filter-container * {
+    font-size : 15px;
+  }
+}
+
+@media (min-width: 426px) and (max-width: 567px){
+  .search-filter-container * {
+    font-size : 13px;
+  }
+}
+
+/*mobile*/
+@media (max-width: 425px){
+  .search-filter-container{
+    margin-top: 10px;
+  }
+  .search-filter-container>div>span,
+  .search-filter-container>div>img{
+    position: relative;
+    top : 35px;
+    font-size: 15px;
+    z-index: 1;
+  }
+
+  .reset-filter>span,
+  .reset-filter>img{
+    left : 80px;
+  }
+
+  .search-helper>span,
+  .search-helper>img{
+    right : 90px;
+  }
 }

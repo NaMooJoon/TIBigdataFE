@@ -14,6 +14,9 @@ export class NavbarComponent implements OnInit {
   private isSignedIn: boolean = false;
   private selectedMenu: string = "";
   private userEmail: string;
+  private isHamburger: boolean = false;
+  private isDropdownCommunity: boolean = false;
+  private isDropdownSiteInfo: boolean = false;
 
   constructor(
     public router: Router,
@@ -21,7 +24,7 @@ export class NavbarComponent implements OnInit {
     private httpClient: HttpClient,
     private ipService: IpService
   ) {
-    // subscriber to get user infomation 
+    // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
       if (user !== null) {
         this.isApiUser = user.isApiUser;
@@ -57,6 +60,14 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  selectMobileMenu(): void {
+    this.isHamburger = !this.isHamburger;
+  }
+
+  public get isSelectMobileMenu(): boolean {
+    return this.isHamburger;
+  }
+
   async logOut() {
     this.authService.signOut();
   }
@@ -87,6 +98,22 @@ export class NavbarComponent implements OnInit {
 
   toCommunity(): void {
     this.router.navigateByUrl("/community/qna");
+  }
+
+  clickDropDownCommunity(): void {
+    this.isDropdownCommunity = !this.isDropdownCommunity;
+  }
+
+  public get isDropDownCommunity(): boolean {
+    return this.isDropdownCommunity;
+  }
+
+  clickDropDownSiteInfo(): void {
+    this.isDropdownSiteInfo = !this.isDropdownSiteInfo;
+  }
+
+  public get isDropDownSiteInfo(): boolean {
+    return this.isDropdownSiteInfo;
   }
 
   toAnnouncement(): void {

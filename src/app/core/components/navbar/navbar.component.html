@@ -1,41 +1,76 @@
-<nav>
-  <ul class="common-menu">
-    <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
-      <a (click)="navigateLibrary()">자료열람</a>
-    </li>
-    <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
-      <a (click)="navigateSpecials()">자료분석</a>
-    </li>
-    <li *ngIf="getIsApiUser()"><a>OpenAPI</a></li>
-    <li
-      [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
-      class="community-menu"
-    >
-      <div class="dropdown-container">
-        <a (click)="toCommunity()">커뮤니티</a>
-        <ul class="community-dropdown-menu">
-          <li><a (click)="toAnnouncement()">공지사항</a></li>
-          <li><a (click)="toFaq()">FAQ</a></li>
-          <li><a (click)="toCommunity()">Q&A</a></li>
-        </ul>
-      </div>
-    </li>
-    <li
-      [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
-      class="about-menu"
-    >
-      <div class="dropdown-container">
-        <a>홈페이지소개</a>
-        <ul class="about-dropdown-menu">
-          <li><a (click)="toSiteIntro()">사이트소개</a></li>
-          <li><a (click)="toServiceGuide()">서비스안내</a></li>
-          <li><a (click)="toCollectedInfo()">수집정보</a></li>
-          <li><a (click)="toMemberPolicy()">회원정책</a></li>
-        </ul>
-      </div>
-    </li>
-  </ul>
+<header>
+  <div class="left">
+    <a
+       class="all"
+       (click)="selectMobileMenu()"
+    > all menu</a>
+    <div [ngClass]="isSelectMobileMenu ? 'nav on' : 'nav'" >
+      <nav>
+        <ul class="common-menu">
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
+            <a (click)="navigateLibrary()">자료열람</a>
+          </li>
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
+            <a (click)="navigateSpecials()">자료분석</a>
+          </li>
+          <li *ngIf="getIsApiUser()"><a>OpenAPI</a></li>
+          <li
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
+            class="community-menu"
+          >
+<!--common-->
+            <div class="dropdown-container">
+              <a (click)="toCommunity()">커뮤니티</a>
+              <ul class="community-dropdown-menu">
+                <li><a (click)="toAnnouncement()">공지사항</a></li>
+                <li><a (click)="toFaq()">FAQ</a></li>
+                <li><a (click)="toCommunity()">Q&A</a></li>
+              </ul>
+            </div>
+<!--tablet and mobile-->
+            <div class="dropdown-container-tablet">
+              <a (click)="clickDropDownCommunity()">커뮤니티</a>
+              <ul *ngIf="isDropDownCommunity" class="community-dropdown-menu">
+                <li><a (click)="toAnnouncement()">공지사항</a></li>
+                <li><a (click)="toFaq()">FAQ</a></li>
+                <li><a (click)="toCommunity()">Q&A</a></li>
+              </ul>
+            </div>
 
+          </li>
+          <li
+            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
+            class="about-menu"
+          >
+            <!--common-->
+            <div class="dropdown-container">
+              <a>홈페이지소개</a>
+              <ul class="about-dropdown-menu">
+                <li><a (click)="toSiteIntro()">사이트소개</a></li>
+                <li><a (click)="toServiceGuide()">서비스안내</a></li>
+                <li><a (click)="toCollectedInfo()">수집정보</a></li>
+                <li><a (click)="toMemberPolicy()">회원정책</a></li>
+              </ul>
+            </div>
+            <!--tablet and mobile-->
+            <div class="dropdown-container-tablet">
+              <a (click)="clickDropDownSiteInfo()">홈페이지소개</a>
+              <ul *ngIf="isDropDownSiteInfo" class="about-dropdown-menu">
+                <li><a (click)="toSiteIntro()">사이트소개</a></li>
+                <li><a (click)="toServiceGuide()">서비스안내</a></li>
+                <li><a (click)="toCollectedInfo()">수집정보</a></li>
+                <li><a (click)="toMemberPolicy()">회원정책</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <a
+         class="close"
+         (click)="selectMobileMenu()"
+      ></a>
+    </div>
+  </div>
   <ul *ngIf="!getIsSignedIn()" class="login-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
       <a (click)="toLogin()">로그인</a>
@@ -51,4 +86,4 @@
     </li>
     <li><a (click)="logOut()">로그아웃</a></li>
   </ul>
-</nav>
+</header>

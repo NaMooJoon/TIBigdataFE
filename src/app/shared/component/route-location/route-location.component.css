@@ -9,3 +9,15 @@ hr {
   width: 100vw;
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  p {
+    display: none;
+  }
+
+  hr{
+    text-align: center;
+    width: 85vw;
+    position: absolute;
+  }
+}

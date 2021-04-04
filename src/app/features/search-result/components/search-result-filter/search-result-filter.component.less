@@ -79,7 +79,6 @@
   }
 }
 
-
 .filter {
   grid-area: filter;
 }
@@ -109,7 +108,7 @@ h3 {
   margin-bottom: 2rem;
 }
 
-.keyword-analysis {
+.filter-container > .keyword-analysis {
   grid-area      : analysis;
   display        : flex;
   align-items    : center;
@@ -131,7 +130,7 @@ h3 {
   border             : none;
 }
 
-.helper {
+.keyword-analysis > .helper {
   width              : 2rem;
   height             : 2rem;
   background-image   : url(../../../../../assets/icons/help-gray.png);
@@ -241,3 +240,141 @@ h3 {
 .topics-container {
   margin-bottom: 4rem;
 }
+
+.research-result-mobile-run{
+  display: none;
+}
+
+.close{
+  display: none;
+}
+
+.title-box{
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .filter{
+    display: none;
+  }
+
+  .filter-container {
+    display              : grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows   : max-content min-content;
+    gap                  : 20px 20px;
+    height               : 100%;
+    grid-template-areas  :
+      " . . analysis analysis analysis "
+      " outline outline outline outline outline";
+  }
+
+  .research-result-mobile-run {
+    position: relative;
+    display: block;
+    grid-area      : analysis;
+    width              : 136px;
+    font-size          : 8px;
+    background-color   : #52b9ff;
+    color              : white;
+    padding-top: 0.1em;
+    padding-bottom: 0.2em;
+    font-weight        : 400;
+    border             : none;
+    text-align: center;
+    padding-left: 10px;
+  }
+
+  .keyword-analysis{
+    position: absolute;
+  }
+
+  .keyword-analysis-run{
+    width              : 136px;
+    font-size          : 8px;
+    background-size    : 1.1em;
+    font-weight        : 400;
+    padding: 0.2em 0.4em 0.2em 1.8em;
+  }
+  .filter.on {
+    display: block;
+    position: absolute;
+    left : 0;
+    top: 0;
+    width: 100%;
+    height: max-content;
+    background: #fff;
+    z-index: 10;
+  }
+
+  .filter.on > section{
+    padding-left : 22vw;
+    padding-right: 22vw;
+  }
+
+  .close{
+    display: block;
+    position: absolute;
+    right: 24px;
+    top: 20px;
+    width: 12px;
+    height: 28px;
+    color : transparent;
+  }
+  .close:before{
+    position: absolute;
+    top: 0;
+    left: 45.5%;
+    content: "";
+    width: 1px;
+    height: 100%;
+    background: #606162;
+    transform: rotate(45deg);
+    border: 1px solid #606162;
+    border-radius : 2px;
+  }
+  .close:after {
+    position: absolute;
+    top: 0;
+    right: 45%;
+    content: "";
+    width: 1px;
+    height: 100%;
+    background: #606162;
+    transform: rotate(-45deg);
+    border: 1px solid #606162;
+    border-radius : 2px;
+  }
+
+  .title-box{
+    display: block;
+    z-index: 10;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    border: solid #BDBDBD;
+    border-width: 0 0 1.9px 0;
+    width: 100%;
+  }
+
+  .keyword-analysis > .helper{
+    display: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .filter.on > section {
+    padding-left : 7vw;
+    padding-right: 7vw;
+  }
+
+  .filter.on *{
+    font-size: 20px;
+  }
+
+  .keyword-analysis{
+    text-align: center;
+  }
+}
+

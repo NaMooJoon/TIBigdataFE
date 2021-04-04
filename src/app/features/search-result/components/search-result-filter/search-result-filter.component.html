@@ -2,25 +2,32 @@
   <div class="keyword-analysis">
     <button class="keyword-analysis-run">키워드분석</button>
     <button class="helper"></button>
+    <button
+      class="research-result-mobile-run"
+      (click)="selectSearchFilter()"
+    >검색필터</button>
   </div>
   <div class="outline">
-    <div class="filter">
+    <div [ngClass]="isSelectSearchFilter ? 'filter on' : 'filter'">
+      <div class="title-box">
+        <h1>검색필터</h1>
+      </div>
       <section>
         <h2>
           검색필터<img
-            (click)="resetFilters()"
-            class="reset-btn"
-            src="../../../../../assets/icons/reset-filter.png"
-            alt="filter-reset"
-          />
+          (click)="resetFilters()"
+          class="reset-btn"
+          src="../../../../../assets/icons/reset-filter.png"
+          alt="filter-reset"
+        />
         </h2>
       </section>
       <section class="keyword-search">
         <h3>결과 내 재검색</h3>
         <div class="input-container">
           <div class="text-inputs">
-            <input type="text" placeholder="키워드 포함" />
-            <input type="text" placeholder="키워드 제외" />
+            <input type="text" placeholder="키워드 포함"/>
+            <input type="text" placeholder="키워드 제외"/>
           </div>
           <button class="search-btn"></button>
         </div>
@@ -39,8 +46,8 @@
 
         <div class="date-input">
           <p>직접입력</p>
-          <input type="date" />
-          <input type="date" />
+          <input type="date"/>
+          <input type="date"/>
         </div>
       </section>
       <section class="inst">
@@ -70,6 +77,10 @@
           <button>과학</button>
         </div>
       </section>
+      <a
+        class="close"
+        (click)="selectSearchFilter()"
+      ></a>
     </div>
   </div>
 </section>

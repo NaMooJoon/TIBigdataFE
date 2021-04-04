@@ -125,3 +125,77 @@ h2 {
   border-radius   : 25px;
   border          : 1px solid lightgray;
 }
+
+.hr{
+  background: #ffffff;
+  margin-top : 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .selection-container>p {
+    padding-left : 0px;
+    font-size  : 1.6rem;
+    width : 60px;
+    z-index: 1;
+  }
+  .selection-container.topic-container>p{
+    margin-bottom: 180px;
+  }
+  .selection-container.dict-container>p{
+    margin-bottom: 350px;
+  }
+
+  .selection-buttons>button {
+    width           : 4em;
+    height          : 2em;
+    margin: 0.2em 0.4em 0.2em 0.4em;
+  }
+  .library-header>h1 {
+    text-align: left;
+    padding-top : 50px;
+  }
+  .library-header>button{
+    margin-bottom: 60px;
+    background-size    : 1.4em;
+    font-size: 1.2rem;
+  }
+
+  .selection-container>topic-container,
+  .selection-container>dict-container,
+  .selection-container>inst-container{
+    position : relative;
+    z-index: 3;
+  }
+
+  .selection-container.topic-container>div.selection-buttons,
+  .selection-container.dict-container>div.selection-buttons{
+    //border: 5px solid darkblue;
+    width: 300px;
+  }
+
+}
+
+@media (max-width: 468px) {
+  .selection-buttons>button {
+    width           : 4em;
+    height          : 2em;
+    margin: 0.2em 0.1em 0.2em 0.1em;
+  }
+}
+
+@media (max-width: 426px) {
+  .selection-buttons>button {
+    font-size  : 1.4rem;
+  }
+  .selection-container.topic-container>div.selection-buttons,
+  .selection-container.dict-container>div.selection-buttons{
+    //border: 5px solid black;
+    width: 240px;
+    z-index: 2;
+  }
+  .selection-container>p {
+    z-index: 1;
+    margin-left: 0;
+  }
+}

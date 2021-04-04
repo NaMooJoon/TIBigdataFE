@@ -5,13 +5,13 @@
       <button (click)="navToGraph()">통일연구 동향 그래프</button>
     </div>
 
-    <hr />
+    <hr class="hr"/>
 
     <div class="selection-container topic-container">
       <p>주제별</p>
       <div class="selection-buttons">
         <button
-          *ngFor="let cat of categories"
+          *ngFor="let cat of categories; let i = index"
           id="topic"
           (click)="selectCategory($event)"
         >
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <hr />
+    <hr class="hr"/>
 
     <div class="selection-container dict-container">
       <p>사전편찬별</p>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <hr />
+    <hr class="hr"/>
 
     <div class="selection-container inst-container">
       <p>기관별</p>
@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <hr />
+    <hr class="hr"/>
     <app-article-list></app-article-list>
   </section>
 </div>
