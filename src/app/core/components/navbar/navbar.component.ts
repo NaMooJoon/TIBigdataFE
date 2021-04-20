@@ -47,16 +47,29 @@ export class NavbarComponent implements OnInit {
   }
 
   selectedStyleObject(flag: boolean): Object {
-    if (flag) {
-      return {
-        color: "white",
-        "background-color": "#52b9ff",
-      };
-    } else {
-      return {
-        color: "black",
-        "background-color": "transparent",
-      };
+    if(matchMedia("(max-width: 768px)").matches) {
+      if (flag) {
+        return {
+          color: "#0FBAFF",
+          "font-weight": "bold",
+        };
+      } else {
+        return {
+          "background-color": "white",
+        };
+      }
+    }else{
+      if (flag) {
+        return {
+          color: "white",
+          "background-color": "#52b9ff",
+        };
+      } else {
+        return {
+          color: "black",
+          "background-color": "transparent",
+        };
+      }
     }
   }
 

@@ -29,8 +29,10 @@
             </div>
 <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
-              <a (click)="clickDropDownCommunity()">커뮤니티</a>
-              <ul *ngIf="isDropDownCommunity" class="community-dropdown-menu">
+              <a
+                (click)="clickDropDownSiteInfo()"
+                class="dropdown-community">커뮤니티</a>
+              <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a (click)="toAnnouncement()">공지사항</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
                 <li><a (click)="toCommunity()">Q&A</a></li>
@@ -54,8 +56,10 @@
             </div>
             <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
-              <a (click)="clickDropDownSiteInfo()">홈페이지소개</a>
-              <ul *ngIf="isDropDownSiteInfo" class="about-dropdown-menu">
+              <a
+                (click)="clickDropDownCommunity()"
+                class="dropdown-about">홈페이지소개</a>
+              <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a (click)="toSiteIntro()">사이트소개</a></li>
                 <li><a (click)="toServiceGuide()">서비스안내</a></li>
                 <li><a (click)="toCollectedInfo()">수집정보</a></li>
