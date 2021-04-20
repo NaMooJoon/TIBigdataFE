@@ -133,17 +133,30 @@ h2 {
 }
 
 @media (max-width: 768px) {
+  .selection-buttons{
+    margin: 40px auto 10px;
+    position: relative;
+    z-index: 2;
+    left:-20px;
+  }
   .selection-container>p {
     padding-left : 0px;
     font-size  : 1.6rem;
     width : 60px;
     z-index: 1;
   }
+
   .selection-container.topic-container>p{
-    margin-bottom: 180px;
+    margin-top: 5px;
+    margin-bottom: 140px;
   }
   .selection-container.dict-container>p{
-    margin-bottom: 350px;
+    margin-top: 5px;
+    margin-bottom: 220px;
+  }
+  .selection-container.inst-container>p{
+    margin-top: 5px;
+    margin-bottom: 460px;
   }
 
   .selection-buttons>button {
@@ -169,11 +182,16 @@ h2 {
   }
 
   .selection-container.topic-container>div.selection-buttons,
-  .selection-container.dict-container>div.selection-buttons{
+  .selection-container.dict-container>div.selection-buttons,
+  .selection-container.inst-container>div.selection-buttons{
     //border: 5px solid darkblue;
     width: 300px;
   }
 
+  .hr{
+    margin-top : 10px;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 468px) {
@@ -189,11 +207,13 @@ h2 {
     font-size  : 1.4rem;
   }
   .selection-container.topic-container>div.selection-buttons,
-  .selection-container.dict-container>div.selection-buttons{
+  .selection-container.dict-container>div.selection-buttons,
+  .selection-container.inst-container>div.selection-buttons{
     //border: 5px solid black;
     width: 240px;
     z-index: 2;
   }
+
   .selection-container>p {
     z-index: 1;
     margin-left: 0;
