@@ -154,7 +154,7 @@ export class SearchBarComponent implements OnInit {
    */
   checkRouterIsMain(): void {
     let rootUrl = this._router.routerState.snapshot.url;
-
+    
     if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search")){
       this.isMain = false;
     } else {
