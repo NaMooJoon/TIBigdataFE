@@ -96,7 +96,7 @@ ul > li {
 
 @media all and (max-width: 768px){
   .outline{
-    /*display : none;*/
+    display : none;
   }
 
   h1 {

@@ -110,8 +110,19 @@ div>ul>li>a {
   display: none;
 }
 
+.login-menu-tablet,
+.user-menu-tablet {
+  display: none;
+}
+
 /*tablet, mobile*/
 @media (max-width: 768px) {
+
+  .login-menu,
+  .user-menu{
+    display: none;
+  }
+
   header nav{
     display: block;
   }
@@ -182,11 +193,6 @@ div>ul>li>a {
     display: none;
   }
 
-  //div>ul>li>a {
-  //  font-size: 10px;
-  //  display: block;
-  //}
-
   header .left > div.nav.on nav li{
     display: block;
     float:none;
@@ -195,7 +201,9 @@ div>ul>li>a {
 
   .common-menu,
   .community-menu,
-  .about-menu{
+  .about-menu,
+  .login-menu-tablet,
+  .user-menu-tablet{
     margin-right: 15px;
     display: block;
     text-align: center;
@@ -210,7 +218,8 @@ div>ul>li>a {
   }
 
   .dropdown-community,
-  .dropdown-about{
+  .dropdown-about,
+  .dropdown-userpage{
     border: 0;
     width    : 200px;
     cursor : pointer;
@@ -219,6 +228,31 @@ div>ul>li>a {
     background-size    : 1rem;
     background-repeat  : no-repeat;
     background-position: 90% 50%;
+  }
+  
+  .login-menu-tablet,
+  .user-menu-tablet{
+    margin-top : 70px;
+  }
+
+  .login-menu-tablet>li,
+  .user-menu-tablet>li{
+    float: none;
+    border       : 2px solid transparent;
+    padding      : 0.2em 0.6em;
+    border-radius: 2em;
+    color : #7D7F80;
+    font-weight: 400;
+  }
+
+  .login-menu-tablet>li>a,
+  .user-menu-tablet>li>a{
+    display:block;
+  }
+
+  .dropdown-userpage{
+    padding-right: 20px;
+    background-position: 85% 50%;
   }
 
   .community-dropdown-menu.no,
