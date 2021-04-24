@@ -2,6 +2,7 @@
   <aside >
     <div class="title">
       <h1>자료 분석</h1>
+      <hr class="nav-separator" />
       <h2>내 보관 자료</h2>
     </div>
     <div class="outline">
@@ -50,11 +51,12 @@
       <p *ngIf="isSavedDocsEmpty" class="saved-document-list no-saved-doc">저장된 문서가 없습니다.</p>
     </div>
   </aside>
-
+  <hr class="nav-separator" />
   <main class="article-analysis">
     <div class="select-outline">
       <section class="select-analysis">
         <form class="select-analysis-form">
+          <h3>원하는 분석 선택</h3>
           <div class="select-analysis-up-menu">
             <div class="select-analysis-type">
               <h3>원하는 분석 선택</h3>
@@ -135,7 +137,7 @@
         </form>
       </section>
     </div>
-
+    <hr class="nav-separator" />
     <div class="result-outline">
       <section *ngIf="isChartLoaded" class="analysis-result">
         <button>내 분석함에 담기</button>

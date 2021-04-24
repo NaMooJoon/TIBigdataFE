@@ -82,3 +82,53 @@ h1 {
   align-items    : center;
   margin         : 0 15%;
 }
+
+@media all and (min-width: 426px) and (max-width: 768px){
+  .research-status-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows   : 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  : " body body body body body body body body body body body body body  ";
+    height               : 100%;
+  }
+
+  .header{
+    font-size: 1em !important;
+  }
+
+  .chart-wrapper {
+    margin       : 0% 10%;
+  }
+
+  .save-graph-button {
+    font-size : 1.2rem;
+  }
+}
+
+@media all and (max-width: 425px){
+  .research-status-container {
+    grid-area            : main;
+    display              : grid;
+    align-content        : stretch;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows   : 1fr;
+    gap                  : 20px 20px;
+    grid-template-areas  : " body body body body body body body body body body body body body  ";
+    height               : 100%;
+  }
+
+  .chart-wrapper {
+    margin       : auto;
+    padding : 0;
+    width : 250px;
+    height: 250px;
+  }
+
+  .chart-wrapper>canvas{
+    width : 200% !important;
+    height : 100% !important;
+  }
+}
