@@ -18,22 +18,36 @@ export class AboutSideMenuComponent implements OnInit {
   }
 
   selectedStyleObject(flag: boolean): Object {
-    if (flag) {
-      return {
-        color: "#0FBAFF",
-        "font-weight": "bold",
-      };
-    } else {
-      return {
-        color: "black",
-        "background-color": "white",
-      };
+    if(matchMedia("(max-width: 425px)").matches) {
+      if (flag) {
+        return {
+          color: "black",
+          "font-weight": "bold",
+          "border-bottom" : "0.2rem solid #0FBAFF",
+        };
+      } else {
+        return {
+          color: "#898C8D",
+          "background-color": "white",
+        };
+      }
+    }else{
+      if (flag) {
+        return {
+          color: "#0FBAFF",
+          "font-weight": "bold",
+        };
+      } else {
+        return {
+          color: "black",
+          "background-color": "white",
+        };
+      }
     }
   }
-
   /**
-   * @description Set title according to current address 
-   * @param currentAddress 
+   * @description Set title according to current address
+   * @param currentAddress
    */
   setTitle(currentAddress: string) {
     if (currentAddress === "intro") this.title = "홈페이지소개";

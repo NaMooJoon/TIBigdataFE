@@ -13,10 +13,13 @@ export class NavbarComponent implements OnInit {
   private isApiUser: boolean = false;
   private isSignedIn: boolean = false;
   private selectedMenu: string = "";
+  private selectedSubMenu : string = "";
   private userEmail: string;
   private isHamburger: boolean = false;
   private isDropdownCommunity: boolean = false;
   private isDropdownSiteInfo: boolean = false;
+  private isDropdownUserpage: boolean = false;
+  private _isFolderBtn: boolean = false;
 
   constructor(
     public router: Router,
@@ -39,24 +42,40 @@ export class NavbarComponent implements OnInit {
   }
   ngOnInit(): void {
     this.selectedMenu = this.router.url.split("/")[1];
+    this.selectedSubMenu = this.router.url.split("/")[2];
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.selectedMenu = event.url.split("/")[1];
+        this.selectedSubMenu = event.url.split("/")[2];
       }
     });
   }
 
   selectedStyleObject(flag: boolean): Object {
-    if (flag) {
-      return {
-        color: "white",
-        "background-color": "#52b9ff",
-      };
-    } else {
-      return {
-        color: "black",
-        "background-color": "transparent",
-      };
+    if(matchMedia("(max-width: 768px)").matches) {
+      if (flag) {
+        return {
+          color: "#0FBAFF",
+          "font-weight": "bold",
+        };
+      } else {
+        return {
+          "background-color": "white",
+        };
+      }
+    }else{
+      if (flag) {
+        return {
+          color: "white",
+          "background-color": "#52b9ff",
+        };
+      } else {
+        return {
+          color: "black",
+          "background-color": "transparent",
+        };
+      }
     }
   }
 
@@ -158,6 +177,10 @@ export class NavbarComponent implements OnInit {
     return this.selectedMenu;
   }
 
+  getSelectedSubMenu(): string {
+    return this.selectedSubMenu;
+  }
+
   getIsApiUser(): boolean {
     return this.isApiUser;
   }
@@ -165,4 +188,56 @@ export class NavbarComponent implements OnInit {
   getIsSignedIn(): boolean {
     return this.isSignedIn;
   }
+
+  clickDropDownUserpage(): void {
+    this.isDropdownUserpage = !this.isDropdownUserpage;
+  }
+
+  public get isDropDownUserpage(): boolean {
+    return this.isDropdownUserpage;
+  }
+
+  /**
+   * @description router to my-docs in user page
+   */
+  toMyDocs() {
+    this._isFolderBtn = true;
+    this.router.navigateByUrl("/userpage/my-docs");
+  }
+
+  /**
+   * @description router to my-analysis in user page
+   */
+  toMyAnalysis() {
+    this._isFolderBtn = true;
+    this.router.navigateByUrl("/userpage/my-analysis");
+  }
+
+  /**
+   * @description router to member-info in user page
+   */
+  toMemberInfo() {
+    this.router.navigateByUrl("/userpage/member-info");
+  }
+
+  /**
+   * @description router to api register page in userpage
+   */
+  toOpenAPI() {
+    if (this.authService.getCurrentUser().isApiUser) {
+      this.toOpenApi();
+    }
+    else {
+      this.router.navigateByUrl("/api-register");
+    }
+  }
+
+  /**
+   * @description router to secession page in userpage
+   */
+  toSecession() {
+    this.router.navigateByUrl("/userpage/secession");
+  }
+
 }
+

@@ -104,4 +104,16 @@
       </li>
     </ul>
   </div>
+<!--mobile relatedKeywords-->
+  <div
+    *ngIf="isKeyLoaded && relatedKeywords_mobile.length != 0"
+    class="related-keywords-container-mobile"
+  >
+    <p>연관검색어</p>
+    <ul class="keyword-list-mobile">
+      <li *ngFor="let keyword of relatedKeywords_mobile">
+        <a (click)="relatedSearch(keyword)">{{ keyword }}</a>
+      </li>
+    </ul>
+  </div>
 </section>

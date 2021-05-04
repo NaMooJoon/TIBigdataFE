@@ -23,6 +23,7 @@ export class SearchBarComponent implements OnInit {
   private _isSearching: boolean = false;
   private _isKeyLoaded: boolean;
   public relatedKeywords = [];
+  public relatedKeywords_mobile = [];
   private searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
 
   private _dateList: Array<String> = [
@@ -134,7 +135,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   /**
-   * @description set search configuration and navigate to search result page. 
+   * @description set search configuration and navigate to search result page.
    */
   async search(): Promise<void> {
     this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
@@ -149,13 +150,15 @@ export class SearchBarComponent implements OnInit {
   }
 
   /**
-   * @description Check if current url is home 
+   * @description Check if current url is home
    */
   checkRouterIsMain(): void {
-    if (this._router.routerState.snapshot.url === "/") {
-      this.isMain = true;
-    } else {
+    let rootUrl = this._router.routerState.snapshot.url;
+    
+    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search")){
       this.isMain = false;
+    } else {
+      this.isMain = true;
     }
   }
 
@@ -171,7 +174,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   /**
-   * @description Trigger search with given keyword. 
+   * @description Trigger search with given keyword.
    * @param keyword Search keyword selected by user.
    */
   relatedSearch(keyword: string) {
@@ -185,6 +188,7 @@ export class SearchBarComponent implements OnInit {
     if (this._router.url.split("/")[2] !== "result") return;
     this.isKeyLoaded = false;
     this.relatedKeywords = [];
+    this.relatedKeywords_mobile = [];
     await this.analysisDatabaseService
       .getTfidfVal(this.articleService.getList())
       .then((res) => {
@@ -197,6 +201,13 @@ export class SearchBarComponent implements OnInit {
             !this.relatedKeywords.includes(tfVal[0])
           )
             this.relatedKeywords.push(tfVal[0]);
+          /*mobile relatedKeywords_mobile*/
+          if (
+            this.relatedKeywords_mobile.length < 4 &&
+            tfVal[0] !== this.searchKeyword &&
+            !this.relatedKeywords_mobile.includes(tfVal[0])
+          )
+            this.relatedKeywords_mobile.push(tfVal[0]);
         }
       });
     this.isKeyLoaded = true;

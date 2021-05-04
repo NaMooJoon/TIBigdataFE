@@ -29,11 +29,19 @@
             </div>
 <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
-              <a (click)="clickDropDownCommunity()">커뮤니티</a>
-              <ul *ngIf="isDropDownCommunity" class="community-dropdown-menu">
-                <li><a (click)="toAnnouncement()">공지사항</a></li>
-                <li><a (click)="toFaq()">FAQ</a></li>
-                <li><a (click)="toCommunity()">Q&A</a></li>
+              <a
+                (click)="clickDropDownSiteInfo()"
+                class="dropdown-community">커뮤니티</a>
+              <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'announcement')"
+                  (click)="toAnnouncement()">공지사항</a></li>
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'faq')"
+                  (click)="toFaq()">FAQ</a></li>
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'qna')"
+                  (click)="toCommunity()">Q&A</a></li>
               </ul>
             </div>
 
@@ -54,16 +62,61 @@
             </div>
             <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
-              <a (click)="clickDropDownSiteInfo()">홈페이지소개</a>
-              <ul *ngIf="isDropDownSiteInfo" class="about-dropdown-menu">
-                <li><a (click)="toSiteIntro()">사이트소개</a></li>
-                <li><a (click)="toServiceGuide()">서비스안내</a></li>
-                <li><a (click)="toCollectedInfo()">수집정보</a></li>
-                <li><a (click)="toMemberPolicy()">회원정책</a></li>
+              <a
+                (click)="clickDropDownCommunity()"
+                class="dropdown-about">홈페이지소개</a>
+              <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'intro')"
+                  (click)="toSiteIntro()">사이트소개</a></li>
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'service-guide')"
+                  (click)="toServiceGuide()">서비스안내</a></li>
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'collected-info')"
+                  (click)="toCollectedInfo()">수집정보</a></li>
+                <li><a
+                  [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-policy')"
+                  (click)="toMemberPolicy()">회원정책</a></li>
               </ul>
             </div>
           </li>
         </ul>
+
+        <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
+            <a (click)="toLogin()">로그인</a>
+          </li>
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
+            <a (click)="toRegister()">회원가입</a>
+          </li>
+        </ul>
+
+        <ul *ngIf="getIsSignedIn()" class="user-menu-tablet">
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
+            <a (click)="clickDropDownUserpage()"
+               class="dropdown-userpage">마이페이지</a>
+            <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
+              <li><a
+                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-docs')"
+                (click)="toMyDocs()">내 보관함</a></li>
+              <li><a
+                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-analysis')"
+                (click)="toMyAnalysis()">내 분석함</a></li>
+              <li><a
+                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-info')"
+                (click)="toMemberInfo()">회원정보관리</a></li>
+              <li><a
+                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
+                (click)="toOpenAPI()">OpenAPI</a></li>
+              <li><a
+                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
+                (click)="toSecession()">회원탈퇴</a></li>
+            </ul>
+          </li>
+          <li><a (click)="logOut()">로그아웃</a></li>
+        </ul>
+
       </nav>
       <a
          class="close"
