@@ -12,6 +12,7 @@ import { IpService } from 'src/app/core/services/ip-service/ip.service';
 export class UserpageSidebarComponent implements OnInit {
   private _title: string = "";
   private _currentMenu: string = "";
+  private _isFolderBtn: boolean = false;
 
   constructor(
     private router: Router,
@@ -45,28 +46,30 @@ export class UserpageSidebarComponent implements OnInit {
     }
   }
   /**
-     * @description router to my-docs in user page  
+     * @description router to my-docs in user page
      */
   toMyDocs() {
+    this._isFolderBtn = true;
     this.router.navigateByUrl("/userpage/my-docs");
   }
 
   /**
-   * @description router to my-analysis in user page 
+   * @description router to my-analysis in user page
    */
   toMyAnalysis() {
+    this._isFolderBtn = true;
     this.router.navigateByUrl("/userpage/my-analysis");
   }
 
   /**
-   * @description router to member-info in user page 
+   * @description router to member-info in user page
    */
   toMemberInfo() {
     this.router.navigateByUrl("/userpage/member-info");
   }
 
   /**
-   * @description router to api register page in userpage 
+   * @description router to api register page in userpage
    */
   toOpenAPI() {
     if (this.authenticationService.getCurrentUser().isApiUser) {
@@ -93,7 +96,7 @@ export class UserpageSidebarComponent implements OnInit {
   }
 
   /**
-   * @description router to secession page in userpage 
+   * @description router to secession page in userpage
    */
   toSecession() {
     this.router.navigateByUrl("/userpage/secession");
@@ -111,5 +114,9 @@ export class UserpageSidebarComponent implements OnInit {
   }
   public set currentMenu(value: string) {
     this._currentMenu = value;
+  }
+
+  public get showFolderButton(){
+    return this._isFolderBtn;
   }
 }

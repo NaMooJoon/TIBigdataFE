@@ -184,7 +184,9 @@ ul {
   padding: 0;
 }
 
-
+.nav-separator{
+  display: none;
+}
 
 .title {
   grid-area: title;
@@ -346,4 +348,152 @@ div>input {
   display        : flex;
   align-items    : center;
   justify-content: center;
+}
+
+.select-analysis-form>h3{
+  display: none;
+}
+
+@media all and (max-width: 768px){
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2{
+    font-size: 1.7rem !important;
+    margin-bottom: 30px;
+  }
+
+  h3{
+    font-size: 1.4rem !important;
+    color : #3E3E3E;
+    margin-left : 13px;
+  }
+
+  .nav-separator{
+    display: flex;
+    margin-bottom: 30px;
+  }
+
+  .select-outline{
+    border : 0;
+    padding-top : 0;
+    padding-left : 25px;
+    margin : auto;
+  }
+
+  .select-analysis-type{
+    margin-right : 30px;
+  }
+
+  .select-analysis-up-menu{
+    margin-bottom: 10px;
+  }
+
+  .submit-container {
+    margin-left : 28px;
+  }
+
+  .result-outline{
+    border : 0;
+  }
+}
+
+@media all and (min-width: 494px) and (max-width: 700px){
+  .select-analysis-type{
+    flex-direction : row;
+  }
+
+  .select-analysis-type>h3{
+    display : none;
+  }
+
+  .select-analysis-form>h3{
+    display: flex;
+  }
+
+  .submit-container{
+    margin-left: 0;
+    margin-right : 50px;
+  }
+
+  .select-analysis-up-menu{
+    flex-direction : row;
+  }
+
+  .select-analysis-form{
+    margin-left : 30px;
+  }
+
+}
+
+
+@media all and (max-width: 495px){
+  h1 {
+    font-size: 1.7rem !important;
+  }
+
+  h2{
+    font-size: 1.4rem !important;
+    margin-bottom: 20px;
+  }
+
+  h3{
+    padding : 0;
+    margin-bottom : 15px;
+    margin-left : 0;
+    font-weight : 600 !important;
+  }
+
+  .select-analysis-type{
+    flex-direction : row;
+    margin-bottom : 30px;
+  }
+
+  .select-analysis-type>h3{
+    display : none;
+  }
+
+  .select-analysis-form>h3{
+    display: flex;
+  }
+
+  .select-analysis-data-num>select,
+  div>input {
+    font-size: 14px;
+  }
+
+  .select-outline{
+    padding : 0;
+  }
+
+  .select-analysis-graph {
+    margin-bottom : 30px;
+    width : 100%
+  }
+
+  .submit-container{
+    margin-left: 0;
+  }
+
+  .select-analysis-form{
+    margin-left : 40px;
+  }
+
+  .result-outline{
+    padding-left : 10px;
+  }
+
+}
+
+@media all and (min-width: 338px) and (max-width: 375px){
+  .select-analysis-form{
+    margin-left : 20px;
+  }
+}
+
+@media all and (max-width: 337px){
+  .select-analysis-form{
+    margin-left : 5px;
+  }
 }

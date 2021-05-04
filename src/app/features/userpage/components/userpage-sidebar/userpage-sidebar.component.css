@@ -93,3 +93,22 @@ ul > li {
   font-size: 1.5rem;
   margin-bottom: 20px;
 }
+
+@media all and (max-width: 768px){
+  .outline{
+    display : none;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+    text-align: left;
+    padding : 15px 20px;
+  }
+}
+
+@media all and (max-width: 495px){
+  h1 {
+    font-size: 1.7rem !important;
+    padding : 15px 0px;
+  }
+}

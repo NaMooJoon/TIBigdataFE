@@ -30,3 +30,42 @@
   background-image: url("../../../../../assets/icons/folder-modify.png");
   background-position: left 1.3em center;
 }
+
+@media all and (max-width: 768px){
+  .where {
+    padding-top : 0;
+    display: flex;
+    padding-left : 20px;
+  }
+
+  .button1,
+  .button2 {
+    font-size: 15px;
+    margin-right : 5px;
+  }
+
+  h3{
+    font-size: 1.7rem !important;
+    color : #3E3E3E;
+    font-weight : 600 !important;
+    margin-bottom: 0;
+    padding-top : 10px;
+  }
+}
+
+@media all and (max-width: 448px){
+  .where {
+    padding : 0;
+  }
+
+  .button1,
+  .button2 {
+    font-size: 13px;
+  }
+
+  h3{
+    font-size: 1.4rem !important;
+    margin-left : 0px;
+    padding-top : 5px;
+  }
+}
