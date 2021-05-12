@@ -50,6 +50,10 @@ a {
   white-space: pre;
 }
 
+.post-detail-container.mobile{
+  display: none;
+}
+
 @media (max-width: 768px) {
   .post-title {
     font-size  : 2rem;
@@ -61,5 +65,35 @@ a {
 
   .article-info{
     padding: 0;
+  }
+}
+
+@media all and (max-width: 425px){
+  .post-detail-container{
+    display: none;
+  }
+
+  .post-detail-container.mobile{
+    display: flex;
+  }
+
+  .post-title {
+    white-space: normal;
+    font-size  : 2rem;
+    font-weight: 500;
+  }
+
+  .post-detail-container {
+    justify-content: flex-start;
+  }
+
+  .post-date::after {
+    display: none;
+  }
+
+  .post-institution.mobile::after,
+  .post-writer.mobile::after {
+    content    : " | ";
+    white-space: pre;
   }
 }
