@@ -40,7 +40,7 @@ export class MyDocsComponent implements OnInit {
 
   /**
    * @description Load saved documents from userSavedDocumentService
-   * @param pageNum 
+   * @param pageNum
    */
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
@@ -57,8 +57,8 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Helper function for page number to handle the page overflow 
-   * @param pageNum 
+   * @description Helper function for page number to handle the page overflow
+   * @param pageNum
    */
   handlePageOverflow(pageNum: number): number {
     if (pageNum < 0) pageNum = 1;
@@ -83,24 +83,23 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description 
-   * @param docId 
+   * @description
+   * @param docId
    */
   openDocDetail(docId: string): void {
-    console.log(docId);
     this.articleService.setSelectedId(docId);
     this.navToDocDetail();
   }
 
   /**
-   * @description Navigate to doc detail 
+   * @description Navigate to doc detail
    */
   navToDocDetail(): void {
     this.router.navigateByUrl("search/read");
   }
 
   /**
-   * @description Set the checkbox of saved docs 
+   * @description Set the checkbox of saved docs
    */
   setCheckbox(): void {
     for (let i in this.savedDocs) {
@@ -115,9 +114,9 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Check or uncheck all documents 
-   * @param isCheckAll 
-   * @param checkArray 
+   * @description Check or uncheck all documents
+   * @param isCheckAll
+   * @param checkArray
    */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
@@ -136,8 +135,8 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Change check box 
-   * @param e 
+   * @description Change check box
+   * @param e
    */
   onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get("checkArray") as FormArray;
@@ -160,7 +159,7 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description delete all my documents 
+   * @description delete all my documents
    */
   deleteAllMyDocs() {
     this.userSavedDocumentService.eraseAllMyDocs().then(

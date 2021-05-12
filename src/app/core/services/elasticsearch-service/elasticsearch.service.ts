@@ -178,6 +178,7 @@ export class ElasticsearchService {
     if (!docSize) docSize = this.numDocsPerPage;
 
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
@@ -212,6 +213,7 @@ export class ElasticsearchService {
    */
   countByText(): Promise<any> {
     return this.client.count({
+      index: this.ipSvc.ES_INDEX,
       body: this.esQueryModel.getSearchDocCount(),
     });
   }
@@ -250,6 +252,7 @@ export class ElasticsearchService {
    */
   searchById(): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       filterPath: this.esQueryModel.getFilterPath(),
       body: this.esQueryModel.getSearchIds(),
       _source: this.esQueryModel.getSearchSource(),
@@ -271,6 +274,7 @@ export class ElasticsearchService {
    */
   searchByManyId(startIndex?: number, docSize?: number): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
       body: this.esQueryModel.getSearchIds(),
@@ -373,6 +377,7 @@ export class ElasticsearchService {
    */
   async getInstitutionsWithTextSearch(): Promise<any> {
     return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
       body: {
         size: 0,
         aggs: {
@@ -394,6 +399,7 @@ export class ElasticsearchService {
    */
   async getInstitutions(): Promise<any> {
     return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
       body: {
         size: 0,
         aggs: {
@@ -409,6 +415,7 @@ export class ElasticsearchService {
    */
   searchByInst(startIndex?: number): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: this.numDocsPerPage,
       body: {
@@ -445,6 +452,7 @@ export class ElasticsearchService {
    */
   async countByInst(): Promise<any> {
     return await this.client.count({
+      index: this.ipSvc.ES_INDEX,
       body: {
         query: {
           match: {
@@ -499,6 +507,7 @@ export class ElasticsearchService {
   async isAvailable(): Promise<boolean> {
     try {
       return await this.client.ping({
+        index: this.ipSvc.ES_INDEX,
         requestTimeout: 3000,
         body: "ElasticSearch Works!",
       });

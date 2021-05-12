@@ -30,7 +30,7 @@ export class UserSavedDocumentService {
   }
 
   /**
-   * @description Send query of saving list of article ids into saved document list 
+   * @description Send query of saving list of article ids into saved document list
    * @param docIds list of article ids to save
    * @returns returns true if the saving success, else return false.
    */
@@ -48,12 +48,12 @@ export class UserSavedDocumentService {
    * @returns Array of object that holds article title and article id.
    */
   async getMyDocs(startIndex?: number): Promise<Array<{ title: string; id: string }>> {
-    if (startIndex === undefined) startIndex = 0;
+    if (startIndex === undefined) { startIndex = 0; }
     let currentIndex = (startIndex - 1) * this.docsPerPage;
     let res: QueryResponse = await this.httpClient
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
       .toPromise();
-    let docIds: Array<string> = res.payload["docIds"].slice(currentIndex, currentIndex + this.docsPerPage);
+    let docIds: Array<string> = res.payload['docIds'].slice(currentIndex, currentIndex + this.docsPerPage);
     let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docIds);
     let idIdx = 0;
 

@@ -15,7 +15,7 @@ export class ArticleService {
   /**
    * @description get list of article ids collected by ES search and convery them into list of article titles.
    * @param ids list of ids in string
-   * @returns list of article titles 
+   * @returns list of article titles
    */
   async convertDocIdsToTitles(ids: string[]): Promise<string[]> {
     let docTitles: Array<string> = new Array<string>(ids.length);
@@ -40,15 +40,15 @@ export class ArticleService {
   }
 
   /**
-   * @description add article id into current list of articles 
-   * @param id 
+   * @description add article id into current list of articles
+   * @param id
    */
   addId(id: string): void {
     this.idList.push(id);
   }
 
   /**
-   * @description get current list of articles 
+   * @description get current list of articles
    * @returns list of article ids in string
    */
   getList(): Array<string> {
@@ -80,7 +80,7 @@ export class ArticleService {
   }
 
   /**
-   * @description update article source that will be controlled by this service 
+   * @description update article source that will be controlled by this service
    * @param art article source
    */
   setArticle(article: ArticleSource) {
@@ -89,7 +89,7 @@ export class ArticleService {
 
   /**
    * @description when index passed, return the article that located in the index from list of article ids.
-   * @param index 
+   * @param index
    * @returns selected id from article id list
    */
   getIdByIdx(index: number): string {
