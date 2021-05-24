@@ -29,7 +29,7 @@ export class ArticleCardViewComponent implements OnInit {
   }
 
   /**
-   * @description Update selected article and navigate to read article page. 
+   * @description Update selected article and navigate to read article page.
    */
   openDocDetail(): void {
     this.documentService.setSelectedId(this.docId);
