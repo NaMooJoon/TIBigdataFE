@@ -2,15 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-management",
-  templateUrl: "./management.component.html",
-  styleUrls: ["./management.component.less"],
+  selector: "app-gotoapi",
+  templateUrl: "./gotoapi.component.html",
+  styleUrls: ["./gotoapi.component.less"],
 })
-export class ManagementComponent implements OnInit {
+export class GotoapiComponent implements OnInit {
   constructor(public router: Router) {}
-  email="21800409@handong.edu"
-  count=3
-  ngOnInit() {}
+
+  ngOnInit(): void {}
 
   /**
    * @description Router to intro page

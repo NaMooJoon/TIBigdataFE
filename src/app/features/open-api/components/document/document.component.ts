@@ -2,11 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-service-guide",
-  templateUrl: "./service-guide.component.html",
-  styleUrls: ["./service-guide.component.less"],
+  selector: "app-document",
+  templateUrl: "./document.component.html",
+  styleUrls: ["./document.component.less"],
 })
-export class ServiceGuideComponent implements OnInit {
+export class DocumentComponent implements OnInit {
   constructor(public router: Router) {}
 
   ngOnInit(): void {}
