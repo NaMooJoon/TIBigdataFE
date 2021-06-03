@@ -66,6 +66,13 @@ const routes: Routes = [
     loadChildren: () =>
       import("./userpage/userpage.module").then((m) => m.UserpageModule),
   },
+  {
+    path: "openapi",
+    loadChildren: () =>
+      import("./open-api/open-api.module").then(
+        (m) => m.OpenApiModule
+      ),
+  },
 ];
 
 @NgModule({
