@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { ManagementComponent } from "./components/management/management.component";
 import { DocumentComponent } from "./components/document/document.component";
 import { GotoapiComponent } from "./components/gotoapi/gotoapi.component";
+
 const routes: Routes = [
   {
     path: "",
