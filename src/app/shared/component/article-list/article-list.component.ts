@@ -107,7 +107,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description Create form to set checkbox for each article in the list. 
+   * @description Create form to set checkbox for each article in the list.
    */
   setArticleForm(): void {
     this.form = this.formBuilder.group({
@@ -137,7 +137,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   /**
    * @description Update paging information based on current page information.
-   * @param currentPage current page to display 
+   * @param currentPage current page to display
    */
   async loadPage(currentPage: number): Promise<void> {
     let pageInfo: PaginationModel = await this.paginationService.paginate(
@@ -150,7 +150,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   /**
    * @description Convert number format by inserting ',' for each 3 digits. i.e. 1234567 will be converted into 1,234,567
-   * @param num Number to convert. 
+   * @param num Number to convert.
    */
   convertNumberFormat(num: number): string {
     let docCount: string = num.toString();
@@ -159,15 +159,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @description Reset all search options set before. 
+   * @description Reset all search options set before.
    */
   resetSearchOptions(): void {
     this.isMainSearch = (this.router.url === "/search/result");
     this.articleService.clearList();
-    this.searchKeyword = this.elasticsearchService.getKeyword();
     this.isResultFound = false;
     this.isSearchDone = false;
     this.currentPage = this.elasticsearchService.getCurrentSearchingPage();
+    if (this.isMainSearch === true) {
+      this.searchKeyword = this.elasticsearchService.getKeyword();
+    } else {
+      this.searchKeyword = '키워드 없음';
+    }
   }
 
   /**
@@ -218,11 +222,14 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Save checked articles into database.
    */
   saveSelectedDocs(): void {
+    console.log(this.form.value["checkArray"]);
+    console.log(this._searchKeyword);
+
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
     } else {
       this.userSavedDocumentService
-        .saveNewMyDoc(this.form.value["checkArray"])
+        .saveNewMyDoc(this.form.value["checkArray"], this._searchKeyword)
         .then(() => {
           alert("문서가 나의 문서함에 저장되었어요.");
         });
@@ -274,7 +281,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   /**
    * @description Set selected article and navigate to article detail.
-   * @param docId 
+   * @param docId
    */
   openDocDetail(docId: string): void {
     this.articleService.setSelectedId(docId);
@@ -294,7 +301,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   /**
    * @description Chage arrow icon when user click on related article toggle.
-   * @param idx 
+   * @param idx
    */
   toggleArrowStyle(idx: number) {
     if (this.relatedDocBtnToggle[idx] !== true) {

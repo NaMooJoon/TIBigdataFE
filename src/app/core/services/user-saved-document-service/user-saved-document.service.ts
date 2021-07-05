@@ -34,8 +34,8 @@ export class UserSavedDocumentService {
    * @param docIds list of article ids to save
    * @returns returns true if the saving success, else return false.
    */
-  async saveNewMyDoc(docIds: Array<string>): Promise<boolean> {
-    let payload = { userEmail: this.currentUser.email, docIds: docIds };
+  async saveNewMyDoc(docIds: Array<string>, keyword: string): Promise<boolean> {
+    let payload = { userEmail: this.currentUser.email, docIds: docIds, keyword : keyword };
     let res = await this.httpClient
       .post<any>(this.saveMyDocUrl, payload)
       .toPromise();
