@@ -1,0 +1,65 @@
+<div class="content-container">
+  <app-analysis-menu></app-analysis-menu>
+  
+  <section class="content">
+    <p><strong>전처리</strong></p>
+    <p> 
+    </p>
+    <!-- <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+      <ul>
+        <li *ngFor="let doc of savedDocs; index as idx">
+          <input
+            class="article-checkbox"
+            type="checkbox"
+            [(checked)]="doc.isSelected"
+            name="selectDoc"
+            [value]="doc['id']"
+            (change)="onCheckboxChange($event)"
+          />
+          <input class="checkbox" type="checkbox" id="{{ idx }}" />
+          <label>
+            <a (click)="openDocDetail(doc.id)">{{ doc["title"] }}</a>
+          </label>
+        </li>
+      </ul>
+    </section> -->
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox"></th>
+          <th>검색 키워드</th>
+          <th>문서목록</th>
+          <th>수집날짜</th>
+          <th>통계</th>
+          <th>전처리</th>
+          </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>북한+통일</td>
+          <td>북한이탈주민의 통일에 대한 인식 조사</td>
+          <td>2021-03-30</td>
+          <td>총문서수:3개<br> 평균 단어수:230개</td>
+          <td>
+            <button>미리보기</button>
+            <br>
+            <button>다운로드</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <strong>사용자 사전</strong> <button>사용자 사전 파일명 미리보기</button>
+    <li>유의어  <button>사용함</button><button>사용안함</button></li>
+    <li>불용어  <button>사용함</button><button>사용안함</button></li>
+    <li>복합어  <button>사용함</button><button>사용안함</button></li>
+    <strong>품사 선택</strong>
+    <button>동사</button>
+    <button>명사</button>
+    <button>형용사</button>
+
+    <button>전처리 실행</button>
+  </section>
+</div>

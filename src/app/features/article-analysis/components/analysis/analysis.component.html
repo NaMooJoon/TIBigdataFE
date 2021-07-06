@@ -1,0 +1,65 @@
+<div class="content-container">
+  <app-analysis-menu></app-analysis-menu>
+  
+  <section class="content">
+    <p><strong>분석</strong></p>
+    <p> 
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox"></th>
+          <th>검색 키워드</th>
+          <th>문서목록</th>
+          <th>수집날짜</th>
+          <th>통계</th>
+          <th>전처리</th>
+          </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>북한+통일</td>
+          <td>북한이탈주민의 통일에 대한 인식 조사</td>
+          <td>2021-03-30</td>
+          <td>총문서수:3개<br> 평균 단어수:230개</td>
+          <td>
+            <button>미리보기</button>
+            <br>
+            <button>다운로드</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>빈도수 분석</div>
+    <div>TFIDF</div>
+    <div>군집분석</div>
+    <div>토픽 모델링</div>
+    <br>
+    <div>N-gram</div>
+    <div>유의어분석</div>
+    <div>의미연결망</div>
+    <div>개체명인식</div>
+<!--   
+      <tbody *ngIf="docList">
+        <tr *ngFor="let doc of docList; let i = index"
+          [ngStyle]="{'background-color': i < mainAnnounceNum ? 'rgb(236, 239, 239)' : 'white'}">
+          <td class="doc-num">{{ doc["docId"] }}</td>
+          <td>
+            <div *ngIf="doc['isMainAnnounce']" class="doc-announcement announcement-button">공지</div>
+          </td>
+          <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
+          <td class="doc-postdate">{{ doc["regDate"] }}</td>
+        </tr>
+      </tbody>
+  
+      <tbody *ngIf="!docList.length">
+        <tr>
+          <td class="no-docs" rowspan="4" colspan="4">등록된 게시물이 없습니다.</td>
+        </tr>
+      </tbody> -->
+  </section>
+</div>
