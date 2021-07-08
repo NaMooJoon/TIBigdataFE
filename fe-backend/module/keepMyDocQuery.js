@@ -53,11 +53,12 @@ router.post("/deleteAllMyDocs", (req, res) => {
 router.post("/saveMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
   let docIds = req.body.docIds;
+  let keyword = req.body.keyword;
 
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail },
-      { $addToSet: { savedDocIds: { $each: docIds } } },
+      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(), savedDocIds : docIds } ] } },
       { upsert: true }
     )
     .then((result) => {
@@ -65,6 +66,24 @@ router.post("/saveMyDoc", (req, res) => {
     })
     .catch((err) => {
       return res.status(400).json(new Res(false, "Failed to saved doc ids"));
+    });
+});
+
+router.post("/getKeyword", (req, res) => {
+  let userEmail = req.body.userEmail;
+  let keyword = req.body.keyword;
+
+  myDoc
+    .findOne({ userEmail: userEmail }, { savedDocIds: 1, _id: 0 })
+    .then((result) => {
+      return res
+        .status(200)
+        .json(new Res(true, "successfully delete all docs", null));
+    })
+    .catch((err) => {
+      return res
+        .status(400)
+        .json(new Res(false, "successfully delete all docs", null));
     });
 });
 

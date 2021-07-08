@@ -222,9 +222,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Save checked articles into database.
    */
   saveSelectedDocs(): void {
-    console.log(this.form.value["checkArray"]);
-    console.log(this._searchKeyword);
-
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
     } else {
