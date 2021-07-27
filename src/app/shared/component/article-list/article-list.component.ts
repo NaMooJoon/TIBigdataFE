@@ -228,7 +228,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.userSavedDocumentService
         .saveNewMyDoc(this.form.value["checkArray"], this._searchKeyword)
         .then(() => {
-          alert("문서가 나의 문서함에 저장되었어요.");
+          alert("문서가 내 보관함에 저장되었어요.");
         });
     }
   }

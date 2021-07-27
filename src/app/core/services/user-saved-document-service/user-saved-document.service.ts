@@ -17,6 +17,9 @@ export class UserSavedDocumentService {
   private currentUser: UserProfile;
   private docsPerPage: number = 10;
 
+  //keywords
+  private getMyKeywordsUrl = this.API_URL + "/myDoc/getMyKeyword";
+
   constructor(
     private httpClient: HttpClient,
     private authService: AuthenticationService,
@@ -47,13 +50,15 @@ export class UserSavedDocumentService {
    * @param startIndex A index to indicate where to start search.
    * @returns Array of object that holds article title and article id.
    */
-  async getMyDocs(startIndex?: number): Promise<Array<{ title: string; id: string }>> {
+  async getMyDocs(savedDate: string, startIndex?: number): Promise<Array<{ title: string; id: string }>> {
     if (startIndex === undefined) { startIndex = 0; }
     let currentIndex = (startIndex - 1) * this.docsPerPage;
+
     let res: QueryResponse = await this.httpClient
-      .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
+      .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email, savedDate: savedDate })
       .toPromise();
-    let docIds: Array<string> = res.payload['docIds'].slice(currentIndex, currentIndex + this.docsPerPage);
+
+    let docIds: Array<string> = res.payload['keywordList'].find(object => "savedDocIds" in object)["savedDocIds"];
     let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docIds);
     let idIdx = 0;
 
@@ -79,11 +84,23 @@ export class UserSavedDocumentService {
    * @description Send query to get total number of saved articles.
    * @retursn Number of saved articles.
    */
-  async getTotalDocNum(): Promise<number> {
+  async getTotalDocNum(keyword: string, savedDate: string): Promise<number> {
     let res: QueryResponse = await this.httpClient
-      .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email })
+      .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email, keyword: keyword, savedDate: savedDate})
       .toPromise();
 
-    return res.payload["docIds"].length;
+    let docIds: Array<string> = res.payload['keywordList'].find(object => "savedDocIds" in object)["savedDocIds"];
+
+    return docIds.length;
+  }
+
+  //keywords
+  async getMyKeywords(): Promise<Array<{ keyword: string, savedDate: string; }>> {
+    let res: QueryResponse = await this.httpClient
+      .post<any>(this.getMyKeywordsUrl, { userEmail: this.currentUser.email })
+      .toPromise();
+    let keywordList: Array<{ keyword: string, savedDate: string; }> = res.payload['keywordList'];
+
+    return keywordList;
   }
 }

@@ -1,3 +1,11 @@
+<form *ngIf="!isSavedKeywordsEmpty" [formGroup]="form" novalidate>
+  <section *ngIf="isSavedKeywordsLoaded" class="keyword-group">
+    <div *ngFor="let key of savedKeywords; index as idx">
+      <button (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ parsingSavedDate(key.savedDate) }}</button>
+    </div>
+  </section>
+</form>
+<div class="outline">
 <form *ngIf="!isSavedDocsEmpty" [formGroup]="form" novalidate>
   <div class="upside">
     <div class="upside2">
@@ -69,3 +77,4 @@
 </div>
 
 <p class="no-saved-doc" *ngIf="isSavedDocsEmpty" > 저장된 문서가 없습니다.</p>
+</div>

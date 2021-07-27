@@ -46,24 +46,24 @@ export class ArticleAnalysisComponent implements OnInit {
 
   /**
    * @description Load saved documents from userSavedDocumentService
-   * @param pageNum 
+   * @param pageNum
    */
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
-    this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
+    // this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
     if (this.isSavedDocsEmpty) return;
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
-    this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
+    // this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
     this.pageInfo = await this.paginationService.paginate(pageNum, this.totalSavedDocsNum, 10, 3);
     this.pages = this.pageInfo.pages;
     this.isSavedDocsLoaded = true;
   }
 
   /**
-   * @description Helper function for page number to handle the page overflow 
-   * @param pageNum 
+   * @description Helper function for page number to handle the page overflow
+   * @param pageNum
    */
   handlePageOverflow(pageNum: number): number {
     if (pageNum < 0) pageNum = 1;
@@ -72,7 +72,7 @@ export class ArticleAnalysisComponent implements OnInit {
   }
 
   /**
-   * @description Reset the analysis settings 
+   * @description Reset the analysis settings
    */
   initializeSettings() {
     this.resetSelections();
@@ -109,8 +109,8 @@ export class ArticleAnalysisComponent implements OnInit {
   }
 
   /**
-   * @description Set the chart type as input 
-   * @param type 
+   * @description Set the chart type as input
+   * @param type
    */
   setChartType(type: ChartOption): void {
     this.selectedChartType = type;
@@ -118,7 +118,7 @@ export class ArticleAnalysisComponent implements OnInit {
 
   /**
    * @description Set the analysis type as input
-   * @param type 
+   * @param type
    */
   setAnalysisType(type: AnalysisOption): void {
     this.selectedAnalysisType = type;
@@ -126,14 +126,14 @@ export class ArticleAnalysisComponent implements OnInit {
 
   /**
    * @description Set the number of selected data as input
-   * @param num 
+   * @param num
    */
   setSelectedDataNum(num: number): void {
     this.selectedDataNum = num;
   }
 
   /**
-   * @description Reset the selected setting 
+   * @description Reset the selected setting
    */
   resetSelections(): void {
     this.selectedAnalysisType = null;
@@ -143,7 +143,7 @@ export class ArticleAnalysisComponent implements OnInit {
 
   /**
    * @description Add selected documents to analysis document list
-   * @param idx 
+   * @param idx
    */
   addDocToAnalysis(idx: number) {
     this.analysisDocIdsList.push(this.savedDocs[idx].id);
