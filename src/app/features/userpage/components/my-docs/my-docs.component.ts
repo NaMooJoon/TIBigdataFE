@@ -169,8 +169,8 @@ export class MyDocsComponent implements OnInit {
    * @description delete all my documents
    */
   deleteAllMyDocs() {
-    this.userSavedDocumentService.eraseAllMyDocs().then(
-      () => this.loadSavedDocs(1)
+    this.userSavedDocumentService.eraseAllMyDocs(this.savedDate).then(
+      () => this.loadSavedKeywords()
     );
   }
 
@@ -292,5 +292,17 @@ export class MyDocsComponent implements OnInit {
     this.savedDate = this.savedKeywords[0].savedDate;
 
     this.loadSavedDocs(1);
+  }
+
+  deleteSelectedDocs() {
+    if (this.form.value["checkArray"].length == 0) {
+      alert("삭제할 문서가 없습니다! 삭제할 문서를 선택해주세요.");
+    } else {
+      this.userSavedDocumentService.eraseSelectedMyDocs(this.form.value["checkArray"], this.savedDate).then(
+        () => this.loadSavedKeywords(),
+        this.form.value["checkArray"].clear()
+      );
+    }
+
   }
 }

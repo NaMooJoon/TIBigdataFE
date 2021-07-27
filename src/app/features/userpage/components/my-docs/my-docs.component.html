@@ -19,7 +19,7 @@
       </label>
     </div>
     <div *ngIf="!isSavedDocsEmpty" class="upside3">
-      <button>선택삭제</button>
+      <button (click) = "deleteSelectedDocs()">선택삭제</button>
       <button (click)="deleteAllMyDocs()">전체삭제</button>
     </div>
   </div>

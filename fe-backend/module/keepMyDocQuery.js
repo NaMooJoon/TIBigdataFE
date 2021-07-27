@@ -41,8 +41,14 @@ router.post("/getMyDoc", (req, res) => {
 
 router.post("/deleteAllMyDocs", (req, res) => {
   let userEmail = req.body.userEmail;
+  let savedDate = req.body.savedDate;
+
   myDoc
-    .deleteOne({ userEmail: userEmail })
+    .findOneAndUpdate(
+      {userEmail: userEmail},
+      { $pull : {keywordList : {savedDate : new Date(savedDate).toISOString()}} },
+      { upsert: true }
+      )
     .then((result) => {
       return res
         .status(200)
@@ -51,6 +57,28 @@ router.post("/deleteAllMyDocs", (req, res) => {
     .catch((err) => {
       return res
         .status(400)
+        .json(new Res(false, "successfully delete all docs", null));
+    });
+});
+
+router.post("/deleteSelectedMyDocs", (req, res) => {
+  let userEmail = req.body.userEmail;
+  let docIds = req.body.docIds;
+  let savedDate = req.body.savedDate;
+console.log("hihi : "+docIds)
+  myDoc
+    .findOneAndUpdate(
+      { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
+      { $pull: { 'keywordList.savedDocIds' : {$each : docIds} } },
+      { upsert: true }
+    )
+    .then((result) => {
+      return res.
+      status(200)
+        .json(new Res(true, "successfully delete all docs", null));
+    })
+    .catch((err) => {
+      return res.status(400)
         .json(new Res(false, "successfully delete all docs", null));
     });
 });

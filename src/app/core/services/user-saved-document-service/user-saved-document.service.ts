@@ -14,6 +14,7 @@ export class UserSavedDocumentService {
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
+  private deleteSelectedMyDocUrl = this.API_URL + "/myDoc/deleteSelectedMyDocs";
   private currentUser: UserProfile;
   private docsPerPage: number = 10;
 
@@ -73,9 +74,9 @@ export class UserSavedDocumentService {
    * @description Send query to delete all saved ariticles.
    * @returns Result of deleting operation.
    */
-  async eraseAllMyDocs(): Promise<boolean> {
+  async eraseAllMyDocs(savedDate: string): Promise<boolean> {
     let res = await this.httpClient
-      .post<any>(this.deleteAllMyDocUrl, { userEmail: this.currentUser.email })
+      .post<any>(this.deleteAllMyDocUrl, { userEmail: this.currentUser.email, savedDate: savedDate })
       .toPromise();
     return res.succ;
   }
@@ -102,5 +103,12 @@ export class UserSavedDocumentService {
     let keywordList: Array<{ keyword: string, savedDate: string; }> = res.payload['keywordList'];
 
     return keywordList;
+  }
+
+  async eraseSelectedMyDocs(docIds: Array<string>, savedDate: string): Promise<boolean> {
+    let res = await this.httpClient
+      .post<any>(this.deleteSelectedMyDocUrl, { userEmail: this.currentUser.email, docIds: docIds, savedDate: savedDate })
+      .toPromise();
+    return res.succ;
   }
 }
