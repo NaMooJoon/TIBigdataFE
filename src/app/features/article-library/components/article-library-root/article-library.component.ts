@@ -18,6 +18,9 @@ export class ArticleLibraryComponent implements OnInit {
     public _router: Router
   ) { }
 
+  //new
+  private _totalSavedDocsNum: number;
+
   private _toggleTopics: boolean[];
   private _institutionList: string[];
   private _selectedInst: string;
@@ -76,15 +79,18 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   /**
-   * @description Load institutions list 
+   * @description Load institutions list
    */
+  //new
   async loadInstitutions() {
     let res = await this.elasticsearchService.getInstitutions();
+    let numRes = await this.elasticsearchService.countAllDocs();
     this.institutionList = res["aggregations"]["count"]["buckets"];
+    this.totalSavedDocsNum = numRes["count"];
   }
 
   /**
-   * @description Router to library/research-status 
+   * @description Router to library/research-status
    */
   navToGraph(): void {
     this._router.navigateByUrl("library/research-status");
@@ -101,9 +107,9 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   /**
-   * @description Select category of topic ot dictionary order or institution 
-   * @param $event 
-   * @param doc 
+   * @description Select category of topic ot dictionary order or institution
+   * @param $event
+   * @param doc
    */
   async selectCategory($event, doc?) {
     this.articleService.clearList();
@@ -156,8 +162,8 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   /**
-   * @description Select institutions and set search mode as selected 
-   * @param institution 
+   * @description Select institutions and set search mode as selected
+   * @param institution
    */
   async selectInstitution(institution: { key: string; doc_count: number }) {
     if (institution === null || this.selectedInst === institution.key) {
@@ -177,8 +183,8 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   /**
-   * @description Return document ID from topic category 
-   * @param category 
+   * @description Return document ID from topic category
+   * @param category
    */
   async getDocIDsFromTopic(category) {
     return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
@@ -232,5 +238,13 @@ export class ArticleLibraryComponent implements OnInit {
   }
   public set dict_orders_1(value: string[]) {
     this._dict_orders_1 = value;
+  }
+
+  //new
+  public get totalSavedDocsNum(): number {
+    return this._totalSavedDocsNum;
+  }
+  public set totalSavedDocsNum(value: number) {
+    this._totalSavedDocsNum = value;
   }
 }

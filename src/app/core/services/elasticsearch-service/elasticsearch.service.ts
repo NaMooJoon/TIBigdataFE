@@ -30,6 +30,10 @@ export class ElasticsearchService {
   );
   private currentSearchingPage: number = 1;
 
+  //new
+  private startTime: string = null;
+  private endTime: string = null;
+
   constructor(
     private ipSvc: IpService,
     private esQueryModel: ElasticSearchQueryModel
@@ -343,6 +347,10 @@ export class ElasticsearchService {
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
       this.countByInstComplete();
+    } else if (searchMode === SearchMode.DATE) {
+      this.searchByDateComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
     }
   }
 
@@ -514,5 +522,35 @@ export class ElasticsearchService {
     } catch (error) {
       return false;
     }
+  }
+
+  //new
+  setSelectedDate(startTime: string, endTime: string) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
+  searchByDateComplete(startIndex?: number) {
+    this.saveSearchResult(this.searchByDate(startIndex));
+  }
+
+  searchByDate(startIndex?: number): Promise<any> {
+    return this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      from: startIndex,
+      size: this.numDocsPerPage,
+      body: {
+        query: {
+          range: {
+            post_date: {
+              gt: this.startTime,
+              lt: this.endTime,
+              format: "yyyy-MM-dd"
+            }
+          },
+        },
+      },
+      _source: this.esQueryModel.getSearchSource(),
+    });
   }
 }

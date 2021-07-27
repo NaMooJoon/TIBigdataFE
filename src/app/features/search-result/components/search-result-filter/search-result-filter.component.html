@@ -35,19 +35,46 @@
       <section class="date-range">
         <h3>기간</h3>
         <div class="date-range-container">
-          <button>1일</button>
-          <button>1주</button>
-          <button>1개월</button>
-          <button>3개월</button>
-          <button>6개월</button>
-          <button>1년</button>
-          <button>전체</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '1일')"
+          >1일</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '1주')"
+          >1주</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '1개월')"
+          >1개월</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '3개월')"
+          >3개월</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '6개월')"
+          >6개월</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '1년')"
+          >1년</button>
+          <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '전체')"
+          >전체</button>
         </div>
 
         <div class="date-input">
-          <p>직접입력</p>
-          <input type="date"/>
-          <input type="date"/>
+          <p>직접입력
+            <button
+            (click)="selectDate($event)"
+            [ngStyle]="selectedStyleObject(selectedDate === '확인')"
+            class = datepicker-btn
+          > 확인 </button>
+          </p>
+          <input type="date" value="startDate" (change)="setDatePickerStartDate($event)"/>
+          <input type="date" value="endDate" (change)="setDatePickerEndDate($event)"/>
         </div>
       </section>
       <section class="inst">

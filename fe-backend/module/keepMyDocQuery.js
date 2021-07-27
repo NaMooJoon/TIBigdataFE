@@ -87,12 +87,11 @@ router.post("/saveMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
   let docIds = req.body.docIds;
   let keyword = req.body.keyword;
-  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
 
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail },
-      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(Date.now() + KR_TIME_DIFF), savedDocIds : docIds } ] } },
+      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(), savedDocIds : docIds } ] } },
       { upsert: true }
     )
     .then((result) => {

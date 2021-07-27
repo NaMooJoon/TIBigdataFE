@@ -4,6 +4,7 @@ import { ChartOption } from "src/app/core/enums/chart-option";
 import { PaginationModel } from "src/app/core/models/pagination.model";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import {FormGroup} from '@angular/forms';
 
 const keywordIconUrl: string = "../../../assets/icons/keyword-analysis";
 const relatedIconUrl: string = "../../../assets/icons/related-doc";
@@ -18,7 +19,6 @@ const wordcloudIconUrl: string = "../../../assets/icons/chart-word-cloud";
   styleUrls: ["./article-analysis.less"],
 })
 export class ArticleAnalysisComponent implements OnInit {
-
   private _isChartLoaded = false;
   private _isSavedDocsLoaded = false;
   private _savedDocs: Array<{ title: string; id: string; }>;
@@ -32,6 +32,11 @@ export class ArticleAnalysisComponent implements OnInit {
   private _currentPage: number;
   private _pages: number[];
   private _isSavedDocsEmpty: boolean;
+  private _isSavedKeywordsLoaded = false;
+  private _isSavedKeywordsEmpty: boolean;
+  private _savedKeywords: Array<{ keyword: string, savedDate: string; }>;
+  private _keyword: string;
+  private _savedDate: string;
 
   constructor(
     private paginationService: PaginationService,
@@ -40,8 +45,34 @@ export class ArticleAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedDataNum = 0;
-    this.loadSavedDocs(1);
+    this.loadSavedKeywords();
     this.initializeSettings();
+  }
+
+  async loadSavedKeywords(): Promise<void> {
+    this.isSavedKeywordsEmpty = false;
+    this.isSavedKeywordsLoaded = false;
+    this.savedKeywords = await this.userSavedDocumentService.getMyKeywords();
+    this.isSavedKeywordsLoaded = true;
+    if(this.savedKeywords.length === 0){
+      this.isSavedKeywordsEmpty = true;
+    }
+    this.keyword = this.savedKeywords[0].keyword;
+    this.savedDate = this.savedKeywords[0].savedDate;
+
+    this.loadSavedDocs(1);
+  }
+
+  parsingSavedDate(savedDate: string){
+    let date = new Date(savedDate);
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let dt = date.getDate();
+    let hor = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+
+    return year+"-"+month+"-"+dt+" "+hor+":"+min+":"+sec;;
   }
 
   /**
@@ -50,15 +81,21 @@ export class ArticleAnalysisComponent implements OnInit {
    */
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
-    // this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
+    this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
     if (this.isSavedDocsEmpty) return;
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
-    // this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
+    this.savedDocs = await this.userSavedDocumentService.getMyDocs( this.savedDate, pageNum);
     this.pageInfo = await this.paginationService.paginate(pageNum, this.totalSavedDocsNum, 10, 3);
     this.pages = this.pageInfo.pages;
     this.isSavedDocsLoaded = true;
+  }
+
+  currentKeywordAndDate(keyword: string, savedDate: string){
+    this.keyword = keyword;
+    this.savedDate = savedDate;
+    this.loadSavedDocs(1);
   }
 
   /**
@@ -232,5 +269,35 @@ export class ArticleAnalysisComponent implements OnInit {
   }
   public set isSavedDocsEmpty(value: boolean) {
     this._isSavedDocsEmpty = value;
+  }
+  public get isSavedKeywordsEmpty(): boolean {
+    return this._isSavedKeywordsEmpty;
+  }
+  public set isSavedKeywordsEmpty(value: boolean) {
+    this._isSavedKeywordsEmpty = value;
+  }
+  public get isSavedKeywordsLoaded() {
+    return this._isSavedKeywordsLoaded;
+  }
+  public set isSavedKeywordsLoaded(value) {
+    this._isSavedKeywordsLoaded = value;
+  }
+  public get savedKeywords(): Array<{ keyword: string, savedDate: string; }> {
+    return this._savedKeywords;
+  }
+  public set savedKeywords(value: Array<{ keyword: string, savedDate: string; }>) {
+    this._savedKeywords = value;
+  }
+  public get keyword(): string {
+    return this._keyword;
+  }
+  public set keyword(value: string) {
+    this._keyword = value;
+  }
+  public get savedDate(): string {
+    return this._savedDate;
+  }
+  public set savedDate(value: string) {
+    this._savedDate = value;
   }
 }

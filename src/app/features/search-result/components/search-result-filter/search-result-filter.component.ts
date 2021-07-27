@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import {SearchMode} from '../../../../core/enums/search-mode';
 
 @Component({
   selector: "app-search-result-filter",
@@ -13,6 +14,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private articleSubscriber: Subscription;
   private _selectedInst: string;
   private isSearchFilter: boolean = false;
+
+  private _datePickerStartDate: string;
+  private _datePickerEndDate: string;
+  private _selectedDate: string;
+
   public topics = [
     "전체",
     "정치",
@@ -30,9 +36,14 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadInstitutions();
       });
+    this._datePickerEndDate = null;
+    this._datePickerStartDate = null;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadInstitutions();
+
+  }
 
   ngOnDestroy() {
     this.articleSubscriber.unsubscribe();
@@ -67,6 +78,9 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
    */
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
+    this.elasticsearchService.setSearchMode(SearchMode.INST);
+    this.elasticsearchService.setSelectedInst(inst.key);
+    this.elasticsearchService.triggerSearch(1);
   }
 
   resetFilters() {
@@ -95,4 +109,126 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedInst = value;
   }
 
+  //new
+  async selectDate(e){
+    this.selectedDate = e.target.innerText.toString();
+    let startTime : Date;
+    let endTime : Date;
+    let date = new Date();
+
+    switch (this.selectedDate) {
+      case "1일": {
+        endTime = new Date()
+        startTime = new Date(date.setDate(date.getDate()-1));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "1주":{
+        endTime = new Date()
+        startTime = new Date(date.setDate(date.getDate()-7));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "1개월":{
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth()-1));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "3개월":{
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth()-3));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "6개월":{
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth()-6));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "1년":{
+        endTime = new Date()
+        startTime = new Date(date.setFullYear(date.getFullYear()-1));
+
+        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        break;
+      }
+
+      case "전체":{
+        this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+        this.elasticsearchService.triggerSearch(1);
+
+        break;
+      }
+
+      default :{
+        if((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
+          alert("날짜를 선택해 주세요.");
+        }else{
+          let endTime2 = this.datePickerEndDate;
+          let startTime2 = this.datePickerStartDate;
+
+          if(startTime2 > endTime2){
+            alert("날짜를 다시 선택해 주세요.");
+          }else{
+            this.startDateSearch(startTime2, endTime2);
+          }
+        }
+        break;
+      }
+    }
+
+    function leftPad(value) {
+      if (value >= 10) {
+        return value;
+      }
+      return `0${value}`;
+    }
+
+    function toStringByFormatting(source, delimiter = '-') {
+      const year = source.getFullYear();
+      const month = leftPad(source.getMonth() + 1);
+      const day = leftPad(source.getDate());
+      return [year, month, day].join(delimiter);
+    }
+
+  }
+
+  startDateSearch(startTime: string, endTime: string) {
+    this.elasticsearchService.setSearchMode(SearchMode.DATE);
+    this.elasticsearchService.setSelectedDate(startTime, endTime);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
+  setDatePickerStartDate(e) {
+    this._datePickerStartDate = e.target.value;
+  }
+  public get datePickerStartDate(): string {
+    return this._datePickerStartDate;
+  }
+
+  setDatePickerEndDate(e) {
+    this._datePickerEndDate = e.target.value;
+  }
+  public get datePickerEndDate(): string {
+    return this._datePickerEndDate;
+  }
+
+  public get selectedDate(): string {
+    return this._selectedDate;
+  }
+  public set selectedDate(value: string) {
+    this._selectedDate = value;
+  }
 }

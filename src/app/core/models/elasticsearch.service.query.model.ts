@@ -12,6 +12,7 @@ export class ElasticSearchQueryModel {
     "post_writer",
     "post_body",
     "file_download_url",
+    "hash_key",
   ];
   private searchField: string[] = [
     "post_title",

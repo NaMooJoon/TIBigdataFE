@@ -3,4 +3,6 @@ export enum SearchMode {
   IDS,
   KEYWORD,
   INST,
+  MULTI,
+  DATE,
 }

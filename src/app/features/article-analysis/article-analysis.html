@@ -1,9 +1,16 @@
-<div class="article-analysis-container">
+<div class="article-analysis-container" xmlns="http://www.w3.org/1999/html">
   <aside >
     <div class="title">
       <h1>자료 분석</h1>
       <hr class="nav-separator" />
       <h2>내 보관 자료</h2>
+      <div *ngIf="!isSavedKeywordsEmpty" class="keyword-outline" >
+        <section *ngIf="isSavedKeywordsLoaded" class="keyword-group">
+          <div *ngFor="let key of savedKeywords; index as idx">
+            <button (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ parsingSavedDate(key.savedDate) }}</button>
+          </div>
+        </section>
+      </div>
     </div>
     <div class="outline">
       <section *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="saved-document-list">

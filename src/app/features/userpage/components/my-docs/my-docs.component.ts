@@ -271,7 +271,7 @@ export class MyDocsComponent implements OnInit {
     let min = date.getMinutes();
     let sec = date.getSeconds();
 
-    return year+month;
+    return year+"-"+month+"-"+dt+" "+hor+":"+min+":"+sec;
   }
 
   currentKeywordAndDate(keyword: string, savedDate: string){
