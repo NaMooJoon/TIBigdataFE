@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 14000;
+const PORT = 14001;
 
 const userAuth = require('./module/userAuthQuery');
 const keepDoc = require('./module/keepMyDocQuery');

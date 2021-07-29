@@ -1,3 +1,46 @@
+.popupmenu-item ul.popupmenu-menu
+{
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: .4em;
+    list-style: none;
+    background: white;
+    border: solid 1px #CCCCCC;
+}
+.popupmenu-item ul.popupmenu-menu li
+{
+    padding: .1em .5em;
+}
+.popupmenu-item ul.popupmenu-menu li a
+{
+    display: block;
+}
+.popupmenu-item:hover
+{
+    background: lightblue;
+}
+.popupmenu-item:hover ul.popupmenu-menu
+{
+    display: block;
+}
+
+button { 
+  font-size:1.5rem;
+}
+.popupmenu-item {
+  margin: 10px;
+  background-color: white;
+  border-radius: 25px !important;
+  border: 1px solid lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:20%;
+  font-size: 1.5rem;
+}
+
 .content-container {
   grid-area: main;
   display: grid;

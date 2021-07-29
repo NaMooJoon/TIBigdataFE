@@ -94,7 +94,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/logos",
-              "src/assets/icons"
+              "src/assets/icons",
+              "src/assets/manual.pdf"
             ]
           }
         },
