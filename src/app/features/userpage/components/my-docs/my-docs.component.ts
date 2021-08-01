@@ -17,7 +17,7 @@ export class MyDocsComponent implements OnInit {
   private _pageInfo: PaginationModel;
   private _pages: number[];
   private _isSavedDocsLoaded = false;
-  private _savedDocs: Array<{ title: string; id: string; }>;
+  private _savedDocs: Array<{ title: string; hashKey: string; }>;
   private _paginationModel: PaginationModel;
   private _totalSavedDocsNum: number;
   private _form: FormGroup;
@@ -91,10 +91,10 @@ export class MyDocsComponent implements OnInit {
 
   /**
    * @description
-   * @param docId
+   * @param docHashKey
    */
-  openDocDetail(docId: string): void {
-    this.articleService.setSelectedId(docId);
+  openDocDetail(docHashKey: string): void {
+    this.articleService.setSelectedId(docHashKey);
     this.navToDocDetail();
   }
 
@@ -128,7 +128,7 @@ export class MyDocsComponent implements OnInit {
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.savedDocs.length; i++) {
-        checkArray.push(new FormControl(this.savedDocs[i]["id"]));
+        checkArray.push(new FormControl(this.savedDocs[i]["hashKey"]));
       }
     } else {
       checkArray.clear();
@@ -199,10 +199,10 @@ export class MyDocsComponent implements OnInit {
   public set isSavedDocsLoaded(value) {
     this._isSavedDocsLoaded = value;
   }
-  public get savedDocs(): Array<{ title: string; id: string; }> {
+  public get savedDocs(): Array<{ title: string; hashKey: string; }> {
     return this._savedDocs;
   }
-  public set savedDocs(value: Array<{ title: string; id: string; }>) {
+  public set savedDocs(value: Array<{ title: string; hashKey: string; }>) {
     this._savedDocs = value;
   }
   public get paginationModel(): PaginationModel {

@@ -37,7 +37,7 @@ export class ReadArticle implements OnInit {
   }
 
   /**
-   * @description Load new document for related documents 
+   * @description Load new document for related documents
    */
   async load_new_document() {
     // this.isLoaded = 0;
@@ -66,8 +66,8 @@ export class ReadArticle implements OnInit {
   }
 
   /**
-   * @description Check if the data is empty 
-   * @param data 
+   * @description Check if the data is empty
+   * @param data
    */
   isDataEmpty(data: any) {
     if (data === undefined || data === null || data === " ") return true;

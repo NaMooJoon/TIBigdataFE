@@ -180,7 +180,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   setArticleIdList(): void {
     this.relatedDocBtnToggle = [];
     for (var i in this.articleSources) {
-      this.articleService.addId(this.articleSources[i]["_id"]);
+      this.articleService.addId(this.articleSources[i]["_source"]["hash_key"]);
       this.relatedDocBtnToggle.push(false);
     }
   }
@@ -241,7 +241,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.articleSources.length; i++) {
-        checkArray.push(new FormControl(this.articleSources[i]["_id"]));
+        checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
       }
     } else {
       checkArray.clear();

@@ -21,7 +21,7 @@ export class ElasticsearchService {
   private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
   private selectedInst: string;
-  private ids: string[] = [];
+  private hashKeys: string[] = [];
   private sortOption: SortOption = SortOption.SCORE;
   private numDocsPerPage: number = 10;
   private searchMode: SearchMode;
@@ -127,12 +127,12 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Update article ids to search
-   * @param ids
+   * @description Update article hashKeys to search
+   * @param hashKeys
    */
-  setIds(ids: string[]): void {
-    this.esQueryModel.setSearchIds(ids);
-    this.ids = ids;
+  setIds(hashKeys: string[]): void {
+    this.esQueryModel.setSearchIds(hashKeys);
+    this.hashKeys = hashKeys;
   }
 
   /**
@@ -232,7 +232,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Update number of articles that mathces with list of ids.
+   * @description Update number of articles that mathces with list of hashKeys.
    * @returns query result
    */
   countByIds(): Promise<any> {
@@ -252,7 +252,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Send query to ElasticSearch with article ids
+   * @description Send query to ElasticSearch with article hashKeys
    */
   searchById(): Promise<any> {
     return this.client.search({
@@ -272,7 +272,7 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Send query to ElasticSearch with article ids
+   * @description Send query to ElasticSearch with article hashKeys
    * @param startIndex A index to indicate where to start search.
    * @param docSize Number of articles to search at one time.
    */

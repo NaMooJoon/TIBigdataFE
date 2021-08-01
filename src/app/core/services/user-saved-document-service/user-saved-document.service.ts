@@ -9,6 +9,7 @@ import { IpService } from "../ip-service/ip.service";
 @Injectable({
   providedIn: "root",
 })
+
 export class UserSavedDocumentService {
   private API_URL: string = this.ipService.getFrontDBServerIp();
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
@@ -34,12 +35,12 @@ export class UserSavedDocumentService {
   }
 
   /**
-   * @description Send query of saving list of article ids into saved document list
-   * @param docIds list of article ids to save
+   * @description Send query of saving list of article HashKeys into saved document list
+   * @param docHashKeys list of article HashKeys to save
    * @returns returns true if the saving success, else return false.
    */
-  async saveNewMyDoc(docIds: Array<string>, keyword: string): Promise<boolean> {
-    let payload = { userEmail: this.currentUser.email, docIds: docIds, keyword : keyword };
+  async saveNewMyDoc(docHashKeys: Array<string>, keyword: string): Promise<boolean> {
+    let payload = { userEmail: this.currentUser.email, docHashKeys: docHashKeys, keyword : keyword };
     let res = await this.httpClient
       .post<any>(this.saveMyDocUrl, payload)
       .toPromise();
@@ -49,9 +50,9 @@ export class UserSavedDocumentService {
   /**
    * @description Send query to get list of saved articles.
    * @param startIndex A index to indicate where to start search.
-   * @returns Array of object that holds article title and article id.
+   * @returns Array of object that holds article title and article HashKey.
    */
-  async getMyDocs(savedDate: string, startIndex?: number): Promise<Array<{ title: string; id: string }>> {
+  async getMyDocs(savedDate: string, startIndex?: number): Promise<Array<{ title: string; hashKey: string }>> {
     if (startIndex === undefined) { startIndex = 0; }
     let currentIndex = (startIndex - 1) * this.docsPerPage;
 
@@ -59,15 +60,15 @@ export class UserSavedDocumentService {
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email, savedDate: savedDate })
       .toPromise();
 
-    let docIds: Array<string> = res.payload['keywordList'].find(object => "savedDocIds" in object)["savedDocIds"];
-    let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docIds);
-    let idIdx = 0;
+    let docHashKeys: Array<string> = res.payload['keywordList'].find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
+    let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docHashKeys);
+    let hashKeyIdx = 0;
 
-    let idsAndTitles = titles.map((title) => {
-      return { title: title, id: docIds[idIdx++] };
+    let HashKeysAndTitles = titles.map((title) => {
+      return { title: title, hashKey: docHashKeys[hashKeyIdx++] };
     });
 
-    return idsAndTitles;
+    return HashKeysAndTitles;
   }
 
   /**
@@ -90,9 +91,9 @@ export class UserSavedDocumentService {
       .post<any>(this.getMyDocUrl, { userEmail: this.currentUser.email, keyword: keyword, savedDate: savedDate})
       .toPromise();
 
-    let docIds: Array<string> = res.payload['keywordList'].find(object => "savedDocIds" in object)["savedDocIds"];
+    let docHashKeys: Array<string> = res.payload['keywordList'].find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
 
-    return docIds.length;
+    return docHashKeys.length;
   }
 
   //keywords
@@ -105,9 +106,9 @@ export class UserSavedDocumentService {
     return keywordList;
   }
 
-  async eraseSelectedMyDocs(docIds: Array<string>, savedDate: string): Promise<boolean> {
+  async eraseSelectedMyDocs(docHashKeys: Array<string>, savedDate: string): Promise<boolean> {
     let res = await this.httpClient
-      .post<any>(this.deleteSelectedMyDocUrl, { userEmail: this.currentUser.email, docIds: docIds, savedDate: savedDate })
+      .post<any>(this.deleteSelectedMyDocUrl, { userEmail: this.currentUser.email, docHashKeys: docHashKeys, savedDate: savedDate })
       .toPromise();
     return res.succ;
   }

@@ -17,7 +17,7 @@ router.post("/getMyDoc", (req, res) => {
         return res
           .status(200)
           .json(
-            new Res(true, "successfully saved doc ids", {
+            new Res(true, "successfully saved doc HashKeys", {
               keywordList : result.keywordList,
             })
           );
@@ -26,7 +26,7 @@ router.post("/getMyDoc", (req, res) => {
         .status(200)
         .json(
           new Res(false, "no saved docs", {
-            docIds: [],
+            docHashKeys: [],
           })
         );
       }
@@ -35,7 +35,7 @@ router.post("/getMyDoc", (req, res) => {
       console.log(err);
       return res
         .status(400)
-        .json(new Res(false, "successfully saved doc ids", null));
+        .json(new Res(false, "successfully saved doc HashKeys", null));
     });
 });
 
@@ -63,13 +63,12 @@ router.post("/deleteAllMyDocs", (req, res) => {
 
 router.post("/deleteSelectedMyDocs", (req, res) => {
   let userEmail = req.body.userEmail;
-  let docIds = req.body.docIds;
+  let docHashKeys = req.body.docHashKeys;
   let savedDate = req.body.savedDate;
-console.log("hihi : "+docIds)
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
-      { $pull: { 'keywordList.savedDocIds' : {$each : docIds} } },
+      { $pull: { 'keywordList.savedDocHashKeys' : {$each : docHashKeys} } },
       { upsert: true }
     )
     .then((result) => {
@@ -85,20 +84,20 @@ console.log("hihi : "+docIds)
 
 router.post("/saveMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
-  let docIds = req.body.docIds;
+  let docHashKeys = req.body.docHashKeys;
   let keyword = req.body.keyword;
 
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail },
-      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(), savedDocIds : docIds } ] } },
+      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(), savedDocHashKeys : docHashKeys } ] } },
       { upsert: true }
     )
     .then((result) => {
-      return res.status(200).json(new Res(true, "successfully saved doc ids"));
+      return res.status(200).json(new Res(true, "successfully saved doc HashKeys"));
     })
     .catch((err) => {
-      return res.status(400).json(new Res(false, "Failed to saved doc ids"));
+      return res.status(400).json(new Res(false, "Failed to saved doc HashKeys"));
     });
 });
 
@@ -131,7 +130,7 @@ router.post("/getMyKeyword", (req, res) => {
       console.log(err);
       return res
         .status(400)
-        .json(new Res(false, "successfully saved doc ids", null));
+        .json(new Res(false, "successfully saved doc HashKeys", null));
     });
 });
 

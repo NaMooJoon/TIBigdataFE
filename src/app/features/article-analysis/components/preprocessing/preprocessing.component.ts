@@ -13,7 +13,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
   styleUrls: ["./preprocessing.component.less"],
 })
 
-export class PreprocessingComponent implements OnInit {
+export class PreprocessingComponent {
   private _isDataPreprocessed = false;
   private _preprocessedData: Array<string>;
 
@@ -23,8 +23,8 @@ export class PreprocessingComponent implements OnInit {
     http_req.setRequestHeader('Content-Type', 'application/json');
 
     var data = {
-      userEmail:"sujinyang@handong.edu", 
-      keyword:"북한", 
+      userEmail:"sujinyang@handong.edu",
+      keyword:"북한",
       savedDate:"2021-07-08T11:46:03.973Z",
       synonym: true,
       stopword: true,
@@ -48,7 +48,7 @@ export class PreprocessingComponent implements OnInit {
   //       data :JSON.stringify(data),
   //       url: "http://kubic.handong.edu:15000/preprocessing",
   //       contentType: "application/json",
-        
+
   //   });
   // });
   }
@@ -68,7 +68,7 @@ export class PreprocessingComponent implements OnInit {
     this._isDataPreprocessed = value;
   }
 
-  
+
   public get preprocessedData(){
     return this._preprocessedData;
   }

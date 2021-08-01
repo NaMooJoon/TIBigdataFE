@@ -50,7 +50,7 @@
           type="checkbox"
           [(checked)]="articleSource.isSelected"
           name="selectDoc"
-          [value]="articleSource['_id']"
+          [value]="articleSource['_source']['hash_key']"
           (change)="onCheckboxChange($event)"
         />
       </label>

@@ -121,7 +121,6 @@ export class ArticleLibraryComponent implements OnInit {
     switch (id) {
       case "topic": {
         let docIDs = await this.getDocIDsFromTopic(ct);
-        console.log(docIDs);
         docIDs.map((e) => this.articleService.addId(e));
         let partialIDs: Object[] = this.articleService
           .getList()

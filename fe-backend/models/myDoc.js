@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const keywordListSchema = new Schema({
   keyword : String,
   savedDate : Date,
-  savedDocIds: [],
+  savedDocHashKeys: [],
 });
 
 const keepDocSchema = new Schema({

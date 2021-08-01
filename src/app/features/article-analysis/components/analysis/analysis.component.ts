@@ -21,21 +21,21 @@ export class AnalysisComponent implements OnInit {
   // }
 
   // /**
-  //  * @description Router to service guide page 
+  //  * @description Router to service guide page
   //  */
   // toServiceGuide() {
   //   this.router.navigateByUrl("/introduce/service-guide");
   // }
 
   // /**
-  //  * @description Router to collected info page 
+  //  * @description Router to collected info page
   //  */
   // toCollectedInfo() {
   //   this.router.navigateByUrl("/introduce/collected-info");
   // }
 
   // /**
-  //  * @description Router to member policy page 
+  //  * @description Router to member policy page
   //  */
   // toMemberPolicy() {
   //   this.router.navigateByUrl("/introduce/member-policy");

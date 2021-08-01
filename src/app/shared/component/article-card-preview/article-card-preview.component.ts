@@ -20,7 +20,7 @@ export class ArticleCardViewComponent implements OnInit {
   private docId: string;
 
   ngOnInit() {
-    this.docId = this.article._id;
+    this.docId = this.article._source.hash_key;
     this.article = this.article._source;
     this.loadTopKeywords();
     if (this.article.file_download_url === undefined) {

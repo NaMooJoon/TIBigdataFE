@@ -21,7 +21,7 @@ const wordcloudIconUrl: string = "../../../assets/icons/chart-word-cloud";
 export class ArticleAnalysisComponent implements OnInit {
   private _isChartLoaded = false;
   private _isSavedDocsLoaded = false;
-  private _savedDocs: Array<{ title: string; id: string; }>;
+  private _savedDocs: Array<{ title: string; hashKey: string; }>;
   private _selectedChartType: ChartOption;
   private _selectedAnalysisType: AnalysisOption;
   private _selectedDataNum: number;
@@ -183,7 +183,7 @@ export class ArticleAnalysisComponent implements OnInit {
    * @param idx
    */
   addDocToAnalysis(idx: number) {
-    this.analysisDocIdsList.push(this.savedDocs[idx].id);
+    this.analysisDocIdsList.push(this.savedDocs[idx].hashKey);
 
   }
 
@@ -204,10 +204,10 @@ export class ArticleAnalysisComponent implements OnInit {
   public set isSavedDocsLoaded(value) {
     this._isSavedDocsLoaded = value;
   }
-  public get savedDocs(): Array<{ title: string; id: string; }> {
+  public get savedDocs(): Array<{ title: string; hashKey: string; }> {
     return this._savedDocs;
   }
-  public set savedDocs(value: Array<{ title: string; id: string; }>) {
+  public set savedDocs(value: Array<{ title: string; hashKey: string; }>) {
     this._savedDocs = value;
   }
   public get selectedChartType(): ChartOption {
