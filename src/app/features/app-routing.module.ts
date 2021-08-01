@@ -58,13 +58,23 @@ const routes: Routes = [
   },
   {
     path: "analysis",
-    component: ArticleAnalysisComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import("./article-analysis/analysis.module").then(
+        (m) => m.AnalysisModule
+      ),
   },
   {
     path: "userpage",
     loadChildren: () =>
       import("./userpage/userpage.module").then((m) => m.UserpageModule),
+  },
+  {
+    path: "openapi",
+    loadChildren: () =>
+      import("./open-api/open-api.module").then(
+        (m) => m.OpenApiModule
+      ),
   },
 ];
 
