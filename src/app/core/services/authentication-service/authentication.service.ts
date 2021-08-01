@@ -10,6 +10,7 @@ import {
   SocialUser,
 } from "angularx-social-login";
 import { IpService } from "../ip-service/ip.service";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 
 @Injectable({
   providedIn: "root",
@@ -134,6 +135,9 @@ export class AuthenticationService {
    * @returns Either the database has information of user with given email or not
    */
   async verifyUser(email: string): Promise<boolean> {
+    console.log('api_url : ',this.API_URL);
+    console.log('email : ',email);
+
     let res: QueryResponse = await this.httpClient
       .post<any>(`${this.API_URL}/users/verifyUser`, { email: email })
       .toPromise();

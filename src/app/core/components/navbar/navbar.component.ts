@@ -220,6 +220,17 @@ export class NavbarComponent implements OnInit {
   toMemberPolicy(): void {
     this.isHamburger = false;
     this.router.navigateByUrl("/about/member-policy");
+
+  toManagement(): void {
+    this.router.navigateByUrl("/openapi/management");
+  }
+
+  toDocument(): void {
+    this.router.navigateByUrl("/openapi/document");
+  }
+
+  toGotoapi(): void {
+    this.router.navigateByUrl("/openapi/gotoapi");
   }
 
   getSelectedMenu(): string {
