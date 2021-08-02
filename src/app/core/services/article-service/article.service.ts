@@ -6,24 +6,24 @@ import { ArticleSource } from "../../models/article.model";
   providedIn: "root",
 })
 export class ArticleService {
-  private selectedId: string;
-  private idList: Array<string>;
+  private selectedHashKey: string;
+  private hashKeyList: Array<string>;
   private article: ArticleSource;
 
   constructor(private elasticsearchService: ElasticsearchService) { }
 
   /**
    * @description get list of article ids collected by ES search and convery them into list of article titles.
-   * @param ids list of ids in string
+   * @param hashKeys list of ids in string
    * @returns list of article titles
    */
-  async convertDocIdsToTitles(ids: string[]): Promise<string[]> {
-    let docTitles: Array<string> = new Array<string>(ids.length);
-    this.elasticsearchService.setIds(ids);
-    await this.elasticsearchService.searchByManyId().then((res) => {
+  async convertDocHashKeysToTitles(hashKeys: string[]): Promise<string[]> {
+    let docTitles: Array<string> = new Array<string>(hashKeys.length);
+    this.elasticsearchService.setHashKeys(hashKeys);
+    await this.elasticsearchService.searchByManyHashKey().then((res) => {
       let articles: {}[] = res["hits"]["hits"];
       for (let i = 0; i < articles.length; i++) {
-        let idx = ids.indexOf(articles[i]["_source"]["hash_key"]);
+        let idx = hashKeys.indexOf(articles[i]["_source"]["hash_key"]);
         let extractedTitle: string = articles[i]["_source"]["post_title"];
         docTitles[idx] = extractedTitle.trim();
       }
@@ -35,16 +35,16 @@ export class ArticleService {
    * @description clear current list of articles
    */
   clearList(): void {
-    this.idList = [];
-    this.selectedId = "";
+    this.hashKeyList = [];
+    this.selectedHashKey = "";
   }
 
   /**
    * @description add article id into current list of articles
-   * @param id
+   * @param hashKey
    */
-  addId(id: string): void {
-    this.idList.push(id);
+  addHashKey(hashKey: string): void {
+    this.hashKeyList.push(hashKey);
   }
 
   /**
@@ -52,23 +52,23 @@ export class ArticleService {
    * @returns list of article ids in string
    */
   getList(): Array<string> {
-    return this.idList;
+    return this.hashKeyList;
   }
 
   /**
    * @description update current selected id
-   * @param id article id from ES that user wants to select
+   * @param hashKey article id from ES that user wants to select
    */
-  setSelectedId(id: string): void {
-    this.selectedId = id;
+  setSelectedHashKey(hashKey: string): void {
+    this.selectedHashKey = hashKey;
   }
 
   /**
    * @description get currently selected article's id
    * @returns article id that user chose
    */
-  getSelectedId(): string {
-    return this.selectedId;
+  getSelectedHashKey(): string {
+    return this.selectedHashKey;
   }
 
   /**
@@ -92,7 +92,7 @@ export class ArticleService {
    * @param index
    * @returns selected id from article id list
    */
-  getIdByIdx(index: number): string {
-    return this.idList[index];
+  getHashKeyByIdx(index: number): string {
+    return this.hashKeyList[index];
   }
 }

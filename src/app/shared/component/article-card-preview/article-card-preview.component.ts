@@ -17,10 +17,10 @@ export class ArticleCardViewComponent implements OnInit {
     private documentService: ArticleService
   ) { }
   private keywords: any[] = [];
-  private docId: string;
+  private docHashKey: string;
 
   ngOnInit() {
-    this.docId = this.article._source.hash_key;
+    this.docHashKey = this.article._source.hash_key;
     this.article = this.article._source;
     this.loadTopKeywords();
     if (this.article.file_download_url === undefined) {
@@ -32,7 +32,7 @@ export class ArticleCardViewComponent implements OnInit {
    * @description Update selected article and navigate to read article page.
    */
   openDocDetail(): void {
-    this.documentService.setSelectedId(this.docId);
+    this.documentService.setSelectedHashKey(this.docHashKey);
     this.navToDocDetail();
   }
 
@@ -40,7 +40,7 @@ export class ArticleCardViewComponent implements OnInit {
    * @description Load list of top keywords of current article
    */
   loadTopKeywords(): void {
-    this.db.getTfidfVal(this.docId).then((res) => {
+    this.db.getTfidfVal(this.docHashKey).then((res) => {
       let data = res as [];
       for (let n = 0; n < data.length; n++) {
         let tfVal = data[n]["tfidf"];

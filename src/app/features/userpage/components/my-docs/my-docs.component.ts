@@ -94,7 +94,7 @@ export class MyDocsComponent implements OnInit {
    * @param docHashKey
    */
   openDocDetail(docHashKey: string): void {
-    this.articleService.setSelectedId(docHashKey);
+    this.articleService.setSelectedHashKey(docHashKey);
     this.navToDocDetail();
   }
 

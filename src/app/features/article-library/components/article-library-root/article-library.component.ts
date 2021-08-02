@@ -102,7 +102,7 @@ export class ArticleLibraryComponent implements OnInit {
 
   navToDetail(doc) {
     let id = doc["idList"];
-    this.articleService.setSelectedId(id);
+    this.articleService.setSelectedHashKey(id);
     this._router.navigateByUrl("search/read");
   }
 
@@ -121,7 +121,7 @@ export class ArticleLibraryComponent implements OnInit {
     switch (id) {
       case "topic": {
         let docIDs = await this.getDocIDsFromTopic(ct);
-        docIDs.map((e) => this.articleService.addId(e));
+        docIDs.map((e) => this.articleService.addHashKey(e));
         let partialIDs: Object[] = this.articleService
           .getList()
           .slice(0, this.elasticsearchService.getNumDocsPerPage());
@@ -132,10 +132,10 @@ export class ArticleLibraryComponent implements OnInit {
 
 
         this.elasticsearchService.setKeyword(ct);
-        this.elasticsearchService.setSearchMode(SearchMode.IDS);
+        this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
         this.elasticsearchService.setArticleNumChange(docIDs.length);
-        this.elasticsearchService.setIds(ids);
-        this.elasticsearchService.multiIdSearchComplete();
+        this.elasticsearchService.setHashKeys(ids);
+        this.elasticsearchService.multiHashKeySearchComplete();
       }
 
       case "dict": {
@@ -155,9 +155,9 @@ export class ArticleLibraryComponent implements OnInit {
     this.articleService.clearList();
     let category = this.get_chosen_category();
     let docs_id = await this.getDocIDsFromTopic(category); //현재 토픽에 해당하는 내용을 불러온다.
-    docs_id.map((e) => this.articleService.addId(e));
-    this.elasticsearchService.setIds(docs_id);
-    this.elasticsearchService.multiIdSearchComplete();
+    docs_id.map((e) => this.articleService.addHashKey(e));
+    this.elasticsearchService.setHashKeys(docs_id);
+    this.elasticsearchService.multiHashKeySearchComplete();
   }
 
   /**

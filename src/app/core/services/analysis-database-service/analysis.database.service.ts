@@ -61,7 +61,7 @@ export class AnalysisDatabaseService {
   async loadRelatedDocs(id: string) {
     let _rcmdIdsRes = await this.getRelatedDocsTbl(id);
     let rcmdIds = _rcmdIdsRes[0]["rcmd"];
-    let _titlesRes = await this.docControl.convertDocIdsToTitles(
+    let _titlesRes = await this.docControl.convertDocHashKeysToTitles(
       rcmdIds as string[]
     );
     let titles = _titlesRes as [];

@@ -1,6 +1,6 @@
 export enum SearchMode {
   ALL,
-  IDS,
+  HASHKEYS,
   KEYWORD,
   INST,
   MULTI,

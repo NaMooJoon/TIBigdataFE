@@ -32,7 +32,7 @@ export class ReadArticle implements OnInit {
   }
 
   goToDoc(r) {
-    this.articleService.setSelectedId(this.rcmdList[r]["id"]);
+    this.articleService.setSelectedHashKey(this.rcmdList[r]["hashKey"]);
     this.load_new_document();
   }
 
@@ -45,21 +45,21 @@ export class ReadArticle implements OnInit {
     this.isCloudLoaded = 0;
     this.isDocInfoLoaded = 0;
 
-    let id = this.articleService.getSelectedId();
-    this.elasticsearchService.setIds([id]);
+    let hashKey = this.articleService.getSelectedHashKey();
+    this.elasticsearchService.setHashKeys([hashKey]);
 
-    this.analysisDatabaseService.loadRelatedDocs(id).then((res) => {
+    this.analysisDatabaseService.loadRelatedDocs(hashKey).then((res) => {
       this.rcmdList = res as [];
       this.isRelatedLoaded++;
     });
 
-    await this.elasticsearchService.searchById().then((res) => {
+    await this.elasticsearchService.searchByHashKey().then((res) => {
       this.article = res["hits"]["hits"][0]["_source"];
 
       this.isDocInfoLoaded++;
     });
 
-    this.wordcloudService.createCloud(id).then((data) => {
+    this.wordcloudService.createCloud(hashKey).then((data) => {
       this.cloudData = data as CloudData[];
       this.isCloudLoaded++;
     });

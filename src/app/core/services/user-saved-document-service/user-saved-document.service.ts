@@ -61,7 +61,7 @@ export class UserSavedDocumentService {
       .toPromise();
 
     let docHashKeys: Array<string> = res.payload['keywordList'].find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
-    let titles: Array<string> = await this.articleService.convertDocIdsToTitles(docHashKeys);
+    let titles: Array<string> = await this.articleService.convertDocHashKeysToTitles(docHashKeys);
     let hashKeyIdx = 0;
 
     let HashKeysAndTitles = titles.map((title) => {

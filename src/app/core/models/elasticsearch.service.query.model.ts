@@ -83,7 +83,7 @@ export class ElasticSearchQueryModel {
     return this.filterPath;
   }
 
-  public getSearchIds() {
+  public getSearchHashKeys() {
     return {
       query: {
         terms : {
@@ -97,7 +97,7 @@ export class ElasticSearchQueryModel {
     this.searchKeyword = keyword;
   }
 
-  public setSearchIds(hashKeys: string[]) {
+  public setSearchHashKeys(hashKeys: string[]) {
     this.hashKeys = hashKeys;
   }
 

@@ -130,8 +130,8 @@ export class ElasticsearchService {
    * @description Update article hashKeys to search
    * @param hashKeys
    */
-  setIds(hashKeys: string[]): void {
-    this.esQueryModel.setSearchIds(hashKeys);
+  setHashKeys(hashKeys: string[]): void {
+    this.esQueryModel.setSearchHashKeys(hashKeys);
     this.hashKeys = hashKeys;
   }
 
@@ -235,18 +235,18 @@ export class ElasticsearchService {
    * @description Update number of articles that mathces with list of hashKeys.
    * @returns query result
    */
-  countByIds(): Promise<any> {
+  countByHashKeys(): Promise<any> {
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
     });
   }
 
   /**
    * @description Update number of articles for all subscribers.
    */
-  countByIdsComplete(): void {
-    this.countByIds().then((articleNum) =>
+  countByHashKeysComplete(): void {
+    this.countByHashKeys().then((articleNum) =>
       this.articleNum.next(articleNum.count)
     );
   }
@@ -254,11 +254,11 @@ export class ElasticsearchService {
   /**
    * @description Send query to ElasticSearch with article hashKeys
    */
-  searchById(): Promise<any> {
+  searchByHashKey(): Promise<any> {
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -267,8 +267,8 @@ export class ElasticsearchService {
    * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
    * @param startIndex
    */
-  multiIdSearchComplete(startIndex?: number): void {
-    this.saveSearchResult(this.searchByManyId(startIndex));
+  multiHashKeySearchComplete(startIndex?: number): void {
+    this.saveSearchResult(this.searchByManyHashKey(startIndex));
   }
 
   /**
@@ -276,12 +276,12 @@ export class ElasticsearchService {
    * @param startIndex A index to indicate where to start search.
    * @param docSize Number of articles to search at one time.
    */
-  searchByManyId(startIndex?: number, docSize?: number): Promise<any> {
+  searchByManyHashKey(startIndex?: number, docSize?: number): Promise<any> {
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -332,11 +332,11 @@ export class ElasticsearchService {
     if (searchMode === SearchMode.ALL) {
       this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
       this.allCountComplete();
-    } else if (searchMode === SearchMode.IDS) {
-      this.multiIdSearchComplete(
+    } else if (searchMode === SearchMode.HASHKEYS) {
+      this.multiHashKeySearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-      this.countByIdsComplete();
+      this.countByHashKeysComplete();
     } else if (searchMode === SearchMode.KEYWORD) {
       this.fullTextSearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()

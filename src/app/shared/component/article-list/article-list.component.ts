@@ -58,7 +58,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.articleSubscriber = this.articleChange$.subscribe((articles) => {
       this.articleSources = articles;
       this.resetSearchOptions();
-      this.setArticleIdList();
+      this.setArticleHashKeyList();
       this.setCheckbox();
       this.setArticleForm();
 
@@ -177,10 +177,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   /**
    * @description Set list of article ids by reading id field of each element in articleSource.
    */
-  setArticleIdList(): void {
+  setArticleHashKeyList(): void {
     this.relatedDocBtnToggle = [];
     for (var i in this.articleSources) {
-      this.articleService.addId(this.articleSources[i]["_source"]["hash_key"]);
+      this.articleService.addHashKey(this.articleSources[i]["_source"]["hash_key"]);
       this.relatedDocBtnToggle.push(false);
     }
   }
@@ -191,8 +191,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @param RelatedDocIdx Index of related articles from relatedDocs.
    */
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
-    this.articleService.setSelectedId(
-      this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]
+    this.articleService.setSelectedHashKey(
+      this.relatedDocs[articleSourceIdx][RelatedDocIdx]["hashKey"]
     );
     this.navToDocDetail();
   }
@@ -212,7 +212,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    */
   loadRelatedDocs(idx: number): void {
     this.analysisDatabaseService
-      .loadRelatedDocs(this.articleService.getIdByIdx(idx))
+      .loadRelatedDocs(this.articleService.getHashKeyByIdx(idx))
       .then((res) => {
         this.relatedDocs[idx] = res as [];
       });
@@ -278,10 +278,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   /**
    * @description Set selected article and navigate to article detail.
-   * @param docId
+   * @param docHashKey
    */
-  openDocDetail(docId: string): void {
-    this.articleService.setSelectedId(docId);
+  openDocDetail(docHashKey: string): void {
+    this.articleService.setSelectedHashKey(docHashKey);
     this.navToDocDetail();
   }
 
