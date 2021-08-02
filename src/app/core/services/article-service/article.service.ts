@@ -22,12 +22,14 @@ export class ArticleService {
     this.elasticsearchService.setHashKeys(hashKeys);
     await this.elasticsearchService.searchByManyHashKey().then((res) => {
       let articles: {}[] = res["hits"]["hits"];
+
       for (let i = 0; i < articles.length; i++) {
         let idx = hashKeys.indexOf(articles[i]["_source"]["hash_key"]);
         let extractedTitle: string = articles[i]["_source"]["post_title"];
         docTitles[idx] = extractedTitle.trim();
       }
     });
+    docTitles = Array.from(docTitles, item => typeof item === 'undefined' ? "(삭제된 문서 입니다.)" : item);
     return docTitles;
   }
 

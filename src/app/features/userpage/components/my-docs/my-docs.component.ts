@@ -93,9 +93,13 @@ export class MyDocsComponent implements OnInit {
    * @description
    * @param docHashKey
    */
-  openDocDetail(docHashKey: string): void {
-    this.articleService.setSelectedHashKey(docHashKey);
-    this.navToDocDetail();
+  openDocDetail(docHashKey: string, docTitle: string): void {
+    if(docTitle === "(삭제된 문서 입니다.)"){
+      alert("선택하신 문서는 존재하지 않습니다.")
+    }else{
+      this.articleService.setSelectedHashKey(docHashKey);
+      this.navToDocDetail();
+    }
   }
 
   /**
