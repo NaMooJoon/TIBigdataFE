@@ -1,10 +1,17 @@
 <div *ngIf="article" class="article-info">
   <a class="post-title" (click)="openDocDetail()"> {{ article.post_title }} </a>
   <div class="post-preview">{{ article.post_body }}</div>
+<!--  normal-->
   <div class="post-detail-container">
-    <span class="post-date"> {{ article.post_date }} </span>
-    <span class="post-writer"> {{ article.post_writer }} </span>
-    <span class="post-keywords"> 키워드 </span>
+    <span *ngIf="article.post_date" class="post-date"> {{ article.post_date }} </span>
+    <span *ngIf="article.post_writer" class="post-writer"> {{ article.post_writer }} </span>
+    <span *ngIf="keywords[0]" class="post-keywords"> 키워드 </span>
     <span>{{ keywords[0] }}</span>
+  </div>
+<!--  mobile-->
+  <div class="post-detail-container mobile">
+    <span *ngIf="article.published_institution" class="post-institution mobile"> {{ article.published_institution }} </span>
+    <span *ngIf="article.post_writer" class="post-writer mobile"> {{ article.post_writer }} </span>
+    <span *ngIf="article.post_date" class="post-date mobile"> {{ article.post_date }} </span>
   </div>
 </div>

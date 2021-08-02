@@ -5,15 +5,20 @@ const Res = require("../models/Res");
 
 router.post("/getMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
+  let savedDate = req.body.savedDate;
+
   myDoc
-    .findOne({ userEmail: userEmail }, { savedDocIds: 1, _id: 0 })
+    .findOne(
+      { $and: [ { userEmail: userEmail }, {'keywordList.savedDate' : new Date(savedDate).toISOString() } ] },
+      { 'keywordList.$' :1, _id: 0 }
+      )
     .then((result) => {
       if (result)
         return res
           .status(200)
           .json(
-            new Res(true, "successfully saved doc ids", {
-              docIds: result.savedDocIds,
+            new Res(true, "successfully saved doc HashKeys", {
+              keywordList : result.keywordList,
             })
           );
       else{
@@ -21,7 +26,7 @@ router.post("/getMyDoc", (req, res) => {
         .status(200)
         .json(
           new Res(false, "no saved docs", {
-            docIds: [],
+            docHashKeys: [],
           })
         );
       }
@@ -30,14 +35,20 @@ router.post("/getMyDoc", (req, res) => {
       console.log(err);
       return res
         .status(400)
-        .json(new Res(false, "successfully saved doc ids", null));
+        .json(new Res(false, "successfully saved doc HashKeys", null));
     });
 });
 
 router.post("/deleteAllMyDocs", (req, res) => {
   let userEmail = req.body.userEmail;
+  let savedDate = req.body.savedDate;
+
   myDoc
-    .deleteOne({ userEmail: userEmail })
+    .findOneAndUpdate(
+      {userEmail: userEmail},
+      { $pull : {keywordList : {savedDate : new Date(savedDate).toISOString()}} },
+      { upsert: true }
+      )
     .then((result) => {
       return res
         .status(200)
@@ -50,21 +61,76 @@ router.post("/deleteAllMyDocs", (req, res) => {
     });
 });
 
+router.post("/deleteSelectedMyDocs", (req, res) => {
+  let userEmail = req.body.userEmail;
+  let docHashKeys = req.body.docHashKeys;
+  let savedDate = req.body.savedDate;
+  myDoc
+    .findOneAndUpdate(
+      { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
+      { $pull: { 'keywordList.savedDocHashKeys' : {$each : docHashKeys} } },
+      { upsert: true }
+    )
+    .then((result) => {
+      return res.
+      status(200)
+        .json(new Res(true, "successfully delete all docs", null));
+    })
+    .catch((err) => {
+      return res.status(400)
+        .json(new Res(false, "successfully delete all docs", null));
+    });
+});
+
 router.post("/saveMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
-  let docIds = req.body.docIds;
+  let docHashKeys = req.body.docHashKeys;
+  let keyword = req.body.keyword;
 
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail },
-      { $addToSet: { savedDocIds: { $each: docIds } } },
+      { $addToSet : { keywordList : [ { keyword : keyword, savedDate : new Date(), savedDocHashKeys : docHashKeys } ] } },
       { upsert: true }
     )
     .then((result) => {
-      return res.status(200).json(new Res(true, "successfully saved doc ids"));
+      return res.status(200).json(new Res(true, "successfully saved doc HashKeys"));
     })
     .catch((err) => {
-      return res.status(400).json(new Res(false, "Failed to saved doc ids"));
+      return res.status(400).json(new Res(false, "Failed to saved doc HashKeys"));
+    });
+});
+
+//keywords
+router.post("/getMyKeyword", (req, res) => {
+  let userEmail = req.body.userEmail;
+
+  myDoc
+    .findOne({userEmail : userEmail},{ 'keywordList.keyword' : 1 , 'keywordList.savedDate' :1, _id: 0 })
+    .then((result) => {
+      if (result)
+        return res
+          .status(200)
+          .json(
+            new Res(true, "successfully saved keyword", {
+              keywordList: result.keywordList,
+            })
+          );
+      else{
+        return res
+          .status(200)
+          .json(
+            new Res(false, "no saved keyword", {
+              keywordList: [],
+            })
+          );
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json(new Res(false, "successfully saved doc HashKeys", null));
     });
 });
 

@@ -1,5 +1,5 @@
 export class ElasticSearchQueryModel {
-  private ids: string[] = [];
+  private hashKeys: string[] = [];
   private searchKeyword: string = "";
   private sortOption: {};
 
@@ -12,6 +12,7 @@ export class ElasticSearchQueryModel {
     "post_writer",
     "post_body",
     "file_download_url",
+    "hash_key",
   ];
   private searchField: string[] = [
     "post_title",
@@ -23,6 +24,7 @@ export class ElasticSearchQueryModel {
     "hits.hits._id",
     "hits.total",
     "_scroll_id",
+    "hits.hits._source.hash_key",
   ];
 
   private sortByScoreDesc: {} = {
@@ -81,11 +83,11 @@ export class ElasticSearchQueryModel {
     return this.filterPath;
   }
 
-  public getSearchIds() {
+  public getSearchHashKeys() {
     return {
       query: {
-        ids: {
-          values: this.ids,
+        terms : {
+          hash_key: this.hashKeys,
         },
       },
     };
@@ -95,8 +97,8 @@ export class ElasticSearchQueryModel {
     this.searchKeyword = keyword;
   }
 
-  public setSearchIds(ids: string[]) {
-    this.ids = ids;
+  public setSearchHashKeys(hashKeys: string[]) {
+    this.hashKeys = hashKeys;
   }
 
   public setSortOption(op) {

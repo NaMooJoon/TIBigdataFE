@@ -21,7 +21,7 @@ export class ElasticsearchService {
   private articleNum: BehaviorSubject<number> = new BehaviorSubject<any>(0);
   private keyword: string = "";
   private selectedInst: string;
-  private ids: string[] = [];
+  private hashKeys: string[] = [];
   private sortOption: SortOption = SortOption.SCORE;
   private numDocsPerPage: number = 10;
   private searchMode: SearchMode;
@@ -29,6 +29,10 @@ export class ElasticsearchService {
     false
   );
   private currentSearchingPage: number = 1;
+
+  //new
+  private startTime: string = null;
+  private endTime: string = null;
 
   constructor(
     private ipSvc: IpService,
@@ -123,12 +127,12 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Update article ids to search
-   * @param ids
+   * @description Update article hashKeys to search
+   * @param hashKeys
    */
-  setIds(ids: string[]): void {
-    this.esQueryModel.setSearchIds(ids);
-    this.ids = ids;
+  setHashKeys(hashKeys: string[]): void {
+    this.esQueryModel.setSearchHashKeys(hashKeys);
+    this.hashKeys = hashKeys;
   }
 
   /**
@@ -178,6 +182,7 @@ export class ElasticsearchService {
     if (!docSize) docSize = this.numDocsPerPage;
 
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
@@ -212,6 +217,7 @@ export class ElasticsearchService {
    */
   countByText(): Promise<any> {
     return this.client.count({
+      index: this.ipSvc.ES_INDEX,
       body: this.esQueryModel.getSearchDocCount(),
     });
   }
@@ -226,32 +232,33 @@ export class ElasticsearchService {
   }
 
   /**
-   * @description Update number of articles that mathces with list of ids.
+   * @description Update number of articles that mathces with list of hashKeys.
    * @returns query result
    */
-  countByIds(): Promise<any> {
+  countByHashKeys(): Promise<any> {
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
     });
   }
 
   /**
    * @description Update number of articles for all subscribers.
    */
-  countByIdsComplete(): void {
-    this.countByIds().then((articleNum) =>
+  countByHashKeysComplete(): void {
+    this.countByHashKeys().then((articleNum) =>
       this.articleNum.next(articleNum.count)
     );
   }
 
   /**
-   * @description Send query to ElasticSearch with article ids
+   * @description Send query to ElasticSearch with article hashKeys
    */
-  searchById(): Promise<any> {
+  searchByHashKey(): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -260,20 +267,21 @@ export class ElasticsearchService {
    * @description Save search result after searching. This function works as a wrapper to call function of sending query and save the responded data into article source.
    * @param startIndex
    */
-  multiIdSearchComplete(startIndex?: number): void {
-    this.saveSearchResult(this.searchByManyId(startIndex));
+  multiHashKeySearchComplete(startIndex?: number): void {
+    this.saveSearchResult(this.searchByManyHashKey(startIndex));
   }
 
   /**
-   * @description Send query to ElasticSearch with article ids
+   * @description Send query to ElasticSearch with article hashKeys
    * @param startIndex A index to indicate where to start search.
    * @param docSize Number of articles to search at one time.
    */
-  searchByManyId(startIndex?: number, docSize?: number): Promise<any> {
+  searchByManyHashKey(startIndex?: number, docSize?: number): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
-      body: this.esQueryModel.getSearchIds(),
+      body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -324,11 +332,11 @@ export class ElasticsearchService {
     if (searchMode === SearchMode.ALL) {
       this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
       this.allCountComplete();
-    } else if (searchMode === SearchMode.IDS) {
-      this.multiIdSearchComplete(
+    } else if (searchMode === SearchMode.HASHKEYS) {
+      this.multiHashKeySearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-      this.countByIdsComplete();
+      this.countByHashKeysComplete();
     } else if (searchMode === SearchMode.KEYWORD) {
       this.fullTextSearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
@@ -339,6 +347,10 @@ export class ElasticsearchService {
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
       this.countByInstComplete();
+    } else if (searchMode === SearchMode.DATE) {
+      this.searchByDateComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
     }
   }
 
@@ -373,6 +385,7 @@ export class ElasticsearchService {
    */
   async getInstitutionsWithTextSearch(): Promise<any> {
     return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
       body: {
         size: 0,
         aggs: {
@@ -394,6 +407,7 @@ export class ElasticsearchService {
    */
   async getInstitutions(): Promise<any> {
     return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
       body: {
         size: 0,
         aggs: {
@@ -409,6 +423,7 @@ export class ElasticsearchService {
    */
   searchByInst(startIndex?: number): Promise<any> {
     return this.client.search({
+      index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: this.numDocsPerPage,
       body: {
@@ -445,6 +460,7 @@ export class ElasticsearchService {
    */
   async countByInst(): Promise<any> {
     return await this.client.count({
+      index: this.ipSvc.ES_INDEX,
       body: {
         query: {
           match: {
@@ -499,11 +515,42 @@ export class ElasticsearchService {
   async isAvailable(): Promise<boolean> {
     try {
       return await this.client.ping({
+        index: this.ipSvc.ES_INDEX,
         requestTimeout: 3000,
         body: "ElasticSearch Works!",
       });
     } catch (error) {
       return false;
     }
+  }
+
+  //new
+  setSelectedDate(startTime: string, endTime: string) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
+  searchByDateComplete(startIndex?: number) {
+    this.saveSearchResult(this.searchByDate(startIndex));
+  }
+
+  searchByDate(startIndex?: number): Promise<any> {
+    return this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      from: startIndex,
+      size: this.numDocsPerPage,
+      body: {
+        query: {
+          range: {
+            post_date: {
+              gt: this.startTime,
+              lt: this.endTime,
+              format: "yyyy-MM-dd"
+            }
+          },
+        },
+      },
+      _source: this.esQueryModel.getSearchSource(),
+    });
   }
 }

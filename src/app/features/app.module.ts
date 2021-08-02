@@ -19,6 +19,7 @@ import { HomePageComponent } from "./home-page/home-page.component";
 import { MembershipModule } from "./memberships/membership.module";
 import { SearchResultModule } from "./search-result/search-result.module";
 import { UserpageModule } from "./userpage/userpage.module";
+import { OpenApiModule } from "./open-api/open-api.module";
 
 @NgModule({
   declarations: [AppComponent, HomePageComponent, ArticleAnalysisComponent],
@@ -37,6 +38,7 @@ import { UserpageModule } from "./userpage/userpage.module";
     MembershipModule,
     SearchResultModule,
     UserpageModule,
+    OpenApiModule,
   ],
   exports: [],
   providers: [AuthGuard, AuthenticationService, TokenInterceptorService],

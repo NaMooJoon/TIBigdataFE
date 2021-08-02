@@ -93,7 +93,7 @@
     display              : grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-template-rows   : minmax(0, min-content) 1fr;
-    gap                  : 20px 20px;
+    gap                  : 0px 20px;
     grid-template-areas  :
       ". . title title title title"
       "outline outline outline outline outline outline";
@@ -352,6 +352,33 @@ div>input {
 
 .select-analysis-form>h3{
   display: none;
+}
+
+.title>h2{
+  margin-bottom: 35px !important;
+}
+
+.keyword-outline{
+  display : flex;
+}
+
+.keyword-group{
+  display        : flex;
+  white-space : nowrap;
+  overflow-x : scroll;
+  width : 300px; //1024
+  padding : 0;
+}
+
+.keyword-group>div>button{
+  border : none;
+  font-size : 17px;
+  margin-left : 2px;
+  margin-right: 9px;
+  list-style-type: none;
+  color : #7A7A7A;
+  border-bottom: 2px solid #0FBAFF;
+  border-radius: 0px !important;
 }
 
 @media all and (max-width: 768px){

@@ -10,6 +10,7 @@ import {
   SocialUser,
 } from "angularx-social-login";
 import { IpService } from "../ip-service/ip.service";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +18,7 @@ import { IpService } from "../ip-service/ip.service";
 
 /**
  * This service takes control of user related features such as login, logout, user session, user verification, etc.
- * The service sends query to mongodb in front-end server and do user-related works. 
+ * The service sends query to mongodb in front-end server and do user-related works.
  */
 export class AuthenticationService {
   private API_URL: string = this.ipService.getFrontDBServerIp();
@@ -58,8 +59,8 @@ export class AuthenticationService {
   }
 
   /**
-   * @description Update current user state 
-   * @param userProfile Current logged in user information 
+   * @description Update current user state
+   * @param userProfile Current logged in user information
    */
   setCurrentUser(userProfile: UserProfile): void {
     this.currentUser = userProfile;
@@ -69,7 +70,7 @@ export class AuthenticationService {
   /**
    * @description Register user into mongodb. Register user only if the user's email does not exist in database.
    * @param user User information to register.
-   * @returns Result of registration. 
+   * @returns Result of registration.
    */
   async register(user: UserProfile): Promise<boolean> {
     let userDataFromGoogle: SocialUser = await this.getSocialAccountInfo();
@@ -115,7 +116,7 @@ export class AuthenticationService {
 
   /**
    * @description Get user information that has the given email address
-   * @param email 
+   * @param email
    * @returns User information. If there is no user with the email, return null
    */
   async getUserProfile(email: string): Promise<UserProfile> {
@@ -130,10 +131,13 @@ export class AuthenticationService {
 
   /**
    * @description Send query to front-end database server to check the given email is valid user
-   * @param email 
+   * @param email
    * @returns Either the database has information of user with given email or not
    */
   async verifyUser(email: string): Promise<boolean> {
+    console.log('api_url : ',this.API_URL);
+    console.log('email : ',email);
+
     let res: QueryResponse = await this.httpClient
       .post<any>(`${this.API_URL}/users/verifyUser`, { email: email })
       .toPromise();
@@ -155,7 +159,7 @@ export class AuthenticationService {
   }
 
   /**
-   * @description Verify user's token to check if it is expired or invalid token 
+   * @description Verify user's token to check if it is expired or invalid token
    * @returns Either the user's token is available or not
    */
   async verifyToken(token: string): Promise<QueryResponse> {
@@ -169,7 +173,7 @@ export class AuthenticationService {
   }
 
   /**
-   * @description Register user as a api user. Update user's api authentication status 
+   * @description Register user as a api user. Update user's api authentication status
    * @returns If the register sucessfully done, return true. If it is failed, return false.
    */
   async apiRegister(): Promise<boolean> {
@@ -180,7 +184,7 @@ export class AuthenticationService {
   }
 
   /**
-   * @description Sign in user into google account and get user information that is saved in google account. 
+   * @description Sign in user into google account and get user information that is saved in google account.
    */
   async getSocialAccountInfo(): Promise<SocialUser> {
     return await this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
@@ -202,7 +206,7 @@ export class AuthenticationService {
 
   /**
    * @description Save user's token into browser with token from google api.
-   * @param userData 
+   * @param userData
    */
   setToken(userData: SocialUser): void {
     localStorage.setItem("KUBIC_TOKEN", userData.idToken);
@@ -210,7 +214,7 @@ export class AuthenticationService {
 
   /**
    * @description Get sign in status of user.
-   * @returns user logged in status 
+   * @returns user logged in status
    */
   isUserLoggedIn(): boolean {
     return this.isLoggedIn;

@@ -17,11 +17,18 @@ export class MyDocsComponent implements OnInit {
   private _pageInfo: PaginationModel;
   private _pages: number[];
   private _isSavedDocsLoaded = false;
-  private _savedDocs: Array<{ title: string; id: string; }>;
+  private _savedDocs: Array<{ title: string; hashKey: string; }>;
   private _paginationModel: PaginationModel;
   private _totalSavedDocsNum: number;
   private _form: FormGroup;
   private _isSavedDocsEmpty: boolean;
+
+  //keywords
+  private _isSavedKeywordsLoaded = false;
+  private _isSavedKeywordsEmpty: boolean;
+  private _savedKeywords: Array<{ keyword: string, savedDate: string; }>;
+  private _keyword: string;
+  private _savedDate: string;
 
 
   constructor(
@@ -35,21 +42,21 @@ export class MyDocsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadSavedDocs(1);
+    this.loadSavedKeywords();
   }
 
   /**
    * @description Load saved documents from userSavedDocumentService
-   * @param pageNum 
+   * @param pageNum
    */
   async loadSavedDocs(pageNum: number): Promise<void> {
     this.isSavedDocsLoaded = false;
-    this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum();
+    this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
     if (this.isSavedDocsEmpty) return;
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
-    this.savedDocs = await this.userSavedDocumentService.getMyDocs(pageNum);
+    this.savedDocs = await this.userSavedDocumentService.getMyDocs( this.savedDate, pageNum);
     this.setCheckbox();
     this.pageInfo = await this.paginationService.paginate(pageNum, this.totalSavedDocsNum, 10, 3);
     this.pages = this.pageInfo.pages;
@@ -57,8 +64,8 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Helper function for page number to handle the page overflow 
-   * @param pageNum 
+   * @description Helper function for page number to handle the page overflow
+   * @param pageNum
    */
   handlePageOverflow(pageNum: number): number {
     if (pageNum < 0) pageNum = 1;
@@ -83,24 +90,27 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description 
-   * @param docId 
+   * @description
+   * @param docHashKey
    */
-  openDocDetail(docId: string): void {
-    console.log(docId);
-    this.articleService.setSelectedId(docId);
-    this.navToDocDetail();
+  openDocDetail(docHashKey: string, docTitle: string): void {
+    if(docTitle === "(삭제된 문서 입니다.)"){
+      alert("선택하신 문서는 존재하지 않습니다.")
+    }else{
+      this.articleService.setSelectedHashKey(docHashKey);
+      this.navToDocDetail();
+    }
   }
 
   /**
-   * @description Navigate to doc detail 
+   * @description Navigate to doc detail
    */
   navToDocDetail(): void {
     this.router.navigateByUrl("search/read");
   }
 
   /**
-   * @description Set the checkbox of saved docs 
+   * @description Set the checkbox of saved docs
    */
   setCheckbox(): void {
     for (let i in this.savedDocs) {
@@ -115,14 +125,14 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Check or uncheck all documents 
-   * @param isCheckAll 
-   * @param checkArray 
+   * @description Check or uncheck all documents
+   * @param isCheckAll
+   * @param checkArray
    */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
       for (let i = 0; i < this.savedDocs.length; i++) {
-        checkArray.push(new FormControl(this.savedDocs[i]["id"]));
+        checkArray.push(new FormControl(this.savedDocs[i]["hashKey"]));
       }
     } else {
       checkArray.clear();
@@ -136,8 +146,8 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description Change check box 
-   * @param e 
+   * @description Change check box
+   * @param e
    */
   onCheckboxChange(e): void {
     let checkArray: FormArray = this.form.get("checkArray") as FormArray;
@@ -160,11 +170,11 @@ export class MyDocsComponent implements OnInit {
   }
 
   /**
-   * @description delete all my documents 
+   * @description delete all my documents
    */
   deleteAllMyDocs() {
-    this.userSavedDocumentService.eraseAllMyDocs().then(
-      () => this.loadSavedDocs(1)
+    this.userSavedDocumentService.eraseAllMyDocs(this.savedDate).then(
+      () => this.loadSavedKeywords()
     );
   }
 
@@ -193,10 +203,10 @@ export class MyDocsComponent implements OnInit {
   public set isSavedDocsLoaded(value) {
     this._isSavedDocsLoaded = value;
   }
-  public get savedDocs(): Array<{ title: string; id: string; }> {
+  public get savedDocs(): Array<{ title: string; hashKey: string; }> {
     return this._savedDocs;
   }
-  public set savedDocs(value: Array<{ title: string; id: string; }>) {
+  public set savedDocs(value: Array<{ title: string; hashKey: string; }>) {
     this._savedDocs = value;
   }
   public get paginationModel(): PaginationModel {
@@ -222,5 +232,81 @@ export class MyDocsComponent implements OnInit {
   }
   public set isSavedDocsEmpty(value: boolean) {
     this._isSavedDocsEmpty = value;
+  }
+
+  //keyword
+  public get isSavedKeywordsLoaded() {
+    return this._isSavedKeywordsLoaded;
+  }
+  public set isSavedKeywordsLoaded(value) {
+    this._isSavedKeywordsLoaded = value;
+  }
+  public get isSavedKeywordsEmpty(): boolean {
+    return this._isSavedKeywordsEmpty;
+  }
+  public set isSavedKeywordsEmpty(value: boolean) {
+    this._isSavedKeywordsEmpty = value;
+  }
+  public get savedKeywords(): Array<{ keyword: string, savedDate: string; }> {
+    return this._savedKeywords;
+  }
+  public set savedKeywords(value: Array<{ keyword: string, savedDate: string; }>) {
+    this._savedKeywords = value;
+  }
+  public get keyword(): string {
+    return this._keyword;
+  }
+  public set keyword(value: string) {
+    this._keyword = value;
+  }
+  public get savedDate(): string {
+    return this._savedDate;
+  }
+  public set savedDate(value: string) {
+    this._savedDate = value;
+  }
+
+  parsingSavedDate(savedDate: string){
+    let date = new Date(savedDate);
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let dt = date.getDate();
+    let hor = date.getHours();
+    let min = date.getMinutes();
+    let sec = date.getSeconds();
+
+    return year+"-"+month+"-"+dt+" "+hor+":"+min+":"+sec;
+  }
+
+  currentKeywordAndDate(keyword: string, savedDate: string){
+    this.keyword = keyword;
+    this.savedDate = savedDate;
+    this.loadSavedDocs(1);
+  }
+
+  async loadSavedKeywords(): Promise<void> {
+    this.isSavedKeywordsEmpty = false;
+    this.isSavedKeywordsLoaded = false;
+    this.savedKeywords = await this.userSavedDocumentService.getMyKeywords();
+    this.isSavedKeywordsLoaded = true;
+    if(this.savedKeywords.length === 0){
+      this.isSavedKeywordsEmpty = true;
+    }
+    this.keyword = this.savedKeywords[0].keyword;
+    this.savedDate = this.savedKeywords[0].savedDate;
+
+    this.loadSavedDocs(1);
+  }
+
+  deleteSelectedDocs() {
+    if (this.form.value["checkArray"].length == 0) {
+      alert("삭제할 문서가 없습니다! 삭제할 문서를 선택해주세요.");
+    } else {
+      this.userSavedDocumentService.eraseSelectedMyDocs(this.form.value["checkArray"], this.savedDate).then(
+        () => this.loadSavedKeywords(),
+        this.form.value["checkArray"].clear()
+      );
+    }
+
   }
 }

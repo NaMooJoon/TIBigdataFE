@@ -60,6 +60,33 @@ input[type="checkbox"] {
     width: 100%;
 }
 
+.outline {
+  border       : 1px solid #606060;
+  border-radius: 50px;
+  width        : 100%;
+  padding      : 40px 10%;
+}
+
+.keyword-group{
+  display        : flex;
+  align-items    : center;
+  white-space : nowrap;
+  overflow-x : scroll;
+  width : 400px; //1024
+  margin-left : 7vw;//1024
+}
+
+.keyword-group>div>button{
+  border : none;
+  font-size : 17px;
+  margin-left : 2px;
+  margin-right: 9px;
+  list-style-type: none;
+  color : #7A7A7A;
+  border-bottom: 2px solid #0FBAFF;
+  border-radius: 0px !important;
+}
+
 @media all and (max-width: 768px){
   .upside3>button{
     font-size : 13px;

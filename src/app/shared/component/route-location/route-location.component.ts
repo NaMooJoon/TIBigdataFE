@@ -57,6 +57,7 @@ export class RouteLocationComponent implements OnInit {
     else if (routeName === "my-analysis") return "내 분석함"
     else if (routeName === "member-info") return "회원 정보"
     else if (routeName === "secession") return "회원 탈퇴"
+    else if (routeName === "openapi") return "Open API"
   }
 
   public get dir(): string {

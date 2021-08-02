@@ -7,13 +7,15 @@
     <div [ngClass]="isSelectMobileMenu ? 'nav on' : 'nav'" >
       <nav>
         <ul class="common-menu">
-          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
+          <li
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
             <a (click)="navigateLibrary()">자료열람</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
             <a (click)="navigateSpecials()">자료분석</a>
           </li>
-          <li *ngIf="getIsApiUser()"><a>OpenAPI</a></li>
+          <li *ngIf="getIsApiUser()"
+              (click)="toOpenAPI()"><a>OpenAPI</a></li>
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
             class="community-menu"
@@ -30,9 +32,9 @@
 <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
               <a
-                (click)="clickDropDownSiteInfo()"
+                (click)="clickDropDownCommunity()"
                 class="dropdown-community">커뮤니티</a>
-              <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
+              <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'announcement')"
                   (click)="toAnnouncement()">공지사항</a></li>
@@ -63,9 +65,9 @@
             <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
               <a
-                (click)="clickDropDownCommunity()"
+                (click)="clickDropDownSiteInfo()"
                 class="dropdown-about">홈페이지소개</a>
-              <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
+              <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'intro')"
                   (click)="toSiteIntro()">사이트소개</a></li>
@@ -81,7 +83,21 @@
               </ul>
             </div>
           </li>
-        </ul>
+          
+          <li
+          [ngStyle]="selectedStyleObject(getSelectedMenu() === 'openapi')"
+          class="openapi-menu"
+          >
+            <div class="dropdown-container">
+              <a (click)="toManagement()">Open API</a>
+              <ul class="openapi-dropdown-menu">
+                <li><a (click)="toManagement()">활용관리</a></li>
+                <li><a (click)="toDocument()">참고문서</a></li>
+                <li><a (click)="toGotoapi()">API 이동</a></li>
+              </ul>
+            </div>
+            </li>
+          </ul>
 
         <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
@@ -124,6 +140,7 @@
       ></a>
     </div>
   </div>
+
   <ul *ngIf="!getIsSignedIn()" class="login-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
       <a (click)="toLogin()">로그인</a>

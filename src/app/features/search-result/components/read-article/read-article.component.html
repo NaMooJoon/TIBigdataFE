@@ -15,6 +15,11 @@
       >
     </div>
 
+    <u1 *ngIf="isDataEmpty(article.post_body)" class="detail-body empty-data">
+      <h1 class="article-content-subtitle">문서 정보</h1>
+      <hr />
+    </u1>
+
     <ul class="article-info">
       <li *ngIf="!isDataEmpty(article.published_institution)" class="info">
         <div class="info-title">발행기관</div>
@@ -27,7 +32,7 @@
       <li *ngIf="!isDataEmpty(article.file_download_url)" class="info">
         <div class="info-title">자료열람</div>
         <div class="info-content">
-          <a href="{{ article.file_download_url }}">
+          <a target="_blank" href="{{ article.file_download_url }}">
             {{ article.file_download_url }}</a
           >
         </div>
@@ -35,21 +40,17 @@
       <li *ngIf="!isDataEmpty(article.original_url)" class="info">
         <div class="info-title">문서출처</div>
         <div class="info-content">
-          <a href="{{ article.original_url }}"> {{ article.original_url }}</a>
+          <a target="_blank" href="{{ article.original_url }}"> {{ article.original_url }}</a>
         </div>
       </li>
     </ul>
 
     <!-- 소제목들 -->
-    <section class="article-index">
+    <section *ngIf="!isDataEmpty(article.post_body)" class="article-index">
       <h1 class="article-content-subtitle">문서 정보</h1>
       <hr />
       <p *ngIf="!isDataEmpty(article.post_body)" class="detail-body">
         {{ article.post_body }}
-      </p>
-
-      <p *ngIf="isDataEmpty(article.post_body)" class="detail-body empty-data">
-        등록된 정보가 없습니다.
       </p>
     </section>
 

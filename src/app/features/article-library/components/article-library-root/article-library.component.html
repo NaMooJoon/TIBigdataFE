@@ -45,7 +45,7 @@
           id="inst"
           (click)="selectCategory($event, null)"
         >
-          전체
+          전체  {{ totalSavedDocsNum }}
         </button>
         <button
           *ngFor="let inst of institutionList"

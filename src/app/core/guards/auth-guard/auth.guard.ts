@@ -34,9 +34,9 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(["/"]);
       }
     // other pages follows canActivate policy set in routing module
-    } else if (!localStorage.getItem("KUBIC_TOKEN")) {
+    } else if (!localStorage.getItem("KUBIC_TOKEN")) {;
       window.alert("비정상적인 접근입니다. 로그인이 되어있는지 확인해주세요.");
-      this.router.navigate(["login"]);
+      this.router.navigate(["login"]); // temporily
     }
 
     return true;

@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { NavigationEnd, Router } from "@angular/router";
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { HttpClient } from "@angular/common/http";
 import { IpService } from "src/app/core/services/ip-service/ip.service";
+import {fromEvent, Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: "app-nav",
@@ -20,12 +21,15 @@ export class NavbarComponent implements OnInit {
   private isDropdownSiteInfo: boolean = false;
   private isDropdownUserpage: boolean = false;
   private _isFolderBtn: boolean = false;
+  private mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
 
   constructor(
     public router: Router,
     private authService: AuthenticationService,
     private httpClient: HttpClient,
-    private ipService: IpService
+    private ipService: IpService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -39,6 +43,11 @@ export class NavbarComponent implements OnInit {
         this.userEmail = null;
       }
     });
+
+    this.mobileQuery = matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+
   }
   ngOnInit(): void {
     this.selectedMenu = this.router.url.split("/")[1];
@@ -50,6 +59,16 @@ export class NavbarComponent implements OnInit {
         this.selectedSubMenu = event.url.split("/")[2];
       }
     });
+
+    // this.resizeObservable$ = fromEvent(window, 'resize')
+    // this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
+    //   if(matchMedia("(max-width: 768px)").matches) {
+    //     console.log('hihi');
+    //   }
+    //   console.log('event: ', evt);
+    // });
+
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   selectedStyleObject(flag: boolean): Object {
@@ -88,22 +107,27 @@ export class NavbarComponent implements OnInit {
   }
 
   async logOut() {
+    this.isHamburger = false;
     this.authService.signOut();
   }
 
   navigateSpecials(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/analysis");
   }
 
   navigateLibrary(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/library");
   }
 
   toLogin(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/login");
   }
 
   toRegister(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/register");
   }
 
@@ -116,10 +140,13 @@ export class NavbarComponent implements OnInit {
   }
 
   toCommunity(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/community/qna");
   }
 
   clickDropDownCommunity(): void {
+    this.isDropdownSiteInfo = false;
+    this.isDropdownUserpage = false;
     this.isDropdownCommunity = !this.isDropdownCommunity;
   }
 
@@ -128,6 +155,8 @@ export class NavbarComponent implements OnInit {
   }
 
   clickDropDownSiteInfo(): void {
+    this.isDropdownCommunity = false;
+    this.isDropdownUserpage = false;
     this.isDropdownSiteInfo = !this.isDropdownSiteInfo;
   }
 
@@ -136,11 +165,27 @@ export class NavbarComponent implements OnInit {
   }
 
   toAnnouncement(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/community/announcement");
   }
 
   toFaq(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/community/faq");
+  }
+
+  /**
+   * @description router to api register page in userpage
+   */
+  toOpenAPI() {
+    this.isHamburger = false;
+
+    if (this.authService.getCurrentUser().isApiUser) {
+      this.toOpenApi();
+    }
+    else {
+      this.router.navigateByUrl("/api-register");
+    }
   }
 
   async toOpenApi(): Promise<void> {
@@ -158,19 +203,35 @@ export class NavbarComponent implements OnInit {
   }
 
   toSiteIntro(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/about/intro");
   }
 
   toServiceGuide(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/about/service-guide");
   }
 
   toCollectedInfo(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/about/collected-info");
   }
 
   toMemberPolicy(): void {
+    this.isHamburger = false;
     this.router.navigateByUrl("/about/member-policy");
+  }
+
+  toManagement(): void {
+    this.router.navigateByUrl("/openapi/management");
+  }
+
+  toDocument(): void {
+    this.router.navigateByUrl("/openapi/document");
+  }
+
+  toGotoapi(): void {
+    this.router.navigateByUrl("/openapi/gotoapi");
   }
 
   getSelectedMenu(): string {
@@ -190,6 +251,8 @@ export class NavbarComponent implements OnInit {
   }
 
   clickDropDownUserpage(): void {
+    this.isDropdownSiteInfo = false;
+    this.isDropdownCommunity = false;
     this.isDropdownUserpage = !this.isDropdownUserpage;
   }
 
@@ -201,7 +264,7 @@ export class NavbarComponent implements OnInit {
    * @description router to my-docs in user page
    */
   toMyDocs() {
-    this._isFolderBtn = true;
+    this.isHamburger = false;
     this.router.navigateByUrl("/userpage/my-docs");
   }
 
@@ -209,7 +272,7 @@ export class NavbarComponent implements OnInit {
    * @description router to my-analysis in user page
    */
   toMyAnalysis() {
-    this._isFolderBtn = true;
+    this.isHamburger = false;
     this.router.navigateByUrl("/userpage/my-analysis");
   }
 
@@ -217,25 +280,15 @@ export class NavbarComponent implements OnInit {
    * @description router to member-info in user page
    */
   toMemberInfo() {
+    this.isHamburger = false;
     this.router.navigateByUrl("/userpage/member-info");
-  }
-
-  /**
-   * @description router to api register page in userpage
-   */
-  toOpenAPI() {
-    if (this.authService.getCurrentUser().isApiUser) {
-      this.toOpenApi();
-    }
-    else {
-      this.router.navigateByUrl("/api-register");
-    }
   }
 
   /**
    * @description router to secession page in userpage
    */
   toSecession() {
+    this.isHamburger = false;
     this.router.navigateByUrl("/userpage/secession");
   }
 

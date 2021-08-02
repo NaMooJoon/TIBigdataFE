@@ -2,9 +2,15 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const keywordListSchema = new Schema({
+  keyword : String,
+  savedDate : Date,
+  savedDocHashKeys: [],
+});
+
 const keepDocSchema = new Schema({
   userEmail: String,
-  savedDocIds: [],
+  keywordList : [keywordListSchema],
 });
 
 // module.exports = mongoose.model('keepDoc',keepDocSchema);

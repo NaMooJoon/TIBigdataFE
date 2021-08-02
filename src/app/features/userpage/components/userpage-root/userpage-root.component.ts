@@ -17,9 +17,11 @@ export class UserpageRootComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.where = "내 보관함";
-    // this.navService.setNavMenu(navMenu.MYPAGE);
-    this.router.navigateByUrl("/userpage/my-docs");
+    if (!(matchMedia('(max-width: 768px)').matches)) {
+      this.where = "내 보관함";
+      // this.navService.setNavMenu(navMenu.MYPAGE);
+      this.router.navigateByUrl("/userpage/my-docs");
+    }
   }
 
 
