@@ -225,6 +225,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
     } else {
+      console.log(this.form.value["checkArray"]);
       this.userSavedDocumentService
         .saveNewMyDoc(this.form.value["checkArray"], this._searchKeyword)
         .then(() => {

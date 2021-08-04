@@ -41,6 +41,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.9",
     "ng2-charts": "^2.4.2",
+    "ng2-file-upload": "^1.4.0",
     "passport-google-oauth": "^2.0.0",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.3",

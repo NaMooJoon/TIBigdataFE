@@ -5,6 +5,7 @@ import { QueryResponse } from "src/app/core/models/query.response.model";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import { UserProfile } from "src/app/core/models/user.model";
 import { IpService } from "../ip-service/ip.service";
+import { MydocModel } from "../../models/mydoc.model";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +15,7 @@ export class UserSavedDocumentService {
   private API_URL: string = this.ipService.getFrontDBServerIp();
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
+  private getAllMyDocUrl = this.API_URL + "/myDoc/getAllMyDoc";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private deleteSelectedMyDocUrl = this.API_URL + "/myDoc/deleteSelectedMyDocs";
   private currentUser: UserProfile;
@@ -45,6 +47,24 @@ export class UserSavedDocumentService {
       .post<any>(this.saveMyDocUrl, payload)
       .toPromise();
     return res.succ;
+  }
+
+  /**
+   * @description Send query to get list of saved articles.
+   * @returns Array of object that holds articles.
+   */
+  async getAllMyDocs(): Promise<Array<MydocModel>>{
+    let res: QueryResponse = await this.httpClient
+    .post<any>(this.getAllMyDocUrl, { userEmail: this.currentUser.email })
+    .toPromise();
+
+    let mydocs:Array<MydocModel> = res.payload["keywordList"];
+    for(let doc of mydocs){
+      let docHashKeys:Array<string> = mydocs.find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
+      doc['title'] = await this.articleService.convertDocHashKeysToTitles(docHashKeys);
+    }
+    
+    return mydocs;
   }
 
   /**
