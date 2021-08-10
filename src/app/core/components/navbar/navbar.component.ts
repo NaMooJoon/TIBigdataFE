@@ -189,8 +189,7 @@ export class NavbarComponent implements OnInit {
   }
 
   async toOpenApi(): Promise<void> {
-    const dest =
-      this.ipService.getFrontEndServerIP() + ":" + this.ipService.FLASK_PORT;
+    const dest = this.ipService.getOpenAPIServerIp();
 
     await this.httpClient
       .post(dest, { email: this.userEmail }, { responseType: "text" })
