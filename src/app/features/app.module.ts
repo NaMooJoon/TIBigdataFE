@@ -12,7 +12,7 @@ import { SharedModule } from "../shared/shared.module";
 import { AboutKubicModule } from "./about-kubic/about-kubic.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { ArticleAnalysisComponent } from "./article-analysis/article-analysis";
+import { AnalysisComponent } from "./article-analysis/components/analysis/analysis.component";
 import { ArticleLibraryModule } from "./article-library/article-library.module";
 import { CommunityBoardModule } from "./community-board/community.board.module";
 import { HomePageComponent } from "./home-page/home-page.component";
@@ -22,7 +22,7 @@ import { UserpageModule } from "./userpage/userpage.module";
 import { OpenApiModule } from "./open-api/open-api.module";
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent, ArticleAnalysisComponent],
+  declarations: [AppComponent, HomePageComponent],
   imports: [
     CommonModule,
     AppRoutingModule,

@@ -1,86 +1,59 @@
 <div class="content-container">
   <app-analysis-menu></app-analysis-menu>
-  
-  <section class="content">
-    <section *ngIf="isSavedDocsEmpty" class="saved-document-list">
-      문서함이 비었습니다.
-    </section>
-    <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox"></th>
-          <th>검색 키워드</th>
-          <th>문서목록</th>
-          <th>수집날짜</th>
-          <th>통계</th>
-          <th>전처리</th>
-          </tr>
-      </thead>
 
-      <tbody>
-        <tr *ngFor="let doc of savedDocs">
-            <td><input 
-              class="article-checkbox"
-              type="checkbox"
-              name="selectDoc"
-              [value]="doc['hashKey']"
-              (change)="onCheckboxChange($event)"
-            /></td>
-            
-            <td class="text-center">{{ doc['keyword'] }}</td>
-            <td class="text-center"><ul *ngFor="let adoc of doc['title']" class="text-left"> - {{adoc}}</ul></td>
-            <td class="text-center">{{ doc['savedDate']}}</td>
-            <td class="text-center">총문서수:{{doc['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td>
-            <td class="text-center">
-            <div *ngIf="isDataPreprocessed">
-            <button (click)="previewPreprocessedData()">
-              <div id="pop" class ="popup">
-                <!-- {{preprocessedData}} -->
-              </div>
-              미리보기</button>
-            <button>다운로드</button>
-            </div>
-          </td>
-      </tr>
-      </tbody>
-    </table>
-    </section>
+  <section class="content">
+  <app-savedDocForAnalysis (sender)='onMessage($event)'></app-savedDocForAnalysis>
 
     <div class="pop-container">
       <div class="pop-block">
-      <div class="pophead"><a (click)="showPop('bindo')">빈도수 분석</a></div>
-      <div class="popbody" id="bindo">
-          분석할 단어수: <input type="text" value="1000">
-          <button>분석 실행</button>
+        <div class="pop-head" (click)="showPop('count')">빈도수 분석</div>
+        <div class="pop-body" id="count">
+          분석할 단어수: <input type="text" value="100">
+          <button (click)="runAnalysis('count')">분석 실행</button>
       </div>
+    </div>
+
+    <div class="pop-block" (click)="showPop('tfidf')">
+      <div class="pop-head">TFIDF</div>
+      <div class="pop-body" id="tfidf">
+        tfidf 옵션들!
+        
+        <button (click)="runAnalysis('tfidf')">분석 실행</button>
       </div>
+    </div>
+    
+      <div class="pop-block">
+        <div class="pop-head">군집분석</div>
+        <div class="pop-body" id="bindo">
+      </div>
+    </div>
+
     <div class="pop-block">
-    <div class="pophead">TFIDF</div>
-    <div class="popbody" id="bindo">
-      분석할 단어수: <input type="text" value="1000">
-      <button>분석 실행</button>
+      <div class="pop-head">토픽 모델링</div>
+      <div class="pop-body" id="bindo">
+      </div>
     </div>
-  </div>
-  <div class="pop-block">
-    <div class="pophead">군집분석</div>
-    <div class="popbody" id="bindo">
-      분석할 단어수: <input type="text" value="1000">
-      <button>분석 실행</button>
+
+    <div class="pop-block">
+      <div class="pop-head">N-gram</div>
+      <div class="pop-body" id="bindo">
+
+      </div>
     </div>
-  </div>
-  <div class="pop-block">
-    <div class="pophead">토픽 모델링</div>
-    <div class="popbody" id="bindo">
-      분석할 단어수: <input type="text" value="1000">
-      <button>분석 실행</button>
+
+    <div class="pop-block">
+      <div class="pop-head">유의어분석</div>
     </div>
+    
+    <div class="pop-block">
+      <div class="pop-head">의미연결망</div>
+    </div>
+    
+    <div class="pop-block">
+      <div class="pop-head">개체명인식</div>
+    </div>
+
   </div>
-      <div class="pop-block">N-gram</div>
-      <div class="pop-block">유의어분석</div>
-      <div class="pop-block">의미연결망</div>
-      <div class="pop-block">개체명인식</div>
-</div>
   
   </section>
 </div>

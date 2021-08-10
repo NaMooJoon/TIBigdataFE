@@ -1,17 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { PaginationModel } from "src/app/core/models/pagination.model";
-import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
-import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { MyDocsComponent } from "src/app/features/userpage/components/my-docs/my-docs.component";
-import { MydocModel } from "src/app/core/models/mydoc.model";
-import { UserProfile } from "src/app/core/models/user.model";
 import { FileUploader } from 'ng2-file-upload';
-
+import { AnalysisOnMiddlewareService } from 'src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service'
 const URL = '/uploadDict';
 
 @Component({
@@ -22,53 +11,34 @@ const URL = '/uploadDict';
 
 export class PreprocessingComponent implements OnInit {
 
-  private _savedDocs: Array<MydocModel>;
-
-  private _isSavedDocsLoaded: boolean = false;
-  private _isSavedDocsEmpty: boolean;
-  private _totalSavedDocsNum: number;
-  private _totalSavedKeywordsNum: number;
-  
-  private _userProfile: UserProfile;
-
-  private _isDataPreprocessed: boolean = false;
+  private _isDataPreprocessed=false;
   private _preprocessedData: Array<string>;
 
   //uploadDict
   public uploader:FileUploader = new FileUploader({url: URL});
-
+  private _previewPreprocessed: boolean;
+  private _isError: boolean;
+  selectedKeyword: string;
+  selectedSavedDate: string;
+  email: string;
+  
   constructor(
-    private userSavedDocumentService: UserSavedDocumentService,
-    private articleService: ArticleService,
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    )   {
-      this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
-      this.userProfile = currentUser;
-    });
-  }
+    private middlewareService: AnalysisOnMiddlewareService
+  ){};
 
   ngOnInit(): void {
-    this.loadSavedDocs();
+    // this.loadSavedDocs();
+    // this.isDataPreprocessed=Array[4];
+    this.previewPreprocessed = false;
   }
 
+  onMessage(event){
+    let data = JSON.parse(event);
+    this.email = data.email;
+    this.selectedKeyword = data.keyword;
+    this.selectedSavedDate = data.savedDate;
+  }
   
-  /**
-   * @description Load saved documents from userSavedDocumentService
-   * @param pageNum
-   */
-  async loadSavedDocs(): Promise<void> {
-    
-    // this.isSavedDocsLoaded = false;
-    // this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
-    // this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
-    // if (this.isSavedDocsEmpty) return;
-
-    this.savedDocs = await this.userSavedDocumentService.getAllMyDocs();
-    // this.setCheckbox();
-    this.isSavedDocsLoaded = true;
-    }
-
   async uploadDict(event:any){
     this.uploader.clearQueue();
     let files:File[] = event.target.files;
@@ -108,43 +78,45 @@ export class PreprocessingComponent implements OnInit {
 
   }
 
-  async toMiddleWare(){
-    const http_req = new XMLHttpRequest();
-    http_req.open("POST", "https://kubic.handong.edu:15000/preprocessing");
-    http_req.setRequestHeader('Content-Type', 'application/json');
-
-    var data = {
-      userEmail:this.userProfile.email, 
-      keyword:"북한", 
-      savedDate:"2021-07-08T11:46:03.973Z",
-      synonym: true,
-      stopword: true,
-      compound: true,
+  async runPreprocessing(idx:number):Promise<void>{
+    let data = JSON.stringify({
+      userEmail: this.email, 
+      keyword: this.selectedKeyword, 
+      savedDate: this.selectedSavedDate,
+      synonym: false,
+      stopword: false,
+      compound: false,
       wordclass: "010" //(100) 동사, 010(명사), 001(형용사)
-    };
+    });
+    
+    console.log(data);
+    let res = await this.middlewareService.postDataToMiddleware('/preprocessing',data);
+    
+    this.preprocessedData = res.result;
+    this.isDataPreprocessed = true;
+    // if(res.isSuccess) this.isDataPreprocessed = true;
 
-    http_req.send(JSON.stringify(data));
-    // let data = http_req.responseText("result");
-    http_req.onload = () => {
-      console.log("응답:"+ JSON.parse(http_req.responseText).result[0].slice(0,50));
-      this.preprocessedData = JSON.parse(http_req.responseText).result[0].slice(0,50);
-      // console.log("Flask 서버로부터의 응답은: " + http_req.responseText);
-      this.isDataPreprocessed =true;
-    }
-    // if(http_req.status==200)
-  //   $(function () {
-  //   var data = {userEmail:"sujinyang@handong.edu", keyword:"북한", savedDate:"2021-07-08T11:46:03.973Z"};
-  //   $.ajax({
-  //       type: "POST",
-  //       data :JSON.stringify(data),
-  //       url: "http://kubic.handong.edu:15000/preprocessing",
-  //       contentType: "application/json",
-        
-  //   });
-  // });
+    // http_req.send(JSON.stringify(data));
+    // // let data = http_req.responseText("result");
+    // http_req.onload = () => {
+
+    //   if(http_req.status==200){
+    //     console.log("응답:"+ JSON.parse(http_req.responseText).result);
+    //     this.preprocessedData = JSON.parse(http_req.responseText).result;
+    //     this.isDataPreprocessed =true;
+    //   }
+    //   else{
+    //     console.log('flask not responsed');
+    //     this.isError=true;
+    //     alert("내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!");
+    //   }
+    //   // console.log("Flask 서버로부터의 응답은: " + http_req.responseText);
+    
+    // }
   }
 
   previewPreprocessedData(){
+    this.previewPreprocessed = true;
     document.getElementById("pop").style.display='inline';
     // var url = "popup.html";
     // var name = "preview data";
@@ -152,34 +124,6 @@ export class PreprocessingComponent implements OnInit {
     // window.open(url, name, option);
   }
 
-  public get savedDocs(): Array<MydocModel> {
-    return this._savedDocs;
-  }
-  public set savedDocs(value: Array<MydocModel>) {
-    this._savedDocs = value;
-  }
-
-  public get isSavedDocsLoaded() {
-    return this._isSavedDocsLoaded;
-  }
-  public set isSavedDocsLoaded(value) {
-    this._isSavedDocsLoaded = value;
-  }
-
-  public get isSavedDocsEmpty() {
-    return this._isSavedDocsEmpty;
-  }
-  public set isSavedDocsEmpty(value) {
-    this._isSavedDocsEmpty = value;
-  }
-  
-  
-  public get userProfile(): UserProfile {
-    return this._userProfile;
-  }
-  public set userProfile(value: UserProfile) {
-    this._userProfile = value;
-  }
   
   public get isDataPreprocessed() {
     return this._isDataPreprocessed;
@@ -195,5 +139,19 @@ export class PreprocessingComponent implements OnInit {
 
   public set preprocessedData(value){
     this._preprocessedData = value;
+  }
+
+  public get previewPreprocessed(): boolean {
+    return this._previewPreprocessed;
+  }
+  public set previewPreprocessed(value: boolean) {
+    this._previewPreprocessed = value;
+  }
+
+  public get isError(): boolean {
+    return this._isError;
+  }
+  public set isError(value: boolean) {
+    this._isError = value;
   }
 }
