@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 
 @Component({
   selector: "app-analysis",
@@ -9,6 +10,12 @@ export class AnalysisComponent implements OnInit  {
   email: any;
   selectedKeyword: any;
   selectedSavedDate: any;
+  isDataAnalysised: boolean;
+  AnalysisResult: any;
+
+  constructor(
+    private middlewareService: AnalysisOnMiddlewareService
+  ){};
 
   ngOnInit(): void {
   }
@@ -24,37 +31,66 @@ export class AnalysisComponent implements OnInit  {
     document.getElementById(analName).style.display='inline';
   }
 
-  async runAnalysis(): Promise<void> {
-    const http_req = new XMLHttpRequest();
-    http_req.open("POST", "https://kubic.handong.edu:15000/textmining");
-    http_req.setRequestHeader('Content-Type', 'application/json');
+  async runAnalysisCount(): Promise<void> {
 
+    let optionValue = (<HTMLInputElement> document.getElementById('count_option1')).value ;
+
+    let data = JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      'optionList': optionValue,
+      'analysisName': 'count',
+    });
     
-
-    var data = {
-      userEmail:this.email, 
-      keyword:this.selectedKeyword, 
-      savedDate:this.selectedSavedDate,
-      optionList: 100,
-      analysisName: 'count',
-    };
-
+    console.log(data);
+    let res = await this.middlewareService.postDataToMiddleware('/textmining',data);
     
-    http_req.send(JSON.stringify(data));
-    // let data = http_req.responseText("result");
-    http_req.onload = () => {
-
-      if(http_req.status==200){
-        console.log("응답:"+ JSON.parse(http_req.response));
-        // this.preprocessedData = JSON.parse(http_req.responseText).result[0];
-        // this.isDataPreprocessed =true;
-      }
-      else{
-        console.log('flask not responsed');
-        // this.isError=true;
-        alert("내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!");
-      }
-    }
+    this.AnalysisResult = res.result;
+    this.isDataAnalysised = true;
+    
   }
+
+  async runAnalysisTfidf(): Promise<void> {
+
+    let optionValue = (<HTMLInputElement> document.getElementById('tfidf_option1')).value ;
+
+    let data = JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      'optionList': optionValue,
+      'analysisName': 'tfidf',
+    });
+    
+    console.log(data);
+    let res = await this.middlewareService.postDataToMiddleware('/textmining',data);
+    
+    this.AnalysisResult = res.result;
+    this.isDataAnalysised = true;
+    
+  }
+
+
+  async runAnalysisNetwork(): Promise<void> {
+
+    let optionValue = (<HTMLInputElement> document.getElementById('network_option1')).value ;
+
+    let data = JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      'optionList': optionValue,
+      'analysisName': 'network',
+    });
+    
+    console.log(data);
+    let res = await this.middlewareService.postDataToMiddleware('/textmining',data);
+    
+    this.AnalysisResult = res.result;
+    this.isDataAnalysised = true;
+    
+  }
+
 
 }

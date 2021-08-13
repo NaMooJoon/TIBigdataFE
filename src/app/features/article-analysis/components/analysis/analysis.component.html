@@ -8,17 +8,17 @@
       <div class="pop-block">
         <div class="pop-head" (click)="showPop('count')">빈도수 분석</div>
         <div class="pop-body" id="count">
-          분석할 단어수: <input type="text" value="100">
-          <button (click)="runAnalysis('count')">분석 실행</button>
+          분석할 단어수: <input type="text" value="100" id='count_option1'>
+          <button (click)="runAnalysisCount()">분석 실행</button>
       </div>
     </div>
 
     <div class="pop-block" (click)="showPop('tfidf')">
       <div class="pop-head">TFIDF</div>
       <div class="pop-body" id="tfidf">
-        tfidf 옵션들!
+        분석할 단어수: <input type="text" value="100" id='tfidf_option1'>
         
-        <button (click)="runAnalysis('tfidf')">분석 실행</button>
+        <button (click)="runAnalysisTfidf()">분석 실행</button>
       </div>
     </div>
     
@@ -46,7 +46,12 @@
     </div>
     
     <div class="pop-block">
-      <div class="pop-head">의미연결망</div>
+      <div class="pop-head" (click)="showPop('network')">의미연결망</div>
+      <div class="pop-body" id="network">
+        분석할 단어수: <input type="text" value="100" id='network_option1'>
+        
+        <button (click)="runAnalysisNetwork()">분석 실행</button>
+      </div>
     </div>
     
     <div class="pop-block">

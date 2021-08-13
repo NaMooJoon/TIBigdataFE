@@ -1,6 +1,11 @@
+import { stringify } from "@angular/compiler/src/util";
 import { Component, OnInit } from "@angular/core";
 import { FileUploader } from 'ng2-file-upload';
 import { AnalysisOnMiddlewareService } from 'src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service'
+import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
+import { abstractAnalysis } from "../abstractAnalysisPage";
+import $ from 'jquery';
+
 const URL = '/uploadDict';
 
 @Component({
@@ -9,36 +14,22 @@ const URL = '/uploadDict';
   styleUrls: ["./preprocessing.component.less"],
 })
 
-export class PreprocessingComponent implements OnInit {
+export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
-  private _isDataPreprocessed=false;
+  private _isDataPreprocessed: boolean = false;
   private _preprocessedData: Array<string>;
 
   //uploadDict
   public uploader:FileUploader = new FileUploader({url: URL});
   private _previewPreprocessed: boolean;
   private _isError: boolean;
-  selectedKeyword: string;
-  selectedSavedDate: string;
-  email: string;
-  
-  constructor(
-    private middlewareService: AnalysisOnMiddlewareService
-  ){};
 
   ngOnInit(): void {
     // this.loadSavedDocs();
     // this.isDataPreprocessed=Array[4];
-    this.previewPreprocessed = false;
+    // this.previewPreprocessed = false;
   }
 
-  onMessage(event){
-    let data = JSON.parse(event);
-    this.email = data.email;
-    this.selectedKeyword = data.keyword;
-    this.selectedSavedDate = data.savedDate;
-  }
-  
   async uploadDict(event:any){
     this.uploader.clearQueue();
     let files:File[] = event.target.files;
@@ -78,52 +69,62 @@ export class PreprocessingComponent implements OnInit {
 
   }
 
-  async runPreprocessing(idx:number):Promise<void>{
+  setDisplay(){
+    if($('input:radio[id=synonym_user]').is(':checked')){
+        $('#selectUserDict').show();
+    }else{
+        $('#selectUserDict').hide();
+    }
+}
+
+
+  async runPreprocessing():Promise<void>{
+    let synonym: boolean = false;
+    let stopword: boolean = false;
+    let compound: boolean = false;
+    let wordclass: number = 0;
+    let nodeList:NodeListOf<HTMLInputElement>;
+
+    if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
+
+    // console.log();
+    // nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('synonym');
+    // nodeList.forEach((node) => {
+    //   if(node.checked && node.value=='user') synonym = true;
+    // });
+
+    // nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('stopword');
+    // nodeList.forEach((node) => {
+    //   if(node.checked && node.value=='user') stopword = true;
+    // });
+
+    // nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('compound');
+    // nodeList.forEach((node) => {
+    //   if(node.checked && node.value=='user') compound = true;
+    // });
+
+    nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('wordclass');
+    nodeList.forEach((node) => {
+      if(node.checked) wordclass += parseInt(node.value);
+    });
+
     let data = JSON.stringify({
-      userEmail: this.email, 
-      keyword: this.selectedKeyword, 
-      savedDate: this.selectedSavedDate,
-      synonym: false,
-      stopword: false,
-      compound: false,
-      wordclass: "010" //(100) 동사, 010(명사), 001(형용사)
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      'synonym': (<HTMLInputElement>document.getElementById('synonym_user')).checked,
+      'stopword': (<HTMLInputElement>document.getElementById('stopword_user')).checked,
+      'compound': (<HTMLInputElement>document.getElementById('compound_user')).checked,
+      'wordclass': wordclass.toString() //(100) 동사, 010(명사), 001(형용사)
     });
     
-    console.log(data);
+    // console.log(data);
     let res = await this.middlewareService.postDataToMiddleware('/preprocessing',data);
     
+    this.userSavedDocumentService.setMyDocPreprocessed(this.selectedSavedDate);
     this.preprocessedData = res.result;
     this.isDataPreprocessed = true;
-    // if(res.isSuccess) this.isDataPreprocessed = true;
-
-    // http_req.send(JSON.stringify(data));
-    // // let data = http_req.responseText("result");
-    // http_req.onload = () => {
-
-    //   if(http_req.status==200){
-    //     console.log("응답:"+ JSON.parse(http_req.responseText).result);
-    //     this.preprocessedData = JSON.parse(http_req.responseText).result;
-    //     this.isDataPreprocessed =true;
-    //   }
-    //   else{
-    //     console.log('flask not responsed');
-    //     this.isError=true;
-    //     alert("내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!");
-    //   }
-    //   // console.log("Flask 서버로부터의 응답은: " + http_req.responseText);
-    
-    // }
   }
-
-  previewPreprocessedData(){
-    this.previewPreprocessed = true;
-    document.getElementById("pop").style.display='inline';
-    // var url = "popup.html";
-    // var name = "preview data";
-    // var option = "width = 500, height = 500, top = 100, left = 200, location = no, scrollbars=yes";
-    // window.open(url, name, option);
-  }
-
   
   public get isDataPreprocessed() {
     return this._isDataPreprocessed;
@@ -141,17 +142,4 @@ export class PreprocessingComponent implements OnInit {
     this._preprocessedData = value;
   }
 
-  public get previewPreprocessed(): boolean {
-    return this._previewPreprocessed;
-  }
-  public set previewPreprocessed(value: boolean) {
-    this._previewPreprocessed = value;
-  }
-
-  public get isError(): boolean {
-    return this._isError;
-  }
-  public set isError(value: boolean) {
-    this._isError = value;
-  }
 }
