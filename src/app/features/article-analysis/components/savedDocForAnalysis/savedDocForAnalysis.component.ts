@@ -58,22 +58,47 @@ export class savedDocForAnalysis implements OnInit{
   }
 
 
-  updateSelectDoc(){
-    const nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('selectDoc');
-    nodeList.forEach((node) => {
-      if(node.checked)
-        this.idx = parseInt(node.value);
-    });
-  }
+  // updateSelectDoc(){
+  //   const nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('selectDoc');
+  //   nodeList.forEach((node) => {
+  //     if(node.checked)
+  //       this.idx = parseInt(node.value);
+  //   });
+  // }
 
-  emitData(){
-    this.updateSelectDoc();
+  emitData(activity:string, selectedKeyword:string, selectedSavedDate:string){
     this.sender.emit(JSON.stringify({
+      'activity': activity,
       'email': this.userProfile.email,
-      'keyword': this.savedDocs[this.idx].keyword,
-      'savedDate': this.savedDocs[this.idx].savedDate
+      'savedKeyword': selectedKeyword,
+      'savedDate': selectedSavedDate,
     }));
   }
+
+  // emitSelectedData(selectedSavedDate:string){
+  //   // this.updateSelectDoc();
+  //   this.sender.emit(JSON.stringify({
+  //     'activity': 'selected',
+  //     'email': this.userProfile.email,
+  //     'savedDate': selectedSavedDate,
+  //   }));
+  // }
+
+  // emitPreview(selectedSavedDate:string){
+  //   this.sender.emit(JSON.stringify({
+  //     'activity': 'preview',
+  //     'email': this.userProfile.email,
+  //     'savedDate': selectedSavedDate,
+  //   }));
+  // }
+
+  // emitDownload(selectedSavedDate:string){
+  //   this.sender.emit(JSON.stringify({
+  //     'activity': 'download',
+  //     'email': this.userProfile.email,
+  //     'savedDate': selectedSavedDate,
+  //   }));
+  // }
 
   public get idx(): number {
     return this._idx;

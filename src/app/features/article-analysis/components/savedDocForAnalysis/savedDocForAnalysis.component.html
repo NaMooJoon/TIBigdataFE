@@ -22,7 +22,7 @@
             type="radio"
             name="selectDoc"
             [value]="idx"
-            (change)="emitData()"
+            (change)="emitData('select',docSet['keyword'], docSet['savedDate'])"
           /></td>
           
           <td class="text-center">{{ docSet['keyword'] }}</td>
@@ -30,13 +30,9 @@
           <td class="text-center">{{ docSet['savedDate']}}</td>
           <td class="text-center">총문서수:{{ docSet['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td>
           <td class="text-center">
-          <div *ngIf="isDataPreprocessed">
-          <button (click)="previewPreprocessedData()">
-            <div id="pop" class ="popup">
-              {{preprocessedData}} 
-            </div>
-            미리보기</button>
-          <button>다운로드</button>
+          <div *ngIf="docSet['preprocessed']">
+          <button (click)="emitData('preview',docSet['keyword'],docSet['savedDate'])">미리보기</button>
+          <button (click)="emitData('download',docSet['keyword'], docSet['savedDate'])">다운로드</button>
           </div>
         </td>
     </tr>
