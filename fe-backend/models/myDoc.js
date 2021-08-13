@@ -6,6 +6,7 @@ const keywordListSchema = new Schema({
   keyword : String,
   savedDate : Date,
   savedDocHashKeys: [],
+  preprocessed: Boolean
 });
 
 const keepDocSchema = new Schema({

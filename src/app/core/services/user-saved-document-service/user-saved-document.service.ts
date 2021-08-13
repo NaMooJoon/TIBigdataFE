@@ -16,6 +16,7 @@ export class UserSavedDocumentService {
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
   private getAllMyDocUrl = this.API_URL + "/myDoc/getAllMyDoc";
+  private setPreprocessedUrl = this.API_URL + "/myDoc/setPreprocessed";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private deleteSelectedMyDocUrl = this.API_URL + "/myDoc/deleteSelectedMyDocs";
   private currentUser: UserProfile;
@@ -65,6 +66,16 @@ export class UserSavedDocumentService {
     }
     
     return mydocs;
+  }
+
+  /**
+   * @description Send query to delete all saved ariticles.
+   * @returns Result of deleting operation.
+   */
+   async setMyDocPreprocessed(savedDate: string): Promise<void> {
+    let res = await this.httpClient
+      .post<any>(this.setPreprocessedUrl, { userEmail: this.currentUser.email, savedDate: savedDate })
+      .toPromise();
   }
 
   /**
