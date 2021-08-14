@@ -1,18 +1,44 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { UserProfile } from "src/app/core/models/user.model";
+import { APIService } from "src/app/core/services/api-database-service/api-database.service";
+import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
+
 @Component({
   selector: "app-management",
   templateUrl: "./management.component.html",
   styleUrls: ["./management.component.less"],
 })
 export class ManagementComponent implements OnInit {
-  constructor(public router: Router) {}
+  userProfile: UserProfile;
+  name:string;
+  count: number;
+  public infos: { app_name: string; app_purpose: string; user_email: string; reporting_date: string; expiration_date: string; traffic: number; }[];
 
-  ngOnInit() {}
+  constructor(
+    public router: Router,
+    public apiService: APIService,
+    private authenticationService: AuthenticationService
+    ) {
+      this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
+        this.userProfile = currentUser;
+      });
+    }
 
-  email: string = '21800409@handong.edu';
-  count: number=3;
+  ngOnInit() {
+    this.loadInfo();
+    // this.count = 3;
+  }
+
+  async loadInfo(){
+    let info=await this.apiService.getApiInfos(this.userProfile.email);
+    this.count = info.count;
+    this.infos= info.info;
+    console.log(this.infos);
+    this.name=this.userProfile.name;
+  }
+
   // /**
   //  * @description Router to intro page
   //  */

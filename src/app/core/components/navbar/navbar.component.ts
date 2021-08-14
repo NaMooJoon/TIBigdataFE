@@ -221,17 +221,18 @@ export class NavbarComponent implements OnInit {
     this.router.navigateByUrl("/about/member-policy");
   }
 
-  toManagement(): void {
-    this.router.navigateByUrl("/openapi/management");
-  }
+
+  // toManagement(): void {
+  //   this.router.navigateByUrl("/openapi/management");
+  // }
 
   toDocument(): void {
     this.router.navigateByUrl("/openapi/document");
   }
 
-  toGotoapi(): void {
-    this.router.navigateByUrl("/openapi/gotoapi");
-  }
+  // toGotoapi(): void {
+  //   this.router.navigateByUrl("/openapi/gotoapi");
+  // }
 
   getSelectedMenu(): string {
     return this.selectedMenu;

@@ -3,17 +3,19 @@
   <div class="menus">
     <ul>
       <li
+        [ngStyle]="selectedStyleObject(currentMenu == 'document')"
+        class="menu-item"
+        id="document">
+        <a (click)="toDocument()">매뉴얼</a>
+      </li>
+      
+      <li
         [ngStyle]="selectedStyleObject(currentMenu == 'management')"
         class="menu-item"
         id="management">
         <a (click)="toManagement()">활용관리</a>
       </li>
-      <li
-        [ngStyle]="selectedStyleObject(currentMenu == 'document')"
-        class="menu-item"
-        id="document">
-        <a (click)="toDocument()">참고문서</a>
-      </li>
+      
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'gotoapi')"
         class="menu-item"

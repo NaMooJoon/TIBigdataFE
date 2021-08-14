@@ -70,6 +70,7 @@ const routes: Routes = [
   },
   {
     path: "openapi",
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import("./open-api/open-api.module").then(
         (m) => m.OpenApiModule
