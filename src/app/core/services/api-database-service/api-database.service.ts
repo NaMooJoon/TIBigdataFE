@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import moment from "moment";
 import { ApiInfo } from "../../models/api.model";
 import { QueryResponse } from "../../models/query.response.model";
 import { IpService } from "../ip-service/ip.service";
@@ -39,6 +40,10 @@ private headers = new HttpHeaders().set("Content-Type", "application/json");
       })
       .toPromise();
     
+      for(let item of res.payload['info']){
+        item.reporting_date = moment(new Date(item.reporting_date)).format('YYYY년 MM월 DD일 HH시 mm분');
+        item.expiration_date = moment(new Date(item.expiration_date)).format('YYYY년 MM월 DD일 HH시 mm분');
+      }
     return <ApiInfo> res.payload;
   }
 }

@@ -6,8 +6,8 @@ const apiSchema = new Schema({
   app_name: String,
   app_purpose: String,
   user_email: String,
-  reporting_date: String,
-  expiration_date: String,
+  reporting_date: Date,
+  expiration_date: Date,
   traffic: Number,
 },{collection: 'apiUser'});
 

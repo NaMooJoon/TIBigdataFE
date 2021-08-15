@@ -6,6 +6,7 @@ import { ArticleService } from "src/app/core/services/article-service/article.se
 import { UserProfile } from "src/app/core/models/user.model";
 import { IpService } from "../ip-service/ip.service";
 import { MydocModel } from "../../models/mydoc.model";
+import moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -63,6 +64,7 @@ export class UserSavedDocumentService {
     for(let doc of mydocs){
       let docHashKeys:Array<string> = mydocs.find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
       doc['title'] = await this.articleService.convertDocHashKeysToTitles(docHashKeys);
+      doc['savedDate'] = moment(new Date(doc['savedDate'])).format('YYYY년 MM월 DD일 HH시 mm분');
     }
     
     return mydocs;
