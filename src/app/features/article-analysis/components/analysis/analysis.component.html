@@ -6,56 +6,86 @@
 
     <div class="pop-container">
       <div class="pop-block">
-        <div class="pop-head" (click)="showPop('count')">빈도수 분석</div>
+        <div class="pop-head" (click)="showPop('count')">빈도수 분석
+          <img
+          src="../../../../assets/icons/help-gray.png"
+        /></div>
         <div class="pop-body" id="count">
-          분석할 단어수: <input type="text" value="100" id='count_option1'>
-          <button (click)="runAnalysisCount()">분석 실행</button>
+          분석할 단어수: <input type="number" value="100" min='1' max='500' id='count_option1'>
+          <button (click)="runAnalysis('count')">분석 실행</button>
       </div>
     </div>
 
-    <div class="pop-block" (click)="showPop('tfidf')">
-      <div class="pop-head">TFIDF</div>
+    <div class="pop-block">
+      <div class="pop-head" (click)="showPop('tfidf')">TFIDF
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
       <div class="pop-body" id="tfidf">
-        분석할 단어수: <input type="text" value="100" id='tfidf_option1'>
-        
-        <button (click)="runAnalysisTfidf()">분석 실행</button>
+        분석할 단어수: <input type="number" value="100" min='1' max='500' id='tfidf_option1'>
+        <button (click)="runAnalysis('tfidf')">분석 실행</button>
       </div>
     </div>
     
       <div class="pop-block">
-        <div class="pop-head">군집분석</div>
+        <div class="pop-head">군집분석
+          <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+        </div>
         <div class="pop-body" id="bindo">
       </div>
     </div>
 
     <div class="pop-block">
-      <div class="pop-head">토픽 모델링</div>
+      <div class="pop-head">토픽 모델링
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
       <div class="pop-body" id="bindo">
       </div>
     </div>
 
     <div class="pop-block">
-      <div class="pop-head">N-gram</div>
+      <div class="pop-head">N-gram
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
       <div class="pop-body" id="bindo">
 
       </div>
     </div>
 
     <div class="pop-block">
-      <div class="pop-head">유의어분석</div>
+      <div class="pop-head">유의어분석
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
     </div>
     
     <div class="pop-block">
-      <div class="pop-head" (click)="showPop('network')">의미연결망</div>
+      <div class="pop-head" (click)="showPop('network')">의미연결망
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
       <div class="pop-body" id="network">
-        분석할 단어수: <input type="text" value="100" id='network_option1'>
+        분석할 단어수: <input type="number" value="100" min='1' max='500' id='network_option1'>
         
-        <button (click)="runAnalysisNetwork()">분석 실행</button>
+        <button (click)="runAnalysis('network')">분석 실행</button>
       </div>
     </div>
     
     <div class="pop-block">
-      <div class="pop-head">개체명인식</div>
+      <div class="pop-head">개체명인식
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
     </div>
 
   </div>
