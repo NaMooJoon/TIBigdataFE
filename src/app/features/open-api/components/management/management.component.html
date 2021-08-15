@@ -8,7 +8,7 @@
       <br>
       현재까지 당신이 신청한 활용은 {{count}} 개 입니다.
     </p>
-      <button>활용신청</button>
+      <button (click)=toRegister()>활용신청</button>
 
     <table>
       <thead>
@@ -33,29 +33,11 @@
           <td class="text-center">{{ info['traffic'] }}</td>
           <td class="text-center">
             <button>수정</button>
-            <button>인증키 재발급</button>
-            <button>삭제</button>
+            <button (click)="reissue(info['_id'])">인증키 재발급</button>
+            <button (click)="delete(info['_id'])">삭제</button>
           </td>
         </tr>
       </tbody>
-<!--   
-      <tbody *ngIf="docList">
-        <tr *ngFor="let doc of docList; let i = index"
-          [ngStyle]="{'background-color': i < mainAnnounceNum ? 'rgb(236, 239, 239)' : 'white'}">
-          <td class="doc-num">{{ doc["docId"] }}</td>
-          <td>
-            <div *ngIf="doc['isMainAnnounce']" class="doc-announcement announcement-button">공지</div>
-          </td>
-          <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
-          <td class="doc-postdate">{{ doc["regDate"] }}</td>
-        </tr>
-      </tbody>
-  
-      <tbody *ngIf="!docList.length">
-        <tr>
-          <td class="no-docs" rowspan="4" colspan="4">등록된 게시물이 없습니다.</td>
-        </tr>
-      </tbody> -->
     </table>
   </section>
 </div>

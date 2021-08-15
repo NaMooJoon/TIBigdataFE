@@ -53,6 +53,7 @@ export class OpenApiMenuComponent implements OnInit {
     if (currentAddress === "management") this.title = "활용관리";
     if (currentAddress === "document") this.title = "매뉴얼";
     if (currentAddress === "gotoapi") this.title = "API이동";
+    if (currentAddress === "register") this.title = "활용신청";
   }
 
   toManagement() {

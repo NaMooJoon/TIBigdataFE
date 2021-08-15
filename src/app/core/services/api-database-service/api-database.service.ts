@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import moment from "moment";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 import { ApiInfo } from "../../models/api.model";
 import { QueryResponse } from "../../models/query.response.model";
 import { IpService } from "../ip-service/ip.service";
@@ -13,6 +14,8 @@ import { IpService } from "../ip-service/ip.service";
 
 export class APIService {
 private API_URL: string = this.ipService.getFrontDBServerIp();
+  private _OpenAPI_URL: string = this.ipService.getOpenAPIServerIp();
+  
 private headers = new HttpHeaders().set("Content-Type", "application/json");
     // ipService: any;
 // private currentUserChange$: BehaviorSubject<UserProfile> = new BehaviorSubject(null);
@@ -45,5 +48,45 @@ private headers = new HttpHeaders().set("Content-Type", "application/json");
         item.expiration_date = moment(new Date(item.expiration_date)).format('YYYY년 MM월 DD일 HH시 mm분');
       }
     return <ApiInfo> res.payload;
+  }
+  
+  async reissueKey(_id: string): Promise<{authKey:string}> {
+    let res: {authKey:string} = await this.httpClient
+      .post<any>(this.OpenAPI_URL +'/reissue', 
+        '_id='+_id,
+        {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}},
+      )
+      .toPromise();
+    // console.log(res);
+    return res;
+  }
+
+  async register(app_name:string ,app_purpose: string): Promise<{authKey:string}>{
+    let res: {authKey:string} = await this.httpClient
+      .post<any>(this.OpenAPI_URL +'/register', 
+        'app_name='+app_name+'&app_purpose='+app_purpose,
+        {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}},
+      )
+      .toPromise();
+    // console.log(res);
+    return res;
+  }
+
+  async delete(_id: string): Promise<{succeed:boolean}> {
+    let res: {succeed:boolean} = await this.httpClient
+      .post<any>(this.OpenAPI_URL +'/delete', 
+        '_id='+_id,
+        {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}},
+      )
+      .toPromise();
+    // console.log(res);
+    return res;
+  }
+
+  public get OpenAPI_URL(): string {
+    return this._OpenAPI_URL;
+  }
+  public set OpenAPI_URL(value: string) {
+    this._OpenAPI_URL = value;
   }
 }

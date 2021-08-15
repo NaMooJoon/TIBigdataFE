@@ -28,7 +28,6 @@ export class ManagementComponent implements OnInit {
 
   ngOnInit() {
     this.loadInfo();
-    // this.count = 3;
   }
 
   async loadInfo(){
@@ -39,31 +38,24 @@ export class ManagementComponent implements OnInit {
     this.name=this.userProfile.name;
   }
 
-  // /**
-  //  * @description Router to intro page
-  //  */
-  // toSiteIntro() {
-  //   this.router.navigateByUrl("/introduce/intro");
-  // }
+  async reissue(_id:string): Promise<void>{
+    let authKey = (await this.apiService.reissueKey(_id)).authKey;
+    prompt('성공적으로 인증키가 변경되었습니다.\n복사하세요.',authKey);
+    this.ngOnInit();
+    return ;
+  }
 
-  // /**
-  //  * @description Router to service guide page 
-  //  */
-  // toServiceGuide() {
-  //   this.router.navigateByUrl("/introduce/service-guide");
-  // }
+  async delete(_id:string): Promise<void>{
+    if ((await this.apiService.delete(_id)).succeed)
+      alert('성공적으로 삭제되었습니다');
+    else alert('삭제중에 문제가 발생했습니다.');
+    this.ngOnInit();
+    return ;
+  }
 
-  // /**
-  //  * @description Router to collected info page 
-  //  */
-  // toCollectedInfo() {
-  //   this.router.navigateByUrl("/introduce/collected-info");
-  // }
+  toRegister(){
+    this.router.navigateByUrl("/openapi/register");
+    this.ngOnInit();
+  }
 
-  // /**
-  //  * @description Router to member policy page 
-  //  */
-  // toMemberPolicy() {
-  //   this.router.navigateByUrl("/introduce/member-policy");
-  // }
 }
