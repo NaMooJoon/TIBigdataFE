@@ -22,16 +22,10 @@ export class savedDocForAnalysis implements OnInit{
   private _isSavedDocsEmpty: boolean;
   private _totalSavedDocsNum: number;
   
-  private _totalSavedKeywordsNum: number;
-  
   private _userProfile: UserProfile;
-  private _idx: number;
-
 
   constructor(
     private userSavedDocumentService: UserSavedDocumentService,
-    private articleService: ArticleService,
-    private router: Router,
     private authenticationService: AuthenticationService,
     )   {
       this.authenticationService.getCurrentUserChange().subscribe((currentUser) => {
@@ -66,45 +60,14 @@ export class savedDocForAnalysis implements OnInit{
   //   });
   // }
 
-  emitData(activity:string, selectedKeyword:string, selectedSavedDate:string){
+  emitData(activity:string, selectedKeyword:string, selectedSavedDate:string, isSelectedPreprocessed?:boolean){
     this.sender.emit(JSON.stringify({
       'activity': activity,
       'email': this.userProfile.email,
       'savedKeyword': selectedKeyword,
       'savedDate': selectedSavedDate,
+      'isSelectedPreprocessed':isSelectedPreprocessed,
     }));
-  }
-
-  // emitSelectedData(selectedSavedDate:string){
-  //   // this.updateSelectDoc();
-  //   this.sender.emit(JSON.stringify({
-  //     'activity': 'selected',
-  //     'email': this.userProfile.email,
-  //     'savedDate': selectedSavedDate,
-  //   }));
-  // }
-
-  // emitPreview(selectedSavedDate:string){
-  //   this.sender.emit(JSON.stringify({
-  //     'activity': 'preview',
-  //     'email': this.userProfile.email,
-  //     'savedDate': selectedSavedDate,
-  //   }));
-  // }
-
-  // emitDownload(selectedSavedDate:string){
-  //   this.sender.emit(JSON.stringify({
-  //     'activity': 'download',
-  //     'email': this.userProfile.email,
-  //     'savedDate': selectedSavedDate,
-  //   }));
-  // }
-
-  public get idx(): number {
-    return this._idx;
-  }
-  public set idx(value: number) {
-    this._idx = value;
   }
 
   public get savedDocs(): Array<MydocModel> {
