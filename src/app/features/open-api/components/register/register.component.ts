@@ -23,8 +23,8 @@ export class RegisterComponent implements OnInit{
     ){}
 
     async register():Promise<void>{
-        let app_name:string = document.getElementById('app_name').value;
-        let app_purpose:string = document.getElementById('app_purpose').value;
+        let app_name:string = (<HTMLInputElement>document.getElementById('app_name')).value;
+        let app_purpose:string = (<HTMLInputElement>document.getElementById('app_purpose')).value;
         let authKey = (await this.apiService.register(app_name,app_purpose)).authKey;
         prompt('성공적으로 활용이 등록되었습니다.\n인증키를 복사하세요.',authKey);
         return this.toManagement();

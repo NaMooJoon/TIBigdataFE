@@ -34,7 +34,7 @@ export class AnalysisComponent implements OnInit  {
       document.getElementById(analName).style.display='inline';
   }
 
-  async runAnylysis(activity:string): Promise<void>{
+  async runAnalysis(activity:string): Promise<void>{
 
     let optionValue =  (<HTMLInputElement> document.getElementById(activity+'_option1')).value ;
 
