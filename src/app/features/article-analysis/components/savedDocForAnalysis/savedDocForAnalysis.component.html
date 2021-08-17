@@ -3,6 +3,7 @@
 </section>
 
 <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
+  <h1>내 보관함</h1>
   <table>
     <thead>
       <tr>
@@ -14,7 +15,10 @@
         <th>전처리</th>
         </tr>
     </thead>
-
+  </table>
+  
+  <div class="savedDocTable">
+    <table>
     <tbody>
       <tr *ngFor="let docSet of savedDocs;index as idx">
           <td><input 
@@ -22,12 +26,15 @@
             type="radio"
             name="selectDoc"
             [value]="idx"
-            (change)="emitData('select',docSet['keyword'], docSet['savedDate'])"
+            (change)="emitData('select',docSet['keyword'], docSet['savedDate'], docSet['preprocessed'])"
           /></td>
           
           <td class="text-center">{{ docSet['keyword'] }}</td>
-          <td class="text-center"><ul *ngFor="let adoc of docSet['title']" class="text-left"> - {{adoc}}</ul></td>
-          <td class="text-center">{{ docSet['savedDate']}}</td>
+          <td class="text-center"><ul *ngFor="let adoc of docSet['title']" class="text-left">
+            <div class="savedAdocTable"> - {{adoc}}</div>
+            </ul>
+          </td>
+          <td class="text-center">{{ docSet['savedDate_format']}}</td>
           <td class="text-center">총문서수:{{ docSet['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td>
           <td class="text-center">
           <div *ngIf="docSet['preprocessed']">
@@ -38,4 +45,5 @@
     </tr>
     </tbody>
   </table>
+  </div>
 </section>
