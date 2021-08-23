@@ -189,8 +189,7 @@ export class NavbarComponent implements OnInit {
   }
 
   async toOpenApi(): Promise<void> {
-    const dest =
-      this.ipService.getFrontEndServerIP() + ":" + this.ipService.FLASK_PORT;
+    const dest = this.ipService.getOpenAPIServerIp();
 
     await this.httpClient
       .post(dest, { email: this.userEmail }, { responseType: "text" })
@@ -222,17 +221,18 @@ export class NavbarComponent implements OnInit {
     this.router.navigateByUrl("/about/member-policy");
   }
 
-  toManagement(): void {
-    this.router.navigateByUrl("/openapi/management");
-  }
+
+  // toManagement(): void {
+  //   this.router.navigateByUrl("/openapi/management");
+  // }
 
   toDocument(): void {
     this.router.navigateByUrl("/openapi/document");
   }
 
-  toGotoapi(): void {
-    this.router.navigateByUrl("/openapi/gotoapi");
-  }
+  // toGotoapi(): void {
+  //   this.router.navigateByUrl("/openapi/gotoapi");
+  // }
 
   getSelectedMenu(): string {
     return this.selectedMenu;

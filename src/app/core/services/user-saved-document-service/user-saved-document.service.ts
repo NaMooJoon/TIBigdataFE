@@ -5,6 +5,8 @@ import { QueryResponse } from "src/app/core/models/query.response.model";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import { UserProfile } from "src/app/core/models/user.model";
 import { IpService } from "../ip-service/ip.service";
+import { MydocModel } from "../../models/mydoc.model";
+import moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +16,8 @@ export class UserSavedDocumentService {
   private API_URL: string = this.ipService.getFrontDBServerIp();
   private saveMyDocUrl = this.API_URL + "/myDoc/saveMyDoc";
   private getMyDocUrl = this.API_URL + "/myDoc/getMyDoc";
+  private getAllMyDocUrl = this.API_URL + "/myDoc/getAllMyDoc";
+  private setPreprocessedUrl = this.API_URL + "/myDoc/setPreprocessed";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private deleteSelectedMyDocUrl = this.API_URL + "/myDoc/deleteSelectedMyDocs";
   private currentUser: UserProfile;
@@ -45,6 +49,36 @@ export class UserSavedDocumentService {
       .post<any>(this.saveMyDocUrl, payload)
       .toPromise();
     return res.succ;
+  }
+
+  /**
+   * @description Send query to get list of saved articles.
+   * @returns Array of object that holds articles.
+   */
+  async getAllMyDocs(): Promise<Array<MydocModel>>{
+    let res: QueryResponse = await this.httpClient
+    .post<any>(this.getAllMyDocUrl, { userEmail: this.currentUser.email })
+    .toPromise();
+
+    let mydocs:Array<MydocModel> = res.payload["keywordList"];
+    for(let doc of mydocs){
+      let docHashKeys:Array<string> = mydocs.find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
+      doc['title'] = await this.articleService.convertDocHashKeysToTitles(docHashKeys);
+      doc['savedDate_format'] = moment(new Date(doc['savedDate'])).format('YYYY년 MM월 DD일 HH시 mm분');
+      doc['preprocessed'] = doc['preprocessed']==true? true:false;
+    }
+    
+    return mydocs;
+  }
+
+  /**
+   * @description Send query to delete all saved ariticles.
+   * @returns Result of deleting operation.
+   */
+   async setMyDocPreprocessed(savedDate: string): Promise<void> {
+    let res = await this.httpClient
+      .post<any>(this.setPreprocessedUrl, { userEmail: this.currentUser.email, savedDate: savedDate })
+      .toPromise();
   }
 
   /**

@@ -7,6 +7,7 @@ import { DocumentComponent } from "./components/document/document.component";
 import { GotoapiComponent } from "./components/gotoapi/gotoapi.component";
 import { OpenApiMenuComponent } from "./components/open-api-menu/open-api-menu.component";
 import { SharedModule } from "src/app/shared/shared.module";
+import { RegisterComponent } from "./components/register/register.component";
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { SharedModule } from "src/app/shared/shared.module";
     DocumentComponent,
     GotoapiComponent,
     OpenApiMenuComponent,
+    RegisterComponent
   ],
   imports: [CommonModule, OpenApiRoutingModule, SharedModule],
 })

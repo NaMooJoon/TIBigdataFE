@@ -2,114 +2,76 @@
   <app-analysis-menu></app-analysis-menu>
   
   <section class="content">
-    <p><strong>전처리</strong></p>
-    
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox"></th>
-          <th>검색 키워드</th>
-          <th>문서목록</th>
-          <th>수집날짜</th>
-          <th>통계</th>
-          <th>전처리</th>
-          </tr>
-      </thead>
+    <app-savedDocForAnalysis (sender)='onMessage($event)'></app-savedDocForAnalysis>
 
-      <tbody>
-        <tr *ngFor="let doc of savedDocs; index as idx">
-          <td *ngIf="idx==0" [attr.rowspan]="savedDocs.length"><input 
-            class="article-checkbox"
-            type="checkbox"
-            [(checked)]="doc.isSelected"
-            name="selectDoc"
-            [value]="doc['id']"
-            (change)="onCheckboxChange($event)"
-          /></td>
-          <!-- <td>{{idx}}</td> -->
-          <td *ngIf="idx==0" [attr.rowspan]="savedDocs.length" class="text-center">북한</td>
-          <!-- <td *ngIf="idx!=0"><a (click)="openDocDetail(doc.id)">북한</a></td> -->
-          <td><a (click)="openDocDetail(doc.id)">{{ doc["title"] }}</a></td>
-          <td *ngIf="idx==0" [attr.rowspan]="savedDocs.length" class="text-center">2021-07-08</td>
-          <td *ngIf="idx==0" [attr.rowspan]="savedDocs.length" class="text-center">총문서수:3개<br> 평균 단어수:230개</td>
-          <td *ngIf="idx==0" [attr.rowspan]="savedDocs.length" class="text-center">
-            <div *ngIf="isDataPreprocessed">
-            <button (click)="previewPreprocessedData()">
-              <div id="pop" class ="popup">
-                {{preprocessedData}}
-              </div>
+    <section class="options">
+    <strong>사용자 사전</strong>
 
-              미리보기</button>
-            <br>
-            <button>다운로드</button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <strong>사용자 사전</strong> <button>사용자 사전</button> <button>미리보기</button>
     <li>유의어  
-      <div style="width: 400px;">
       <div class="radio-items">
-        <div class="col-6">
-          <input id="a1" class="only-sr checked" type="radio" name="temp1" value="1" checked>
-          <label for="a1">기본 사전 사용</label>
-        </div>
-        <div class="col-6">
-          <input id="a2" class="only-sr" type="radio" name="temp1" value="2" (click)="popup()">
-          <label for="a2">내 사전 사용</label>
-        </div>
-      </div>
+        <div class="col-3">
+      <input id='synonym_basic' class="only-sr checked" type="radio" name="synonym" value="basic" checked>
+      <label for="synonym_basic">기본 사전 사용</label>
     </div>
-    <div id="filename">유의어1.txt</div>
-    <button>미리보기</button>
-    <li>불용어  
-      <div style="width: 200px;">
-        <div class="radio-items">
-          <div class="col-6">
-            <input id="b1" class="only-sr checked" type="radio" name="temp2" value="1" checked>
-            <label for="b1">사용함</label>
-          </div>
-          <div class="col-6">
-            <input id="b2" class="only-sr" type="radio" name="temp2" value="2">
-            <label for="b2">사용안함</label>
-          </div>
-        </div>
-      </div>
+    <div class="col-3">
+      <input id='synonym_user' class="only-sr" type="radio" name="synonym" value="user">
+      <label for="synonym_user">내 사전 사용</label>
+    </div>  
+    </div>
+
+      <!-- <div id="filename" *ngIf="dictSynonym">저장된 사전 있음</div>
+      <button>미리보기</button>
+      <div id='selectUserDict'>
+      새로운 사전 업로드 <input id="input-file1" type="file" (change)="handleUploadFileChanged($event)">
+      </div> -->
     </li>
-    <li>복합어  
-      <div style="width: 200px;">
+
+    <li>불용어
       <div class="radio-items">
-        <div class="col-6">
-          <input id="c1" class="only-sr checked" type="radio" name="temp3" value="1" checked>
-          <label for="c1">사용함</label>
+        <div class="col-3">
+      <input id='stopword_basic' class="only-sr checked" type="radio" name="stopword" value="basic" checked>
+      <label for="stopword_basic">기본 사전 사용</label>
         </div>
-        <div class="col-6">
-          <input id="c2" class="only-sr" type="radio" name="temp3" value="2">
-          <label for="c2">사용안함</label>
-        </div>
-      </div>
-    </div>
-  </li>
+        <div class="col-3">
+      <input id ="stopword_user" class="only-sr" type="radio" name="stopword" value="user">
+      <label for="stopword_user">내 사전 사용</label></div></div>
+    </li>
+
+    <li>복합어  
+      <div class="radio-items">
+        <div class="col-3">
+      <input id='compound_basic' class="only-sr checked" type="radio" name="compound" value="basic" checked>
+      <label for="compound_basic">기본 사전 사용</label>
+      </div>  
+      <div class="col-3">
+      <input id="compound_user" class="only-sr" type="radio" name="compound" value="user">
+      <label for="compound_user">내 사전 사용</label></div></div>
+    </li>
+    
+    
     <strong>품사 선택</strong>
     <div style="width: 300px;">
       <div class="radio-items">
         <div class="col-3">
-          <input id="d1" class="only-sr checked" type="radio" name="temp4" value="1" checked>
+          <input id="d1" class="only-sr checkbox" type="checkbox" name="wordclass" value="100">
           <label for="d1">동사</label>
         </div>
         <div class="col-3">
-          <input id="d2" class="only-sr" type="radio" name="temp4" value="2">
+          <input id="d2" class="only-sr" type="checkbox" name="wordclass" value="010" checked>
           <label for="d2">명사</label>
         </div>
         <div class="col-3">
-          <input id="d3" class="only-sr" type="radio" name="temp4" value="3">
+          <input id="d3" class="only-sr" type="checkbox" name="wordclass" value="001">
           <label for="d3">형용사</label>
         </div>
       </div>
     </div>
-
-    <button (click)="toMiddleWare()" class="run">전처리 실행</button>
+    <button (click)="runPreprocessing()" class="run">전처리 실행</button>
+  </section>
+  
+  <section class='preview' *ngIf="isDataPreprocessed">
+    <strong>미리보기</strong>
+      {{preprocessedData}}
+  </section>
   </section>
 </div>

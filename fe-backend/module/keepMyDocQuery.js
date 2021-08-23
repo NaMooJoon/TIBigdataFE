@@ -17,6 +17,34 @@ router.post("/getMyDoc", (req, res) => {
         return res
           .status(200)
           .json(
+            new Res(true, "successfully saved doc HashKeys", result)
+          );
+      else{
+        return res
+        .status(200)
+        .json(
+          new Res(false, "no saved docs", [])
+        );
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json(new Res(false, "successfully saved doc HashKeys", null));
+    });
+});
+
+router.post("/getAllMyDoc", (req, res) => {
+  let userEmail = req.body.userEmail;
+
+  myDoc
+    .findOne({ userEmail: userEmail })
+    .then((result) => {
+      if (result)
+        return res
+          .status(200)
+          .json(
             new Res(true, "successfully saved doc HashKeys", {
               keywordList : result.keywordList,
             })
@@ -37,6 +65,18 @@ router.post("/getMyDoc", (req, res) => {
         .status(400)
         .json(new Res(false, "successfully saved doc HashKeys", null));
     });
+});
+
+router.post("/setPreprocessed", (req, res) => {
+  let userEmail = req.body.userEmail;
+  let savedDate = req.body.savedDate;
+
+  myDoc
+    .updateOne(
+      { $and: [ { userEmail: userEmail }, {'keywordList.savedDate' : new Date(savedDate).toISOString() } ] },
+      { $set: {"keywordList.$.preprocessed": true} },
+  );
+  return res.status(200).json(new Res(true));
 });
 
 router.post("/deleteAllMyDocs", (req, res) => {

@@ -1,43 +1,59 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { abstractAnalysis } from "../abstractAnalysisPage";
 
 @Component({
   selector: "app-analysis",
   templateUrl: "./analysis.component.html",
   styleUrls: ["./analysis.component.less"],
 })
-export class AnalysisComponent implements OnInit {
-  constructor(public router: Router) {}
+export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
-  ngOnInit() {}
+  private _isDataAnalysised: boolean = false;
+  private _analysisedData: any;
+  
+  ngOnInit(): void {
+  }
 
-  // email: string = '21800409@handong.edu';
-  // count: number=3;
-  // /**
-  //  * @description Router to intro page
-  //  */
-  // toSiteIntro() {
-  //   this.router.navigateByUrl("/introduce/intro");
-  // }
+  showPop(analName:string){
+    if(document.getElementById(analName).style.display=='inline')
+      document.getElementById(analName).style.display='none'
+    else
+      document.getElementById(analName).style.display='inline';
+  }
 
-  // /**
-  //  * @description Router to service guide page
-  //  */
-  // toServiceGuide() {
-  //   this.router.navigateByUrl("/introduce/service-guide");
-  // }
+  async runAnalysis(activity:string): Promise<void>{
+    if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
+    if(!this.isSelectedPreprocessed) return alert('선택하신 문서는 전처리되지 않은 문서입니다. 전처리를 먼저 해주세요!');
+    let optionValue =  (<HTMLInputElement> document.getElementById(activity+'_option1')).value ;
+    
+    let data = JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
 
-  // /**
-  //  * @description Router to collected info page
-  //  */
-  // toCollectedInfo() {
-  //   this.router.navigateByUrl("/introduce/collected-info");
-  // }
+      'optionList': optionValue,
+      'analysisName': activity,
+    });
+    
+    // console.log(data);
+    let res = await this.middlewareService.postDataToMiddleware('/textmining',data);
+    
+    this.analysisedData = res.result;
+    this.isDataAnalysised = true;
+  }
 
-  // /**
-  //  * @description Router to member policy page
-  //  */
-  // toMemberPolicy() {
-  //   this.router.navigateByUrl("/introduce/member-policy");
-  // }
+
+  public get isDataAnalysised(): boolean {
+    return this._isDataAnalysised;
+  }
+  public set isDataAnalysised(value: boolean) {
+    this._isDataAnalysised = value;
+  }
+
+  public get analysisedData(): any {
+    return this._analysisedData;
+  }
+  public set analysisedData(value: any) {
+    this._analysisedData = value;
+  }
 }

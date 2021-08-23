@@ -7,6 +7,8 @@ import { PreprocessingComponent } from "./components/preprocessing/preprocessing
 import { AnalysisComponent } from "./components/analysis/analysis.component";
 import { AnalysisMenuComponent } from "./components/analysis-menu/analysis-menu.component";
 import { SharedModule } from "src/app/shared/shared.module";
+import { FileUploadModule } from 'ng2-file-upload';
+import { savedDocForAnalysis } from "./components/savedDocForAnalysis/savedDocForAnalysis.component";
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { SharedModule } from "src/app/shared/shared.module";
     PreprocessingComponent,
     AnalysisComponent,
     AnalysisMenuComponent,
+    savedDocForAnalysis,
   ],
-  imports: [CommonModule, AnalysisRoutingModule, SharedModule],
+  imports: [CommonModule, AnalysisRoutingModule, SharedModule, FileUploadModule],
 })
 export class AnalysisModule {}

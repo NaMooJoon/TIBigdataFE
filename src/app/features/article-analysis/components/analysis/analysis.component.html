@@ -1,65 +1,94 @@
 <div class="content-container">
   <app-analysis-menu></app-analysis-menu>
-  
+
   <section class="content">
-    <p><strong>분석</strong></p>
-    <p> 
-    </p>
+  <app-savedDocForAnalysis (sender)='onMessage($event)'></app-savedDocForAnalysis>
 
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox"></th>
-          <th>검색 키워드</th>
-          <th>수집날짜</th>
-          <th>문서목록</th>
-          <th>통계</th>
-          <th>전처리</th>
-          </tr>
-      </thead>
+    <div class="pop-container">
+      <div class="pop-block">
+        <div class="pop-head" (click)="showPop('count')">빈도수 분석
+          <img
+          src="../../../../assets/icons/help-gray.png"
+        /></div>
+        <div class="pop-body" id="count">
+          분석할 단어수: <input type="number" value="100" min='1' max='500' id='count_option1'>
+          <button (click)="runAnalysis('count')">분석 실행</button>
+      </div>
+    </div>
 
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td>북한+통일</td>
-          <td>2021-03-30 15:30</td>
-          <td>북한이탈주민의 통일에 대한 인식 조사</td>
-          <td>총문서수:3개<br> 평균 단어수:230개</td>
-          <td>
-            <button>미리보기</button>
-            <br>
-            <button>다운로드</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="pop-block">
+      <div class="pop-head" (click)="showPop('tfidf')">TFIDF
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+      <div class="pop-body" id="tfidf">
+        분석할 단어수: <input type="number" value="100" min='1' max='500' id='tfidf_option1'>
+        <button (click)="runAnalysis('tfidf')">분석 실행</button>
+      </div>
+    </div>
+    
+      <div class="pop-block">
+        <div class="pop-head">군집분석
+          <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+        </div>
+        <div class="pop-body" id="bindo">
+      </div>
+    </div>
 
-    <div>빈도수 분석</div>
-    <div>TFIDF</div>
-    <div>군집분석</div>
-    <div>토픽 모델링</div>
-    <br>
-    <div>N-gram</div>
-    <div>유의어분석</div>
-    <div>의미연결망</div>
-    <div>개체명인식</div>
-<!--   
-      <tbody *ngIf="docList">
-        <tr *ngFor="let doc of docList; let i = index"
-          [ngStyle]="{'background-color': i < mainAnnounceNum ? 'rgb(236, 239, 239)' : 'white'}">
-          <td class="doc-num">{{ doc["docId"] }}</td>
-          <td>
-            <div *ngIf="doc['isMainAnnounce']" class="doc-announcement announcement-button">공지</div>
-          </td>
-          <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
-          <td class="doc-postdate">{{ doc["regDate"] }}</td>
-        </tr>
-      </tbody>
+    <div class="pop-block">
+      <div class="pop-head">토픽 모델링
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+      <div class="pop-body" id="bindo">
+      </div>
+    </div>
+
+    <div class="pop-block">
+      <div class="pop-head">N-gram
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+      <div class="pop-body" id="bindo">
+
+      </div>
+    </div>
+
+    <div class="pop-block">
+      <div class="pop-head">유의어분석
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+    </div>
+    
+    <div class="pop-block">
+      <div class="pop-head" (click)="showPop('network')">의미연결망
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+      <div class="pop-body" id="network">
+        분석할 단어수: <input type="number" value="100" min='1' max='500' id='network_option1'>
+        
+        <button (click)="runAnalysis('network')">분석 실행</button>
+      </div>
+    </div>
+    
+    <div class="pop-block">
+      <div class="pop-head">개체명인식
+        <img
+          src="../../../../assets/icons/help-gray.png"
+        />
+      </div>
+    </div>
+
+  </div>
   
-      <tbody *ngIf="!docList.length">
-        <tr>
-          <td class="no-docs" rowspan="4" colspan="4">등록된 게시물이 없습니다.</td>
-        </tr>
-      </tbody> -->
   </section>
 </div>

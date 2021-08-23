@@ -6,6 +6,7 @@ import { ArticleService } from "src/app/core/services/article-service/article.se
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
 
+
 @Component({
   selector: "app-my-docs",
   templateUrl: "./my-docs.component.html",

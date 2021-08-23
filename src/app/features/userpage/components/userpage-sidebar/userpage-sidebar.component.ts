@@ -82,8 +82,7 @@ export class UserpageSidebarComponent implements OnInit {
   }
 
   async toOpenApi(): Promise<void> {
-    const dest =
-      this.ipService.getFrontEndServerIP() + ":" + this.ipService.FLASK_PORT;
+    const dest = this.ipService.getOpenAPIServerIp();
 
     await this.httpClient
       .post(dest, { email: this.authenticationService.getCurrentUser().email }, { responseType: "text" })

@@ -4,10 +4,11 @@
   <section class="content">
     <p><strong>활용 관리</strong></p>
     <p> 
-      {{email}} 님 오늘도 즐거운 하루 되세요!!!
+      {{name}} 님 오늘도 즐거운 하루 되세요!!!
       <br>
       현재까지 당신이 신청한 활용은 {{count}} 개 입니다.
     </p>
+      <button (click)=toRegister()>활용신청</button>
 
     <table>
       <thead>
@@ -16,37 +17,27 @@
           <th class="doc-title">활용명</th>
           <th class="doc-purpose">활용목적</th>
           <th class="doc-postdate">등록일</th>
+          <th class="doc-postdate">만료일</th>
+          <th class="doc-postdate">데이터량</th>
           <th class="doc-manage">관리</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr>
-          <td class="doc-num">1</td>
-          <td class="doc-title">활용명1</td>
-          <td class="doc-purpose">목적1</td>
-          <td class="doc-postdate">등록일</td>
-          <td class="doc-manage">수정/삭제</td>
-        </tr>
-      </tbody>
-<!--   
-      <tbody *ngIf="docList">
-        <tr *ngFor="let doc of docList; let i = index"
-          [ngStyle]="{'background-color': i < mainAnnounceNum ? 'rgb(236, 239, 239)' : 'white'}">
-          <td class="doc-num">{{ doc["docId"] }}</td>
-          <td>
-            <div *ngIf="doc['isMainAnnounce']" class="doc-announcement announcement-button">공지</div>
+        <tr *ngFor="let info of infos; index as idx">
+          <td class="text-center">{{ idx+1 }}</td>
+          <td class="text-center">{{ info['app_name'] }}</td>
+          <td class="text-center">{{ info['app_purpose'] }}</td>
+          <td class="text-center">{{ info['reporting_date'] }}</td>
+          <td class="text-center">{{ info['expiration_date'] }}</td>
+          <td class="text-center">{{ info['traffic'] }}</td>
+          <td class="text-center">
+            <button>수정</button>
+            <button (click)="reissue(info['_id'])">인증키 재발급</button>
+            <button (click)="delete(info['_id'])">삭제</button>
           </td>
-          <td class="doc-title"> <a (click)="navToReadThisDoc(i)">{{ doc["title"] }}</a></td>
-          <td class="doc-postdate">{{ doc["regDate"] }}</td>
         </tr>
       </tbody>
-  
-      <tbody *ngIf="!docList.length">
-        <tr>
-          <td class="no-docs" rowspan="4" colspan="4">등록된 게시물이 없습니다.</td>
-        </tr>
-      </tbody> -->
     </table>
   </section>
 </div>

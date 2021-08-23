@@ -29,7 +29,7 @@ export class ArticleService {
         docTitles[idx] = extractedTitle.trim();
       }
     });
-    docTitles = Array.from(docTitles, item => typeof item === 'undefined' ? "(삭제된 문서 입니다.)" : item);
+    docTitles = Array.from(docTitles, item => typeof item === 'undefined' ? "(삭제된 문서입니다.)" : item);
     return docTitles;
   }
 
