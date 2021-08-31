@@ -14,5 +14,5 @@ collection = db.topics
 i = 0
 for data in dataAll:
     data['topic']
-    inputJson = { "topic" : data['topic'], "docTitle" : data['doc_title'], "docId" : data['doc_id']}
+    inputJson = { "topic" : data['topic'], "docTitle" : data['doc_title'], "hashKey" : data['hash_key']}
     collection.insert(inputJson)

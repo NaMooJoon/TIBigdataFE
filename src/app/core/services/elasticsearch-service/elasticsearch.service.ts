@@ -268,6 +268,7 @@ export class ElasticsearchService {
    * @param startIndex
    */
   multiHashKeySearchComplete(startIndex?: number): void {
+
     this.saveSearchResult(this.searchByManyHashKey(startIndex));
   }
 
@@ -276,11 +277,11 @@ export class ElasticsearchService {
    * @param startIndex A index to indicate where to start search.
    * @param docSize Number of articles to search at one time.
    */
-  searchByManyHashKey(startIndex?: number, docSize?: number): Promise<any> {
+  searchByManyHashKey(startIndex?: number): Promise<any> {
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
-      size: docSize,
+      size: this.numDocsPerPage,
       body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });

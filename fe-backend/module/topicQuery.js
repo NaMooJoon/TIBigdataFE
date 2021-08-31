@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 router.post("/getTopicCounts", (req, res) => {
   topic
-    .aggregate([{ $group: { _id: "$topic", count: { $sum: 1 } } }])
+    .aggregate([{ $group: { hash_key: "$topic", count: { $sum: 1 } } }])
     .then((result) => {
       return res
         .status(200)
@@ -42,15 +42,14 @@ router.post("/getOneTopicDocs", (req, res) => {
       },
       {
         $project: {
-          docId: 1,
-          _id: 0,
+          hashKey: 1,
+          _id : 0,
         },
       },
     ],
     (err, docs) => {
       if (err) console.log(err);
       else {
-        console.log("docs", docs);
         res.json(docs);
       }
     }
@@ -62,6 +61,6 @@ router.post("/getTopicTbl", (req, res) => {
   topic.aggregate([
     { $match: { topic: topicReq } },
   ]);
-}),
+});
 
-(module.exports = router);
+module.exports = router;

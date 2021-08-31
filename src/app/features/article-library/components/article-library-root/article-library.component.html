@@ -12,6 +12,7 @@
       <div class="selection-buttons">
         <button
           *ngFor="let cat of categories; let i = index"
+          [ngStyle]="selectedStyleObject(selectedTp === cat)"
           id="topic"
           (click)="selectCategory($event)"
         >
