@@ -75,8 +75,16 @@ router.post("/setPreprocessed", (req, res) => {
     .updateOne(
       { $and: [ { userEmail: userEmail }, {'keywordList.savedDate' : new Date(savedDate).toISOString() } ] },
       { $set: {"keywordList.$.preprocessed": true} },
-  );
-  return res.status(200).json(new Res(true));
+  ).then((result) => {
+    return res
+      .status(200)
+      .json(new Res(true, "set Preprocessed", null));
+  })
+  .catch((err) => {
+    return res
+      .status(400)
+      .json(new Res(false, "Error", null));
+  });
 });
 
 router.post("/deleteAllMyDocs", (req, res) => {

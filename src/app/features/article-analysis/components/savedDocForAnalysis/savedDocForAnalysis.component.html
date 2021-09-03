@@ -7,11 +7,11 @@
   <table>
     <thead>
       <tr>
-        <th></th>
+        <th>선택</th>
         <th>검색 키워드</th>
         <th>문서목록</th>
         <th>수집날짜</th>
-        <th>통계</th>
+        <!-- <th>통계</th> -->
         <th>전처리</th>
         </tr>
     </thead>
@@ -35,7 +35,7 @@
             </ul>
           </td>
           <td class="text-center">{{ docSet['savedDate_format']}}</td>
-          <td class="text-center">총문서수:{{ docSet['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td>
+          <!-- <td class="text-center">총문서수:{{ docSet['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td> -->
           <td class="text-center">
           <div *ngIf="docSet['preprocessed']">
           <button (click)="emitData('preview',docSet['keyword'],docSet['savedDate'])">미리보기</button>

@@ -1,13 +1,14 @@
+
+  <!-- <img src='../../../../assets/icons/loading.gif' style='position: absolute; display: block; margin: 0px auto;'/> -->
 <div class="content-container">
   <app-analysis-menu></app-analysis-menu>
-
   <section class="content">
   <app-savedDocForAnalysis (sender)='onMessage($event)'></app-savedDocForAnalysis>
 
     <div class="pop-container">
       <div class="pop-block">
         <div class="pop-head" (click)="showPop('count')">빈도수 분석
-          <img
+          <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         /></div>
         <div class="pop-body" id="count">
@@ -18,7 +19,7 @@
 
     <div class="pop-block">
       <div class="pop-head" (click)="showPop('tfidf')">TFIDF
-        <img
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
@@ -29,28 +30,35 @@
     </div>
     
       <div class="pop-block">
-        <div class="pop-head">군집분석
-          <img
-          src="../../../../assets/icons/help-gray.png"
+        <div class="pop-head" (click)="showPop('kmeans')">분할군집분석
+          <img class="tooltip" src="../../../../assets/icons/help-gray.png"
         />
         </div>
-        <div class="pop-body" id="bindo">
-      </div>
+        <div class="pop-body" id="kmeans">
+          분석할 단어수: <input type="number" value="100" min='1' max='500' id='kmeans_option1'>
+          <br>
+          군집개수: <input type="number" value="10" min='1' max='500' id='kmeans_option2'>
+          <button (click)="runAnalysis('kmeans')">분석 실행</button>
+        </div>
     </div>
 
     <div class="pop-block">
-      <div class="pop-head">토픽 모델링
-        <img
+      <div class="pop-head" (click)="showPop('hcluster')">계층군집분석
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
-      <div class="pop-body" id="bindo">
+      <div class="pop-body" id="hcluster">
+        분석할 단어수: <input type="number" value="100" min='1' max='500' id='hcluster_option1'>
+          <br>
+          계층레벨: <input type="number" value="10" min='1' max='500' id='hcluster_option2'>
+          <button (click)="runAnalysis('hcluster')">분석 실행</button>
       </div>
     </div>
 
     <div class="pop-block">
       <div class="pop-head">N-gram
-        <img
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
@@ -61,7 +69,7 @@
 
     <div class="pop-block">
       <div class="pop-head">유의어분석
-        <img
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
@@ -69,7 +77,7 @@
     
     <div class="pop-block">
       <div class="pop-head" (click)="showPop('network')">의미연결망
-        <img
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
@@ -81,14 +89,41 @@
     </div>
     
     <div class="pop-block">
-      <div class="pop-head">개체명인식
-        <img
+      <div class="pop-head">토픽 모델링
+        <img class="tooltip"
           src="../../../../assets/icons/help-gray.png"
         />
       </div>
     </div>
+    </div>  
+  <div class="analysis-result" *ngIf="isDataAnalysised">
+    <strong>분석 결과</strong>
+    </div>
+    <!-- <div class="result-table"> -->
 
-  </div>
+    <figure id="table"></figure>
+    <!-- <table>
+      <tr>
+        <th>No</th>
+        <th>단어</th>
+        <th>빈도</th>
+      </tr>
+      <tbody>
+        <tr *ngFor="let data of analysisedData;index as idx">
+          <td>{{ idx }}</td>
+          <td>{{ data['word'] }}</td>
+          <td>{{ data['value'] }}</td>
+        </tr>
+      </tbody>
+    </table> -->
+  <!-- </div> -->
+  
+  <figure id="bar"></figure>
+  <figure id="wordcloud"></figure>
+  <figure id="network"></figure>
+  <figure id="scatter"></figure>
+  <!-- </div>  -->
+
   
   </section>
 </div>

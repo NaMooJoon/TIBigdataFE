@@ -35,6 +35,7 @@ export class savedDocForAnalysis implements OnInit{
 
   ngOnInit(){
     this.loadSavedDocs();
+    this.emitData(); //send userEmail
   }
 
   
@@ -60,7 +61,7 @@ export class savedDocForAnalysis implements OnInit{
   //   });
   // }
 
-  emitData(activity:string, selectedKeyword:string, selectedSavedDate:string, isSelectedPreprocessed?:boolean){
+  emitData(activity?:string, selectedKeyword?:string, selectedSavedDate?:string, isSelectedPreprocessed?:boolean){
     this.sender.emit(JSON.stringify({
       'activity': activity,
       'email': this.userProfile.email,
