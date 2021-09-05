@@ -103,6 +103,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (this.currentPage === null) this.currentPage = 1;
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
     if (this.currentPage < 1) this.currentPage = 1;
+
     this.elasticsearchService.triggerSearch(this.currentPage);
   }
 
@@ -225,7 +226,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (this.form.value["checkArray"].length == 0) {
       alert("담을 문서가 없습니다! 담을 문서를 선택해주세요.");
     } else {
-      console.log(this.form.value["checkArray"]);
       this.userSavedDocumentService
         .saveNewMyDoc(this.form.value["checkArray"], this._searchKeyword)
         .then(() => {

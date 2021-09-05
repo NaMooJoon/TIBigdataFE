@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 
 const topicSchema = new Schema({
   topic: String,
-  docID: String,
+  hashKey: String,
   docTitle: String,
-  lastUpdate: Date,
 });
+
 const conn = require("../connection/dataConn");
 module.exports = conn.model("topics", topicSchema);

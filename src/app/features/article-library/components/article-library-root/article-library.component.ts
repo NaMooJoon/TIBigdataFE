@@ -20,6 +20,7 @@ export class ArticleLibraryComponent implements OnInit {
 
   //new
   private _totalSavedDocsNum: number;
+  private _selectedTp: string;
 
   private _toggleTopics: boolean[];
   private _institutionList: string[];
@@ -33,10 +34,9 @@ export class ArticleLibraryComponent implements OnInit {
     "경제",
     "사회",
     "국제",
-    "IT",
+    "IT_과학",
     "스포츠",
     "문화",
-    "과학",
   ];
   private _dict_orders_1: string[] = [
     "전체",
@@ -64,6 +64,7 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   selectedStyleObject(flag: boolean): Object {
+
     if (flag) {
       return {
         color: "white",
@@ -120,22 +121,8 @@ export class ArticleLibraryComponent implements OnInit {
 
     switch (id) {
       case "topic": {
-        let docIDs = await this.getDocIDsFromTopic(ct);
-        docIDs.map((e) => this.articleService.addHashKey(e));
-        let partialIDs: Object[] = this.articleService
-          .getList()
-          .slice(0, this.elasticsearchService.getNumDocsPerPage());
-        const ids: string[] = [];
-        for (let i = 0; i < partialIDs.length; i++) {
-          ids.push(partialIDs[i]["docId"]);
-        }
-
-
-        this.elasticsearchService.setKeyword(ct);
-        this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
-        this.elasticsearchService.setArticleNumChange(docIDs.length);
-        this.elasticsearchService.setHashKeys(ids);
-        this.elasticsearchService.multiHashKeySearchComplete();
+        this.cat_button_choice[0] = ct;
+        this.selectTopic(ct);
       }
 
       case "dict": {
@@ -145,6 +132,7 @@ export class ArticleLibraryComponent implements OnInit {
 
       case "inst": {
         this.cat_button_choice[2] = ct;
+        console.log(doc);
         this.selectInstitution(doc);
         break;
       }
@@ -245,5 +233,45 @@ export class ArticleLibraryComponent implements OnInit {
   }
   public set totalSavedDocsNum(value: number) {
     this._totalSavedDocsNum = value;
+  }
+  public get selectedTp(): string {
+    return this._selectedTp;
+  }
+  public set selectedTp(value: string) {
+    this._selectedTp = value;
+  }
+
+  /**
+   * @description Select institutions and set search mode as selected
+   * @param institution
+   */
+  async selectTopic(tp: string) {
+
+    if(tp === "전체"){
+      this.elasticsearchService.setSearchMode(SearchMode.ALL);
+      this.selectedTp = "전체";
+      this.elasticsearchService.triggerSearch(1);
+    } else {
+      this.selectedTp = tp;
+
+      let hashKeys = await this.getDocIDsFromTopic(tp);
+      hashKeys.map((e) => this.articleService.addHashKey(e));
+
+      let partialIDs: Object[] = this.articleService
+        .getList()
+        .slice(0, this.elasticsearchService.getNumDocsPerPage());
+
+      const ids: string[] = [];
+
+      for (let i = 0; i < partialIDs.length; i++) {
+        ids.push(partialIDs[i]["hashKey"]);
+      }
+
+      this.elasticsearchService.setKeyword(tp);
+      this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
+      this.elasticsearchService.setArticleNumChange(hashKeys.length);
+      this.elasticsearchService.setHashKeys(ids);
+      this.elasticsearchService.multiHashKeySearchComplete();
+    }
   }
 }

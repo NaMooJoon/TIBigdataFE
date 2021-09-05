@@ -113,10 +113,13 @@ router.post("/deleteSelectedMyDocs", (req, res) => {
   let userEmail = req.body.userEmail;
   let docHashKeys = req.body.docHashKeys;
   let savedDate = req.body.savedDate;
+
+  console.log(docHashKeys);
+
   myDoc
     .findOneAndUpdate(
       { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
-      { $pull: { 'keywordList.savedDocHashKeys' : {$each : docHashKeys} } },
+      { $pull : {'keywordList.$.savedDocHashKeys' :  {$in :docHashKeys }}  },
       { upsert: true }
     )
     .then((result) => {
