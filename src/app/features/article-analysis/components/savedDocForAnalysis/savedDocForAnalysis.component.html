@@ -3,7 +3,11 @@
 </section>
 
 <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
-  <h1>내 보관함</h1>
+  <span class="section-header">내 보관함</span>
+  <span class="section-info">분석하실 문서를 선택해주세요.</span>
+  <hr>
+  
+  <div class="savedDocTable">
   <table>
     <thead>
       <tr>
@@ -15,10 +19,9 @@
         <th>전처리</th>
         </tr>
     </thead>
-  </table>
+  <!-- </table> -->
   
-  <div class="savedDocTable">
-    <table>
+    <!-- <table> -->
     <tbody>
       <tr *ngFor="let docSet of savedDocs;index as idx">
           <td><input 
@@ -46,4 +49,6 @@
     </tbody>
   </table>
   </div>
+  
+  <hr>
 </section>

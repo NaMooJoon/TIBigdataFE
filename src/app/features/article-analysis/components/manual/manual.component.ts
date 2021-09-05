@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-manual",
   templateUrl: "./manual.component.html",
-  styleUrls: ["./manual.component.less"],
+  styleUrls: ["../../analysis-style.less"],
 })
 export class ManualComponent implements OnInit {
   constructor(public router: Router) {}

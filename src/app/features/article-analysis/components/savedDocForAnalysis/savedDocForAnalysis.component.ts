@@ -11,7 +11,7 @@ import { EventEmitter } from "@angular/core";
 @Component({
   selector: "app-savedDocForAnalysis",
   templateUrl: "./savedDocForAnalysis.component.html",
-  styleUrls: ["./savedDocForAnalysis.component.less"],
+  styleUrls: ["../../analysis-style.less"],
 })
 
 export class savedDocForAnalysis implements OnInit{

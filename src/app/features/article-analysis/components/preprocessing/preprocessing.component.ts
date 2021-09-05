@@ -7,7 +7,7 @@ import * as d3 from 'd3';
 @Component({
   selector: "app-preprocessing",
   templateUrl: "./preprocessing.component.html",
-  styleUrls: ["./preprocessing.component.less"],
+  styleUrls: ["../../analysis-style.less"],
 })
 
 export class PreprocessingComponent extends abstractAnalysis implements OnInit {
@@ -162,7 +162,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
   drawTable(){
     let data:Array<string> = this.preprocessedData;
-    const table = d3.select("figure#table").append("table").style('width','100%');
+    const table = d3.select("figure#table").append("table").attr('class','result-table').style('width','100%');
 
       const th = table.append("tr")
       .style('padding','15px 0px')

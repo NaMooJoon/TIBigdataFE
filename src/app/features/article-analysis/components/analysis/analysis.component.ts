@@ -6,7 +6,7 @@ import { dragDisable } from "d3";
 @Component({
   selector: "app-analysis",
   templateUrl: "./analysis.component.html",
-  styleUrls: ["./analysis.component.less"],
+  styleUrls: ['../../analysis-style.less'],
 })
 export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
@@ -21,10 +21,16 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   ngOnInit(): void {}
  
   showPop(analName:string){
-    if(document.getElementById(analName).style.display=='inline')
+    if(document.getElementById(analName).style.display=='inline'){
       document.getElementById(analName).style.display='none'
-    else
+      document.getElementById(analName+"-head").style.background='none';
+      document.getElementById(analName+"-head").style.color='black';
+    }
+    else{
       document.getElementById(analName).style.display='inline';
+      document.getElementById(analName+"-head").style.background='lightskyblue';
+      document.getElementById(analName+"-head").style.color='white';
+    }
   }
 
   async runAnalysis(activity:string): Promise<void>{
