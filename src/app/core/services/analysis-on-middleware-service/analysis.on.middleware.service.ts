@@ -9,7 +9,8 @@ import { ArticleService } from "../article-service/article.service";
 })
 
 export class AnalysisOnMiddlewareService {
-    private URL = this.ipService.getMiddlewareServerIp();
+    private middleware_URL = this.ipService.getMiddlewareServerIp();
+    private frontDB_URL = this.ipService.getFrontDBServerIp();
 
     constructor(
         private ipService: IpService,
@@ -20,11 +21,22 @@ export class AnalysisOnMiddlewareService {
 
     async postDataToMiddleware(route:string, data: string): Promise<any> {
         
-        // this.http.DefaultRequestHeaders.Add("Accept", "application/json");
-        // this.http.DefaultRequestHeaders.Add("Content-Type", "application/json");
-        // const headers = new HttpHeaders().set('Content-Type', 'application/json');
         let res: any = await this.http
-            .post<any>(this.URL+route, data, {'headers':{'Content-Type': 'application/json'}})
+            .post<any>(this.middleware_URL+route, data, {'headers':{'Content-Type': 'application/json'}})
+            .toPromise();
+
+            if(res == undefined) {
+                // alert('내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!');
+                return null;
+            }
+
+        return res;
+    }
+
+    async postDataToFEDB(route:string, data: string): Promise<any> {
+        
+        let res: any = await this.http
+            .post<any>(this.frontDB_URL+route, data, {'headers':{'Content-Type': 'application/json'}})
             .toPromise();
 
             if(res == undefined) alert('내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!');

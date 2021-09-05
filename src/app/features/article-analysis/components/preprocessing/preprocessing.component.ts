@@ -1,28 +1,87 @@
 import { stringify } from "@angular/compiler/src/util";
-import { Component, OnInit } from "@angular/core";
-import { FileUploader } from 'ng2-file-upload';
+import { Component, OnInit, Output } from "@angular/core";
 import { abstractAnalysis } from "../abstractAnalysisPage";
 import $ from 'jquery';
-
-const URL = '/uploadDict';
+import * as d3 from 'd3';
 
 @Component({
   selector: "app-preprocessing",
   templateUrl: "./preprocessing.component.html",
-  styleUrls: ["./preprocessing.component.less"],
+  styleUrls: ["../../analysis-style.less"],
 })
 
 export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
   private _isDataPreprocessed: boolean = false;
   private _preprocessedData: Array<string>;
-
-  //uploadDict
-  // public uploader:FileUploader = new FileUploader({url: URL});
+  uploadedDict: Object;
   // private _previewPreprocessed: boolean;
 
   ngOnInit(): void {
   }
+
+  // uploadDict(dictType:string){
+  //   this.insertDictToDB(dictType);
+  // }
+
+  openTextFile(dictType:string){
+    console.log('opened csv file');
+    let input = document.createElement("input");
+
+    input.type = "file";
+    input.accept =".csv";
+
+    input.click();
+    input.onchange= (event:Event) => {
+      
+      let target = <HTMLInputElement> event.target;
+      // console.log(target.files);
+      // if(target.files.length==0) 
+      //   return alert('사전이 업로드되지 않았습니다.');
+      // console.log("fileUpload:"+(event.target).files[0].name);
+      this.processFile(target.files[0],dictType);
+      // return this.uploadedDict;
+    };
+  }
+
+  async processFile(file:File, dictType:string){
+    console.log('csv->json');
+    let reader = new FileReader();
+    let csv_string: string;
+    reader.readAsText(file, "UTF-8");
+
+    // console.log("성공?"+reader.error);
+
+    reader.onload= ()=> {
+      csv_string = <string> reader.result;
+      // console.log("csvfile:"+csv_string);
+      const rows = csv_string.split("\r\n"); 
+      let jsonArray = {};
+      for(let i = 0; i < rows.length; i++){ 
+        let words = rows[i].split(",");
+        let header = words.shift();
+        jsonArray[header]= words;
+      } 
+        
+      let data = JSON.stringify({
+        'userEmail': this.email,
+        'dictType': dictType,
+        'csv': jsonArray,
+      });
+      console.log(data);
+      this.middlewareService.postDataToFEDB('/usersDict/uploadDict', data);
+      alert('사전 업로드가 완료되었습니다.');
+        // return jsonArray;
+        // this.uploadedDict = jsonArray;
+        // console.log("uploadedDict",this.uploadedDict);
+    };
+  }
+
+  // insertDictToDB(dictType:string){
+  //   console.log('reading..');
+  //   let csv = this.openTextFile();
+  //   console.log('reading done',csv);
+  // }
 
   // async uploadDict(event:any){
   //   this.uploader.clearQueue();
@@ -44,21 +103,16 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   //       this.uploader.addToQueue(filteredFiles, options, filters);
   //   }
 
-  //   function csvToJSON(csv_string){ // 1. 문자열을 줄바꿈으로 구분 => 배열에 저장 
-  //     const rows = csv_string.split("\r\n"); // 줄바꿈을 \n으로만 구분해야하는 경우, 아래 코드 사용 
-  //     // const rows = csv_string.split("\n"); // 2. 빈 배열 생성: CSV의 각 행을 담을 JSON 객체임 
-  //     const jsonArray = []; // 3. 제목 행 추출 후, 콤마로 구분 => 배열에 저장 
-  //     const header = rows[0].split(","); // 4. 내용 행 전체를 객체로 만들어, jsonArray에 담기 
-  //     for(let i = 1; i < rows.length; i++){ // 빈 객체 생성: 각 내용 행을 객체로 만들어 담아둘 객체임 
-  //       let obj = {}; // 각 내용 행을 콤마로 구분 
-  //       let row = rows[i].split(","); // 각 내용행을 {제목1:내용1, 제목2:내용2, ...} 형태의 객체로 생성 
-  //       for(let j=0; j < header.length; j++){ 
-  //         obj[header[j]] = row[j]; 
-  //       } // 각 내용 행의 객체를 jsonArray배열에 담기 
-  //       jsonArray.push(obj); } 
-  //       // 5. 완성된 JSON 객체 배열 반환 
-  //       // return jsonArray; // 문자열 형태의 JSON으로 반환할 경우, 아래 코드 사용 
-  //       return JSON.stringify(jsonArray); 
+  //   function csvToJSON(file: File){
+  //     // loadDataFile (파일 : 파일) : void {
+  //       const fileReader = new FileReader();
+  //       fileReader.onload = e =>{
+  //         file.text
+  //       };
+  //       fileReader.readAsText (파일 이름);
+  //   }
+      
+      
   //   }
 
   // }
@@ -81,6 +135,8 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
       if(node.checked) wordclass += parseInt(node.value);
     });
 
+    this.LoadingWithMask();
+
     let data = JSON.stringify({
       'userEmail': this.email, 
       'keyword': this.selectedKeyword, 
@@ -89,7 +145,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
       'synonym': (<HTMLInputElement>document.getElementById('synonym_user')).checked,
       'stopword': (<HTMLInputElement>document.getElementById('stopword_user')).checked,
       'compound': (<HTMLInputElement>document.getElementById('compound_user')).checked,
-      'wordclass': wordclass.toString() //(100) 동사, 010(명사), 001(형용사)
+      'wordclass': wordclass.toString().padStart(3, '0') //(100) 동사, 010(명사), 001(형용사)
     });
     
     // console.log(data);
@@ -98,7 +154,33 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     this.userSavedDocumentService.setMyDocPreprocessed(this.selectedSavedDate);
     this.preprocessedData = res.result;
     this.isDataPreprocessed = true;
+    this.drawTable();
+    this.closeLoadingWithMask();
+
+    alert("전처리 완료되었습니다");
   }
+
+  drawTable(){
+    let data:Array<string> = this.preprocessedData;
+    const table = d3.select("figure#table").append("table").attr('class','result-table').style('width','100%');
+
+      const th = table.append("tr")
+      .style('padding','15px 0px')
+      .style('font-weight','500')
+      .style('text-align','center');
+      
+      th.append('th').text('No');
+      th.append('th').text('단어');
+
+      const tbody = table.append("tbody")
+      .style('text-align','center');
+
+      for(let i=0;i<data.length;i++){
+        const tr = tbody.append("tr");
+        tr.append("td").text(i+1);
+        tr.append("td").text(data[i]);
+      }
+    }
   
   public get isDataPreprocessed() {
     return this._isDataPreprocessed;

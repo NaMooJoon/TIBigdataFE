@@ -11,7 +11,7 @@ import { EventEmitter } from "@angular/core";
 @Component({
   selector: "app-savedDocForAnalysis",
   templateUrl: "./savedDocForAnalysis.component.html",
-  styleUrls: ["./savedDocForAnalysis.component.less"],
+  styleUrls: ["../../analysis-style.less"],
 })
 
 export class savedDocForAnalysis implements OnInit{
@@ -35,6 +35,7 @@ export class savedDocForAnalysis implements OnInit{
 
   ngOnInit(){
     this.loadSavedDocs();
+    this.emitData(); //send userEmail
   }
 
   
@@ -60,7 +61,7 @@ export class savedDocForAnalysis implements OnInit{
   //   });
   // }
 
-  emitData(activity:string, selectedKeyword:string, selectedSavedDate:string, isSelectedPreprocessed?:boolean){
+  emitData(activity?:string, selectedKeyword?:string, selectedSavedDate?:string, isSelectedPreprocessed?:boolean){
     this.sender.emit(JSON.stringify({
       'activity': activity,
       'email': this.userProfile.email,
