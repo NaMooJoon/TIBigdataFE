@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 router.post("/getTopicCounts", (req, res) => {
   topic
-    .aggregate([{ $group: { hash_key: "$topic", count: { $sum: 1 } } }])
+    .aggregate([{ $group: { hashKey: "$topic", count: { $sum: 1 } } }])
     .then((result) => {
       return res
         .status(200)

@@ -39,6 +39,8 @@ export class MyDocsComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
   ) {
+    this.savedDate = null;
+    this.savedKeywords = null;
     this.setArticleForm();
   }
 
@@ -54,7 +56,10 @@ export class MyDocsComponent implements OnInit {
     this.isSavedDocsLoaded = false;
     this.totalSavedDocsNum = await this.userSavedDocumentService.getTotalDocNum(this.keyword, this.savedDate);
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
-    if (this.isSavedDocsEmpty) return;
+    if (this.isSavedDocsEmpty) {
+      this.deleteAllMyDocs();
+      return;
+    }
     pageNum = this.handlePageOverflow(pageNum);
     this.currentPage = pageNum;
     this.savedDocs = await this.userSavedDocumentService.getMyDocs( this.savedDate, pageNum);
@@ -293,8 +298,11 @@ export class MyDocsComponent implements OnInit {
     if(this.savedKeywords.length === 0){
       this.isSavedKeywordsEmpty = true;
     }
-    this.keyword = this.savedKeywords[0].keyword;
-    this.savedDate = this.savedKeywords[0].savedDate;
+
+    if(this.savedDate == null){
+      this.keyword = this.savedKeywords[0].keyword;
+      this.savedDate = this.savedKeywords[0].savedDate;
+    }
 
     this.loadSavedDocs(1);
   }
@@ -303,11 +311,11 @@ export class MyDocsComponent implements OnInit {
     if (this.form.value["checkArray"].length == 0) {
       alert("삭제할 문서가 없습니다! 삭제할 문서를 선택해주세요.");
     } else {
+      console.log(this.form.value["checkArray"]);
       this.userSavedDocumentService.eraseSelectedMyDocs(this.form.value["checkArray"], this.savedDate).then(
         () => this.loadSavedKeywords(),
-        this.form.value["checkArray"].clear()
       );
     }
-
+    this.form.value["checkArray"].clear;
   }
 }
