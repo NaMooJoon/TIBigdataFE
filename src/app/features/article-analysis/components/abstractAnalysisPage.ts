@@ -1,10 +1,15 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Directive, Injectable, OnInit } from "@angular/core";
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
 @Injectable({
     providedIn: "root",
   })
+
+@Directive({
+    selector: '[appChanges]'
+})
+  
   
 export abstract class abstractAnalysis{
 
