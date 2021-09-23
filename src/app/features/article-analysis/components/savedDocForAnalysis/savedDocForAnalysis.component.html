@@ -19,9 +19,6 @@
         <th>전처리</th>
         </tr>
     </thead>
-  <!-- </table> -->
-  
-    <!-- <table> -->
     <tbody>
       <tr *ngFor="let docSet of savedDocs;index as idx">
           <td><input 
@@ -41,8 +38,8 @@
           <!-- <td class="text-center">총문서수:{{ docSet['savedDocHashKeys'].length}}개<br> 평균 단어수:230개</td> -->
           <td class="text-center">
           <div *ngIf="docSet['preprocessed']">
-          <button (click)="emitData('preview',docSet['keyword'],docSet['savedDate'])">미리보기</button>
-          <button (click)="emitData('download',docSet['keyword'], docSet['savedDate'])">다운로드</button>
+          <button class="tablebtn"(click)="emitData('preview',docSet['keyword'],docSet['savedDate'])">미리보기</button>
+          <button class="tablebtn"(click)="emitData('download',docSet['keyword'], docSet['savedDate'])">다운로드</button>
           </div>
         </td>
     </tr>
