@@ -47,7 +47,7 @@ export class savedDocForAnalysis implements OnInit{
    async loadSavedDocs(): Promise<void> {
     this.savedDocs = await this.userSavedDocumentService.getAllMyDocs();
     this.isSavedDocsLoaded = true;
-
+    console.log(this.savedDocs);
     this.totalSavedDocsNum = this.savedDocs.length;
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
   }

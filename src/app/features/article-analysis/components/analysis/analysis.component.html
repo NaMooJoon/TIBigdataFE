@@ -36,13 +36,26 @@
       />
       </div>
       <div class="pop-body" id="kmeans">
-        분석할 단어수: <input type="number" value="100" min='1' max='500' id='kmeans_option1'>
-        <br>
-        군집개수: <input type="number" value="10" min='1' max='500' id='kmeans_option2'>
+        군집개수: <input type="number" value="10" min='1' max='500' id='kmeans_option1'>
+        
         <button (click)="runAnalysis('kmeans')">분석 실행</button>
       </div>
   </div>
 
+  <div class="pop-block">
+    <div class="pop-head" id="network-head" (click)="showPop('network')">의미연결망
+      <img class="tooltip"
+        src="../../../../assets/icons/help-gray.png"
+      />
+    </div>
+    <div class="pop-body" id="network">
+      분석할 단어수: <input type="number" value="100" min='1' max='500' id='network_option1'>
+      <br>
+      연결 강도(%) <input type="number" value="50" min='1' max='100' id='network_option2'>
+      <button (click)="runAnalysis('network')">분석 실행</button>
+    </div>
+  </div>
+  
   <div class="pop-block">
     <div class="pop-head" id="hcluster-head" (click)="showPop('hcluster')">계층군집분석
       <img class="tooltip"
@@ -75,19 +88,7 @@
       />
     </div>
   </div>
-  
-  <div class="pop-block">
-    <div class="pop-head" id="network-head" (click)="showPop('network')">의미연결망
-      <img class="tooltip"
-        src="../../../../assets/icons/help-gray.png"
-      />
-    </div>
-    <div class="pop-body" id="network">
-      분석할 단어수: <input type="number" value="100" min='1' max='500' id='network_option1'>
-      
-      <button (click)="runAnalysis('network')">분석 실행</button>
-    </div>
-  </div>
+
   
   <div class="pop-block">
     <div class="pop-head">토픽 모델링

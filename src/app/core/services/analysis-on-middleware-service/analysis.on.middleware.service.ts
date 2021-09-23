@@ -21,7 +21,7 @@ export class AnalysisOnMiddlewareService {
 
     async postDataToMiddleware(route:string, data: string): Promise<any> {
         
-        let res: any = await this.http
+        let res: QueryResponse = await this.http
             .post<any>(this.middleware_URL+route, data, {'headers':{'Content-Type': 'application/json'}})
             .toPromise();
 
@@ -35,12 +35,12 @@ export class AnalysisOnMiddlewareService {
 
     async postDataToFEDB(route:string, data: string): Promise<any> {
         
-        let res: any = await this.http
+        let res: QueryResponse = await this.http
             .post<any>(this.frontDB_URL+route, data, {'headers':{'Content-Type': 'application/json'}})
             .toPromise();
 
-            if(res == undefined) alert('내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!');
+            if(res == undefined || res.isSuccess==false) alert('내부적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요!');
 
-        return res;
+        return res.payload;
     }
 }

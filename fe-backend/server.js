@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const PORT = 14000;
 
-const usersDict = require('./module/usersDictQuery');
+const textMiningQuery = require('./module/textMiningQuery');
 const apiInfo = require('./module/apiQuery');
 const userAuth = require('./module/userAuthQuery');
 const keepDoc = require('./module/keepMyDocQuery');
@@ -18,7 +18,7 @@ const rcmds = require('./module/rcmdQuery');
 
 app.use(cors());
 app.use(express.json());
-app.use('/usersDict', usersDict);
+app.use('/textmining', textMiningQuery);
 app.use('/api', apiInfo);
 app.use('/users', userAuth);
 app.use('/myDoc',keepDoc);

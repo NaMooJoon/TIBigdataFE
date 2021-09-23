@@ -12,45 +12,53 @@
     font-size: 1.3rem;
     font-weight: 500 ;
 }
+
+hr{
+  width: 100%;
+  color: darkgray;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+// Table
+table {
+  width:100%;
+  border-collapse: separate;
+  text-align : center;
+  border-spacing: 1px;
+  line-height: 1.5;
   
-  hr{
-    width: 100%;
-    color: darkgray;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  // Table
-  table {
-    width:100%;
-    border-collapse: separate;
-    text-align : center;
-    border-spacing: 1px;
-    line-height: 1.5;
+}
+
+
+th {
+  // width: 100%;
+  padding    : 15px 0px;
+  font-weight: 500;
+  color: #fff;
+  background: lightskyblue ;
+}
+
+td {
+  // width: 100%;
+  border-bottom : 1px solid lightgray;
+  height        : 57px;
+  vertical-align: middle;
+}
+
+.savedDocTable{
+  overflow-x:hidden;
+  overflow:auto;
+  height: 500px;
+  margin: 1.5rem 0rem;
+}
     
-  }
-  
-  
-  th {
-    padding    : 15px 0px;
-    font-weight: 500;
-    color: #fff;
-    background: lightskyblue ;
-  }
-  
-  td {
-    border-bottom : 1px solid lightgray;
-    height        : 57px;
-    vertical-align: middle;
-  }
-  
-  .savedDocTable{
-    overflow-x:hidden;
-    overflow:auto;
-    height: 500px;
-    margin: 1.5rem 0rem;
-  }
-    
+
+.tablebtn{
+  font-size: 1.2rem;
+}
+
+
 // Preprocessing
 
 .option-header{
@@ -75,9 +83,9 @@
     margin:30px 0px;
 }
 
-.result-table{
+.result-pretable{
     height: 200px;
-    overflow:scroll;
+    overflow:auto;
 }
 
 
@@ -182,9 +190,9 @@
   padding-left : 3px;
 }
 
-input{
-  width: 100px;
-}
+// input{
+//   width: 100px;
+// }
 
 .pop-container{
   margin: 10px;

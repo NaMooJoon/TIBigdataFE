@@ -69,7 +69,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
         'csv': jsonArray,
       });
       console.log(data);
-      this.middlewareService.postDataToFEDB('/usersDict/uploadDict', data);
+      this.middlewareService.postDataToFEDB('/textmining/uploadDict', data);
       alert('사전 업로드가 완료되었습니다.');
         // return jsonArray;
         // this.uploadedDict = jsonArray;
@@ -129,13 +129,17 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   async runPreprocessing():Promise<void>{
     let wordclass: number = 0;
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
+    if(this.isSelectedPreprocessed)  if(!confirm('선택하신 문서는 이미 전처리된 문서입니다. 새로 전처리하시겠습니까?')) return ;
 
     let nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('wordclass');
     nodeList.forEach((node) => {
       if(node.checked) wordclass += parseInt(node.value);
     });
 
+    if(wordclass==0) return alert("품사를 한 개 이상 선택해주세요!");
+
     this.LoadingWithMask();
+    document.getElementById("cancelbtn").addEventListener("click", this.closeLoadingWithMask);
 
     let data = JSON.stringify({
       'userEmail': this.email, 
@@ -150,37 +154,25 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     
     // console.log(data);
     let res = await this.middlewareService.postDataToMiddleware('/preprocessing',data);
-    
+    if(res.returnCode!=200){
+      alert(res.errMsg);
+      this.closeLoadingWithMask();
+      return ;
+    };
+
     this.userSavedDocumentService.setMyDocPreprocessed(this.selectedSavedDate);
     this.preprocessedData = res.result;
     this.isDataPreprocessed = true;
-    this.drawTable();
+
     this.closeLoadingWithMask();
+    console.log("preview", this.preprocessedData);
+    this.clearResult();
+    this.drawPreTable(this.preprocessedData, "runProcessing");
 
     alert("전처리 완료되었습니다");
   }
 
-  drawTable(){
-    let data:Array<string> = this.preprocessedData;
-    const table = d3.select("figure#table").append("table").attr('class','result-table').style('width','100%');
-
-      const th = table.append("tr")
-      .style('padding','15px 0px')
-      .style('font-weight','500')
-      .style('text-align','center');
-      
-      th.append('th').text('No');
-      th.append('th').text('단어');
-
-      const tbody = table.append("tbody")
-      .style('text-align','center');
-
-      for(let i=0;i<data.length;i++){
-        const tr = tbody.append("tr");
-        tr.append("td").text(i+1);
-        tr.append("td").text(data[i]);
-      }
-    }
+  
   
   public get isDataPreprocessed() {
     return this._isDataPreprocessed;

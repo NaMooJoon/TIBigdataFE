@@ -62,7 +62,7 @@ export class UserSavedDocumentService {
 
     let mydocs:Array<MydocModel> = res.payload["keywordList"];
     for(let doc of mydocs){
-      let docHashKeys:Array<string> = mydocs.find(object => "savedDocHashKeys" in object)["savedDocHashKeys"];
+      let docHashKeys:Array<string> = doc["savedDocHashKeys"];
       doc['title'] = await this.articleService.convertDocHashKeysToTitles(docHashKeys);
       doc['savedDate_format'] = moment(new Date(doc['savedDate'])).format('YYYY년 MM월 DD일 HH시 mm분');
       doc['preprocessed'] = doc['preprocessed']==true? true:false;
