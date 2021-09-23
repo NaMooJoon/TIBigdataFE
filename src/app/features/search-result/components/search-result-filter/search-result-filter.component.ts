@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import {SearchMode} from '../../../../core/enums/search-mode';
+import {ArticleService} from '../../../../core/services/article-service/article.service';
+import {AnalysisDatabaseService} from '../../../../core/services/analysis-database-service/analysis.database.service';
 
 @Component({
   selector: "app-search-result-filter",
@@ -19,18 +21,24 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _datePickerEndDate: string;
   private _selectedDate: string;
 
-  public topics = [
-    "전체",
+  private _selectedTp: string;
+
+  private _mustKeyword: string = null;
+  private _mustNotKeyword : string = null;
+
+  public _topics = [
     "정치",
     "경제",
     "사회",
-    "문화",
     "국제",
-    "지역",
+    "IT_과학",
     "스포츠",
+    "문화",
   ];
 
-  constructor(private elasticsearchService: ElasticsearchService) {
+  constructor(private elasticsearchService: ElasticsearchService,
+              private articleService: ArticleService,
+              private analysisDatabaseService: AnalysisDatabaseService) {
     this.articleSubscriber = this.elasticsearchService
       .getArticleChange()
       .subscribe(() => {
@@ -99,89 +107,92 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   public get institutionList(): Array<Object> {
     return this._institutionList;
   }
+
   public set institutionList(value: Array<Object>) {
     this._institutionList = value;
   }
+
   public get selectedInst(): string {
     return this._selectedInst;
   }
+
   public set selectedInst(value: string) {
     this._selectedInst = value;
   }
 
   //new
-  async selectDate(e){
+  async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();
-    let startTime : Date;
-    let endTime : Date;
+    let startTime: Date;
+    let endTime: Date;
     let date = new Date();
 
     switch (this.selectedDate) {
       case "1일": {
         endTime = new Date()
-        startTime = new Date(date.setDate(date.getDate()-1));
+        startTime = new Date(date.setDate(date.getDate() - 1));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "1주":{
+      case "1주": {
         endTime = new Date()
-        startTime = new Date(date.setDate(date.getDate()-7));
+        startTime = new Date(date.setDate(date.getDate() - 7));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "1개월":{
+      case "1개월": {
         endTime = new Date()
-        startTime = new Date(date.setMonth(date.getMonth()-1));
+        startTime = new Date(date.setMonth(date.getMonth() - 1));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "3개월":{
+      case "3개월": {
         endTime = new Date()
-        startTime = new Date(date.setMonth(date.getMonth()-3));
+        startTime = new Date(date.setMonth(date.getMonth() - 3));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "6개월":{
+      case "6개월": {
         endTime = new Date()
-        startTime = new Date(date.setMonth(date.getMonth()-6));
+        startTime = new Date(date.setMonth(date.getMonth() - 6));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "1년":{
+      case "1년": {
         endTime = new Date()
-        startTime = new Date(date.setFullYear(date.getFullYear()-1));
+        startTime = new Date(date.setFullYear(date.getFullYear() - 1));
 
         this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
         break;
       }
 
-      case "전체":{
+      case "전체": {
         this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
         this.elasticsearchService.triggerSearch(1);
 
         break;
       }
 
-      default :{
-        if((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
+      default : {
+        if ((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
           alert("날짜를 선택해 주세요.");
-        }else{
+        } else {
           let endTime2 = this.datePickerEndDate;
           let startTime2 = this.datePickerStartDate;
 
-          if(startTime2 > endTime2){
+          if (startTime2 > endTime2) {
             alert("날짜를 다시 선택해 주세요.");
-          }else{
+          } else {
             this.startDateSearch(startTime2, endTime2);
           }
         }
@@ -214,6 +225,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   setDatePickerStartDate(e) {
     this._datePickerStartDate = e.target.value;
   }
+
   public get datePickerStartDate(): string {
     return this._datePickerStartDate;
   }
@@ -221,6 +233,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   setDatePickerEndDate(e) {
     this._datePickerEndDate = e.target.value;
   }
+
   public get datePickerEndDate(): string {
     return this._datePickerEndDate;
   }
@@ -228,7 +241,65 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   public get selectedDate(): string {
     return this._selectedDate;
   }
+
   public set selectedDate(value: string) {
     this._selectedDate = value;
   }
+
+  public get topics(): string[] {
+    return this._topics;
+  }
+
+  public get selectedTp(): string {
+    return this._selectedTp;
+  }
+
+  public set selectedTp(value: string) {
+    this._selectedTp = value;
+  }
+
+  async selectTopic($event) {
+    this.selectedTp = $event.target.innerText;;
+
+    let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
+    hashKeys.map((e) => this.articleService.addHashKey(e));
+
+    let partialIDs: Object[] = this.articleService
+      .getList()
+      .slice(0, this.elasticsearchService.getNumDocsPerPage());
+
+    const ids: string[] = [];
+
+    for (let i = 0; i < partialIDs.length; i++) {
+      ids.push(partialIDs[i]["hashKey"]);
+    }
+
+    this.elasticsearchService.setKeyword(this.selectedTp);
+    this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
+    this.elasticsearchService.setArticleNumChange(hashKeys.length);
+    this.elasticsearchService.setHashKeys(ids);
+    this.elasticsearchService.multiHashKeySearchComplete();
+  }
+
+  async getDocIDsFromTopic(category) {
+    return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
+  }
+
+  selectKeywords($event) {
+    console.log(this._mustKeyword,this._mustNotKeyword)
+
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
+
+  mustKeyword(e) {
+    this._mustKeyword = e.target.value.toString();
+  }
+
+  mustNotKeyword(e) {
+    this._mustNotKeyword = e.target.value.toString();
+  }
+
 }

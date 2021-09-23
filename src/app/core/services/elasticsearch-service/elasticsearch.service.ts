@@ -33,6 +33,8 @@ export class ElasticsearchService {
   //new
   private startTime: string = null;
   private endTime: string = null;
+  private _mustKeyword: string = null;
+  private _mustNotKeyword : string = null;
 
   constructor(
     private ipSvc: IpService,
@@ -180,7 +182,6 @@ export class ElasticsearchService {
   searchByText(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
-
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -553,5 +554,10 @@ export class ElasticsearchService {
       },
       _source: this.esQueryModel.getSearchSource(),
     });
+  }
+
+  setSelectedKeyword(mustKeyword: string, mustNotKeyword: string){
+    this._mustKeyword = mustKeyword;
+    this._mustNotKeyword = mustNotKeyword;
   }
 }
