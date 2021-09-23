@@ -26,10 +26,19 @@
         <h3>결과 내 재검색</h3>
         <div class="input-container">
           <div class="text-inputs">
-            <input type="text" placeholder="키워드 포함"/>
-            <input type="text" placeholder="키워드 제외"/>
+            <input
+              type="text"
+              placeholder="키워드 포함"
+              (change)="mustKeyword($event)"
+              />
+            <input
+              type="text"
+              (change)="mustNotKeyword($event)"
+              placeholder="키워드 제외"/>
           </div>
-          <button class="search-btn"></button>
+          <button
+            (click)="selectKeywords($event)"
+            class="search-btn"></button>
         </div>
       </section>
       <section class="date-range">
@@ -93,15 +102,14 @@
       <section class="topics">
         <h3>주제별</h3>
         <div class="topics-container">
-          <button>전체</button>
-          <button>정치</button>
-          <button>경제</button>
-          <button>사회</button>
-          <button>문화</button>
-          <button>국제</button>
-          <button>지역</button>
-          <button>스포츠</button>
-          <button>과학</button>
+          <button
+            *ngFor="let cat of topics; let i = index"
+            [ngStyle]="selectedStyleObject(selectedTp === cat)"
+            id="topic"
+            (click)="selectTopic($event)"
+          >
+            {{ cat }}
+          </button>
         </div>
       </section>
       <div class="confirm-cancel-btn">

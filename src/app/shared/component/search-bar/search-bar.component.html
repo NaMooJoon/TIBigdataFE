@@ -38,25 +38,28 @@
     </button>
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
-        <li *ngFor="let date of dateList">
-          <a (click)="updateDate(date)">{{ date }}</a>
+        <li *ngFor="let date of dateList" class = "date-list">
+          <a
+            class = "a-date"
+            [ngStyle]="selectedStyleObject(selectedDate === date)"
+            (click)="updateDate(date)"
+          >{{ date }}</a>
         </li>
-        <li class="direct-date">
-          <span> 직접입력 </span>
-          <input type="date" id="start-date" name="start-date" class="date" />
-          <input type="date" id="end-date" name="end-date" class="date" />
-        </li>
+<!--        <li class="date-input">-->
+<!--          <span> 직접입력 </span>-->
+<!--          <input type="date" id="start-date" name="start-date" class="date" />-->
+<!--          <input type="date" id="end-date" name="end-date" class="date" />-->
+<!--        </li>-->
       </ul>
     </div>
-
-    <button type="button">기관별</button>
     <div uk-dropdown="pos: bottom-justify">
-      <ul class="uk-nav uk-dropdown-nav">
-        <li><a href="#">국회 외교통일위원회</a></li>
-        <li><a href="#">남북사회통합연구원</a></li>
-        <li><a href="#">남북교류협력지원협회</a></li>
-        <li><a href="#">남북물류포럼</a></li>
-      </ul>
+<!--      <ul class="uk-nav uk-dropdown-nav">-->
+<!--        <li><a *ngFor="let inst of institutionList"-->
+<!--         [ngStyle]="selectedStyleObject(selectedInst === inst.key)"-->
+<!--         id="inst"-->
+<!--         (click)="selectInst(inst)"-->
+<!--        >{{ inst["key"] }}</a></li>-->
+<!--      </ul>-->
     </div>
 
     <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">
