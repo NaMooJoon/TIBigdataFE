@@ -100,6 +100,12 @@
   </div>  
 
   <section class='section-result' >
+
+    <span class="section-header" *ngIf="isDataPreview">전처리 미리보기</span>
+    <span class="section-info" *ngIf="isDataPreview">전처리한 결과를 정리한 표입니다. 미리보기는 100개까지만 표시됩니다.</span>
+    <hr *ngIf="isDataPreprocessed">
+
+    <figure id='pretable'></figure>
     <span class="section-header" *ngIf="isDataAnalysised">분석 결과</span>
     <span class="section-info" *ngIf="isDataAnalysised">분석 결과를 정리한 표와 그래프입니다.</span>
     <hr *ngIf="isDataAnalysised">

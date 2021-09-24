@@ -25,7 +25,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/logos",
-              "src/assets/icons"
+              "src/assets/icons",
+              "src/assets/manual.pdf"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
