@@ -160,7 +160,7 @@ export abstract class abstractAnalysis{
         $('#loading').append(loadingImg);
         $('#loading').show();
 
-        $('#mask').append("<button id='cancelbtn' style='position: absolute; margin: 0px auto;display: block;'>취소</button>");
+        $('#mask').append("<button id='cancelbtn' style='position: absolute; margin: 0px auto;display: block;'>창닫기</button>");
         // $('#cancelbtn').click()
         // $(document).on("click", "#cancelbtn", this.closeLoadingWithMask());
     }
