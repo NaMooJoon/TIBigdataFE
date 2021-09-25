@@ -136,10 +136,11 @@
   <section class='section-result' >
     <span class="section-header" *ngIf="isDataPreprocessed">전처리 결과</span>
     <span class="section-info" *ngIf="isDataPreprocessed">전처리한 결과를 정리한 표입니다.</span>
-    
+    <hr *ngIf="isDataPreprocessed">
+
     <span class="section-header" *ngIf="isDataPreview">전처리 미리보기</span>
     <span class="section-info" *ngIf="isDataPreview">전처리한 결과를 정리한 표입니다. 미리보기는 100개까지만 표시됩니다.</span>
-    <hr *ngIf="isDataPreprocessed">
+    <hr *ngIf="isDataPreview">
     <figure id='pretable'></figure>
   </section>
   </section>

@@ -12,7 +12,6 @@ import * as d3 from 'd3';
 
 export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
-  private _isDataPreprocessed: boolean = false;
   private _preprocessedData: Array<string>;
   uploadedDict: Object;
   // private _previewPreprocessed: boolean;
@@ -162,6 +161,8 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
     this.userSavedDocumentService.setMyDocPreprocessed(this.selectedSavedDate);
     this.preprocessedData = res.result;
+    
+    this.isDataPreview = false;
     this.isDataPreprocessed = true;
 
     this.closeLoadingWithMask();
@@ -172,16 +173,6 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     alert("전처리 완료되었습니다");
   }
 
-  
-  
-  public get isDataPreprocessed() {
-    return this._isDataPreprocessed;
-  }
-  public set isDataPreprocessed(value) {
-    this._isDataPreprocessed = value;
-  }
-
-  
   public get preprocessedData(){
     return this._preprocessedData;
   }
