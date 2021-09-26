@@ -72,6 +72,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     
     this.analysisedData = res.result_graph;
     this.isDataAnalysised = true;
+    this.isDataPreview =false;
     // let temp=[];
     // // let i=0;
     // for (let i=0;i< Object.keys(this.analysisedData).length;i++){

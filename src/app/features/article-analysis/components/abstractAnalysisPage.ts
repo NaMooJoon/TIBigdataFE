@@ -18,7 +18,8 @@ export abstract class abstractAnalysis{
     private _selectedKeyword: string;
     private _selectedSavedDate: string;
     private _isSelectedPreprocessed: boolean;
-    private _isDataPreview: boolean;
+    private _isDataPreprocessed: boolean = false;
+    private _isDataPreview: boolean = false;
     
     
     constructor(
@@ -65,6 +66,8 @@ export abstract class abstractAnalysis{
         this.clearResult();
         this.drawPreTable(result, "preview");
         
+        this.isDataPreprocessed = false;
+        this.isDataPreview =true;
         this.closeLoadingWithMask();
     }
     
@@ -109,7 +112,6 @@ export abstract class abstractAnalysis{
             tr.append("td").text(i+1);
             tr.append("td").text(data[i]);
         }   
-        this.isDataPreview =true;
     }
 
     
@@ -208,6 +210,14 @@ export abstract class abstractAnalysis{
     public set isSelectedPreprocessed(value: boolean) {
         this._isSelectedPreprocessed = value;
     }
+
+
+    public get isDataPreprocessed() {
+        return this._isDataPreprocessed;
+      }
+      public set isDataPreprocessed(value) {
+        this._isDataPreprocessed = value;
+      }
 
     public get isDataPreview(): boolean {
         return this._isDataPreview;
