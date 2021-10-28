@@ -39,6 +39,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     if(!this.isSelectedPreprocessed) return alert('선택하신 문서는 전처리되지 않은 문서입니다. 전처리를 먼저 해주세요!');
     let optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1')).value ;
     let optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
+    let optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
 
     this.LoadingWithMask();
     document.getElementById("cancelbtn").addEventListener("click", this.closeLoadingWithMask);
@@ -49,6 +50,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       'savedDate': this.selectedSavedDate,
       'option1': optionValue1,
       'option2': optionValue2,
+      'option3': optionValue3,
       'analysisName': activity,
     });
     
@@ -88,6 +90,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       this.drawNetworkChart(JSON.stringify(this.analysisedData));
     else if(activity=='kmeans')
       this.drawScatterChart(JSON.stringify(this.analysisedData));
+    else if(activity=='ngrams')
+      this.drawNetworkChart(JSON.stringify(this.analysisedData));
+    else if(activity=='hcluster')
+      this.drawDendrogramChart(JSON.stringify(this.analysisedData));
 
     alert("분석 완료되었습니다.");
     this.closeLoadingWithMask();
@@ -338,6 +344,194 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .on("mouseover", highlight)
     .on("mouseleave", doNotHighlight )
 
+  }
+
+  drawDendrogramChart(data_str:string){
+
+    
+  let data = JSON.parse(data_str);
+  //   let ex_data={
+  //     "name":18.0,
+  //     // "parent":0.0,
+  //     "children":[
+  //        {
+  //           "name":14.0,
+  //           "parent":18.0,
+  //           "children":[
+  //              {
+  //                 "name":10.0,
+  //                 "parent":14.0,
+  //                 "children":[
+  //                    {
+  //                       "name":6.0,
+  //                       "parent":10.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    },
+  //                    {
+  //                       "name":9.0,
+  //                       "parent":10.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    }
+  //                 ]
+  //              },
+  //              {
+  //                 "name":13.0,
+  //                 "parent":14.0,
+  //                 "children":[
+  //                    {
+  //                       "name":2.0,
+  //                       "parent":13.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    },
+  //                    {
+  //                       "name":12.0,
+  //                       "parent":13.0,
+  //                       "children":[
+  //                          {
+  //                             "name":4.0,
+  //                             "parent":12.0,
+  //                             "children":[
+                                 
+  //                             ]
+  //                          },
+  //                          {
+  //                             "name":11.0,
+  //                             "parent":12.0,
+  //                             "children":[
+  //                                {
+  //                                   "name":0.0,
+  //                                   "parent":11.0,
+  //                                   "children":[
+                                       
+  //                                   ]
+  //                                },
+  //                                {
+  //                                   "name":8.0,
+  //                                   "parent":11.0,
+  //                                   "children":[
+                                       
+  //                                   ]
+  //                                }
+  //                             ]
+  //                          }
+  //                       ]
+  //                    }
+  //                 ]
+  //              }
+  //           ]
+  //        },
+  //        {
+  //           "name":17.0,
+  //           "parent":18.0,
+  //           "children":[
+  //              {
+  //                 "name":15.0,
+  //                 "parent":17.0,
+  //                 "children":[
+  //                    {
+  //                       "name":3.0,
+  //                       "parent":15.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    },
+  //                    {
+  //                       "name":7.0,
+  //                       "parent":15.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    }
+  //                 ]
+  //              },
+  //              {
+  //                 "name":16.0,
+  //                 "parent":17.0,
+  //                 "children":[
+  //                    {
+  //                       "name":1.0,
+  //                       "parent":16.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    },
+  //                    {
+  //                       "name":5.0,
+  //                       "parent":16.0,
+  //                       "children":[
+                           
+  //                       ]
+  //                    }
+  //                 ]
+  //              }
+  //           ]
+  //        }
+  //     ]
+  //  }
+
+
+   // set the dimensions and margins of the graph
+var width = 460
+var height = 460
+
+// append the svg object to the body of the page
+var svg = d3.select("figure#ngrams")
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(40,0)");  // bit of margin on the left = 40
+
+// // read json data
+// d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram.json")
+// .then((data) => {
+  // Create the cluster layout:
+  var cluster = d3.cluster()
+    .size([height, width - 100]);  // 100 is the margin I will have on the right side
+
+  // Give the data to this cluster layout:
+  var root = d3.hierarchy(data, function(d) {
+      return d['children'];
+  });
+  cluster(root);
+
+
+  // Add the links between nodes:
+  svg.selectAll('path')
+    .data( root.descendants().slice(1) )
+    .enter()
+    .append('path')
+    .attr("d", function(d) {
+        return "M" + d['y'] + "," + d['x']
+                + "C" + (d['parent']['y'] + 50) + "," + d['x']
+                + " " + (d['parent']['y'] + 150) + "," + d['parent']['x'] // 50 and 150 are coordinates of inflexion, play with it to change links shape
+                + " " + d['parent']['y'] + "," + d['parent']['x'];
+              })
+    .style("fill", 'none')
+    .attr("stroke", '#ccc')
+
+
+  // Add a circle for each node.
+  svg.selectAll("g")
+      .data(root.descendants())
+      .enter()
+      .append("g")
+      .attr("transform", function(d) {
+          return "translate(" + d['y'] + "," + d['x'] + ")"
+      })
+      .append("circle")
+        .attr("r", 7)
+        .style("fill", "#69b3a2")
+        .attr("stroke", "black")
+        .style("stroke-width", 2)
+
+// })
   }
 
   public get isDataAnalysised(): boolean {
