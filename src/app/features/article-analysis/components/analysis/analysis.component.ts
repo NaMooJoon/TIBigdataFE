@@ -37,7 +37,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // Check the options
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
     if(!this.isSelectedPreprocessed) return alert('선택하신 문서는 전처리되지 않은 문서입니다. 전처리를 먼저 해주세요!');
-    let optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1')).value ;
+    let optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1'))!= null? (<HTMLInputElement> document.getElementById(activity+'_option1')).value:null;
     let optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
     let optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
 
@@ -86,14 +86,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       this.drawTable(activity, JSON.stringify(this.analysisedData));
       this.drawBarChart(JSON.stringify(this.analysisedData));
     }
-    else if(activity=='network')
+    else if(activity=='network' || activity=='ngrams')
       this.drawNetworkChart(JSON.stringify(this.analysisedData));
     else if(activity=='kmeans')
       this.drawScatterChart(JSON.stringify(this.analysisedData));
-    else if(activity=='ngrams')
-      this.drawNetworkChart(JSON.stringify(this.analysisedData));
     else if(activity=='hcluster')
-      this.drawDendrogramChart(JSON.stringify(this.analysisedData));
+      this.drawTreeChart(JSON.stringify(this.analysisedData));
 
     alert("분석 완료되었습니다.");
     this.closeLoadingWithMask();
@@ -188,8 +186,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     //   console.log(this);
     //   var text = svg.append("text")
     //           // .attr("id","r"+"-"+i)
-    //           .attr("x",d.x-20)
-    //           .attr("y",d.y-20)
+    //           .attr("x",d['x']-20)
+    //           .attr("y",d['y']-20)
     //           .attr("stroke","red")
     //           .attr("stroke-width",2)
     //           // .text(d => d.word);
@@ -201,18 +199,18 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   }
 
   drawNetworkChart(data_str:string){
-    
     let data:any = JSON.parse(data_str);
+    console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40};
     
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
     .append("svg")
-      .attr("width", this.width + margin.left + margin.right)
-      .attr("height", this.height + margin.top + margin.bottom)
+      .attr("width", this.width + margin['left'] + margin['right'])
+      .attr("height", this.height + margin['top'] + margin['bottom'])
     .append("g")
       .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
+            `translate(${margin['left']}, ${margin['top']})`);
 
     // Initialize the links
     const link = svg
@@ -229,11 +227,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .attr("r", 10)
         .style("fill", "#69b3a2")
 
-    // const g = d3.select("svg").select('g');
-    //     g.append("text")
-    //   .data(data['nodes'])
-    //       .attr("dx", function(d){return -20})
-    //       .text(function(d){return d['name']})
+    const g = d3.select("svg").select('g');
+        g.append("text")
+      .data(data['nodes'])
+          .attr("dx", function(d){return -20})
+          .text(function(d){return d['name']})
 
     // Let's list the force we wanna apply on the network
     const simulation = d3.forceSimulation(data['nodes'])                 // Force algorithm is applied to data.nodes
@@ -271,11 +269,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     var svg = d3.select("figure#scatter")
     .append("svg")
-      .attr("width", this.width + this.margina.left + this.margina.right)
-      .attr("height", this.height + this.margina.top + this.margina.bottom)
+      .attr("width", this.width + this.margina['left'] + this.margina['right'])
+      .attr("height", this.height + this.margina['top'] + this.margina['bottom'])
     .append("g")
     .attr("transform",
-          "translate(" + this.margina.left + "," + this.margina.top + ")");
+          "translate(" + this.margina['left'] + "," + this.margina['top'] + ")");
 
     // //Read the data
 
@@ -310,13 +308,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       console.log(colorset);
       d3.selectAll(".dot")
         .transition()
-        .duration(200)
+        // .duration(200)
         .style("fill", "lightgrey")
         .attr("r", 3)
 
       d3.selectAll("." + selected_specie)
         .transition()
-        .duration(200)
+        // .duration(200)
         .style("fill", colorset)
         .attr("r", 7)
     }
@@ -325,7 +323,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     var doNotHighlight = function(){
     d3.selectAll(".dot")
       .transition()
-      .duration(200)
+      // .duration(200)
       .style("fill", "lightgrey")
       .attr("r", 5 )
     }
@@ -346,10 +344,148 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
   }
 
+  drawTreeChart(data_str:string){
+    
+    let data = JSON.parse(data_str);
+    // let ex_data={'name': 18.0, 'children': [{'name': 13.0, 'parent': 18.0, 'children': [{'name': 9.0, 'parent': 13.0, 'children': [], 'title': '통일 이후 북한지역의 도시개발 방향에 관한 연구'}, {'name': 12.0, 'parent': 13.0, 'children': [{'name': 7.0, 'parent': 12.0, 'children': [], 'title': '새 통일 한국의 영.유아 교육 연구'}, {'name': 11.0, 'parent': 12.0, 'children': [{'name': 8.0, 'parent': 11.0, 'children': [], 'title': '민간 통일 운동의 주요 논의 동향과 통일 정책 수용여부에 관한 연구'}, {'name': 10.0, 'parent': 11.0, 'children': [{'name': 5.0, 'parent': 10.0, 'children': [], 'title': '알기쉬운 통일교육 12주제:프리젠테이션-제1부-통일비전'}, {'name': 6.0, 'parent': 10.0, 'children': [], 'title': '통일 후 남북한경제 한시분리운영방안: 노동 및 사회복지 분야'}]}]}]}]}, {'name': 17.0, 'parent': 18.0, 'children': [{'name': 1.0, 'parent': 17.0, 'children': [], 'title': '통일 비용·편익의 분석모형 구축'}, {'name': 16.0, 'parent': 17.0, 'children': [{'name': 2.0, 'parent': 16.0, 'children': [], 'title': '통일대비를 위한 국내과제'}, {'name': 15.0, 'parent': 16.0, 'children': [{'name': 0.0, 'parent': 15.0, 'children': [], 'title': '한반도 통일에 대한 국제사회의 기대와 역할: 주변 4국과 G20'}, {'name': 14.0, 'parent': 15.0, 'children': [{'name': 3.0, 'parent': 14.0, 'children': [], 'title': '통일대계 탐색연구'}, {'name': 4.0, 'parent': 14.0, 'children': [], 'title': '한반도 통일의 미래와 주변 4국의 기대'}]}]}]}]}]}
+    // data=ex_data;
+    let width = 600;
+    const dx = width/4;
+    const dy = width/10;
+    const margin = ({top: 10, right: 40, bottom: 10, left: 40});
+
+    let diagonal:Function = d3.linkHorizontal().x(d => d['y']).y(d => d['x']);
+
+    const tree = d3.tree().nodeSize([dx, dy]);
+    const root = d3.hierarchy(data);
+
+    root['x0'] = dy / 2;
+    root['y0'] = 0;
+    root.descendants().forEach((d, i) => {
+        d['num'] = i;
+        d['_children'] = d['children'];
+        // if (d['depth'] && d['data']['name']['length'] !== 7) d['children'] = null;
+      });
+    
+    const svg = d3.select("figure#tree")
+      .append("svg")
+        .attr("viewBox", [-margin.left, -margin.top, width, dx].join())
+        .style("font", "10px sans-serif")
+        .style("user-select", "none");
+  
+    const gLink = svg.append("g")
+        .attr("fill", "none")
+        .attr("stroke", "#555")
+        .attr("stroke-opacity", 0.4)
+        .attr("stroke-width", 1.5);
+  
+    const gNode = svg.append("g")
+        .attr("cursor", "pointer")
+        .attr("pointer-events", "all");
+  
+    function update(source) {
+      // const duration = d3.event && d3.event.altKey ? 2500 : 250;
+      const nodes = root.descendants().reverse();
+      const links = root.links();
+    
+      // Compute the new tree layout.
+      tree(root);
+
+      let left = root;
+      let right = root;
+      root.eachBefore(node => {
+        if (node['x'] < left['x']) left = node;
+        if (node['x'] > right['x']) right = node;
+      });
+
+      const height = right['x'] - left['x'] + margin['top'] + margin['bottom'];
+
+      const transition = svg.transition()
+          // .duration(duration)
+          .attr("viewBox", [-margin['left'], left['x'] - margin['top'], width, height].join())
+          .tween("resize", window['ResizeObserver'] ? null : () => () => svg.dispatch("toggle"));
+
+      // Update the nodes…
+      const node = gNode.selectAll("g")
+        .data(nodes, d => d['num']);
+
+      // Enter any new nodes at the parent's previous position.
+      const nodeEnter = node.enter().append("g")
+          .attr("transform", d => `translate(${source['y0']},${source['x0']})`)
+          .attr("fill-opacity", 0)
+          .attr("stroke-opacity", 0)
+          .on("click", (event, d) => {
+            d['children'] = d['children'] ? null : d['_children'];
+            update(d);
+          });
+      
+      nodeEnter.append("circle")
+          .attr("r", 2.5)
+          .attr("fill", d => d['_children'] ? "#555" : "#999")
+          .attr("stroke-width", 10);
+
+      nodeEnter.append("text")
+          .attr("dy", "0.31em")
+          .attr("x", d => d['_children'] ? -6 : 6)
+          .attr("text-anchor", d => d['_children'] ? "end" : "start")
+          .text(d => d.data.title? d.data.title: null)
+        .clone(true).lower()
+          .attr("stroke-linejoin", "round")
+          .attr("stroke-width", 3)
+          .attr("stroke", "white");
+
+      // Transition nodes to their new position.
+      const nodeUpdate = node.merge(nodeEnter).transition(transition)
+          .attr("transform", d => `translate(${d['y']},${d['x']})`)
+          .attr("fill-opacity", 1)
+          .attr("stroke-opacity", 1);
+
+      // Transition exiting nodes to the parent's new position.
+      const nodeExit = node.exit().transition(transition).remove()
+          .attr("transform", d => `translate(${source['y']},${source['x']})`)
+          .attr("fill-opacity", 0)
+          .attr("stroke-opacity", 0);
+
+      // Update the links…
+      const link = gLink.selectAll("path")
+        .data(links, d => d['target']['num']);
+
+      // Enter any new links at the parent's previous position.
+      const linkEnter = link.enter().append("path")
+        .attr("d", d => {
+          const o = {x: source['x0'], y: source['y0']};
+          return diagonal({source: o, target: o});
+        });
+
+        // Transition links to their new position.
+        link.merge(linkEnter).transition(transition)
+            .attr("d", <null>diagonal);
+    
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition(transition).remove()
+            .attr("d", d => {
+              const o = {x: source['x'], y: source['y']};
+              return diagonal({source: o, target: o});
+            });
+    
+        // Stash the old positions for transition.
+        root.eachBefore(d => {
+          d['x0'] = d['x'];
+          d['y0'] = d['y'];
+        });
+      }
+    
+      update(root);
+    
+      return svg.node();
+  }
+
+
   drawDendrogramChart(data_str:string){
 
     
   let data = JSON.parse(data_str);
+  
   //   let ex_data={
   //     "name":18.0,
   //     // "parent":0.0,
@@ -496,9 +632,7 @@ var svg = d3.select("figure#ngrams")
     .size([height, width - 100]);  // 100 is the margin I will have on the right side
 
   // Give the data to this cluster layout:
-  var root = d3.hierarchy(data, function(d) {
-      return d['children'];
-  });
+  var root = d3.hierarchy(data, d=>d['children']);
   cluster(root);
 
 

@@ -63,17 +63,13 @@
       />
     </div>
     <div class="pop-body" id="hcluster">
-      분석할 단어 개수: <input type="number" value="100" min='1' max='500' id='hcluster_option1'>
-      <br>
-      트리레벨: <input type="number" value="100" min='1' max='500' id='hcluster_option2'>
-      
       
       <button (click)="runAnalysis('hcluster')">분석 실행</button>
     </div>
   </div>
 
   <div class="pop-block">
-    <div class="pop-head" id="ngram-head" (click)="showPop('ngrams')">N-gram
+    <div class="pop-head" id="ngrams-head" (click)="showPop('ngrams')">N-gram
       <img class="tooltip"
         src="../../../../assets/icons/help-gray.png"
       />
@@ -141,6 +137,8 @@
   <figure id="scatter"></figure>
   
   <figure id="ngrams"></figure>
+  
+  <figure id="tree"></figure>
   </section>
   
   </section>
