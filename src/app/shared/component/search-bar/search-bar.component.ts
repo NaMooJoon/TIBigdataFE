@@ -98,13 +98,12 @@ export class SearchBarComponent implements OnInit {
     this.isTopicSelected = false;
     this.isKeyLoaded = false;
     this.checkRouterIsMain();
-    // this.loadInstitutions();
+    this.loadInstitutions();
   }
 
   async loadInstitutions() {
-    let res = await this.elasticsearchService.getInstitutionsWithTextSearch();
+    let res = await this.elasticsearchService.getInstitutions();
     this.institutionList = res["aggregations"]["count"]["buckets"];
-    console.log(this.institutionList)
   }
 
   /**
@@ -312,6 +311,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   selectInst(inst: { key: string; doc_num: number }) {
+    this.isInstSelected = true;
     this.selectedInst = inst.key;
     this.elasticsearchService.setSearchMode(SearchMode.INST);
     this.elasticsearchService.setSelectedInst(inst.key);

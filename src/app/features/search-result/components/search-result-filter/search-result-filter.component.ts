@@ -23,8 +23,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   private _selectedTp: string;
 
-  private _mustKeyword: string = null;
-  private _mustNotKeyword : string = null;
+  private _mustKeyword: string = "";
+  private _mustNotKeyword : string = "";
 
   public _topics = [
     "정치",
@@ -287,10 +287,10 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   selectKeywords($event) {
     console.log(this._mustKeyword,this._mustNotKeyword)
-
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.setSearchMode(SearchMode.KEYWORDOPTION);
     this.elasticsearchService.triggerSearch(1);
+
   }
 
 

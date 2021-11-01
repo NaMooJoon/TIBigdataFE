@@ -52,14 +52,20 @@
 <!--        </li>-->
       </ul>
     </div>
-    <div uk-dropdown="pos: bottom-justify">
-<!--      <ul class="uk-nav uk-dropdown-nav">-->
-<!--        <li><a *ngFor="let inst of institutionList"-->
-<!--         [ngStyle]="selectedStyleObject(selectedInst === inst.key)"-->
-<!--         id="inst"-->
-<!--         (click)="selectInst(inst)"-->
-<!--        >{{ inst["key"] }}</a></li>-->
-<!--      </ul>-->
+
+    <button
+      [ngStyle]="selectedStyleObject(isInstSelected)"
+      type="button">기관별</button>
+    <div uk-dropdown="pos: bottom-justify; boundary: '#inst';" class = "inst-dropdown">
+      <ul class="uk-nav uk-dropdown-nav">
+        <li>
+          <a *ngFor="let inst of institutionList"
+         [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
+         id="inst"
+         (click)="selectInst(inst)"
+        >{{ inst["key"] }} {{ inst["doc_count"] }}</a>
+        </li>
+      </ul>
     </div>
 
     <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">
@@ -68,7 +74,11 @@
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
         <li *ngFor="let topic of topicList">
-          <a (click)="updateTopic(topic)">{{ topic }}</a>
+          <a
+            [ngStyle]="selectedStyleObject(selectedTopic === topic)"
+            (click)="updateTopic(topic)"
+            id="topic"
+          >{{ topic }}</a>
         </li>
       </ul>
     </div>
@@ -87,13 +97,34 @@
     </div> -->
     <div class="search-helper">
       <span>검색도움말</span>
-      <img
-        (click)="resetFilters()"
-        class="reset-btn"
-        src="../../../../assets/icons/help-gray.png"
-        alt="filter-reset"
-      />
+      <a href="#pop01">
+        <img
+          src="../../../../assets/icons/help-gray.png"
+          alt="filter-reset"
+        />
+      </a>
     </div>
+
+    <div id="pop01" class="overlay">
+      <div class="popup">
+        <a href="#none" class="close">&times;</a>
+        <b>검색 도움말</b><br>
+        <hr>
+        <b>검색창 내 검색연산자 활용법</b><br>
+        검색창 내 검색 연산자를 사용하여 더 정확한 검색 결과를 얻을 수 있습니다.<br>
+        * 검색 연산자(AND,OR,NOT)는 대문자로 입력해야 합니다.<br>
+        <br>
+        <b>단어 중 1개 이상 포함</b><br>
+        각 검색어 사이에 'OR'를 입력합니다.<br>
+        <br>
+        <b>다음단어 모두 포함</b><br>
+        검색어 사이에 띄어쓰기(1칸), 'AND' 또는 '+'를 입력합니다.<br>
+        <br>
+        <b>정확히 일치하는 단어</b><br>
+        단어/문구를 큰따옴표("") 안에 넣습니다.<br>
+      </div>
+    </div>
+
   </div>
 
   <div

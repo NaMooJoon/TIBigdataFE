@@ -35,6 +35,7 @@
       ><input
         class="article-checkbox toggle-all"
         type="checkbox"
+        [(checked)]="toggle_all"
         (change)="onCheckboxChange($event)"
         value="toggleAll"
       />전체선택
