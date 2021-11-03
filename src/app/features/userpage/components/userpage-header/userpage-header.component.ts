@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { MyDocsComponent } from "src/app/features/userpage/components/my-docs/my-docs.component";
 
 @Component({
   selector: 'app-userpage-header',
@@ -49,12 +48,6 @@ export class UserpageHeaderComponent implements OnInit {
   }
   public set currentKeyword(value: string) {
     this._currentKeyword = value;
-  }
-
-  openModal() {
-    let newName = prompt("변경할 폴더 이름을 입력하세요.");
-
-    console.log(newName);
   }
 
 }

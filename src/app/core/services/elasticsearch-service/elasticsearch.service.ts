@@ -183,6 +183,7 @@ export class ElasticsearchService {
   searchByText(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
+
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -304,7 +305,6 @@ export class ElasticsearchService {
    * @param info New article source to update.
    */
   docsToArticleSource(info: Array<ArticleSource>): void {
-    console.log(info);
     this.articleSource.next(info);
   }
 

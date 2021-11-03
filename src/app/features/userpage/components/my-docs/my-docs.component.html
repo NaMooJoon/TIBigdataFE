@@ -1,3 +1,10 @@
+<div class="folder-menu">
+  <button
+    class="folder"
+    (click)="openModal()"
+    id="logout-button"
+  >폴더편집</button>
+</div>
 <form *ngIf="!isSavedKeywordsEmpty" [formGroup]="form" novalidate>
   <section *ngIf="isSavedKeywordsLoaded" class="keyword-group">
     <div *ngFor="let key of savedKeywords; index as idx">
@@ -43,7 +50,7 @@
     </ul>
   </section>
 </form>
-  
+
 <!--<div *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="page-numbers">-->
 <!--  <button-->
 <!--    id="page-multiprev"-->
