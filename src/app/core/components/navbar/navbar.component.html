@@ -14,8 +14,6 @@
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
             <a (click)="navigateSpecials()">자료분석</a>
           </li>
-          <li *ngIf="getIsApiUser()"
-              (click)="toOpenAPI()"><a>OpenAPI</a></li>
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
             class="community-menu"
@@ -89,7 +87,7 @@
           class="openapi-menu"
           >
             <div class="dropdown-container">
-              <a (click)="toDocument()">Open API</a>
+              <a (click)="toOpenAPI()">Open API</a>
             </div>
             </li>
           </ul>
@@ -119,7 +117,7 @@
                 (click)="toMemberInfo()">회원정보관리</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
-                (click)="toOpenAPI()">OpenAPI</a></li>
+                (click)="toOpenAPI()">Open API</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
                 (click)="toSecession()">회원탈퇴</a></li>
