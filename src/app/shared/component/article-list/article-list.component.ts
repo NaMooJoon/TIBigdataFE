@@ -57,13 +57,13 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     private paginationService: PaginationService,
     private authenticationService: AuthenticationService
   ) {
+    this.setArticleForm();
     // Set articles when article has been changed
     this.articleSubscriber = this.articleChange$.subscribe((articles) => {
       this.articleSources = articles;
       this.resetSearchOptions();
       this.setArticleHashKeyList();
       this.setCheckbox();
-      this.setArticleForm();
 
       this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
@@ -126,8 +126,16 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Add property of checkbox value into article.
    */
   setCheckbox(): void {
+    this.checkArray = this.form.get("checkArray") as FormArray;
+
     for (let i in this.articleSources) {
       this.articleSources[i]["isSelected"] = false;
+      this.checkArray.controls.forEach((item: FormControl) => {
+        if (item.value == this.articleSources[i]["_source"]["hash_key"]) {
+          this.articleSources[i]["isSelected"] = true;
+          return;
+        }
+      });
     }
     this._toggle_all = false;
   }
