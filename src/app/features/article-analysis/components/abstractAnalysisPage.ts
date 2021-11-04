@@ -1,5 +1,6 @@
 import { Directive, Injectable, OnInit } from "@angular/core";
 import * as d3 from 'd3';
+import { title } from "process";
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
@@ -81,7 +82,9 @@ export abstract class abstractAnalysis{
         const figure = d3.select("figure#pretable")
             // .attr('class','result-pretable');
         if(activity=="preview"){
-            data= dataArray['tokenList'][0];
+            // data= dataArray['tokenList'][0];
+            
+            data = dataArray['tokenList'];
             console.log("preview",data);
         }
         else if(activity=="runProcessing"){
@@ -101,15 +104,16 @@ export abstract class abstractAnalysis{
         .style('font-weight','500')
         .style('text-align','center');
         
-        th.append('th').text('No');
-        th.append('th').text('단어');
+        th.append('th').text('제목');
+        th.append('th').text('전처리');
 
         const tbody = table.append("tbody")
         .style('text-align','center');
 
-        for(let i=0;i<data.length;i++){
+        console.log(dataArray['titleList']);
+        for(let i=0;i<dataArray['titleList'].length;i++){
             const tr = tbody.append("tr");
-            tr.append("td").text(i+1);
+            tr.append("td").text(dataArray['titleList'][i]);
             tr.append("td").text(data[i]);
         }   
     }

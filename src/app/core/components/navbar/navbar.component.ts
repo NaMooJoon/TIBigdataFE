@@ -181,7 +181,7 @@ export class NavbarComponent implements OnInit {
     this.isHamburger = false;
 
     if (this.authService.getCurrentUser().isApiUser) {
-      this.toOpenApi();
+      this.toManagement();
     }
     else {
       this.router.navigateByUrl("/api-register");
@@ -222,13 +222,13 @@ export class NavbarComponent implements OnInit {
   }
 
 
-  // toManagement(): void {
-  //   this.router.navigateByUrl("/openapi/management");
-  // }
-
-  toDocument(): void {
-    this.router.navigateByUrl("/openapi/document");
+  toManagement(): void {
+    this.router.navigateByUrl("/openapi/management");
   }
+
+  // toDocument(): void {
+  //   this.router.navigateByUrl("/openapi/document");
+  // }
 
   // toGotoapi(): void {
   //   this.router.navigateByUrl("/openapi/gotoapi");

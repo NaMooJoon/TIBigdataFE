@@ -41,11 +41,15 @@ async function uploadDict(req, res) {
   
     preprocessing
       .findOne(
-        { $and: [ { userEmail: userEmail }, {'savedDate' : new Date(savedDate).toISOString() } ] }
+        { $and: [ { userEmail: userEmail }, {'savedDate' : new Date(savedDate).toISOString() } ] },
+        // sort=[('processedDate', 1)]
         )
       .then((result) => {
         // console.log(result);
-        result.tokenList = result.tokenList[0].slice(0,100);
+        // for(let i=0;i<result.tokenList.length;i++)
+        // // let i=0;
+        //   result.tokenList[i] = result.tokenList[i].slice(0,10);
+        result.tokenList = result.tokenList[0].slice(0,10);
         if (result)
           return res
             .status(200)
