@@ -320,7 +320,7 @@ export class MyDocsComponent implements OnInit {
 
   openModal() {
     let title = prompt("변경할 폴더 명을 입력 하세요.",this.keyword);
-    
+
     if(title != null){
       this.userSavedDocumentService.changeFolderTitle(title, this.savedDate).then(
         () => this.loadSavedKeywords(),

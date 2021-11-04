@@ -115,11 +115,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Create form to set checkbox for each article in the list.
    */
   setArticleForm(): void {
-    if(this.checkArray == null){
-      this.form = this.formBuilder.group({
-        checkArray: this.formBuilder.array([]),
-      });
-    }
+    this.form = this.formBuilder.group({
+      checkArray: this.formBuilder.array([]),
+    });
   }
 
   /**
@@ -137,7 +135,13 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this._toggle_all = false;
+
+    this.toggle_all = true;
+    for (let i in this.articleSources) {
+      if(this.articleSources[i]["isSelected"] == false){
+        this.toggle_all = false;
+      }
+    }
   }
 
   /**
@@ -184,7 +188,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.isSearchDone = false;
     this.currentPage = this.elasticsearchService.getCurrentSearchingPage();
     if (this.isMainSearch === true) {
+      let previousSearchKeyword : string = this.searchKeyword;
       this.searchKeyword = this.elasticsearchService.getKeyword();
+      if(previousSearchKeyword != this.searchKeyword){
+        this.setArticleForm();
+      }
     } else {
       this.searchKeyword = '키워드 없음';
     }
@@ -257,16 +265,29 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
-      this._toggle_all = true;
+      this.toggle_all = true;
       for (let i = 0; i < this.articleSources.length; i++) {
         checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
       }
     } else {
-      checkArray.clear();
-    }
+      this.toggle_all = false;
+
+      let j : number = 0;
+      this.checkArray.controls.forEach((item: FormControl, index :number) => {
+        if (item.value == this.articleSources[0]["_source"]["hash_key"]) {
+          for(let i = 10; i > 0; i--){
+            this.checkArray.removeAt(j);
+          }
+          return;
+        }
+        j++;
+      });
+    } 
+
     for (let i = 0; i < this.articleSources.length; i++) {
       this.articleSources[i]["isSelected"] = isCheckAll;
     }
+
     return checkArray;
   }
 
