@@ -1,10 +1,7 @@
 import { Component, OnInit, Output } from "@angular/core";
-import { MyDocsComponent } from "src/app/features/userpage/components/my-docs/my-docs.component";
 import { MydocModel } from "src/app/core/models/mydoc.model";
 import { UserProfile } from "src/app/core/models/user.model";
 import { UserSavedDocumentService } from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
-import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { Router } from "@angular/router";
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { EventEmitter } from "@angular/core";
 
@@ -17,7 +14,6 @@ import { EventEmitter } from "@angular/core";
 export class savedDocForAnalysis implements OnInit{
     
   private _savedDocs: Array<MydocModel>;
-
   private _isSavedDocsLoaded: boolean = false;
   private _isSavedDocsEmpty: boolean;
   private _totalSavedDocsNum: number;
@@ -40,9 +36,9 @@ export class savedDocForAnalysis implements OnInit{
 
   
   @Output() sender = new EventEmitter();
+
   /**
-   * @description Load saved documents from userSavedDocumentService
-   * @param pageNum
+   * @description load every saved documents from the mongo DB
    */
    async loadSavedDocs(): Promise<void> {
     this.savedDocs = await this.userSavedDocumentService.getAllMyDocs();
@@ -52,15 +48,9 @@ export class savedDocForAnalysis implements OnInit{
     this.isSavedDocsEmpty = (this.totalSavedDocsNum === 0);
   }
 
-
-  // updateSelectDoc(){
-  //   const nodeList= <NodeListOf<HTMLInputElement>>document.getElementsByName('selectDoc');
-  //   nodeList.forEach((node) => {
-  //     if(node.checked)
-  //       this.idx = parseInt(node.value);
-  //   });
-  // }
-
+  /**
+     * @description emit the data selected by user to parents class 
+     */
   emitData(activity?:string, selectedKeyword?:string, selectedSavedDate?:string, isSelectedPreprocessed?:boolean){
     this.sender.emit(JSON.stringify({
       'activity': activity,

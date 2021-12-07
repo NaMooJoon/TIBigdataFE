@@ -1,8 +1,5 @@
-import { stringify } from "@angular/compiler/src/util";
 import { Component, OnInit, Output } from "@angular/core";
 import { abstractAnalysis } from "../abstractAnalysisPage";
-import $ from 'jquery';
-import * as d3 from 'd3';
 
 @Component({
   selector: "app-preprocessing",
@@ -13,7 +10,7 @@ import * as d3 from 'd3';
 export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
   private _preprocessedData: Array<string>;
-  uploadedDict: Object;
+  // private _uploadedDict: Object;
   // private _previewPreprocessed: boolean;
 
   ngOnInit(): void {
@@ -22,9 +19,12 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   // uploadDict(dictType:string){
   //   this.insertDictToDB(dictType);
   // }
-
+/**
+ * @description open text file 
+ * @param dictType 
+ */
   openTextFile(dictType:string){
-    console.log('opened csv file');
+    // console.log('opened csv file');
     let input = document.createElement("input");
 
     input.type = "file";
@@ -43,8 +43,11 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     };
   }
 
+  /**
+   * @description process the file to upload to MongoDB
+   */
   async processFile(file:File, dictType:string){
-    console.log('csv->json');
+    // console.log('csv->json');
     let reader = new FileReader();
     let csv_string: string;
     reader.readAsText(file, "UTF-8");
@@ -67,7 +70,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
         'dictType': dictType,
         'csv': jsonArray,
       });
-      console.log(data);
+      // console.log(data);
       this.middlewareService.postDataToFEDB('/textmining/uploadDict', data);
       alert('사전 업로드가 완료되었습니다.');
         // return jsonArray;
@@ -76,55 +79,10 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     };
   }
 
-  // insertDictToDB(dictType:string){
-  //   console.log('reading..');
-  //   let csv = this.openTextFile();
-  //   console.log('reading done',csv);
-  // }
-
-  // async uploadDict(event:any){
-  //   this.uploader.clearQueue();
-  //   let files:File[] = event.target.files;
-  //   let filteredFiles:File[] = [];
-  //   for (var f of files) {
-  //       if (f.name.endsWith(".csv")) {
-  //           filteredFiles.push(f);
-  //       }
-  //   }
-
-  //   if (filteredFiles.length == 0) {
-  //     ;
-  //     // this.showGuide = true;
-  //   } else {
-  //       // this.showGuide = false;
-  //       let options = null;
-  //       let filters = null;
-  //       this.uploader.addToQueue(filteredFiles, options, filters);
-  //   }
-
-  //   function csvToJSON(file: File){
-  //     // loadDataFile (파일 : 파일) : void {
-  //       const fileReader = new FileReader();
-  //       fileReader.onload = e =>{
-  //         file.text
-  //       };
-  //       fileReader.readAsText (파일 이름);
-  //   }
-      
-      
-  //   }
-
-  // }
-
-//   setDisplay(){
-//     if($('input:radio[id=synonym_user]').is(':checked')){
-//         $('#selectUserDict').show();
-//     }else{
-//         $('#selectUserDict').hide();
-//     }
-// }
-
-
+  /**
+   * 
+   * @description run preprocessing
+   */
   async runPreprocessing():Promise<void>{
     let wordclass: number = 0;
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');

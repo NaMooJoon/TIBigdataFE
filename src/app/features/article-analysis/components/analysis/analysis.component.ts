@@ -19,6 +19,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   
   ngOnInit(): void {}
  
+  /**
+  * @description show pop up when the analysis name is on click
+  */
   showPop(analName:string){
     if(document.getElementById(analName).style.display=='inline'){
       document.getElementById(analName).style.display='none'
@@ -31,6 +34,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       document.getElementById(analName+"-head").style.color='white';
     }
   }
+
+  /**
+   * @description run Analysis
+   */
 
   async runAnalysis(activity:string): Promise<void>{
 
@@ -97,7 +104,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     this.closeLoadingWithMask();
   }
 
-  
+  /**
+   * @description draw a result table for analysis using d3
+   */
 
   drawTable(analType:string, data_str:string){
     let data:Array<{word:string,value:number}> = JSON.parse(data_str);
@@ -128,9 +137,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         tr.append("td").text(data[i]['value']);
       }
     }
-    return table.node();
   }
 
+  /**
+   * @description draw a bar chart using the data using d3
+   */
+  
   drawBarChart(data_str:string){
     let data:Array<{word:string,value:number}> = JSON.parse(data_str);
 
@@ -198,9 +210,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
  
   }
 
+  /**
+   * @description draw a network chart using the data using d3
+   */
+
   drawNetworkChart(data_str:string){
     let data:any = JSON.parse(data_str);
-    console.log(data);
+    // console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40};
     
     // append the svg object to the body of the page
@@ -257,6 +273,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     }
     }
 
+  /**
+   * @description draw a scatter chart using the data using d3
+   */
 
   drawScatterChart(data_str:string){
     let data:Array<{
@@ -274,8 +293,6 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .append("g")
     .attr("transform",
           "translate(" + this.margina['left'] + "," + this.margina['top'] + ")");
-
-    // //Read the data
 
     // Add X axis
     var x = d3.scaleLinear()
@@ -343,9 +360,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .on("mouseleave", doNotHighlight )
 
   }
+  /**
+   * @description draw a tree chart using the data using d3
+   */
 
   drawTreeChart(data_str:string){
-    
     let data = JSON.parse(data_str);
     // let ex_data={'name': 18.0, 'children': [{'name': 13.0, 'parent': 18.0, 'children': [{'name': 9.0, 'parent': 13.0, 'children': [], 'title': '통일 이후 북한지역의 도시개발 방향에 관한 연구'}, {'name': 12.0, 'parent': 13.0, 'children': [{'name': 7.0, 'parent': 12.0, 'children': [], 'title': '새 통일 한국의 영.유아 교육 연구'}, {'name': 11.0, 'parent': 12.0, 'children': [{'name': 8.0, 'parent': 11.0, 'children': [], 'title': '민간 통일 운동의 주요 논의 동향과 통일 정책 수용여부에 관한 연구'}, {'name': 10.0, 'parent': 11.0, 'children': [{'name': 5.0, 'parent': 10.0, 'children': [], 'title': '알기쉬운 통일교육 12주제:프리젠테이션-제1부-통일비전'}, {'name': 6.0, 'parent': 10.0, 'children': [], 'title': '통일 후 남북한경제 한시분리운영방안: 노동 및 사회복지 분야'}]}]}]}]}, {'name': 17.0, 'parent': 18.0, 'children': [{'name': 1.0, 'parent': 17.0, 'children': [], 'title': '통일 비용·편익의 분석모형 구축'}, {'name': 16.0, 'parent': 17.0, 'children': [{'name': 2.0, 'parent': 16.0, 'children': [], 'title': '통일대비를 위한 국내과제'}, {'name': 15.0, 'parent': 16.0, 'children': [{'name': 0.0, 'parent': 15.0, 'children': [], 'title': '한반도 통일에 대한 국제사회의 기대와 역할: 주변 4국과 G20'}, {'name': 14.0, 'parent': 15.0, 'children': [{'name': 3.0, 'parent': 14.0, 'children': [], 'title': '통일대계 탐색연구'}, {'name': 4.0, 'parent': 14.0, 'children': [], 'title': '한반도 통일의 미래와 주변 4국의 기대'}]}]}]}]}]}
     // data=ex_data;
@@ -480,11 +499,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       return svg.node();
   }
 
+  /**
+   * @description draw a dendrogram chart using the data using d3
+   */
 
   drawDendrogramChart(data_str:string){
-
-    
-  let data = JSON.parse(data_str);
+    let data = JSON.parse(data_str);
   
   //   let ex_data={
   //     "name":18.0,
@@ -613,20 +633,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
 
    // set the dimensions and margins of the graph
-var width = 460
-var height = 460
+  var width = 460
+  var height = 460
 
-// append the svg object to the body of the page
-var svg = d3.select("figure#ngrams")
-  .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(40,0)");  // bit of margin on the left = 40
+  // append the svg object to the body of the page
+  var svg = d3.select("figure#ngrams")
+    .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(40,0)");  // bit of margin on the left = 40
 
-// // read json data
-// d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram.json")
-// .then((data) => {
+  // // read json data
+  // d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram.json")
+  // .then((data) => {
   // Create the cluster layout:
   var cluster = d3.cluster()
     .size([height, width - 100]);  // 100 is the margin I will have on the right side

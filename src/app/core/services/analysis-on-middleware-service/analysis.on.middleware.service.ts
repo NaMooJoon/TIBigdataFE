@@ -18,6 +18,34 @@ export class AnalysisOnMiddlewareService {
         private docControl: ArticleService
         ) {}
 
+    /**
+     * @description send the data to middleware
+     * @param route : subroute for the middleware ex) /textmining, /preprocessing
+     * @param data : JSON.stringfy(object)
+     * /textmining:
+     * JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      'option1': optionValue1,
+      'option2': optionValue2,
+      'option3': optionValue3,
+      'analysisName': activity,
+    })
+     * 
+     * /getPreprocessedData:
+     * JSON.stringify({
+      'userEmail': this.email, 
+      'keyword': this.selectedKeyword, 
+      'savedDate': this.selectedSavedDate,
+      
+      'synonym': (<HTMLInputElement>document.getElementById('synonym_user')).checked,
+      'stopword': (<HTMLInputElement>document.getElementById('stopword_user')).checked,
+      'compound': (<HTMLInputElement>document.getElementById('compound_user')).checked,
+      'wordclass': wordclass.toString().padStart(3, '0') //(100) 동사, 010(명사), 001(형용사)
+    })
+     * @returns res
+     */
 
     async postDataToMiddleware(route:string, data: string): Promise<any> {
         
@@ -32,7 +60,13 @@ export class AnalysisOnMiddlewareService {
 
         return res;
     }
-
+    /**
+     * @description send the data to frontend DB(node.js)
+     * @see /TIBigdataFE/fe-backend/module/textMiningQuery.js
+     * @param route : subroute for the frontend DB(node.js) ex) /uploadDict , /getPreprocessedData
+     * @param data : /uploadDict(userEmail, dictType, csv), /getPreprocessedData(userEmail, savedDate)
+     * @returns res
+     */
     async postDataToFEDB(route:string, data: string): Promise<any> {
         
         let res: QueryResponse = await this.http

@@ -1,6 +1,5 @@
 import { Directive, Injectable, OnInit } from "@angular/core";
 import * as d3 from 'd3';
-import { title } from "process";
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 
@@ -32,7 +31,7 @@ export abstract class abstractAnalysis{
         let data = JSON.parse(event);
         this.email = data.email;
 
-        console.log(event);
+        // console.log(event);
         let selectedKeyword = data.savedKeyword;
         let selectedSavedDate = data.savedDate;
         let isSelectedPreprocessed = data.isSelectedPreprocessed;
@@ -45,12 +44,19 @@ export abstract class abstractAnalysis{
         else ;
         
         }
+    /**
+     * @description set the variables of the document user selected
+     */
 
     setSelected(selectedKeyword:string, selectedSavedDate:string, isSelectedPreprocessed: boolean){
         this.selectedKeyword=selectedKeyword;
         this.selectedSavedDate=selectedSavedDate;
         this.isSelectedPreprocessed = isSelectedPreprocessed;
     }
+
+    /**
+     * @description get the data to preview from middleware and show in a result table
+     */
 
     async previewData(selectedKeyword:string, selectedSavedDate:string){
         let data = JSON.stringify({
@@ -72,10 +78,18 @@ export abstract class abstractAnalysis{
         this.closeLoadingWithMask();
     }
     
+    /**
+     * @description get the data to preview from middleware and make csv file and give a user as a file download method
+     */
+
     downloadData(selectedKeyword:string, selectedSavedDate:string){
         
     }
 
+
+    /**
+     * @description draw a preprocessing result table using d3 library.
+     */
     drawPreTable(dataArray:any, activity: string){
         let data:Array<string>;
 
@@ -118,7 +132,9 @@ export abstract class abstractAnalysis{
         }   
     }
 
-    
+    /**
+     * @description show a loading img
+     */
     LoadingWithMask() {
         //화면의 높이와 너비를 구합니다.
         let maskHeight = $(document).height();
@@ -171,16 +187,23 @@ export abstract class abstractAnalysis{
         // $(document).on("click", "#cancelbtn", this.closeLoadingWithMask());
     }
     
-    
+    /**
+     * @description close a loading img
+     */
     closeLoadingWithMask() {
         $('#mask, #loading').hide();
         $('#mask, #loading').empty(); 
     }
 
+    /**
+     * @description clear the result table
+     */
     clearResult(){
         d3.selectAll('figure > *').remove();
     }
 
+
+    
     public get middlewareService(): AnalysisOnMiddlewareService {
         return this._middlewareService;
     }
