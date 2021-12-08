@@ -140,7 +140,7 @@ router.post("/changeTitleMyDocs", (req, res) => {
 
   myDoc
     .update(
-      { userEmail: "sujinyang@handong.edu", 'keywordList.savedDate' : new Date(savedDate).toISOString() },
+      { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
       {$set : {'keywordList.$.keyword' : keyword } }
     )
     .then((result) => {
