@@ -2,6 +2,7 @@ import { Directive, Injectable, OnInit } from "@angular/core";
 import * as d3 from 'd3';
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import $ from "jquery";
 
 @Injectable({
     providedIn: "root",
