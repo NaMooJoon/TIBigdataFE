@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-analysis-menu",
   templateUrl: "./analysis-menu.component.html",
-  styleUrls: ["./analysis-menu.component.css"],
+  styleUrls: ["../../analysis-style.less"],
 })
 export class AnalysisMenuComponent implements OnInit {
   private _title: string = "";
@@ -56,17 +56,17 @@ export class AnalysisMenuComponent implements OnInit {
   }
 
   toManual() {
-    this.router.navigateByUrl("/analysis/manual");
+    this.router.navigateByUrl("/analysis-menu/manual");
     this.ngOnInit();
   }
 
   toPreprocessing() {
-    this.router.navigateByUrl("/analysis/preprocessing");
+    this.router.navigateByUrl("/analysis-menu/preprocessing");
     this.ngOnInit();
   }
 
   toAnalysis() {
-    this.router.navigateByUrl("/analysis/analysis");
+    this.router.navigateByUrl("/analysis-menu/analysis");
     this.ngOnInit();
   }
 
