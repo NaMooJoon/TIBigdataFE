@@ -113,7 +113,7 @@ export class NavbarComponent implements OnInit {
 
   navigateSpecials(): void {
     this.isHamburger = false;
-    this.router.navigateByUrl("/analysis");
+    this.router.navigateByUrl("/analysis-menu");
   }
 
   navigateLibrary(): void {

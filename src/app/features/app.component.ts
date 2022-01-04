@@ -28,7 +28,7 @@ export class AppComponent {
         try {
           let rootUrl = this.router.url.split("/")[1];
 
-          if(rootUrl === "search" || rootUrl === "library" || rootUrl === "analysis" || rootUrl === "community" || rootUrl === "about" || rootUrl === "userpage")
+          if(rootUrl === "search" || rootUrl === "library" || rootUrl === "analysis-menu" || rootUrl === "openapi" || rootUrl === "community" || rootUrl === "about" || rootUrl === "userpage")
             this.isSearchbarNeeded = true;
           else
             this.isSearchbarNeeded = false;
