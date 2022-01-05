@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import {Observable, Subscription} from 'rxjs';
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
@@ -25,6 +25,8 @@ export class SearchBarComponent implements OnInit {
   public relatedKeywords = [];
   public relatedKeywords_mobile = [];
   private searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
+  private _institutionList: Array<Object>;
+  private articleSubscriber: Subscription;
 
   private _dateList: Array<String> = [
     "전체",
@@ -37,13 +39,13 @@ export class SearchBarComponent implements OnInit {
   ];
 
   private _topicList: Array<String> = [
-    "전체",
-    "경제",
-    "국제",
-    "문화",
-    "스포츠",
     "정치",
-    "지역",
+    "경제",
+    "사회",
+    "국제",
+    "IT_과학",
+    "스포츠",
+    "문화",
   ];
 
 
@@ -72,6 +74,12 @@ export class SearchBarComponent implements OnInit {
       if (status === true) this.setRelatedKeywords();
     });
 
+    // this.articleSubscriber = this.elasticsearchService
+    //   .getArticleChange()
+    //   .subscribe(() => {
+    //     this.loadInstitutions();
+    //   });
+
     this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (!this._router.url.includes("result")) {
@@ -90,6 +98,12 @@ export class SearchBarComponent implements OnInit {
     this.isTopicSelected = false;
     this.isKeyLoaded = false;
     this.checkRouterIsMain();
+    this.loadInstitutions();
+  }
+
+  async loadInstitutions() {
+    let res = await this.elasticsearchService.getInstitutions();
+    this.institutionList = res["aggregations"]["count"]["buckets"];
   }
 
   /**
@@ -154,7 +168,7 @@ export class SearchBarComponent implements OnInit {
    */
   checkRouterIsMain(): void {
     let rootUrl = this._router.routerState.snapshot.url;
-    
+
     if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search")){
       this.isMain = false;
     } else {
@@ -287,4 +301,21 @@ export class SearchBarComponent implements OnInit {
   public set topicList(value: Array<String>) {
     this._topicList = value;
   }
+
+  public get institutionList(): Array<Object> {
+    return this._institutionList;
+  }
+
+  public set institutionList(value: Array<Object>) {
+    this._institutionList = value;
+  }
+
+  selectInst(inst: { key: string; doc_num: number }) {
+    this.isInstSelected = true;
+    this.selectedInst = inst.key;
+    this.elasticsearchService.setSearchMode(SearchMode.INST);
+    this.elasticsearchService.setSelectedInst(inst.key);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
 }

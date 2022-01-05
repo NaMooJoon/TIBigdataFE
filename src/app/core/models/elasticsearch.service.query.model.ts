@@ -2,6 +2,9 @@ export class ElasticSearchQueryModel {
   private hashKeys: string[] = [];
   private searchKeyword: string = "";
   private sortOption: {};
+  private mustKeyword: string = "";
+  private mustNotKeyword: string = "";
+
 
   private searchSource = [
     "post_title",
@@ -64,6 +67,80 @@ export class ElasticSearchQueryModel {
     };
   }
 
+  public getSearchDocsWithTextOption() {
+    if(this.mustKeyword != "" && this.mustNotKeyword != ""){
+      return {
+        query: {
+          multi_match: {
+            query: this.searchKeyword,
+            fields: this.searchField,
+          },
+        },
+        post_filter: {
+          bool: {
+            must:
+              {
+                multi_match: {
+                  query: this.mustKeyword,
+                  fields: this.searchField,
+                }
+              },
+            must_not:
+              {
+                multi_match: {
+                  query: this.mustNotKeyword,
+                  fields: this.searchField,
+                }
+              }
+          }
+        },
+        sort: [this.sortOption],
+      };
+    }else if (this.mustKeyword != ""){
+      return {
+        query: {
+          multi_match: {
+            query: this.searchKeyword,
+            fields: this.searchField,
+          },
+        },
+        post_filter: {
+          bool: {
+            must:
+              {
+                multi_match: {
+                  query: this.mustKeyword,
+                  fields: this.searchField,
+                }
+              },
+          }
+        },
+        sort: [this.sortOption],
+      };
+    }else {
+      return {
+        query: {
+          multi_match: {
+            query: this.searchKeyword,
+            fields: this.searchField,
+          },
+        },
+        post_filter: {
+          bool: {
+            must_not:
+              {
+                multi_match: {
+                  query: this.mustNotKeyword,
+                  fields: this.searchField,
+                }
+              }
+          }
+        },
+        sort: [this.sortOption],
+      };
+    }
+  }
+
   public getSearchDocCount() {
     return {
       query: {
@@ -105,5 +182,10 @@ export class ElasticSearchQueryModel {
     if (op === 0) this.sortOption = this.sortByDateAsc;
     if (op === 1) this.sortOption = this.sortByDateDesc;
     if (op === 2) this.sortOption = this.sortByScoreDesc;
+  }
+
+  public setSelectedKeyword(mustKeyword: string, mustNotKeyword: string) {
+    this.mustKeyword = mustKeyword;
+    this.mustNotKeyword = mustNotKeyword;
   }
 }

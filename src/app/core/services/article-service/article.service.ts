@@ -22,7 +22,6 @@ export class ArticleService {
     this.elasticsearchService.setHashKeys(hashKeys);
     await this.elasticsearchService.searchByManyHashKey().then((res) => {
       let articles: {}[] = res["hits"]["hits"];
-
       for (let i = 0; i < articles.length; i++) {
         let idx = hashKeys.indexOf(articles[i]["_source"]["hash_key"]);
         let extractedTitle: string = articles[i]["_source"]["post_title"];

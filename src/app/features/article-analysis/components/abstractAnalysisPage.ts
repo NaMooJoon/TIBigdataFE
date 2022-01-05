@@ -11,8 +11,8 @@ import $ from "jquery";
 @Directive({
     selector: '[appChanges]'
 })
-  
-  
+
+
 export abstract class abstractAnalysis{
 
     private _email: string;
@@ -21,13 +21,13 @@ export abstract class abstractAnalysis{
     private _isSelectedPreprocessed: boolean;
     private _isDataPreprocessed: boolean = false;
     private _isDataPreview: boolean = false;
-    
-    
+
+
     constructor(
         private _middlewareService: AnalysisOnMiddlewareService,
         private _userSavedDocumentService: UserSavedDocumentService,
       ){};
-      
+
     onMessage(event){
         let data = JSON.parse(event);
         this.email = data.email;
@@ -43,7 +43,7 @@ export abstract class abstractAnalysis{
         else if(data.activity=='preview') this.previewData(selectedKeyword,selectedSavedDate);
         else if(data.activity=='download') this.downloadData(selectedKeyword,selectedSavedDate);
         else ;
-        
+
         }
     /**
      * @description set the variables of the document user selected
@@ -65,26 +65,26 @@ export abstract class abstractAnalysis{
             'keyword': selectedKeyword,
             'savedDate': selectedSavedDate,
           });
-        
+
         this.LoadingWithMask();
 
         let result = await this.middlewareService.postDataToFEDB('/textmining/getPreprocessedData', data);
         console.log("preview", result);
-        
+
         this.clearResult();
         this.drawPreTable(result, "preview");
-        
+
         this.isDataPreprocessed = false;
         this.isDataPreview =true;
         this.closeLoadingWithMask();
     }
-    
+
     /**
      * @description get the data to preview from middleware and make csv file and give a user as a file download method
      */
 
     downloadData(selectedKeyword:string, selectedSavedDate:string){
-        
+
     }
 
 
@@ -98,7 +98,7 @@ export abstract class abstractAnalysis{
             // .attr('class','result-pretable');
         if(activity=="preview"){
             // data= dataArray['tokenList'][0];
-            
+
             data = dataArray['tokenList'];
             console.log("preview",data);
         }
@@ -113,12 +113,12 @@ export abstract class abstractAnalysis{
         const table = figure.append("div").style('height','200px')
         .style('overflow','auto')
         .append("table").style('width','100%');
-    
+
         const th = table.append("tr")
         .style('padding','15px 0px')
         .style('font-weight','500')
         .style('text-align','center');
-        
+
         th.append('th').text('제목');
         th.append('th').text('전처리');
 
@@ -130,7 +130,7 @@ export abstract class abstractAnalysis{
             const tr = tbody.append("tr");
             tr.append("td").text(dataArray['titleList'][i]);
             tr.append("td").text(data[i]);
-        }   
+        }
     }
 
     /**
@@ -141,19 +141,19 @@ export abstract class abstractAnalysis{
         let maskHeight = $(document).height();
         let maskWidth  = window.document.body.clientWidth;
         let gif='../../../../assets/icons/loading.gif';
-        
+
         //화면에 출력할 마스크를 설정해줍니다.
         var mask       ="<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; left:0; top:0; display:flex; justify-content: center; align-items: center;'></div>";
         var loadingImg = '';
-        
+
         loadingImg +=" <img id='loading' src='"+ gif +"' style='position: absolute; margin: 0px auto;display: block;  '/>";
-    
-        
+
+
 
         //화면에 레이어 추가
         $('body')
             .append(mask)
-    
+
         //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채웁니다.
         $('#mask').css({
         // 'width':'100%',
@@ -162,14 +162,14 @@ export abstract class abstractAnalysis{
                 'height': maskHeight,
                 'opacity' :'0.7'
         });
-    
+
         //마스크 표시
         $('#mask').show();
 
         // var center       ="<div id='center' style='width: 100%; height: 100vh; display:flex; justify-content: center; align-items: center; '></div>";
         // $('body')
         //     .append(center)
-        
+
         // $('#center').append(loadingImg);
         // $('#center').show();
         $('#mask')
@@ -187,13 +187,13 @@ export abstract class abstractAnalysis{
         // $('#cancelbtn').click()
         // $(document).on("click", "#cancelbtn", this.closeLoadingWithMask());
     }
-    
+
     /**
      * @description close a loading img
      */
     closeLoadingWithMask() {
         $('#mask, #loading').hide();
-        $('#mask, #loading').empty(); 
+        $('#mask, #loading').empty();
     }
 
     /**
@@ -204,7 +204,7 @@ export abstract class abstractAnalysis{
     }
 
 
-    
+
     public get middlewareService(): AnalysisOnMiddlewareService {
         return this._middlewareService;
     }

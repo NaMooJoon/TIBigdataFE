@@ -44,6 +44,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   private _totalDocs: number;
   private _pageSize: number = 10;
 
+  private _checkArray: FormArray = null;
+  private _toggle_all : boolean = false;
+
   constructor(
     private userSavedDocumentService: UserSavedDocumentService,
     private articleService: ArticleService,
@@ -54,16 +57,17 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     private paginationService: PaginationService,
     private authenticationService: AuthenticationService
   ) {
+    this.setArticleForm();
     // Set articles when article has been changed
     this.articleSubscriber = this.articleChange$.subscribe((articles) => {
       this.articleSources = articles;
       this.resetSearchOptions();
       this.setArticleHashKeyList();
       this.setCheckbox();
-      this.setArticleForm();
 
       this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
+
     });
 
     // Check if it is still searching
@@ -120,8 +124,23 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Add property of checkbox value into article.
    */
   setCheckbox(): void {
+    this.checkArray = this.form.get("checkArray") as FormArray;
+
     for (let i in this.articleSources) {
       this.articleSources[i]["isSelected"] = false;
+      this.checkArray.controls.forEach((item: FormControl) => {
+        if (item.value == this.articleSources[i]["_source"]["hash_key"]) {
+          this.articleSources[i]["isSelected"] = true;
+          return;
+        }
+      });
+    }
+
+    this.toggle_all = true;
+    for (let i in this.articleSources) {
+      if(this.articleSources[i]["isSelected"] == false){
+        this.toggle_all = false;
+      }
     }
   }
 
@@ -169,7 +188,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.isSearchDone = false;
     this.currentPage = this.elasticsearchService.getCurrentSearchingPage();
     if (this.isMainSearch === true) {
+      let previousSearchKeyword : string = this.searchKeyword;
       this.searchKeyword = this.elasticsearchService.getKeyword();
+      if(previousSearchKeyword != this.searchKeyword){
+        this.setArticleForm();
+      }
     } else {
       this.searchKeyword = '키워드 없음';
     }
@@ -231,6 +254,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         .then(() => {
           alert("문서가 내 보관함에 저장되었어요.");
         });
+      this.checkArray.clear();
     }
   }
 
@@ -241,15 +265,29 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    */
   checkUncheckAll(isCheckAll: boolean, checkArray: FormArray): FormArray {
     if (isCheckAll) {
+      this.toggle_all = true;
       for (let i = 0; i < this.articleSources.length; i++) {
         checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
       }
     } else {
-      checkArray.clear();
-    }
+      this.toggle_all = false;
+
+      let j : number = 0;
+      this.checkArray.controls.forEach((item: FormControl, index :number) => {
+        if (item.value == this.articleSources[0]["_source"]["hash_key"]) {
+          for(let i = 10; i > 0; i--){
+            this.checkArray.removeAt(j);
+          }
+          return;
+        }
+        j++;
+      });
+    } 
+
     for (let i = 0; i < this.articleSources.length; i++) {
       this.articleSources[i]["isSelected"] = isCheckAll;
     }
+
     return checkArray;
   }
 
@@ -258,17 +296,18 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @param e DOM event.
    */
   onCheckboxChange(e): void {
-    let checkArray: FormArray = this.form.get("checkArray") as FormArray;
+    this.checkArray = this.form.get("checkArray") as FormArray;
+
     if (e.target.value === "toggleAll") {
-      checkArray = this.checkUncheckAll(e.target.checked, checkArray);
+      this.checkArray = this.checkUncheckAll(e.target.checked, this.checkArray);
     } else {
       if (e.target.checked) {
-        checkArray.push(new FormControl(e.target.value));
+        this.checkArray.push(new FormControl(e.target.value));
       } else {
         let i: number = 0;
-        checkArray.controls.forEach((item: FormControl) => {
+        this.checkArray.controls.forEach((item: FormControl) => {
           if (item.value == e.target.value) {
-            checkArray.removeAt(i);
+            this.checkArray.removeAt(i);
             return;
           }
           i++;
@@ -442,5 +481,18 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
   public set pageSize(value: number) {
     this._pageSize = value;
+  }
+
+  public get checkArray(): FormArray {
+    return this._checkArray;
+  }
+  public set checkArray(value: FormArray) {
+    this._checkArray = value;
+  }
+  public get toggle_all(): boolean {
+    return this._toggle_all;
+  }
+  public set toggle_all(value: boolean) {
+    this._toggle_all = value;
   }
 }

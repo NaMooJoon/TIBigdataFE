@@ -123,6 +123,7 @@ export class ArticleLibraryComponent implements OnInit {
       case "topic": {
         this.cat_button_choice[0] = ct;
         this.selectTopic(ct);
+        break;
       }
 
       case "dict": {
@@ -246,7 +247,7 @@ export class ArticleLibraryComponent implements OnInit {
    * @param institution
    */
   async selectTopic(tp: string) {
-
+console.log("tp : ",tp)
     if(tp === "전체"){
       this.elasticsearchService.setSearchMode(SearchMode.ALL);
       this.selectedTp = "전체";

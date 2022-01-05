@@ -9,9 +9,10 @@ import { NavigationEnd, Router } from '@angular/router';
 export class UserpageHeaderComponent implements OnInit {
 
   private _currentMenu: string = "";
+  private _currentKeyword: string = "";
 
   constructor(
-    private router: Router
+    private router: Router,
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -25,8 +26,8 @@ export class UserpageHeaderComponent implements OnInit {
   }
 
   /**
-   * @description Return route name to Korean 
-   * @param routename 
+   * @description Return route name to Korean
+   * @param routename
    */
   convertRouteToKor(routename: string) {
     if (routename === "my-docs") return "내 보관함";
@@ -40,6 +41,13 @@ export class UserpageHeaderComponent implements OnInit {
   }
   public set currentMenu(value: string) {
     this._currentMenu = value;
+  }
+
+  public get currentKeyword(): string {
+    return this._currentKeyword;
+  }
+  public set currentKeyword(value: string) {
+    this._currentKeyword = value;
   }
 
 }

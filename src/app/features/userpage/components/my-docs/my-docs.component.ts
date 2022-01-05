@@ -311,11 +311,22 @@ export class MyDocsComponent implements OnInit {
     if (this.form.value["checkArray"].length == 0) {
       alert("삭제할 문서가 없습니다! 삭제할 문서를 선택해주세요.");
     } else {
-      console.log(this.form.value["checkArray"]);
       this.userSavedDocumentService.eraseSelectedMyDocs(this.form.value["checkArray"], this.savedDate).then(
         () => this.loadSavedKeywords(),
       );
     }
     this.form.value["checkArray"].clear;
+  }
+
+  openModal() {
+    let title = prompt("변경할 폴더 명을 입력 하세요.",this.keyword);
+
+    if(title != null){
+      this.userSavedDocumentService.changeFolderTitle(title, this.savedDate).then(
+        () => this.loadSavedKeywords(),
+      );
+    }else{
+      alert("변경할 폴더 명이 없습니다.");
+    }
   }
 }

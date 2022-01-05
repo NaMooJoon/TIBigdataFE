@@ -20,6 +20,7 @@ export class UserSavedDocumentService {
   private setPreprocessedUrl = this.API_URL + "/myDoc/setPreprocessed";
   private deleteAllMyDocUrl = this.API_URL + "/myDoc/deleteAllMyDocs";
   private deleteSelectedMyDocUrl = this.API_URL + "/myDoc/deleteSelectedMyDocs";
+  private changeTitleMyDocs = this.API_URL + "/myDoc/changeTitleMyDocs";
   private currentUser: UserProfile;
   private docsPerPage: number = 10;
 
@@ -67,7 +68,7 @@ export class UserSavedDocumentService {
       doc['savedDate_format'] = moment(new Date(doc['savedDate'])).format('YYYY년 MM월 DD일 HH시 mm분');
       doc['preprocessed'] = doc['preprocessed']==true? true:false;
     }
-    
+
     return mydocs;
   }
 
@@ -143,6 +144,13 @@ export class UserSavedDocumentService {
   async eraseSelectedMyDocs(docHashKeys: Array<string>, savedDate: string): Promise<boolean> {
     let res = await this.httpClient
       .post<any>(this.deleteSelectedMyDocUrl, { userEmail: this.currentUser.email, docHashKeys: docHashKeys, savedDate: savedDate })
+      .toPromise();
+    return res.succ;
+  }
+
+  async changeFolderTitle(title : string, savedDate: string){
+    let res = await this.httpClient
+      .post<any>(this.changeTitleMyDocs, { userEmail: this.currentUser.email, keyword: title, savedDate: savedDate })
       .toPromise();
     return res.succ;
   }

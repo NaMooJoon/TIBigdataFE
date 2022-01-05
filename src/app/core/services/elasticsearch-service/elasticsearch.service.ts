@@ -33,6 +33,9 @@ export class ElasticsearchService {
   //new
   private startTime: string = null;
   private endTime: string = null;
+  private mustKeyword: string = "";
+  private mustNotKeyword: string = "";
+
 
   constructor(
     private ipSvc: IpService,
@@ -280,8 +283,7 @@ export class ElasticsearchService {
   searchByManyHashKey(startIndex?: number): Promise<any> {
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
-      from: startIndex,
-      size: this.numDocsPerPage,
+      size: this.esQueryModel.getSearchHashKeys().query.terms.hash_key.length,
       body: this.esQueryModel.getSearchHashKeys(),
       _source: this.esQueryModel.getSearchSource(),
     });
@@ -350,6 +352,10 @@ export class ElasticsearchService {
       this.countByInstComplete();
     } else if (searchMode === SearchMode.DATE) {
       this.searchByDateComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
+    } else if (searchMode === SearchMode.KEYWORDOPTION) {
+      this.fullTextOptionSearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
     }
@@ -551,6 +557,31 @@ export class ElasticsearchService {
           },
         },
       },
+      _source: this.esQueryModel.getSearchSource(),
+    });
+  }
+
+  setSelectedKeyword(mustKeyword: string, mustNotKeyword: string){
+    this.mustKeyword = mustKeyword;
+    this.mustNotKeyword = mustNotKeyword;
+  }
+
+  fullTextOptionSearchComplete(startIndex?: number, docSize?: number): void {
+    if (startIndex < 0) startIndex = 0;
+    this.saveSearchResult(this.searchByTextOption(startIndex, docSize));
+  }
+
+  searchByTextOption(startIndex?: number, docSize?: number): Promise<any> {
+    if (!startIndex) startIndex = 0;
+    if (!docSize) docSize = this.numDocsPerPage;
+    this.esQueryModel.setSelectedKeyword(this.mustKeyword, this.mustNotKeyword);
+
+    return this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      from: startIndex,
+      size: docSize,
+      filterPath: this.esQueryModel.getFilterPath(),
+      body: this.esQueryModel.getSearchDocsWithTextOption(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }

@@ -133,27 +133,6 @@ router.post("/deleteSelectedMyDocs", (req, res) => {
     });
 });
 
-router.post("/changeTitleMyDocs", (req, res) => {
-  let userEmail = req.body.userEmail;
-  let keyword = req.body.keyword;
-  let savedDate = req.body.savedDate;
-
-  myDoc
-    .update(
-      { userEmail: userEmail, 'keywordList.savedDate' : new Date(savedDate).toISOString() },
-      {$set : {'keywordList.$.keyword' : keyword } }
-    )
-    .then((result) => {
-      return res.
-      status(200)
-        .json(new Res(true, "successfully delete all docs", null));
-    })
-    .catch((err) => {
-      return res.status(400)
-        .json(new Res(false, "successfully delete all docs", null));
-    });
-});
-
 router.post("/saveMyDoc", (req, res) => {
   let userEmail = req.body.userEmail;
   let docHashKeys = req.body.docHashKeys;

@@ -1,3 +1,10 @@
+<div class="folder-menu">
+  <button
+    class="folder"
+    (click)="openModal()"
+    id="logout-button"
+  >폴더편집</button>
+</div>
 <form *ngIf="!isSavedKeywordsEmpty" [formGroup]="form" novalidate>
   <section *ngIf="isSavedKeywordsLoaded" class="keyword-group">
     <div *ngFor="let key of savedKeywords; index as idx">
@@ -43,38 +50,39 @@
     </ul>
   </section>
 </form>
-<div *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="page-numbers">
-  <button
-    id="page-multiprev"
-    *ngIf="currentPage > 1"
-    (click)="loadSavedDocs(pageInfo.currentPage - 10)"
-  ></button>
-  <button
-    id="page-prev"
-    *ngIf="currentPage > 1"
-    (click)="loadSavedDocs(currentPage - 1)"
-  ></button>
-  <button
-    [ngStyle]="{
-      'background-color': currentPage == i ? '#52b9ff' : 'transparent',
-      color: currentPage == i ? 'white' : 'black'
-    }"
-    (click)="loadSavedDocs(i)"
-    *ngFor="let i of pages"
-  >
-    {{ i }}
-  </button>
-  <button
-    id="page-next"
-    *ngIf="currentPage < pageInfo.endPage"
-    (click)="loadSavedDocs(pageInfo.currentPage + 1)"
-  ></button>
-  <button
-    id="page-multinext"
-    *ngIf="currentPage != pageInfo.endPage"
-    (click)="loadSavedDocs(pageInfo.currentPage + 10)"
-  ></button>
-</div>
+
+<!--<div *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="page-numbers">-->
+<!--  <button-->
+<!--    id="page-multiprev"-->
+<!--    *ngIf="currentPage > 1"-->
+<!--    (click)="loadSavedDocs(pageInfo.currentPage - 10)"-->
+<!--  ></button>-->
+<!--  <button-->
+<!--    id="page-prev"-->
+<!--    *ngIf="currentPage > 1"-->
+<!--    (click)="loadSavedDocs(currentPage - 1)"-->
+<!--  ></button>-->
+<!--  <button-->
+<!--    [ngStyle]="{-->
+<!--      'background-color': currentPage == i ? '#52b9ff' : 'transparent',-->
+<!--      color: currentPage == i ? 'white' : 'black'-->
+<!--    }"-->
+<!--    (click)="loadSavedDocs(i)"-->
+<!--    *ngFor="let i of pages"-->
+<!--  >-->
+<!--    {{ i }}-->
+<!--  </button>-->
+<!--  <button-->
+<!--    id="page-next"-->
+<!--    *ngIf="currentPage < pageInfo.endPage"-->
+<!--    (click)="loadSavedDocs(pageInfo.currentPage + 1)"-->
+<!--  ></button>-->
+<!--  <button-->
+<!--    id="page-multinext"-->
+<!--    *ngIf="currentPage != pageInfo.endPage"-->
+<!--    (click)="loadSavedDocs(pageInfo.currentPage + 10)"-->
+<!--  ></button>-->
+<!--</div>-->
 
 <p class="no-saved-doc" *ngIf="isSavedDocsEmpty" > 저장된 문서가 없습니다.</p>
 </div>
