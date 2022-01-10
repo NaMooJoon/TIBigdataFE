@@ -80,6 +80,13 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+/**
+   * @description show help message for "keyword analysis"
+   * when user click the help button beside the "keyword analysis" button.
+   */
+showHelpMessage() {
+}
+
   /**
    * @description Select institutions and set as user selected
    * @param inst
