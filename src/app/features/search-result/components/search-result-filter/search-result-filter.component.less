@@ -130,6 +130,11 @@ h3 {
   border             : none;
 }
 
+span{
+  border: 1px solid rgb(236, 236, 236);
+  box-shadow: 1px 1px 1px 1px rgb(236, 236, 236);
+}
+
 .keyword-analysis > .helper {
   width              : 2rem;
   height             : 2rem;
@@ -138,6 +143,38 @@ h3 {
   background-repeat  : no-repeat;
   background-position: center;
   border             : none;
+  &:hover .arrow-box{
+    visibility: visible;
+    opacity: 1;
+  }
+  .arrow-box{
+    visibility: hidden;
+    display: block;
+    font-size: 15px;
+    width: 180px;
+    background-color: white;
+    font-color: black;
+    text-align: center;
+    border-radius: 18px;
+    padding: 10px 10px;
+    position: relative;
+    z-index: 1;
+    bottom: 70px;
+    left: -73px;
+    opacity: 0;
+    transition: opacity 1s;
+    &::after{
+      content: "";
+      transform: rotate(180deg);
+      position: absolute;
+      bottom: -15%;
+      right: 50%;
+      margin-left: 0px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent white transparent;
+    }
+  }
 }
 
 .keyword-search>input {
