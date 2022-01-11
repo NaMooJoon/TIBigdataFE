@@ -13,6 +13,13 @@
           "styleext": "less"
         }
       },
+      "i18n": {
+        "sourceLocale": "kr-KR",
+        "locales": {
+          "en": "src/locale/messages.en.xlf"
+         
+      }
+    },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -39,6 +46,9 @@
             ]
           },
           "configurations": {
+            "en": {
+              "localize": ["en"]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -49,7 +59,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
+              "extractCss": true, 
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -74,6 +84,9 @@
           "configurations": {
             "production": {
               "browserTarget": "KUBiC:build:production"
+            },
+            "en": {
+              "browserTarget": "KUBiC:build:en"
             }
           }
         },
