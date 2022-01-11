@@ -48,7 +48,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadInstitutions();
       });
-    this.searchSubscribe = this.elasticsearchService
+    this.searchSubscriber = this.elasticsearchService
       .getSearchStatus()
       .subscribe(() => {
         this.setSearchKeyword();
