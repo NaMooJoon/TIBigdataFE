@@ -12,9 +12,11 @@ import {Router} from '@angular/router';
   styleUrls: ["./search-result-filter.component.less"],
 })
 export class SearchResultFilterComponent implements OnInit, OnDestroy {
+  private searchKeyword: string;
 
   private _institutionList: Array<Object>;
   private articleSubscriber: Subscription;
+  private searchSubscriber: Subscription;
   private _selectedInst: string;
   private isSearchFilter: boolean = false;
 
@@ -46,17 +48,23 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadInstitutions();
       });
+    this.searchSubscribe = this.elasticsearchService
+      .getSearchStatus()
+      .subscribe(() => {
+        this.setSearchKeyword();
+      });
     this._datePickerEndDate = null;
     this._datePickerStartDate = null;
   }
 
   ngOnInit() {
     this.loadInstitutions();
-
+    this.setSearchKeyword();
   }
 
   ngOnDestroy() {
     this.articleSubscriber.unsubscribe();
+    this.searchSubscriber.unsubscribe();
   }
 
   /**
@@ -99,6 +107,14 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   selectSearchFilter(): void {
     this.isSearchFilter = !this.isSearchFilter;
+  }
+
+  setSearchKeyword() {
+    this.searchKeyword = this.elasticsearchService.getKeyword();
+  }
+
+  public get getSearchKeyword(): string {
+    return this.searchKeyword;
   }
 
   public get isSelectSearchFilter(): boolean {
