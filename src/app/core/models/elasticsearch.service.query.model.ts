@@ -68,77 +68,27 @@ export class ElasticSearchQueryModel {
   }
 
   public getSearchDocsWithTextOption() {
-    if(this.mustKeyword != "" && this.mustNotKeyword != ""){
-      return {
-        query: {
-          multi_match: {
-            query: this.searchKeyword,
-            fields: this.searchField,
-          },
-        },
-        post_filter: {
-          bool: {
-            must:
-              {
-                multi_match: {
-                  query: this.mustKeyword,
-                  fields: this.searchField,
-                }
-              },
-            must_not:
-              {
-                multi_match: {
-                  query: this.mustNotKeyword,
-                  fields: this.searchField,
-                }
+    return {
+      post_filter: {
+        bool: {
+          must:
+            {
+              multi_match: {
+                query: this.mustKeyword,
+                fields: this.searchField,
               }
-          }
-        },
-        sort: [this.sortOption],
-      };
-    }else if (this.mustKeyword != ""){
-      return {
-        query: {
-          multi_match: {
-            query: this.searchKeyword,
-            fields: this.searchField,
-          },
-        },
-        post_filter: {
-          bool: {
-            must:
-              {
-                multi_match: {
-                  query: this.mustKeyword,
-                  fields: this.searchField,
-                }
-              },
-          }
-        },
-        sort: [this.sortOption],
-      };
-    }else {
-      return {
-        query: {
-          multi_match: {
-            query: this.searchKeyword,
-            fields: this.searchField,
-          },
-        },
-        post_filter: {
-          bool: {
-            must_not:
-              {
-                multi_match: {
-                  query: this.mustNotKeyword,
-                  fields: this.searchField,
-                }
+            },
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: this.searchField,
               }
-          }
-        },
-        sort: [this.sortOption],
-      };
-    }
+            }
+        }
+      },
+      sort: [this.sortOption],
+    };
   }
 
   public getSearchDocCount() {
