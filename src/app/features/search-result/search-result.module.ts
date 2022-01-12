@@ -8,12 +8,14 @@ import { SearchResultFilterComponent } from "./components/search-result-filter/s
 import { ReadArticle } from "./components/read-article/read-article.component";
 import { SharedModule } from "src/app/shared/shared.module";
 import { SearchResultComponent } from "./components/search-result/search-result.component";
+import { KeywordAnalysisComponent } from './components/keyword-analysis/keyword-analysis.component';
 
 @NgModule({
   declarations: [
     SearchResultComponent,
     SearchResultFilterComponent,
     ReadArticle,
+    KeywordAnalysisComponent,
   ],
   imports: [
     CommonModule,
