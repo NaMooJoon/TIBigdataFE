@@ -9,7 +9,7 @@
         <ul class="common-menu">
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
-            <a (click)="navigateLibrary()">자료열람</a>
+            <a i18n="library" (click)="navigateLibrary()">자료열람</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
             <a (click)="navigateSpecials()">자료분석</a>

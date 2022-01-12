@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="kr-KR" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="2cc0f8f467495d904f3038aece186d90cc280e6d" datatype="html">
+        <source>이용약관</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/components/footer/footer.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <note priority="1" from="description">terms</note>
+      </trans-unit>
+      <trans-unit id="673fbc051e1d91b4073d2a9646c522c0ba8922d6" datatype="html">
+        <source>자료열람</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/components/navbar/navbar.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">library</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
