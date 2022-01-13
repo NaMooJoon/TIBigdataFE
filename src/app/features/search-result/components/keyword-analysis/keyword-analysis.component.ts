@@ -34,4 +34,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   public get getSearchKeyword(): string {
     return this.searchKeyword;
   }
+
 }
+
+
