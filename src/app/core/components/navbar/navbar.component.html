@@ -135,6 +135,7 @@
   </div>
 
   <ul *ngIf="!getIsSignedIn()" class="login-menu">
+    <li><img src="../../../../assets/icons/eng_lang.png"> </li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
       <a (click)="toLogin()">로그인</a>
     </li>
