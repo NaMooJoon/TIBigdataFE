@@ -35,6 +35,7 @@ export class ElasticsearchService {
   private endTime: string = null;
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
+  private firstChar = "";
 
 
   constructor(
@@ -332,6 +333,7 @@ export class ElasticsearchService {
     this.esQueryModel.setSortOption(this.sortOption);
     let searchMode = this.getSearchMode();
     this.setCurrentSearchingPage(selectedPageNum);
+
     if (searchMode === SearchMode.ALL) {
       this.allSearchComplete((selectedPageNum - 1) * this.getNumDocsPerPage());
       this.allCountComplete();
@@ -356,6 +358,10 @@ export class ElasticsearchService {
       );
     } else if (searchMode === SearchMode.KEYWORDOPTION) {
       this.fullTextOptionSearchComplete(
+        (selectedPageNum - 1) * this.getNumDocsPerPage()
+      );
+    } else if (searchMode === SearchMode.DICTIONARY) {
+      this.searchByDictionaryComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
     }
@@ -437,6 +443,22 @@ export class ElasticsearchService {
         query: {
           match: {
             published_institution: this.selectedInst,
+          },
+        },
+      },
+      _source: this.esQueryModel.getSearchSource(),
+    });
+  }
+
+  searchByDictionary(startIndex?: number, docSize?: number): Promise<any> {
+    return this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      from: startIndex,
+      size: this.numDocsPerPage,
+      body: {
+        query: {
+          match_phrase: {
+            first_char_title: this.firstChar,
           },
         },
       },
@@ -584,5 +606,13 @@ export class ElasticsearchService {
       body: this.esQueryModel.getSearchDocsWithTextOption(),
       _source: this.esQueryModel.getSearchSource(),
     });
+  }
+
+  setFirstChar(firstChar: string) {
+    this.firstChar = firstChar;
+  }
+
+  searchByDictionaryComplete(startIndex?: number) {
+    this.saveSearchResult(this.searchByDictionary(startIndex));
   }
 }

@@ -256,14 +256,13 @@ export class ArticleLibraryComponent implements OnInit {
    * @param institution
    */
   async selectTopic(tp: string) {
-console.log("tp : ",tp)
-    if(tp === "전체"){
-      this.elasticsearchService.setSearchMode(SearchMode.ALL);
-      this.selectedTp = "전체";
-      this.elasticsearchService.triggerSearch(1);
-    } else {
-      this.selectedTp = tp;
+    this.selectedTp = tp;
 
+    if(this.selectedTp === "전체"){
+      this.elasticsearchService.setSearchMode(SearchMode.ALL);
+      this.elasticsearchService.triggerSearch(1);
+    }
+    else {
       let hashKeys = await this.getDocIDsFromTopic(tp);
       hashKeys.map((e) => this.articleService.addHashKey(e));
 
@@ -281,7 +280,7 @@ console.log("tp : ",tp)
       this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
       this.elasticsearchService.setArticleNumChange(hashKeys.length);
       this.elasticsearchService.setHashKeys(ids);
-      this.elasticsearchService.multiHashKeySearchComplete();
+      this.elasticsearchService.triggerSearch(1);
     }
   }
 
@@ -293,10 +292,9 @@ console.log("tp : ",tp)
       this.elasticsearchService.triggerSearch(1);
     }
     else {
-      //this.elasticsearchService.setFirstToken(DictionaryOption[this.selectedDict]);
-      //this.elasticsearchService.setSearchMode(SearchMode.Dict);
-      //this.elasticsearchService.setArticleNumChange(hashKeys.length);
-      //this.elasticsearchService.triggerSearch(1);
+      this.elasticsearchService.setFirstChar(DictionaryOption[this.selectedDict]);
+      this.elasticsearchService.setSearchMode(SearchMode.DICTIONARY);
+      this.elasticsearchService.triggerSearch(1);
     }
   }
 }
