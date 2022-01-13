@@ -17,7 +17,7 @@
         "sourceLocale": "kr-KR",
         "locales": {
           "en": "src/locale/messages.en.xlf"
-         
+
       }
     },
       "architect": {
@@ -47,7 +47,12 @@
           },
           "configurations": {
             "en": {
-              "localize": ["en"]
+              "aot": true,
+              "outputPath": "dist/under-c-en/",
+              "i18nFile": "src/locale/messages.en.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "en",
+              "i18nMissingTranslation": "error"
             },
             "production": {
               "fileReplacements": [
@@ -59,7 +64,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true, 
+              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
