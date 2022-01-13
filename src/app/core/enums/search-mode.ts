@@ -6,5 +6,6 @@ export enum SearchMode {
   MULTI,
   DATE,
   KEYWORDOPTION,
-  TOPIC
+  TOPIC,
+  DICTIONARY
 }
