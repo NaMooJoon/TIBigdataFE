@@ -86,19 +86,31 @@
   </div>
 
   <div class="pop-block">
-    <div class="pop-head" id="hcluster-head" (click)="showPop('hcluster')">유의어분석
+    <div class="pop-head" id="word2vec-head" (click)="showPop('word2vec')">유의어분석
       <img class="tooltip"
         src="../../../../assets/icons/help-gray.png"
       />
+    </div>
+
+    <div class="pop-body" id="word2vec">
+      분석 단어 수: <input type="number" value="10" min='1' max='500' id='word2vec_option1'>
+      
+      <button (click)="runAnalysis('word2vec')">분석 실행</button>
     </div>
   </div>
 
   
   <div class="pop-block">
-    <div class="pop-head">토픽 모델링
+    <div class="pop-head" id="topicLDA-head" (click)="showPop('topicLDA')">토픽 모델링
       <img class="tooltip"
         src="../../../../assets/icons/help-gray.png"
       />
+    </div>
+
+    <div class="pop-body" id="topicLDA">
+      토픽 수: <input type="number" value="10" min='1' max='500' id='topicLDA_option1'>
+      
+      <button (click)="runAnalysis('topicLDA')">분석 실행</button>
     </div>
   </div>
   </div>  
@@ -139,6 +151,7 @@
   <figure id="ngrams"></figure>
   
   <figure id="tree"></figure>
+  <figure id="topic"></figure>
   </section>
   
   </section>
