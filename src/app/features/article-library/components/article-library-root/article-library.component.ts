@@ -4,6 +4,7 @@ import { AnalysisDatabaseService } from "src/app/core/services/analysis-database
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
+import {DictionaryOption} from '../../../../core/enums/dictionary-option';
 
 @Component({
   selector: "app-category-library",
@@ -21,6 +22,7 @@ export class ArticleLibraryComponent implements OnInit {
   //new
   private _totalSavedDocsNum: number;
   private _selectedTp: string;
+  private _selectedDict: string;
 
   private _toggleTopics: boolean[];
   private _institutionList: string[];
@@ -118,7 +120,6 @@ export class ArticleLibraryComponent implements OnInit {
     let ct = $event.target.innerText;
     let id = $event.target.id;
 
-
     switch (id) {
       case "topic": {
         this.cat_button_choice[0] = ct;
@@ -128,6 +129,7 @@ export class ArticleLibraryComponent implements OnInit {
 
       case "dict": {
         this.cat_button_choice[1] = ct;
+        this.selectDictionary(ct);
         break;
       }
 
@@ -242,6 +244,13 @@ export class ArticleLibraryComponent implements OnInit {
     this._selectedTp = value;
   }
 
+  public get selectedDict(): string {
+    return this._selectedDict;
+  }
+  public set selectedDict(value: string) {
+    this._selectedDict = value;
+  }
+
   /**
    * @description Select institutions and set search mode as selected
    * @param institution
@@ -273,6 +282,21 @@ console.log("tp : ",tp)
       this.elasticsearchService.setArticleNumChange(hashKeys.length);
       this.elasticsearchService.setHashKeys(ids);
       this.elasticsearchService.multiHashKeySearchComplete();
+    }
+  }
+
+  async selectDictionary(dict: string) {
+    this.selectedDict = dict;
+
+    if(this.selectedDict === "전체"){
+      this.elasticsearchService.setSearchMode(SearchMode.ALL);
+      this.elasticsearchService.triggerSearch(1);
+    }
+    else {
+      //this.elasticsearchService.setFirstToken(DictionaryOption[this.selectedDict]);
+      //this.elasticsearchService.setSearchMode(SearchMode.Dict);
+      //this.elasticsearchService.setArticleNumChange(hashKeys.length);
+      //this.elasticsearchService.triggerSearch(1);
     }
   }
 }
