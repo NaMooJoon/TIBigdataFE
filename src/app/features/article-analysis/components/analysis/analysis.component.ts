@@ -142,7 +142,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   /**
    * @description draw a bar chart using the data using d3
    */
-  
+
   drawBarChart(data_str:string){
     let data:Array<{word:string,value:number}> = JSON.parse(data_str);
 
@@ -154,81 +154,98 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     //   {word:"박근혜",count:8}
     // ];
     
-    let svg = d3.select("figure#bar")
-    .append("svg")
-    .attr("width", this.width + (this.margin * 2))
-    .attr("height", this.height + (this.margin * 2))
-    .append("g")
-    .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
-  
+    let margin = ({top: 20, right: 0, bottom: 30, left: 40});
+    let width = 1000;
+    let height = 500;
+
+    function zoom(svg) {
+      const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
+    
+      svg.call(d3.zoom()
+          .scaleExtent([1, 8])
+          .translateExtent(extent)
+          .extent(extent)
+          .on("zoom", zoomed));
+    
+      function zoomed(event) {
+        x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
+        svg.selectAll(".bars rect").attr("x", d => x(d.word)).attr("width", x.bandwidth());
+        svg.selectAll(".x-axis").call(xAxis);
+      }
+    }
+
+    const xAxis = g => g
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+
+    const yAxis = g => g
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y))
+      .call(g => g.select(".domain").remove())
+
     // Create the X-axis band scale
     const x = d3.scaleBand()
-    .range([0, this.width])
-    .domain(data.map(d => d.word))
-    .padding(0.2);
-
-    // Draw the X-axis on the DOM
-    svg.append("g")
-    .attr("transform", "translate(0," + this.height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
+      .domain(data.map(d => d.word))
+      .range([margin.left, width - margin.right])
+      .padding(0.1)
 
     // Create the Y-axis band scale
     const y = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.value)])
-    .range([this.height, 0]);
+      .domain([0, d3.max(data, d => d.value)]).nice()
+      .range([height - margin.bottom, margin.top])
+
+    const svg = d3.select("figure#bar")
+      .append("svg")
+      .attr("viewBox", "0, 0," + width+","+ height)
+      .call(zoom);
+
+    // Draw bars
+    svg.append("g")
+      .attr("class", "bars")
+      .attr("fill", "steelblue")
+    .selectAll("rect")
+    .data(data)
+    .join("rect")
+      .attr("x", d => x(d.word))
+      .attr("y", d => y(d.value))
+      .attr("height", d => y(0) - y(d.value))
+      .attr("width", x.bandwidth())
+    .on("mouseover",function(e,d){
+      tooltip
+          .html("Word: " + d.word + "<br>" + "Value: " + d.value)
+          .style("opacity", 1)
+      d3.select(this).attr("fill","red")})
+    .on("mousemove", function(e, d) {
+      tooltip
+      .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", (e.pageY) + "px")})
+    .on("mouseout",function(){
+      d3.select(this).attr("fill","steelblue");
+      tooltip.style("opacity", 0);});
+
+    // Draw the X-axis on the DOM
+    svg.append("g")
+      .attr("class", "x-axis")
+      .call(xAxis)
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end"); 
 
     // Draw the Y-axis on the DOM
     svg.append("g")
-    .call(d3.axisLeft(y));
+      .attr("class","y-axis")
+      .call(yAxis);
 
-    // Create and fill the bars
-    svg.selectAll("bars")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", (d) => x(d.word))
-    .attr("y", d => y(d.value))
-    .attr("width", x.bandwidth())
-    .attr("height", (d) => this.height - y(d.value))
-    .attr("fill", "red")
-      .on("mouseover",function(e,d){
-        tooltip
-            .html("Word: " + d['word'] + "<br>" + "Value: " + d['value'])
-            .style("opacity", 1)
-        d3.select(this).attr("fill","blue")
-      })
-      .on("mousemove", function(e, d) {
-        tooltip
-        .style("left", (e['pageX']+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-        .style("top", (e['pageY']) + "px")
-      })
-    .on("mouseout",function(){
-      d3.select(this).attr("fill","red");
-      tooltip.style("opacity", 0);
-  });
-
-    let tooltip = d3.select("figure#bar")
-    .append("div")
-    .style("opacity", 0)
-    // .attr("class", "tooltip")
-    .style("position","absolute")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px");
-
-    // // Animation
-    // svg.selectAll("rect")
-    // .transition()
-    // .duration(800)
-    // .attr("y", function(d) { return y(d.value); })
-    // // .attr("height", function(d) { return height - y(d.value); })
-    // .delay(function(d,i){console.log(i) ; return(i*100)});
- 
+    // Draw a tooltip
+    const tooltip = d3.select("figure#bar")
+      .append("div")
+      .style("opacity", 0)
+      .style("position","absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px");
   }
 
   /**
