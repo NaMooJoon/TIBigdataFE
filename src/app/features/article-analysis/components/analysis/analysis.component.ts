@@ -212,8 +212,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .attr("width", x.bandwidth())
     .on("mouseover",function(e,d){
       tooltip
-          .html("Word: " + d.word + "<br>" + "Value: " + d.value)
-          .style("opacity", 1)
+        .html("Word: " + d.word + "<br>" + "Value: " + d.value)
+        .style("opacity", 1)
       d3.select(this).attr("fill","red")})
     .on("mousemove", function(e, d) {
       tooltip
@@ -247,6 +247,122 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style("border-radius", "5px")
       .style("padding", "10px");
   }
+
+  /**
+   * @description draw a scatter chart using the data using d3
+   */
+
+  drawScatterChart(data_str:string){
+    let data:Array<{
+          "category" : number,
+          "x" : number,
+          "y" : number
+      }>= JSON.parse(data_str);
+
+    let margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+    // Add X axis
+    const x = d3.scaleLinear()
+    .domain([d3.min(data, d => d.x), d3.max(data, d => d.x)])
+    .range([ 0, width ]);
+
+    // Add Y axis
+    const y = d3.scaleLinear()
+    .domain([d3.min(data, d => d.y), d3.max(data, d => d.y)])
+    .range([ height, 0]);
+
+    // append the svg object to the body of the page
+    const svg = d3.select("figure#scatter")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+    // Draw x-axis
+    svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+    // Draw y-axis
+    svg.append("g")
+    .call(d3.axisLeft(y));
+
+    // Color scale: give me a specie name, I return a color
+    const color = d3.scaleSequential()
+    .domain([0, d3.max(data, d => d.category)])
+    .interpolator(d3.interpolateSinebow)
+
+    
+    // console.log(color('0'));
+    // Highlight the specie that is hovered
+    const highlight = function(e,d){
+      let category = d.category;
+      let colorset = <string> color(category);
+      console.log(colorset);
+
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 3)
+
+      d3.selectAll(".type" + category)
+        .transition()
+        .duration(200)
+        .style("fill", colorset)
+        .attr("r", 7)
+      
+      tooltip
+        .html("Title: "+d.title +"<br>x: " + d.x + "<br>y: " + d.y)
+        .style("opacity", 1)
+    }
+
+    // Highlight the specie that is hovered
+    const doNotHighlight = function(){
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 5)
+      
+      tooltip.style("opacity", 0);
+    }
+
+    // Add dots
+    svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("class", function (d) { return "dot type" + d['category']} )
+      .attr("cx", function (d) { return x(d.x); } )
+      .attr("cy", function (d) { return y(d.y); } )
+      .attr("r", 5)
+      .style("fill", function(d){return color[d['category']]} )
+    .on("mouseover", highlight)
+    .on("mouseleave", doNotHighlight )
+    .on("mousemove", function(e, d) {
+      tooltip
+      .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", (e.pageY) + "px")})
+
+    // Draw a tooltip
+    const tooltip = d3.select("figure#scatter")
+      .append("div")
+      .style("opacity", 0)
+      .style("position","absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px");
+  }
+
+  
 
   /**
    * @description draw a network chart using the data using d3
@@ -309,95 +425,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
           .attr("cx", function (d) { return d['x']+6; })
           .attr("cy", function(d) { return d['y']-6; });
     }
-    }
-
-  /**
-   * @description draw a scatter chart using the data using d3
-   */
-
-  drawScatterChart(data_str:string){
-    let data:Array<{
-          "category" : string,
-          "x" : number,
-          "y" : number
-      }>= JSON.parse(data_str);
-  
-
-    // append the svg object to the body of the page
-    var svg = d3.select("figure#scatter")
-    .append("svg")
-      .attr("width", this.width + this.margina['left'] + this.margina['right'])
-      .attr("height", this.height + this.margina['top'] + this.margina['bottom'])
-    .append("g")
-    .attr("transform",
-          "translate(" + this.margina['left'] + "," + this.margina['top'] + ")");
-
-    // Add X axis
-    var x = d3.scaleLinear()
-    .domain([d3.min(data, d => d['x']), d3.max(data, d => d['x'])])
-    .range([ 0, this.width ]);
-    svg.append("g")
-    .attr("transform", "translate(0," + this.height + ")")
-    .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-    .domain([d3.min(data, d => d['y']), d3.max(data, d => d['y'])])
-    .range([ this.height, 0]);
-    svg.append("g")
-    .call(d3.axisLeft(y));
-
-    // Color scale: give me a specie name, I return a color
-    let color = d3.scaleOrdinal()
-    .domain(['0', '1', '2' ])
-    .range([ "#4434ff", "#218dff", "#fd25ff"])
-
-
-    // console.log(color('0'));
-    // Highlight the specie that is hovered
-    let highlight = function(d){
-      let selected_specie:string = d['srcElement']['classList'][1];
-      console.log(d);
-      console.log(selected_specie);
-      let colorset = <string> color(selected_specie);
-      console.log(colorset);
-      d3.selectAll(".dot")
-        .transition()
-        // .duration(200)
-        .style("fill", "lightgrey")
-        .attr("r", 3)
-
-      d3.selectAll("." + selected_specie)
-        .transition()
-        // .duration(200)
-        .style("fill", colorset)
-        .attr("r", 7)
-    }
-
-    // Highlight the specie that is hovered
-    var doNotHighlight = function(){
-    d3.selectAll(".dot")
-      .transition()
-      // .duration(200)
-      .style("fill", "lightgrey")
-      .attr("r", 5 )
-    }
-
-    // Add dots
-    svg.append('g')
-    .selectAll("dot")
-    .data(data)
-    .enter()
-    .append("circle")
-      .attr("class", function (d) { return "dot type" + d['category']} )
-      .attr("cx", function (d) { return x(d['x']); } )
-      .attr("cy", function (d) { return y(d['y']); } )
-      .attr("r", 5)
-      .style("fill", function(d){return color[d['category']]} )
-    .on("mouseover", highlight)
-    .on("mouseleave", doNotHighlight )
-
   }
+
+
   /**
    * @description draw a tree chart using the data using d3
    */
