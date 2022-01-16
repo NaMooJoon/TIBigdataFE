@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { abstractAnalysis } from "../abstractAnalysisPage";
 import * as d3 from 'd3';
+import { Tooltip } from "chart.js";
 
 @Component({
   selector: "app-analysis",
@@ -95,8 +96,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     }
     else if(activity=='network' || activity=='ngrams')
       this.drawNetworkChart(JSON.stringify(this.analysisedData));
-    else if(activity=='kmeans' || activity=='word2vec')
+    else if(activity=='kmeans')
       this.drawScatterChart(JSON.stringify(this.analysisedData));
+    else if(activity=='word2vec')
+      this.drawScatterWordChart(JSON.stringify(this.analysisedData));
     else if(activity=='hcluster')
       this.drawTreeChart(JSON.stringify(this.analysisedData));
 
@@ -255,6 +258,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   drawScatterChart(data_str:string){
     let data:Array<{
           "category" : number,
+          "title" : string,
           "x" : number,
           "y" : number
       }>= JSON.parse(data_str);
@@ -262,6 +266,24 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = 460 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
+
+
+    function zoom(svg) {
+      const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
+    
+      svg.call(d3.zoom()
+          .scaleExtent([1, 8])
+          .translateExtent(extent)
+          .extent(extent)
+          .on("zoom", zoomed));
+    
+      function zoomed(event) {
+        x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
+        svg.selectAll(".dots circle").attr("x", d => x(d.x))//.attr("width", x.bandwidth());
+        svg.selectAll(".x-axis").call(xAxis);
+      }
+    }
+  
 
     // Add X axis
     const x = d3.scaleLinear()
@@ -278,18 +300,32 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
+        .call(zoom)
       .append("g")
         .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
+              "translate(" + margin.left + "," + margin.top + ")")
+        
+
+    const xAxis = g => g
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+
+    const yAxis = g => g
+      // .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y))
+      // .call(g => g.select(".domain").remove())
 
     // Draw x-axis
     svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
+      .call(xAxis)
+    // .attr("transform", "translate(0," + height + ")")
+    // .call(d3.axisBottom(x));
 
     // Draw y-axis
     svg.append("g")
-    .call(d3.axisLeft(y));
+      .call(yAxis)
+    // .call(d3.axisLeft(y));
+
 
     // Color scale: give me a specie name, I return a color
     const color = d3.scaleSequential()
@@ -319,18 +355,28 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       tooltip
         .html("Title: "+d.title +"<br>x: " + d.x + "<br>y: " + d.y)
         .style("opacity", 1)
+
+      d3.selectAll(".dottext")
+        .style("opacity", 0)  
     }
 
     // Highlight the specie that is hovered
-    const doNotHighlight = function(){
+    const doNotHighlight = function(e,d){
       d3.selectAll(".dot")
         .transition()
         .duration(200)
         .style("fill", "lightgrey")
         .attr("r", 5)
       
-      tooltip.style("opacity", 0);
+      tooltip
+      .style("opacity", 0)
+      .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", "0px");
+
+      d3.selectAll(".dottext")
+        .style("opacity", 1)
     }
+
 
     // Add dots
     svg.append('g')
@@ -338,17 +384,31 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .data(data)
     .enter()
     .append("circle")
-      .attr("class", function (d) { return "dot type" + d['category']} )
+      .attr("class", function (d) { return "dot type" + d.category} )
       .attr("cx", function (d) { return x(d.x); } )
       .attr("cy", function (d) { return y(d.y); } )
       .attr("r", 5)
       .style("fill", function(d){return color[d['category']]} )
     .on("mouseover", highlight)
-    .on("mouseleave", doNotHighlight )
-    .on("mousemove", function(e, d) {
+    .on("mouseout", doNotHighlight )
+    .on("mousemove", function(e) {
       tooltip
       .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-      .style("top", (e.pageY) + "px")})
+      .style("top", (e.pageY) + "px");
+    });
+
+    // After discussion
+    // svg.append('g')
+    // .selectAll("dottext")
+    // .data(data)
+    // .enter()
+    // .append("text")
+    //   .attr("class","dottext")
+    //   .text(d=>d.title)
+    //   .attr("x",d=>x(d.x))
+    //   .attr("y",d=>y(d.y))
+    //   .style("font-size", "10px")
+
 
     // Draw a tooltip
     const tooltip = d3.select("figure#scatter")
@@ -363,69 +423,309 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   }
 
   
+  /**
+   * @description draw a scatter chart for word-2-vec using the data using d3
+   */
+
+   drawScatterWordChart(data_str:string){
+    let data:Array<{
+          "word" : string,
+          "x" : number,
+          "y" : number
+      }>= JSON.parse(data_str);
+
+    let margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+
+    function zoom(svg) {
+      const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
+    
+      svg.call(d3.zoom()
+          .scaleExtent([1, 8])
+          .translateExtent(extent)
+          .extent(extent)
+          .on("zoom", zoomed));
+    
+      function zoomed(event) {
+        x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
+        svg.selectAll(".dots circle").attr("x", d => x(d.x))//.attr("width", x.bandwidth());
+        svg.selectAll(".x-axis").call(xAxis);
+      }
+    }
+  
+
+    // Add X axis
+    const x = d3.scaleLinear()
+    .domain([d3.min(data, d => d.x), d3.max(data, d => d.x)])
+    .range([ 0, width ]);
+
+    // Add Y axis
+    const y = d3.scaleLinear()
+    .domain([d3.min(data, d => d.y), d3.max(data, d => d.y)])
+    .range([ height, 0]);
+
+    // append the svg object to the body of the page
+    const svg = d3.select("figure#scatter")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .call(zoom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")")
+        
+
+    const xAxis = g => g
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+
+    const yAxis = g => g
+      // .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y))
+      // .call(g => g.select(".domain").remove())
+
+    // Draw x-axis
+    svg.append("g")
+      .call(xAxis)
+    // .attr("transform", "translate(0," + height + ")")
+    // .call(d3.axisBottom(x));
+
+    // Draw y-axis
+    svg.append("g")
+      .call(yAxis)
+    // .call(d3.axisLeft(y));
+
+    
+    // console.log(color('0'));
+    // Highlight the specie that is hovered
+    const highlight = function(e,d){
+      console.log(e)
+
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 3)
+
+      d3.selectAll(".type" + d.word)
+        .transition()
+        .duration(200)
+        .style("fill", "red")
+        .attr("r", 7)
+      
+      tooltip
+        .html("Word: "+d.word +"<br>x: " + d.x + "<br>y: " + d.y)
+        .style("opacity", 1)
+
+      d3.selectAll(".dottext")
+        .style("opacity", 0)  
+    }
+
+    // Highlight the specie that is hovered
+    const doNotHighlight = function(e,d){
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 5)
+      
+      tooltip
+      .style("opacity", 0)
+      .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", "0px");
+
+      d3.selectAll(".dottext")
+        .style("opacity", 1)
+    }
+
+
+    // Add dots
+    svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("class", function (d) { return "dot type" + d.word} )
+      .attr("cx", function (d) { return x(d.x); } )
+      .attr("cy", function (d) { return y(d.y); } )
+      .attr("r", 5)
+      .style("fill", "black")
+    .on("mouseover", highlight)
+    .on("mouseout", doNotHighlight )
+    .on("mousemove", function(e) {
+      tooltip
+      .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", (e.pageY) + "px");
+    });
+
+    // After discussion
+    svg.append('g')
+    .selectAll("dottext")
+    .data(data)
+    .enter()
+    .append("text")
+      .attr("class","dottext")
+      .text(d=>d.word)
+      .attr("x",d=>(x(d.x)+5))
+      .attr("y",d=>(y(d.y)-3))
+      .style("font-size", "10px")
+
+
+    // Draw a tooltip
+    const tooltip = d3.select("figure#scatter")
+      .append("div")
+      .style("opacity", 0)
+      .style("position","absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px");
+  }
+
 
   /**
    * @description draw a network chart using the data using d3
    */
 
   drawNetworkChart(data_str:string){
-    let data:any = JSON.parse(data_str);
+    let data:
+    {
+      "links" : Array<
+        {"source":number,
+        "target":number,
+        "weight":number}>,
+      "nodes" :  Array<{
+        "between_cen":number,
+        "closeness_cen":number,
+        "degree_cen":number,
+        "eigenvector_cen":number,
+        "id":number, 
+        "name":string}>
+  } 
+  = JSON.parse(data_str);
+
     // console.log(data);
-    const margin = {top: 10, right: 30, bottom: 30, left: 40};
+    const margin = {top: 10, right: 30, bottom: 30, left: 40},
+    width = 800 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
     
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
     .append("svg")
-      .attr("width", this.width + margin['left'] + margin['right'])
-      .attr("height", this.height + margin['top'] + margin['bottom'])
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform",
-            `translate(${margin['left']}, ${margin['top']})`);
+            "translate(" + margin.left + "," + margin.top + ")");
+
+
+    // Highlight the specie that is hovered
+    const highlight = function(e,d){
+     
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 3)
+
+      d3.selectAll(".type" + d.id)
+        .transition()
+        .duration(200)
+        .style("fill", "red")
+        .attr("r", 7)
+      
+      tooltip
+        .html(d.name)
+        .style("opacity", 1)
+    }
+
+    // Highlight the specie that is hovered
+    const doNotHighlight = function(e,d){
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 5)
+      
+      tooltip
+      .style("opacity", 0)
+      .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", "0px");
+
+      d3.selectAll(".dottext")
+        .style("opacity", 1)
+    }
 
     // Initialize the links
-    const link = svg
-      .selectAll("line")
-      .data(data['links'])
-      .join("line")
-        .style("stroke", "#aaa")
+    let link = svg
+    .selectAll("line")
+    .data(data.links)
+    .enter()
+    .append("line")
+      .style("stroke", "#aaa")
 
     // Initialize the nodes
-    const node = svg
+    let node = svg
       .selectAll("circle")
-      .data(data['nodes'])
-      .join("circle")
-        .attr("r", 10)
+      .data(data.nodes)
+      .enter()
+      .append("circle")
+        .attr("class", function (d) { return "dot type" + d.id} )
+        .attr("r", 7)
         .style("fill", "#69b3a2")
+      .on("mouseover", highlight)
+      .on("mouseout", doNotHighlight )
+      .on("mousemove", function(e) {
+        tooltip
+        .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+        .style("top", (e.pageY) + "px");
+      });
 
-    const g = d3.select("svg").select('g');
-        g.append("text")
-      .data(data['nodes'])
-          .attr("dx", function(d){return -20})
-          .text(function(d){return d['name']})
+    // d3.select("svg")
+    svg.append("g")
+      .selectAll('label')
+      .append("text")
+      .data(data.nodes)
+        .attr("dx", function(d){return -7})
+        .text(d=> d.name)
 
     // Let's list the force we wanna apply on the network
-    const simulation = d3.forceSimulation(data['nodes'])                 // Force algorithm is applied to data.nodes
-        .force("link", d3.forceLink()                               // This force provides links between nodes
-              .id(function(d) { return d['id']; })                     // This provide  the id of a node
-              .links(data['links'])                                    // and this the list of links
-        )
-        .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-        .force("center", d3.forceCenter(this.width /2, this.height / 2))     // This force attracts nodes to the center of the svg area
-        .on("end", ticked);
+    let simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
+    .force("link", d3.forceLink()                               // This force provides links between nodes
+          .id(function(d) { return d.id; })                     // This provide  the id of a node
+          .links(data.links)                                    // and this the list of links
+    )
+    .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+    .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+    .on("end", ticked);
 
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
-      link
-          .attr("x1", function(d) { return d['source']['x']; })
-          .attr("y1", function(d) { return d['source']['y']; })
-          .attr("x2", function(d) { return d['target']['x']; })
-          .attr("y2", function(d) { return d['target']['y']; });
+    link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
 
-      node
-          .attr("cx", function (d) { return d['x']+6; })
-          .attr("cy", function(d) { return d['y']-6; });
+    node
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
     }
-  }
+
+    // Draw a tooltip
+    const tooltip = d3.select("figure#network")
+      .append("div")
+      .style("opacity", 0)
+      .style("position","absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px");
+  };
 
 
   /**
@@ -567,194 +867,6 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       return svg.node();
   }
 
-  /**
-   * @description draw a dendrogram chart using the data using d3
-   */
-
-  drawDendrogramChart(data_str:string){
-    let data = JSON.parse(data_str);
-  
-  //   let ex_data={
-  //     "name":18.0,
-  //     // "parent":0.0,
-  //     "children":[
-  //        {
-  //           "name":14.0,
-  //           "parent":18.0,
-  //           "children":[
-  //              {
-  //                 "name":10.0,
-  //                 "parent":14.0,
-  //                 "children":[
-  //                    {
-  //                       "name":6.0,
-  //                       "parent":10.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    },
-  //                    {
-  //                       "name":9.0,
-  //                       "parent":10.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    }
-  //                 ]
-  //              },
-  //              {
-  //                 "name":13.0,
-  //                 "parent":14.0,
-  //                 "children":[
-  //                    {
-  //                       "name":2.0,
-  //                       "parent":13.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    },
-  //                    {
-  //                       "name":12.0,
-  //                       "parent":13.0,
-  //                       "children":[
-  //                          {
-  //                             "name":4.0,
-  //                             "parent":12.0,
-  //                             "children":[
-                                 
-  //                             ]
-  //                          },
-  //                          {
-  //                             "name":11.0,
-  //                             "parent":12.0,
-  //                             "children":[
-  //                                {
-  //                                   "name":0.0,
-  //                                   "parent":11.0,
-  //                                   "children":[
-                                       
-  //                                   ]
-  //                                },
-  //                                {
-  //                                   "name":8.0,
-  //                                   "parent":11.0,
-  //                                   "children":[
-                                       
-  //                                   ]
-  //                                }
-  //                             ]
-  //                          }
-  //                       ]
-  //                    }
-  //                 ]
-  //              }
-  //           ]
-  //        },
-  //        {
-  //           "name":17.0,
-  //           "parent":18.0,
-  //           "children":[
-  //              {
-  //                 "name":15.0,
-  //                 "parent":17.0,
-  //                 "children":[
-  //                    {
-  //                       "name":3.0,
-  //                       "parent":15.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    },
-  //                    {
-  //                       "name":7.0,
-  //                       "parent":15.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    }
-  //                 ]
-  //              },
-  //              {
-  //                 "name":16.0,
-  //                 "parent":17.0,
-  //                 "children":[
-  //                    {
-  //                       "name":1.0,
-  //                       "parent":16.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    },
-  //                    {
-  //                       "name":5.0,
-  //                       "parent":16.0,
-  //                       "children":[
-                           
-  //                       ]
-  //                    }
-  //                 ]
-  //              }
-  //           ]
-  //        }
-  //     ]
-  //  }
-
-
-   // set the dimensions and margins of the graph
-  var width = 460
-  var height = 460
-
-  // append the svg object to the body of the page
-  var svg = d3.select("figure#ngrams")
-    .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-    .append("g")
-      .attr("transform", "translate(40,0)");  // bit of margin on the left = 40
-
-  // // read json data
-  // d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram.json")
-  // .then((data) => {
-  // Create the cluster layout:
-  var cluster = d3.cluster()
-    .size([height, width - 100]);  // 100 is the margin I will have on the right side
-
-  // Give the data to this cluster layout:
-  var root = d3.hierarchy(data, d=>d['children']);
-  cluster(root);
-
-
-  // Add the links between nodes:
-  svg.selectAll('path')
-    .data( root.descendants().slice(1) )
-    .enter()
-    .append('path')
-    .attr("d", function(d) {
-        return "M" + d['y'] + "," + d['x']
-                + "C" + (d['parent']['y'] + 50) + "," + d['x']
-                + " " + (d['parent']['y'] + 150) + "," + d['parent']['x'] // 50 and 150 are coordinates of inflexion, play with it to change links shape
-                + " " + d['parent']['y'] + "," + d['parent']['x'];
-              })
-    .style("fill", 'none')
-    .attr("stroke", '#ccc')
-
-
-  // Add a circle for each node.
-  svg.selectAll("g")
-      .data(root.descendants())
-      .enter()
-      .append("g")
-      .attr("transform", function(d) {
-          return "translate(" + d['y'] + "," + d['x'] + ")"
-      })
-      .append("circle")
-        .attr("r", 7)
-        .style("fill", "#69b3a2")
-        .attr("stroke", "black")
-        .style("stroke-width", 2)
-
-// })
-  }
 
   // drawTopicModeling(data_str:string){
   //   // let data = JSON.parse(data_str);
