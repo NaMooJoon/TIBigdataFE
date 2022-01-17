@@ -591,20 +591,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
    */
 
   drawNetworkChart(data_str:string){
-    let data:
-    {
-      "links" : Array<
-        {"source":number,
-        "target":number,
-        "weight":number}>,
-      "nodes" :  Array<{
-        "between_cen":number,
-        "closeness_cen":number,
-        "degree_cen":number,
-        "eigenvector_cen":number,
-        "id":number, 
-        "name":string}>
-  } 
+    let data:any
+  //   {
+  //     "links" : Array<
+  //       {"source":number,
+  //       "target":number,
+  //       "weight":number}>,
+  //     "nodes" :  Array<{
+  //       "between_cen":number,
+  //       "closeness_cen":number,
+  //       "degree_cen":number,
+  //       "eigenvector_cen":number,
+  //       "id":number, 
+  //       "name":string}>
+  // } 
   = JSON.parse(data_str);
 
     // console.log(data);
@@ -673,7 +673,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .data(data.nodes)
       .enter()
       .append("circle")
-        .attr("class", function (d) { return "dot type" + d.id} )
+        .attr("class", function (d) { return "dot type" + d['id']} )
         .attr("r", 7)
         .style("fill", "#69b3a2")
       .on("mouseover", highlight)
@@ -690,12 +690,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .append("text")
       .data(data.nodes)
         .attr("dx", function(d){return -7})
-        .text(d=> d.name)
+        .text(d=> d['name'])
 
     // Let's list the force we wanna apply on the network
     let simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
     .force("link", d3.forceLink()                               // This force provides links between nodes
-          .id(function(d) { return d.id; })                     // This provide  the id of a node
+          .id(function(d) { return d['id']; })                     // This provide  the id of a node
           .links(data.links)                                    // and this the list of links
     )
     .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
@@ -705,14 +705,14 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // This function is run at each iteration of the force algorithm, updating the nodes position.
     function ticked() {
     link
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
+      .attr("x1", function(d) { return d['source']['x']; })
+      .attr("y1", function(d) { return d['source']['y']; })
+      .attr("x2", function(d) { return d['target']['x']; })
+      .attr("y2", function(d) { return d['target']['y']; });
 
     node
-      .attr("cx", function (d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+      .attr("cx", function (d) { return d['x']; })
+      .attr("cy", function(d) { return d['y']; });
     }
 
     // Draw a tooltip
