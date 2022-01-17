@@ -431,7 +431,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     let data:Array<{
           "word" : string,
           "x" : number,
-          "y" : number
+          "y" : number,
+          "wcount": number
       }>= JSON.parse(data_str);
 
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -507,13 +508,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .transition()
         .duration(200)
         .style("fill", "lightgrey")
-        .attr("r", 3)
+        .attr("r", d=> 3*(d['wcount']+1))
 
       d3.selectAll(".type" + d.word)
         .transition()
         .duration(200)
         .style("fill", "red")
-        .attr("r", 7)
+        .attr("r", d=> 7*(d['wcount']+1))
       
       tooltip
         .html("Word: "+d.word +"<br>x: " + d.x + "<br>y: " + d.y)
@@ -529,7 +530,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .transition()
         .duration(200)
         .style("fill", "lightgrey")
-        .attr("r", 5)
+        .attr("r", d=>5*(d['wcount']+1))
       
       tooltip
       .style("opacity", 0)
@@ -550,7 +551,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .attr("class", function (d) { return "dot type" + d.word} )
       .attr("cx", function (d) { return x(d.x); } )
       .attr("cy", function (d) { return y(d.y); } )
-      .attr("r", 5)
+      .attr("r", d=> 5*(d['wcount']+1))
       .style("fill", "black")
     .on("mouseover", highlight)
     .on("mouseout", doNotHighlight )
