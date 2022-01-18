@@ -36,7 +36,7 @@
       />
       </div>
       <div class="pop-body" id="kmeans">
-        군집개수: <input type="number" value="10" min='1' max='500' id='kmeans_option1'>
+        군집개수: <input type="number" value="5" min='1' max='500' id='kmeans_option1'>
         
         <button (click)="runAnalysis('kmeans')">분석 실행</button>
       </div>
@@ -51,7 +51,7 @@
     <div class="pop-body" id="network">
       분석할 단어수: <input type="number" value="100" min='1' max='500' id='network_option1'>
       <br>
-      연결 강도(%) <input type="number" value="10" min='1' max='100' id='network_option2'>
+      연결 강도(%) <input type="number" value="75" min='1' max='100' id='network_option2'>
       <button (click)="runAnalysis('network')">분석 실행</button>
     </div>
   </div>
@@ -142,14 +142,11 @@
       </tbody>
     </table> -->
   <!-- </div> -->
+  <figure id="wordcloud"></figure>
   
   <figure id="bar"></figure>
-  <figure id="wordcloud"></figure>
   <figure id="network"></figure>
   <figure id="scatter"></figure>
-  
-  <figure id="ngrams"></figure>
-  
   <figure id="tree"></figure>
   <figure id="topic"></figure>
   </section>
