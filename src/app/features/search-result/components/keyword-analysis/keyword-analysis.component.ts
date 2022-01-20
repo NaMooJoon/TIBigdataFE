@@ -21,6 +21,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setSearchKeyword();
+    this.getSearchHistoryFromElasticSearch();
   }
 
   ngOnDestroy() {
@@ -29,6 +30,35 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   setSearchKeyword() {
     this.searchKeyword = this.elasticsearchService.getKeyword();
+  }
+
+  getSearchHistoryFromElasticSearch() {
+    var current = new Date();
+    var y = current.getFullYear();
+    var c_month = current.getMonth() + 1;
+    var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
+    var cnt = [];
+    var idx = -1;
+    for(var i = 5 ; i < 17; i++){
+      if(month[i] == c_month) {
+        idx = i;
+        break;
+      }
+    }
+    if(idx == -1){
+      console.log("IDX_ERROR");
+    }
+    for(var j = 0; j < 6; j ++){
+      m = month[idx];
+      if(month[idx] > month[idx - 1]){
+        y = y - 1;
+      }
+      //search_log-<year>.<month>
+      var index = "search_log-" + y + "." + m;
+      cnt.push(this.elasticsearchService.getSearchHistory(index));
+      idx = idx -1;
+    }
+    console.log(cnt);
   }
 
   public get getSearchKeyword(): string {

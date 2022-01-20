@@ -138,6 +138,23 @@ export class ElasticsearchService {
     this.hashKeys = hashKeys;
   }
 
+  /**s
+   * @description Send query to get information of Search history
+   * @param string: index name => search_log-<year>.<month>
+   */
+  getSearchHistory(index: string): Promise<any> {
+     return this.client.count({
+        index: index,
+        body: {
+          query: {
+            match: {
+              search_keyword: this.getKeyword(),
+            },
+          },
+        }
+      });
+    }
+
   /**
    * @description Send query to get information of all articles exist in backend database.
    * @param startIndex A index to indicate where to start search.
