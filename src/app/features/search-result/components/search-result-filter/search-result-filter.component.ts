@@ -138,6 +138,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedInst = value;
   }
 
+
+
   //new
   async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();

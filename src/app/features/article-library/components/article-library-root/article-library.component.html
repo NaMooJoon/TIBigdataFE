@@ -28,6 +28,8 @@
       <div class="selection-buttons">
         <button
           *ngFor="let cat of dict_orders_1"
+          [ngStyle]="selectedStyleObject(selectedDict === cat)"
+          id = "dict"
           (click)="selectCategory($event)"
         >
           {{ cat }}
