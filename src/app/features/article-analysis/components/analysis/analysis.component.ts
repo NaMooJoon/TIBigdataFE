@@ -89,17 +89,23 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     //   temp.push({word:Object.keys(this.analysisedData)[i], count:this.analysisedData[Object.keys(this.analysisedData)[i]]});
     // }
 
-
+    
     if(activity=='count'|| activity=='tfidf'){
       this.drawTable(activity, JSON.stringify(this.analysisedData));
       this.drawBarChart(JSON.stringify(this.analysisedData));
     }
-    else if(activity=='network' || activity=='ngrams')
+    else if(activity=='network' || activity=='ngrams'){
+      if(activity=='network') this.drawTable(activity, JSON.stringify(res.result_table));
       this.drawNetworkChart(JSON.stringify(this.analysisedData));
-    else if(activity=='kmeans')
+    }
+    else if(activity=='kmeans'){
+      this.drawTable(activity, JSON.stringify(this.analysisedData));
       this.drawScatterChart(JSON.stringify(this.analysisedData));
-    else if(activity=='word2vec')
+    }
+    else if(activity=='word2vec'){
+      // this.drawTable(activity, JSON.stringify(this.analysisedData));
       this.drawScatterWordChart(JSON.stringify(this.analysisedData));
+    }
     else if(activity=='hcluster')
       this.drawTreeChart(JSON.stringify(this.analysisedData));
 
@@ -112,7 +118,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
    */
 
   drawTable(analType:string, data_str:string){
-    let data:Array<{word:string,value:number}> = JSON.parse(data_str);
+    let data:any = JSON.parse(data_str);
 
     const table = d3.select("figure#table")
       .attr('class','result-pretable')
@@ -138,6 +144,73 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         tr.append("td").text(i+1);
         tr.append("td").text(data[i]['word']);
         tr.append("td").text(data[i]['value']);
+      }
+    }
+
+    else if(analType=='kmeans'){
+      const th = table.append("tr")
+      .style('padding','15px 0px')
+      .style('font-weight','500')
+      .style('text-align','center');
+      
+      th.append('th').text('category');
+      th.append('th').text('title');
+      // th.append('th').text('값');
+
+      const tbody = table.append("tbody")
+      .style('text-align','center');
+
+      let max=0;
+      for(let i=0;i<data.length;i++){
+        if(data[i]['category']>max)
+          max=data[i]['category'];
+      }
+
+      for(let i=0;i<=max;i++){
+        const tr = tbody.append("tr");
+        tr.append("td").text(i+1);
+        const td=tr.append("td");
+        for(let j=0;j<data.length;j++){
+          if(data[j]['category']==i){
+            td.append("ul").text(data[j]['title']);
+          }
+        }
+        // tr.append("td").text(data[i]['value']);
+      }
+    }
+
+    else if(analType=='network'){
+      const th = table.append("tr")
+      .style('padding','15px 0px')
+      .style('font-weight','500')
+      .style('text-align','center');
+      
+      th.append('th').attr('width','10%').text('index');
+      th.append('th').attr('width','18%').text('사이중심성');
+      th.append('th').attr('width','18%').text('근접중심성');
+      th.append('th').attr('width','18%').text('빈도수');
+      th.append('th').attr('width','18%').text('연결중심성');
+      th.append('th').attr('width','18%').text('eigenvector');
+      
+      // th.append('th').text('값');
+
+      console.log(data);
+      const tbody = table.append("tbody")
+      .style('text-align','center');
+
+      for(let i=0;i<data['between_cen'].length;i++){
+        const tr = tbody.append("tr");
+        tr.append("td").text(i+1);
+        tr.append("td").text('단어: '+data['between_cen'][i]['word']+'\n값: '+data['between_cen'][i]['value']);
+        
+        tr.append("td").text('단어: '+data['closeness_cen'][i]['word']+'\n값: '+data['closeness_cen'][i]['value']);
+        
+        tr.append("td").text('단어: '+data['count'][i]['word']+'\n값: '+data['count'][i]['value']);
+        
+        tr.append("td").text('단어: '+data['degree_cen'][i]['word']+'\n값: '+data['degree_cen'][i]['value']);
+
+        tr.append("td").text('단어: '+data['eigenvector_cen'][i]['word']+'\n값: '+data['eigenvector_cen'][i]['value']);
+        // tr.append("td").text(data[i]['value']);
       }
     }
   }
@@ -353,7 +426,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .attr("r", 7)
       
       tooltip
-        .html("Title: "+d.title +"<br>x: " + d.x + "<br>y: " + d.y)
+        .html("Title: "+d.title +"<br>category: "+d.category)
         .style("opacity", 1)
 
       d3.selectAll(".dottext")
@@ -610,8 +683,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     // console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 800 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 1000 - margin.top - margin.bottom;
     
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
@@ -667,6 +740,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .enter()
     .append("line")
       .style("stroke", "#aaa")
+      // .style("stroke-width", 5);
+      .style("stroke-width", d=>d['weight']/10);
 
     // Initialize the nodes
     let node = svg
@@ -699,7 +774,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
           .id(function(d) { return d['id']; })                     // This provide  the id of a node
           .links(data.links)                                    // and this the list of links
     )
-    .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+    .force("charge", d3.forceManyBody().strength(-40))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
     .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
     .on("end", ticked);
 
