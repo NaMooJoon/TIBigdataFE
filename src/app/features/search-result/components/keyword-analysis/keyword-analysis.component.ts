@@ -32,7 +32,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.searchKeyword = this.elasticsearchService.getKeyword();
   }
 
-  getSearchHistoryFromElasticSearch() {
+  async getSearchHistoryFromElasticSearch() {
     var current = new Date();
     var y = current.getFullYear();
     var c_month = current.getMonth() + 1;
@@ -49,13 +49,29 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
       console.log("IDX_ERROR");
     }
     for(var j = 0; j < 6; j ++){
-      m = month[idx];
-      if(month[idx] > month[idx - 1]){
-        y = y - 1;
+      var m;
+      if(month[idx] < 10){
+        m = "0" + month[idx];
+      }
+      else {
+        m = "" + month[idx];
       }
       //search_log-<year>.<month>
       var index = "search_log-" + y + "." + m;
-      cnt.push(this.elasticsearchService.getSearchHistory(index));
+      var count;
+      try {
+        count = await this.elasticsearchService.getSearchHistory(index);
+        cnt.push(count["count"]);
+      }
+      catch (e) {
+        console.log("There is no log file for year: " + y + ", month: " + m);
+        cnt.push(-1);
+      }
+
+
+      if(month[idx] < month[idx - 1]){
+              y = y - 1;
+      }
       idx = idx -1;
     }
     console.log(cnt);

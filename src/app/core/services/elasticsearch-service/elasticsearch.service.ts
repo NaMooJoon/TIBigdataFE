@@ -149,7 +149,7 @@ export class ElasticsearchService {
         body: {
           query: {
             match: {
-              search_keyword: this.getKeyword(),
+              search_word: this.getKeyword(),
             },
           },
         }
