@@ -4,6 +4,7 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 import { HttpClient } from "@angular/common/http";
 import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
+import { AppComponent } from '../../../features/app.component';
 
 @Component({
   selector: "app-nav",
@@ -30,6 +31,7 @@ export class NavbarComponent implements OnInit {
     private httpClient: HttpClient,
     private ipService: IpService,
     private changeDetectorRef: ChangeDetectorRef,
+    private appcomponent: AppComponent,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -98,6 +100,15 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  useLanguage(language: string): void {
+    if (language === 'en') {
+      this.appcomponent.toEnglish();
+    }
+    else {
+      this.appcomponent.toKorean();
+    }
+
+  }
   selectMobileMenu(): void {
     this.isHamburger = !this.isHamburger;
   }
