@@ -24,8 +24,13 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setSearchKeyword();
 //     this.getSearchHistoryFromElasticSearch();
+    console.log("executed");
     this.drawChart();
   }
+
+//   ngOnChanges(): void{
+//     this.drawChart();
+//   }
 
   ngOnDestroy() {
     this.searchSubscriber.unsubscribe();
@@ -69,7 +74,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
       }
       catch (e) {
         console.log("There is no log file for year: " + y + ", month: " + m);
-        const hist = {date: "" + y + "." + m, freq: -1};
+        const hist = {date: "" + y + "." + m, freq: 0};
         this.searchHistory.push(hist);
       }
 
@@ -95,46 +100,50 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var height = 300 - (margin * 2);
 
     const svg = d3.select("#keyword-analysis")
-    .append("svg")
-    .attr("width", width + (margin * 2))
-    .attr("height", height + (margin * 2))
-    .append("g")
-    .attr("transform", "translate(" + margin + "," + margin + ")");
+                   .append("svg")
+//     .attr("width", width + (margin * 2))
+                   .attr("width", width + (margin * 2))
+                   .attr("height", height + (margin * 2))
+                   .append("g")
+                   .attr("transform", "translate(" + margin + "," + margin + ")");
 
     // Create the X-axis band scale
-    const x = d3.scaleBand()
-    .range([0, width])
-    .domain(histData.map(d => d.date))
-    .padding(0.2);
-    console.log("x-axis");
+    const x = d3.scaleBand().range([0, width])
+                            .domain(histData.map(d => d.date))
+                            .padding(0.2);
 
     // Draw the X-axis on the DOM
-    svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
+    svg.append("g").attr("transform", "translate(0," + height + ")")
+                   .call(d3.axisBottom(x))
+                   .selectAll("text")
+                   .attr("transform", "translate(-10,0)rotate(-45)")
+                   .style("text-anchor", "end");
 
     // Create the Y-axis band scale
-    const y = d3.scaleLinear()
-    .domain([0, d3.max(histData, d => d.freq)])
-    .range([height, 0]);
+    const y = d3.scaleLinear().domain([0, d3.max(histData, d => d.freq)])
+                              .range([height, 0]);
 
+    var maxY = d3.max(histData, d => d.freq);
+    var fixedTicks = [];
+    for(var i = 1; i <= 5; i ++) {
+      fixedTicks.push(Math.round((maxY * i) / 5));
+    }
+    console.log(fixedTicks);
     // Draw the Y-axis on the DOM
-    svg.append("g")
-    .call(d3.axisLeft(y));
+    svg.append("g").call(d3.axisLeft(y)
+                           .tickValues(fixedTicks));
 
     // Create and fill the bars
     svg.selectAll("bars")
-    .data(histData)
-    .enter()
-    .append("rect")
-    .attr("x", d => x(d.date))
-    .attr("y", d => y(d.freq))
-    .attr("width", x.bandwidth())
-    .attr("height", (d) => height - y(d.freq))
-    .attr("fill", "#80D0FC")
+       .data(histData)
+       .enter()
+       .append("rect")
+       .attr("x", d => x(d.date))
+       .attr("y", d => y(d.freq))
+//     .attr("width", x.bandwidth())
+       .attr("width", 10)
+       .attr("height", (d) => height - y(d.freq))
+       .attr("fill", "#80D0FC");
     // .on("mouseover",function(d,i){
     //   console.log(this);
     //   var text = svg.append("text")
