@@ -13,6 +13,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private searchHistory = [];
   private searchSubscriber: Subscription;
   private searchKeyword: string;
+  private currentYearMonth: string;
+
   constructor(private elasticsearchService: ElasticsearchService) {
     this.searchSubscriber = this.elasticsearchService
                                 .getSearchStatus()
@@ -44,6 +46,13 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var current = new Date();
     var y = current.getFullYear();
     var c_month = current.getMonth() + 1;
+    if(c_month < 10) {
+      this.currentYearMonth = "" + y + "-0" +  c_month;
+    }
+    else {
+      this.currentYearMonth = "" + y + "-" +  c_month;
+    }
+
     var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
     var cnt = [];
     var idx = -1;
@@ -161,6 +170,10 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   public get getSearchKeyword(): string {
     return this.searchKeyword;
   }
+
+  public get getCurrentYearMonth(): string {
+      return this.currentYearMonth;
+    }
 }
 
 
