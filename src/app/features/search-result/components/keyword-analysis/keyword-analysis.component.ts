@@ -14,6 +14,9 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private searchSubscriber: Subscription;
   private searchKeyword: string;
   private currentYearMonth: string;
+  private startYearMonth: string;
+  private endYearMonth: string;
+  private per: string;
 
   constructor(private elasticsearchService: ElasticsearchService) {
     this.searchSubscriber = this.elasticsearchService
@@ -25,14 +28,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setSearchKeyword();
-//     this.getSearchHistoryFromElasticSearch();
-    console.log("executed");
     this.drawChart();
   }
-
-//   ngOnChanges(): void{
-//     this.drawChart();
-//   }
 
   ngOnDestroy() {
     this.searchSubscriber.unsubscribe();
@@ -40,6 +37,28 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   setSearchKeyword() {
     this.searchKeyword = this.elasticsearchService.getKeyword();
+  }
+
+  year_clicked() {
+    var yb = document.getElementById("year_button");
+    var mb = document.getElementById("month_button");
+    yb.style.background="lightgrey";
+    mb.style.background="transparent";
+
+    this.startYearMonth = document.getElementById("start_month").value;
+    this.endYearMonth = document.getElementById("end_month").value;
+    this.per = "year";
+  }
+
+  month_clicked() {
+    var yb = document.getElementById("year_button");
+    var mb = document.getElementById("month_button");
+    mb.style.background="lightgrey";
+    yb.style.background="transparent";
+
+    this.startYearMonth = document.getElementById("start_month").value;
+    this.endYearMonth = document.getElementById("end_month").value;
+    this.per = "month";
   }
 
   async getSearchHistoryFromElasticSearch() {
