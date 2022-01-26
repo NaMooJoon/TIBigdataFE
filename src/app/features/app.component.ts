@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { Router, NavigationEnd } from "@angular/router";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: "app-root",
@@ -18,11 +19,13 @@ export class AppComponent {
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
-    private elasticsearchSearvice: ElasticsearchService
+    private elasticsearchSearvice: ElasticsearchService,
+    private translate: TranslateService
   ) {
     this.isUserLoaded = false;
     this.isBackendAvailable = null;
-
+    translate.setDefaultLang('ko');
+    translate.use('ko');
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         try {
@@ -56,7 +59,12 @@ export class AppComponent {
       this.isUserLoaded = true;
     }
   }
-
+  public toKorean() {
+    this.translate.use('ko');
+  }
+  public toEnglish() {
+    this.translate.use('en');
+  }
   // getters and setters
   public get isUserLoaded() {
     return this._isUserLoaded;

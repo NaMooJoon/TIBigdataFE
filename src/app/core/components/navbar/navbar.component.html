@@ -9,10 +9,10 @@
         <ul class="common-menu">
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
-            <a i18n="library" (click)="navigateLibrary()">자료열람</a>
+            <a i18n="library" (click)="navigateLibrary()">{{ 'library' | translate }}</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
-            <a (click)="navigateSpecials()">자료분석</a>
+            <a (click)="navigateSpecials()">{{'analysis' | translate}}</a>
           </li>
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
@@ -20,9 +20,9 @@
           >
 <!--common-->
             <div class="dropdown-container">
-              <a (click)="toCommunity()">커뮤니티</a>
+              <a (click)="toCommunity()">{{'community' | translate}}</a>
               <ul class="community-dropdown-menu">
-                <li><a (click)="toAnnouncement()">공지사항</a></li>
+                <li><a (click)="toAnnouncement()">{{'announcements'|translate}}</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
                 <li><a (click)="toCommunity()">Q&A</a></li>
               </ul>
@@ -31,11 +31,11 @@
             <div class="dropdown-container-tablet">
               <a
                 (click)="clickDropDownCommunity()"
-                class="dropdown-community">커뮤니티</a>
+                class="dropdown-community">{{'community' | translate}}</a>
               <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'announcement')"
-                  (click)="toAnnouncement()">공지사항</a></li>
+                  (click)="toAnnouncement()">{{'announcements'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'faq')"
                   (click)="toFaq()">FAQ</a></li>
@@ -52,12 +52,12 @@
           >
             <!--common-->
             <div class="dropdown-container">
-              <a>홈페이지소개</a>
+              <a>{{'aboutUs'|translate}}</a>
               <ul class="about-dropdown-menu">
-                <li><a (click)="toSiteIntro()">사이트소개</a></li>
-                <li><a (click)="toServiceGuide()">서비스안내</a></li>
-                <li><a (click)="toCollectedInfo()">수집정보</a></li>
-                <li><a (click)="toMemberPolicy()">회원정책</a></li>
+                <li><a (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
+                <li><a (click)="toServiceGuide()">{{'guide'|translate}}</a></li>
+                <li><a (click)="toCollectedInfo()">{{'infoPolicy'|translate}}</a></li>
+                <li><a (click)="toMemberPolicy()">{{'privacyPolicy'|translate}}</a></li>
               </ul>
             </div>
             <!--tablet and mobile-->
@@ -81,7 +81,7 @@
               </ul>
             </div>
           </li>
-          
+
           <li
           [ngStyle]="selectedStyleObject(getSelectedMenu() === 'openapi')"
           class="openapi-menu"
@@ -94,10 +94,10 @@
 
         <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
-            <a (click)="toLogin()">로그인</a>
+            <a (click)="toLogin()">{{'signIn'|translate}}</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
-            <a (click)="toRegister()">회원가입</a>
+            <a (click)="toRegister()">{{'register'|translate}}</a>
           </li>
         </ul>
 
@@ -135,12 +135,13 @@
   </div>
 
   <ul *ngIf="!getIsSignedIn()" class="login-menu">
-    <li><img src="../../../../assets/icons/eng_lang.png"> </li>
+    <li><a (click)="useLanguage('ko')"><img src="../../../../assets/icons/kor_lang.png"></a></li>
+    <li><a (click)="useLanguage('en')"><img src="../../../../assets/icons/eng_lang.png"></a></li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
-      <a (click)="toLogin()">로그인</a>
+      <a (click)="toLogin()">{{'signIn'|translate}}</a>
     </li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
-      <a (click)="toRegister()">회원가입</a>
+      <a (click)="toRegister()">{{'register'|translate}}</a>
     </li>
   </ul>
 

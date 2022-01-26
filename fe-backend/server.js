@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 14001;
+const PORT = 14000;
 
 const textMiningQuery = require('./module/textMiningQuery');
 const apiInfo = require('./module/apiQuery');

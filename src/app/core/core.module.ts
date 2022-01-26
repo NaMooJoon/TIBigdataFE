@@ -14,6 +14,7 @@ import { IpService } from "./services/ip-service/ip.service";
 import { PaginationService } from "./services/pagination-service/pagination.service";
 import { UserSavedDocumentService } from "./services/user-saved-document-service/user-saved-document.service";
 import { WordcloudService } from "./services/wordcloud-service/wordcloud.service";
+import {TranslateModule} from '@ngx-translate/core';
 
 
 
@@ -23,7 +24,7 @@ export const PROVIDER_ID: string =
 
 @NgModule({
   declarations: [NavbarComponent, FooterComponent],
-  imports: [CommonModule, SocialLoginModule],
+    imports: [CommonModule, SocialLoginModule, TranslateModule],
   exports: [NavbarComponent, FooterComponent],
   providers: [
     ElasticSearchQueryModel,
