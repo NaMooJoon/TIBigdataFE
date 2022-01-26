@@ -61,6 +61,13 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.per = "month";
   }
 
+  updateFigure() {
+    //when analysis button is clicked, replace data based on the selected inputs.
+    // 1) get search history based on the inputs
+        
+    // 2) update figure
+  }
+
   async getSearchHistoryFromElasticSearch() {
     var current = new Date();
     var y = current.getFullYear();
@@ -129,7 +136,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
     const svg = d3.select("#keyword-analysis")
                    .append("svg")
-//     .attr("width", width + (margin * 2))
                    .attr("width", width + (margin * 2))
                    .attr("height", height + (margin * 2))
                    .append("g")
@@ -168,22 +174,9 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
        .append("rect")
        .attr("x", d => x(d.date))
        .attr("y", d => y(d.freq))
-//     .attr("width", x.bandwidth())
        .attr("width", 10)
        .attr("height", (d) => height - y(d.freq))
        .attr("fill", "#80D0FC");
-    // .on("mouseover",function(d,i){
-    //   console.log(this);
-    //   var text = svg.append("text")
-    //           // .attr("id","r"+"-"+i)
-    //           .attr("x",d['x']-20)
-    //           .attr("y",d['y']-20)
-    //           .attr("stroke","red")
-    //           .attr("stroke-width",2)
-    //           // .text(d => d.word);
-    //         })
-    // .on("mouseout",function(){d3.select(this).attr("fill","blue");});
-
   }
 
   public get getSearchKeyword(): string {
