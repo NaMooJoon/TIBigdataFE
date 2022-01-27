@@ -45,8 +45,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     yb.style.background="lightgrey";
     mb.style.background="transparent";
 
-    this.startYearMonth = document.getElementById("start_month").value;
-    this.endYearMonth = document.getElementById("end_month").value;
+    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
+    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "year";
   }
 
@@ -56,15 +56,15 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     mb.style.background="lightgrey";
     yb.style.background="transparent";
 
-    this.startYearMonth = document.getElementById("start_month").value;
-    this.endYearMonth = document.getElementById("end_month").value;
+    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
+    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "month";
   }
 
   updateFigure() {
     //when analysis button is clicked, replace data based on the selected inputs.
     // 1) get search history based on the inputs
-        
+
     // 2) update figure
   }
 
