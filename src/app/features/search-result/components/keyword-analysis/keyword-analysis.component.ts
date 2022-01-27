@@ -14,6 +14,9 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private searchSubscriber: Subscription;
   private searchKeyword: string;
   private currentYearMonth: string;
+  private startYearMonth: string;
+  private endYearMonth: string;
+  private per: string;
 
   constructor(private elasticsearchService: ElasticsearchService) {
     this.searchSubscriber = this.elasticsearchService
@@ -25,14 +28,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setSearchKeyword();
-//     this.getSearchHistoryFromElasticSearch();
-    console.log("executed");
     this.drawChart();
   }
-
-//   ngOnChanges(): void{
-//     this.drawChart();
-//   }
 
   ngOnDestroy() {
     this.searchSubscriber.unsubscribe();
@@ -40,6 +37,35 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   setSearchKeyword() {
     this.searchKeyword = this.elasticsearchService.getKeyword();
+  }
+
+  year_clicked() {
+    var yb = document.getElementById("year_button");
+    var mb = document.getElementById("month_button");
+    yb.style.background="lightgrey";
+    mb.style.background="transparent";
+
+    this.startYearMonth = document.getElementById("start_month").value;
+    this.endYearMonth = document.getElementById("end_month").value;
+    this.per = "year";
+  }
+
+  month_clicked() {
+    var yb = document.getElementById("year_button");
+    var mb = document.getElementById("month_button");
+    mb.style.background="lightgrey";
+    yb.style.background="transparent";
+
+    this.startYearMonth = document.getElementById("start_month").value;
+    this.endYearMonth = document.getElementById("end_month").value;
+    this.per = "month";
+  }
+
+  updateFigure() {
+    //when analysis button is clicked, replace data based on the selected inputs.
+    // 1) get search history based on the inputs
+        
+    // 2) update figure
   }
 
   async getSearchHistoryFromElasticSearch() {
@@ -110,7 +136,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
     const svg = d3.select("#keyword-analysis")
                    .append("svg")
-//     .attr("width", width + (margin * 2))
                    .attr("width", width + (margin * 2))
                    .attr("height", height + (margin * 2))
                    .append("g")
@@ -149,22 +174,9 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
        .append("rect")
        .attr("x", d => x(d.date))
        .attr("y", d => y(d.freq))
-//     .attr("width", x.bandwidth())
        .attr("width", 10)
        .attr("height", (d) => height - y(d.freq))
        .attr("fill", "#80D0FC");
-    // .on("mouseover",function(d,i){
-    //   console.log(this);
-    //   var text = svg.append("text")
-    //           // .attr("id","r"+"-"+i)
-    //           .attr("x",d['x']-20)
-    //           .attr("y",d['y']-20)
-    //           .attr("stroke","red")
-    //           .attr("stroke-width",2)
-    //           // .text(d => d.word);
-    //         })
-    // .on("mouseout",function(){d3.select(this).attr("fill","blue");});
-
   }
 
   public get getSearchKeyword(): string {
