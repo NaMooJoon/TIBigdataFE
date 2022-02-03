@@ -7,7 +7,18 @@
   "introduction": "사이트소개",
   "guide": "서비스안내",
   "infoPolicy": "수집정보",
-  "privacyPolicy": "회원정책",
+  "accountPolicy": "회원정책",
   "signIn": "로그인",
-  "register": "회원가입"
+  "register": "회원가입",
+  "myPage:": "마이페이지",
+  "privacy": "회원정보관리",
+  "signOut": "로그아웃",
+  "myDocuments": "내 보관한",
+  "myAnalysis": "내 분석함",
+  "rmAccount": "회원탈퇴",
+  "Terms": "이용약관",
+  "privacyPolicy": "개인정보처리방침",
+  "unauthorizedEmail": "이메일무단수집거부",
+  "citeMap": "사이트맵",
+  "address": "경상북도 포항시 북구 흥해읍 한동로 558"
 }
