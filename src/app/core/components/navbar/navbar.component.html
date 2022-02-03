@@ -57,27 +57,27 @@
                 <li><a (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
                 <li><a (click)="toServiceGuide()">{{'guide'|translate}}</a></li>
                 <li><a (click)="toCollectedInfo()">{{'infoPolicy'|translate}}</a></li>
-                <li><a (click)="toMemberPolicy()">{{'privacyPolicy'|translate}}</a></li>
+                <li><a (click)="toMemberPolicy()">{{'accountPolicy'|translate}}</a></li>
               </ul>
             </div>
             <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
               <a
                 (click)="clickDropDownSiteInfo()"
-                class="dropdown-about">홈페이지소개</a>
+                class="dropdown-about">{{'aboutUs'|translate}}</a>
               <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'intro')"
-                  (click)="toSiteIntro()">사이트소개</a></li>
+                  (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'service-guide')"
-                  (click)="toServiceGuide()">서비스안내</a></li>
+                  (click)="toServiceGuide()">{{'guide'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'collected-info')"
-                  (click)="toCollectedInfo()">수집정보</a></li>
+                  (click)="toCollectedInfo()">{{'infoPolicy'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-policy')"
-                  (click)="toMemberPolicy()">회원정책</a></li>
+                  (click)="toMemberPolicy()">{{'privacyPolicy'|translate}}</a></li>
               </ul>
             </div>
           </li>
@@ -104,26 +104,26 @@
         <ul *ngIf="getIsSignedIn()" class="user-menu-tablet">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
-               class="dropdown-userpage">마이페이지</a>
+               class="dropdown-userpage">{{'myPage' | translate}}</a>
             <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-docs')"
-                (click)="toMyDocs()">내 보관함</a></li>
+                (click)="toMyDocs()">{{'myDocuments' | translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-analysis')"
-                (click)="toMyAnalysis()">내 분석함</a></li>
+                (click)="toMyAnalysis()">{{'myAnalysis'|translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-info')"
-                (click)="toMemberInfo()">회원정보관리</a></li>
+                (click)="toMemberInfo()">{{'privacy'|translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
                 (click)="toOpenAPI()">Open API</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
-                (click)="toSecession()">회원탈퇴</a></li>
+                (click)="toSecession()">{{'rmAccount'|translate}}</a></li>
             </ul>
           </li>
-          <li><a (click)="logOut()">로그아웃</a></li>
+          <li><a (click)="logOut()">{{'signOut'|translate}}</a></li>
         </ul>
 
       </nav>
@@ -147,8 +147,8 @@
 
   <ul *ngIf="getIsSignedIn()" class="user-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
-      <a (click)="toUserPage()">마이페이지</a>
+      <a (click)="toUserPage()">{{'myPage' | translate}}</a>
     </li>
-    <li><a (click)="logOut()">로그아웃</a></li>
+    <li><a (click)="logOut()">{{'signOut'|translate}}</a></li>
   </ul>
 </header>

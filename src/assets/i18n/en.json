@@ -7,9 +7,24 @@
   "introduction": "Introduction",
   "guide": "Service Guide",
   "infoPolicy": "Information Policy",
-  "privacyPolicy": "Privacy Policy",
+  "accountPolicy": "Privacy Policy",
   "signIn": "Sign in",
-  "register": "Register"
+  "register": "Register",
+  "myPage": "My Page",
+  "privacy": "Privacy",
+  "signOut": "Sign out",
+  "myDocuments": "My Documents",
+  "myAnalysis": "My Analysis",
+  "rmAccount": "Remove Account",
+  "Terms": "Terms of Services",
+  "privacyPolicy": "Privacy Policy",
+  "unauthorizedEmail": "Rejection of unauthorized e-mail collection",
+  "citeMap": "Site Map",
+  "address": "558, Handong-ro, Heunghae-eup, Buk-gu, Pohang-si,\n Gyeongsangbuk-do, Republic of Korea"
+
+
+
+
 
 
 }

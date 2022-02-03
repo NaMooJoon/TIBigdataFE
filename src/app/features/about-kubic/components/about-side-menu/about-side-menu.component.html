@@ -6,25 +6,25 @@
         [ngStyle]="selectedStyleObject(currentMenu == 'intro')"
         class="menu-item"
         >
-        <a (click)="toSiteIntro()">사이트소개</a>
+        <a (click)="toSiteIntro()">{{'introduction'|translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'service-guide')"
         class="menu-item"
         >
-        <a (click)="toServiceGuide()">서비스안내</a>
+        <a (click)="toServiceGuide()">{{"guide" | translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'collected-info')"
         class="menu-item"
         >
-        <a (click)="toCollectedInfo()">수집정보</a>
+        <a (click)="toCollectedInfo()">{{'infoPolicy' | translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'member-policy')"
         class="menu-item"
         >
-        <a (click)="toMemberPolicy()">회원정책</a>
+        <a (click)="toMemberPolicy()">{{'accountPolicy' | translate}}</a>
       </li>
     </ul>
   </div>
