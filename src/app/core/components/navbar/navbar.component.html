@@ -93,6 +93,8 @@
           </ul>
 
         <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
+          <li><a (click)="useLanguage('ko')"><img src="../../../../assets/icons/kor_lang.png"></a></li>
+          <li><a (click)="useLanguage('en')"><img src="../../../../assets/icons/eng_lang.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
             <a (click)="toLogin()">{{'signIn'|translate}}</a>
           </li>

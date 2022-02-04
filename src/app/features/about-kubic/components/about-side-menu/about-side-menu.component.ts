@@ -88,4 +88,27 @@ export class AboutSideMenuComponent implements OnInit {
   public set title(value: string) {
     this._title = value;
   }
+  public getTranslatedTitle(): string {
+    let translationTag = '';
+    switch (this.title) {
+      case '홈페이지소개': {
+        translationTag = 'aboutUs';
+        break;
+      }
+      case '서비스안내': {
+        translationTag = 'guide';
+        break;
+      }
+      case '수집정보': {
+        translationTag = 'infoPolicy';
+        break;
+      }
+      case '회원정책': {
+        translationTag = 'accountPolicy';
+        break;
+      }
+    }
+    return translationTag;
+
+  }
 }
