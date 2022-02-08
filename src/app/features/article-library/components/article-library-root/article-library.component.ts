@@ -5,8 +5,8 @@ import { ElasticsearchService } from "src/app/core/services/elasticsearch-servic
 import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import {DictionaryOption} from '../../../../core/enums/dictionary-option';
-import {TranslateModule} from '@ngx-translate/core';
-import { AppComponent } from '../../../app.component';
+
+
 
 @Component({
   selector: "app-category-library",
@@ -18,7 +18,6 @@ export class ArticleLibraryComponent implements OnInit {
     private analysisDatabaseService: AnalysisDatabaseService,
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
-    private appComponent: AppComponent,
     public _router: Router
   ) { }
 
@@ -184,33 +183,35 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   // getters and setters
-//   public setArrayValues(): string[] {
-//     if(appComponent.lang() === 'ko') {
-//       this.categories =
-//       [
-//           "전체",
-//           "정치",
-//           "경제",
-//           "사회",
-//           "국제",
-//           "IT_과학",
-//           "스포츠",
-//           "문화",
-//         ];
-//     }
-//     else {
-//       [
-//           "Total",
-//           "Politics",
-//           "Economics",
-//           "Social",
-//           "International",
-//           "IT_Science",
-//           "Sports",
-//           "Culture",
-//       ];
-//     }
-//   }
+  public setArrayValues(language): void {
+    if (language === 'ko') {
+      this.categories.splice(
+        0,
+        this.categories.length,
+        "전체",
+        "정치",
+        "경제",
+        "사회",
+        "국제",
+        "IT_과학",
+        "스포츠",
+        "문화");
+    }
+    else {
+      this.categories.splice(
+        0,
+        this.categories.length,
+        "Total",
+        "Politics",
+        "Economics",
+        "Social",
+        "International",
+        "IT_Science",
+        "Sports",
+        "Culture"
+      );
+    }
+  }
   public get toggleTopics(): boolean[] {
     return this._toggleTopics;
   }

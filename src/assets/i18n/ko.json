@@ -2,7 +2,7 @@
   "library": "자료열람",
   "analysis": "자료분석",
   "community": "커뮤니티",
-  "announcements:": "공지사항",
+  "announce:": "공지사항",
   "aboutUs": "홈페이지소개",
   "introduction": "사이트소개",
   "introduction-1": "통일빅데이터 분석 서비스 KUBiC",
@@ -123,5 +123,18 @@
   "byTopic": "주제별",
   "trendChart": "통일연구 동향 그래프",
   "lexicographic": "사전편찬별",
-  "organization": "기관별"
+  "organization": "기관별",
+  "announceNo": "글 번호",
+  "announceTitle": "글 제목",
+  "announceDate": "등록일",
+  "noContents": "등록된 게시물이 없습니다.",
+  "write": "글쓰기",
+  "category": "카테고리",
+  "writer": "작성자",
+  "completed": "완료",
+  "processing": "검토중",
+  "noticeBoard": "공지사항을 알려드립니다.",
+  "frequentlyAsked": "이용자분들께서 자주하시는 질문들 입니다.",
+  "pleaseAsk": "KUBiC에 대해 궁금하신 것을 남겨주세요.",
+  "help": "검색도움말"
 }
