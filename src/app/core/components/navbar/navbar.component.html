@@ -20,7 +20,7 @@
           >
 <!--common-->
             <div class="dropdown-container">
-              <a (click)="toCommunity()">{{'community' | translate}}</a>
+              <a (click)="toAnnouncement()">{{'community' | translate}}</a>
               <ul class="community-dropdown-menu">
                 <li><a (click)="toAnnouncement()">{{'announcements'|translate}}</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
@@ -52,7 +52,7 @@
           >
             <!--common-->
             <div class="dropdown-container">
-              <a>{{'aboutUs'|translate}}</a>
+              <a (click)="toSiteIntro()">{{'aboutUs'|translate}}</a>
               <ul class="about-dropdown-menu">
                 <li><a (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
                 <li><a (click)="toServiceGuide()">{{'guide'|translate}}</a></li>

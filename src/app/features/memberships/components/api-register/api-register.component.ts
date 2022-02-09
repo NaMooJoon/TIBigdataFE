@@ -9,6 +9,7 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 })
 export class ApiRegisterComponent implements OnInit {
   private _isAgreed: boolean = false;
+  private _isMain: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -42,5 +43,9 @@ export class ApiRegisterComponent implements OnInit {
   }
   public set isAgreed(value: boolean) {
     this._isAgreed = value;
+  }
+
+  gotoMain(): void {
+    this._router.navigateByUrl("");
   }
 }
