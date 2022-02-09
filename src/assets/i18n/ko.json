@@ -119,5 +119,9 @@
   "doYouAgree": "약관에 동의합니다.",
   "occupation": "신분을 선택해주세요",
   "org:": "소속된 기관을 입력해주세요",
-  "doGoogle": "구글 계정으로 가입하기"
+  "doGoogle": "구글 계정으로 가입하기",
+  "byTopic": "주제별",
+  "trendChart": "통일연구 동향 그래프",
+  "lexicographic": "사전편찬별",
+  "organization": "기관별"
 }

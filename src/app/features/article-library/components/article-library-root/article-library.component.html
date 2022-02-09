@@ -1,14 +1,14 @@
 <div class="library-container">
   <section class="library">
     <div class="library-header">
-      <h1>자료열람</h1>
-      <button (click)="navToGraph()">통일연구 동향 그래프</button>
+      <h1>{{'library'|translate}}</h1>
+      <button (click)="navToGraph()">{{'trendChart'|translate}}</button>
     </div>
 
     <hr class="hr"/>
 
     <div class="selection-container topic-container">
-      <p>주제별</p>
+      <p>{{'byTopic'|translate}}</p>
       <div class="selection-buttons">
         <button
           *ngFor="let cat of categories; let i = index"
@@ -24,7 +24,7 @@
     <hr class="hr"/>
 
     <div class="selection-container dict-container">
-      <p>사전편찬별</p>
+      <p>{{'lexicographic'|translate}}</p>
       <div class="selection-buttons">
         <button
           *ngFor="let cat of dict_orders_1"
@@ -40,7 +40,7 @@
     <hr class="hr"/>
 
     <div class="selection-container inst-container">
-      <p>기관별</p>
+      <p>{{'organization'|translate}}</p>
       <div class="selection-buttons institutions">
         <button
           *ngIf="institutionList !== undefined"

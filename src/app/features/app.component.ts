@@ -4,6 +4,7 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from '@ngx-translate/core';
 
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -15,12 +16,14 @@ export class AppComponent {
   private _isUserLoaded = false;
   private _isBackendAvailable;
   private _isSearchbarNeeded = true;
+  //private lang = 'ko';
 
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
     private elasticsearchSearvice: ElasticsearchService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    //private articleLibrary: ArticleLibrary
   ) {
     this.isUserLoaded = false;
     this.isBackendAvailable = null;
@@ -61,11 +64,18 @@ export class AppComponent {
   }
   public toKorean() {
     this.translate.use('ko');
+    this.lang = 'ko'
+    //articleLibrary.setArrayValues();
   }
   public toEnglish() {
     this.translate.use('en');
+    this.lang = 'en';
+    //articleLibrary.setArrayValues();
   }
   // getters and setters
+//   public get lang() {
+//     return this.lang;
+//   }
   public get isUserLoaded() {
     return this._isUserLoaded;
   }

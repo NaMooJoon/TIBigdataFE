@@ -119,7 +119,11 @@
   "doYouAgree": "I read above terms and agree to all of them.",
   "occupation": "Select your occupation.",
   "org:": "Type the name of your organization.",
-  "doGoogle": "Sign up with a Google account"
+  "doGoogle": "Sign up with a Google account",
+  "byTopic": "By Topics",
+  "trendChart": "Reunion Research Trend Charts",
+  "lexicographic": "By Lexicography",
+  "organization": "By Organizations"
 
 
 
