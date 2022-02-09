@@ -64,7 +64,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   updateFigure() {
     //when analysis button is clicked, replace data based on the selected inputs.
     // 1) get search history based on the inputs
-        
+
     // 2) update figure
   }
 
