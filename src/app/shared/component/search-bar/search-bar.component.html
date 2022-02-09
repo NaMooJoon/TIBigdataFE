@@ -25,7 +25,7 @@
   />
   <div class="search-filter-container">
     <div class="reset-filter">
-      <span>검색조건</span>
+      <span>{{'searchfilter'|translate}}</span>
       <img
         (click)="resetFilters()"
         class="reset-btn"
@@ -55,7 +55,7 @@
 
     <button
       [ngStyle]="selectedStyleObject(isInstSelected)"
-      type="button">기관별</button>
+      type="button">{{'filter-org'|translate}}</button>
     <div uk-dropdown="pos: bottom-justify; boundary: '#inst';" class = "inst-dropdown">
       <ul class="uk-nav uk-dropdown-nav">
         <li>
