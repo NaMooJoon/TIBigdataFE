@@ -2,7 +2,6 @@
   "library": "Library",
   "analysis": "Analysis",
   "community": "Community",
-  "announce:": "Announcements",
   "aboutUs": "About Us",
   "introduction": "Introduction",
   "introduction-1": "KUBIC: Korea Unification Bigdata Center",
@@ -136,8 +135,6 @@
   "noticeBoard": "Notice Board",
   "frequentlyAsked": "Frequently Asked Questions",
   "pleaseAsk": "Any questions about KUBIC?",
-  "help": "Help"
-
-
-
+  "help": "Help",
+  "공지:": "Announcements"
 }
