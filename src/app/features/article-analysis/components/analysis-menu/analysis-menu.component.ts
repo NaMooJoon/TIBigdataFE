@@ -21,9 +21,10 @@ export class AnalysisMenuComponent implements OnInit {
     if(matchMedia("(max-width: 425px)").matches) {
       if (flag) {
         return {
-          color: "black",
+          color: "white",
           "font-weight": "bold",
           "border-bottom" : "0.2rem solid #0FBAFF",
+          "border-radius" : "5px",
         };
       } else {
         return {
