@@ -384,6 +384,60 @@ export class ElasticsearchService {
     }
   }
 
+  triggerSearchFilter(selectedPageNum: number): void {
+    let startIndex = selectedPageNum - 1;
+    let docSize = this.numDocsPerPage;
+    let mustKeyword = this.mustKeyword;
+    let mustNotKeyword = this.mustNotKeyword;
+
+    if (!startIndex) startIndex = 0;
+    this.setCurrentSearchingPage(selectedPageNum);
+console.log(this.keyword)
+console.log(this.selectedInst)
+    return this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      from: startIndex,
+      size: docSize,
+      filterPath: this.esQueryModel.getFilterPath(),
+
+      body: {
+        query: {
+          bool: {
+            should: [
+              { match: { published_institution: this.selectedInst }},
+              { match: { post_title : this.keyword }},
+              { match: { file_extracted_content : this.keyword }},
+              { match: { post_body : this.keyword }}
+            ]
+          },
+
+          // post_filter: {
+          //   bool: {
+          //     must:
+          //       {
+          //         multi_match: {
+          //           query: this.mustKeyword,
+          //           fields: this.esQueryModel.getSearchField(),
+          //         }
+          //       },
+          //     must_not:
+          //       {
+          //         multi_match: {
+          //           query: this.mustNotKeyword,
+          //           fields: this.esQueryModel.getSearchField(),
+          //         }
+          //       }
+          //   }
+          // },
+
+          sort : this.sortOption
+        },
+      },
+
+      _source: this.esQueryModel.getSearchSource(),
+    });
+  }
+
   /**
    * @description Update current search page number
    * @param pageNum
