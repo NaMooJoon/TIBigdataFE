@@ -110,6 +110,10 @@ export class ElasticSearchQueryModel {
     return this.filterPath;
   }
 
+  public getSearchField() {
+    return this.searchField;
+  }
+
   public getSearchHashKeys() {
     return {
       query: {
