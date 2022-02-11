@@ -18,6 +18,20 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private endYearMonth: string;
   private per: string;
 
+  //related to drawing chart
+  // set the dimensions and margins of the graph
+  private margin;
+  private width;
+  private height;
+  // append the svg object to the body of the page
+  private svg;
+  // Initialize the X axis
+  private x;
+  private xAxis;
+  // Initialize the Y axis
+  private y;
+  private yAxis;
+
   constructor(private elasticsearchService: ElasticsearchService) {
     this.searchSubscriber = this.elasticsearchService
                                 .getSearchStatus()
@@ -28,7 +42,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setSearchKeyword();
-    this.drawChart();
+    this.setMinMaxDate();
+    this.initFigure();
   }
 
   ngOnDestroy() {
@@ -37,6 +52,18 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   setSearchKeyword() {
     this.searchKeyword = this.elasticsearchService.getKeyword();
+  }
+
+  setMinMaxDate(){
+    var current = new Date();
+    var year = current.getFullYear();
+    var c_month = current.getMonth() + 1;
+    if(c_month < 10) {
+      this.currentYearMonth = "" + year + "-0" +  c_month;
+    }
+    else {
+      this.currentYearMonth = "" + year + "-" +  c_month;
+    }
   }
 
   year_clicked() {
@@ -61,123 +88,133 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.per = "month";
   }
 
-  updateFigure() {
-    //when analysis button is clicked, replace data based on the selected inputs.
-    // 1) get search history based on the inputs
+  updateChart(){
+    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
+    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
 
-    // 2) update figure
-  }
+    const data1 = [
+      {group: "A", value: 4},
+      {group: "B", value: 16},
+      {group: "C", value: 8}
+    ];
 
-  async getSearchHistoryFromElasticSearch() {
-    var current = new Date();
-    var y = current.getFullYear();
-    var c_month = current.getMonth() + 1;
-    if(c_month < 10) {
-      this.currentYearMonth = "" + y + "-0" +  c_month;
+    const data2 = [
+      {group: "A", value: 7},
+      {group: "B", value: 1},
+      {group: "C", value: 20},
+      {group: "D", value: 10}
+    ];
+
+    var x = this.x;
+    var xAxis = this.xAxis;
+    var y = this.y;
+    var yAxis = this.yAxis;
+    var svg = this.svg;
+    var height = this.height;
+
+    function update(data) {
+      // Update the X axis
+      x.domain(data.map(d => d["group"]))
+      xAxis.call(d3.axisBottom(x))
+      // Update the Y axis
+      y.domain([0, d3.max(data, function(d) { return d["value"]; }) ] as number[]);
+      yAxis.transition().duration(1000).call(d3.axisLeft(y));
+      // Create the u variable
+      var u = svg.selectAll("rect")
+                 .data(data);
+      u.join("rect") // Add a new rect for each new elements
+       .transition()
+       .duration(1000)
+       .attr("x", d => x(d["group"]))
+       .attr("y", d => y(d["value"]))
+       .attr("width", x.bandwidth())
+       .attr("height", d => height - y(d["value"]))
+       .attr("fill", "#69b3a2");
+    }
+    //For test
+    if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-01"){
+      console.log("data1");
+      update(data1);
     }
     else {
-      this.currentYearMonth = "" + y + "-" +  c_month;
+      console.log("data2");
+      update(data2);
     }
-
-    var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
-    var cnt = [];
-    var idx = -1;
-    for(var i = 5 ; i < 17; i++){
-      if(month[i] == c_month) {
-        idx = i;
-        break;
-      }
-    }
-    if(idx == -1){
-      console.log("IDX_ERROR");
-    }
-    for(var j = 0; j < 6; j ++){
-      var m;
-      if(month[idx] < 10){
-        m = "0" + month[idx];
-      }
-      else {
-        m = "" + month[idx];
-      }
-      //search_log-<year>.<month>
-      var index = "search_log-" + y + "." + m;
-      var count;
-      try {
-        count = await this.elasticsearchService.getSearchHistory(index);
-        const hist = {date: "" + y + "." + m, freq: count["count"]};
-        this.searchHistory.push(hist);
-      }
-      catch (e) {
-        console.log("There is no log file for year: " + y + ", month: " + m);
-        const hist = {date: "" + y + "." + m, freq: 0};
-        this.searchHistory.push(hist);
-      }
-
-      if(month[idx] < month[idx - 1]){
-              y = y - 1;
-      }
-      idx = idx -1;
-    }
-    console.log("search history");
-    console.log(this.searchHistory);
   }
 
-  async drawChart(){
-    await this.getSearchHistoryFromElasticSearch();
+  initFigure() {
+    //related to drawing chart
+    // set the dimensions and margins of the graph
+    this.margin = {top: 30, right: 30, bottom: 70, left: 60};
+    this.width = 460 - this.margin.left - this.margin.right;
+    this.height = 400 - this.margin.top - this.margin.bottom;
 
-    const histData = this.searchHistory.reverse();
-    console.log("json");
-    console.log(histData);
+    // append the svg object to the body of the page
+    this.svg = d3.select("#keyword_analysis")
+                 .append("svg")
+                 .attr("width", this.width + this.margin.left + this.margin.right)
+                 .attr("height", this.height + this.margin.top + this.margin.bottom)
+                 .append("g")
+                 .attr("transform",
+                       "translate(" + this.margin.left + "," + this.margin.top + ")");
+    // Initialize the X axis
+    this.x = d3.scaleBand()
+               .range([ 0, this.width ])
+               .padding(0.2);
+    this.xAxis = this.svg.append("g")
+                         .attr("transform", "translate(0," + this.height + ")");
 
-    var margin = 50;
-    var margina = {top: 10, right: 30, bottom: 30, left: 40};
-    var width = 500 - (margin * 2);
-    var height = 300 - (margin * 2);
-
-    const svg = d3.select("#keyword-analysis")
-                   .append("svg")
-                   .attr("width", width + (margin * 2))
-                   .attr("height", height + (margin * 2))
-                   .append("g")
-                   .attr("transform", "translate(" + margin + "," + margin + ")");
-
-    // Create the X-axis band scale
-    const x = d3.scaleBand().range([0, width])
-                            .domain(histData.map(d => d.date))
-                            .padding(0.2);
-
-    // Draw the X-axis on the DOM
-    svg.append("g").attr("transform", "translate(0," + height + ")")
-                   .call(d3.axisBottom(x))
-                   .selectAll("text")
-                   .attr("transform", "translate(-10,0)rotate(-45)")
-                   .style("text-anchor", "end");
-
-    // Create the Y-axis band scale
-    const y = d3.scaleLinear().domain([0, d3.max(histData, d => d.freq)])
-                              .range([height, 0]);
-
-    var maxY = d3.max(histData, d => d.freq);
-    var fixedTicks = [];
-    for(var i = 1; i <= 5; i ++) {
-      fixedTicks.push(Math.round((maxY * i) / 5));
-    }
-    console.log(fixedTicks);
-    // Draw the Y-axis on the DOM
-    svg.append("g").call(d3.axisLeft(y)
-                           .tickValues(fixedTicks));
-
-    // Create and fill the bars
-    svg.selectAll("bars")
-       .data(histData)
-       .enter()
-       .append("rect")
-       .attr("x", d => x(d.date))
-       .attr("y", d => y(d.freq))
-       .attr("width", 10)
-       .attr("height", (d) => height - y(d.freq))
-       .attr("fill", "#80D0FC");
+    // Initialize the Y axis
+    this.y = d3.scaleLinear()
+               .range([ this.height, 0]);
+    this.yAxis = this.svg.append("g")
+                         .attr("class", "myYaxis");
+    this.updateChart();
   }
+
+//   async getSearchHistoryFromElasticSearch() {
+//     var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
+//     var cnt = [];
+//     var idx = -1;
+//     for(var i = 5 ; i < 17; i++){
+//       if(month[i] == c_month) {
+//         idx = i;
+//         break;
+//       }
+//     }
+//     if(idx == -1){
+//       console.log("IDX_ERROR");
+//     }
+//     for(var j = 0; j < 6; j ++){
+//       var m;
+//       if(month[idx] < 10){
+//         m = "0" + month[idx];
+//       }
+//       else {
+//         m = "" + month[idx];
+//       }
+//       //search_log-<year>.<month>
+//       var index = "search_log-" + y + "." + m;
+//       var count;
+//       try {
+//         count = await this.elasticsearchService.getSearchHistory(index);
+//         const hist = {date: "" + y + "." + m, freq: count["count"]};
+//         this.searchHistory.push(hist);
+//       }
+//       catch (e) {
+//         console.log("There is no log file for year: " + y + ", month: " + m);
+//         const hist = {date: "" + y + "." + m, freq: 0};
+//         this.searchHistory.push(hist);
+//       }
+//
+//       if(month[idx] < month[idx - 1]){
+//               y = y - 1;
+//       }
+//       idx = idx -1;
+//     }
+//     console.log("search history");
+//     console.log(this.searchHistory);
+//   }
 
   public get getSearchKeyword(): string {
     return this.searchKeyword;
