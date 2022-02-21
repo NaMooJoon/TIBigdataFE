@@ -44,6 +44,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.setSearchKeyword();
     this.setMinMaxDate();
     this.initFigure();
+    this.month_clicked();
   }
 
   ngOnDestroy() {
@@ -88,21 +89,21 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.per = "month";
   }
 
-  updateChart(){
+  async updateChart(){
     this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
     this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
 
-    const data1 = [
-      {group: "A", value: 4},
-      {group: "B", value: 16},
-      {group: "C", value: 8}
+//     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
+    var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
+    console.log(dataPerMonth);
+
+    var data1 = [
+      {date: "2022.01", freq: 18},
+      {date: "2022.02", freq: 1}
     ];
 
-    const data2 = [
-      {group: "A", value: 7},
-      {group: "B", value: 1},
-      {group: "C", value: 20},
-      {group: "D", value: 10}
+    var data2 = [
+      {date: "2022.02", freq: 1}
     ];
 
     var x = this.x;
@@ -114,10 +115,10 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
     function update(data) {
       // Update the X axis
-      x.domain(data.map(d => d["group"]))
+      x.domain(data.map(d => d["date"]))
       xAxis.call(d3.axisBottom(x))
       // Update the Y axis
-      y.domain([0, d3.max(data, function(d) { return d["value"]; }) ] as number[]);
+      y.domain([0, d3.max(data, function(d) { return d["freq"]; }) ] as number[]);
       yAxis.transition().duration(1000).call(d3.axisLeft(y));
       // Create the u variable
       var u = svg.selectAll("rect")
@@ -125,19 +126,20 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
       u.join("rect") // Add a new rect for each new elements
        .transition()
        .duration(1000)
-       .attr("x", d => x(d["group"]))
-       .attr("y", d => y(d["value"]))
+       .attr("x", d => x(d["date"]))
+       .attr("y", d => y(d["freq"]))
        .attr("width", x.bandwidth())
-       .attr("height", d => height - y(d["value"]))
+       .attr("height", d => height - y(d["freq"]))
        .attr("fill", "#69b3a2");
     }
     //For test
     if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-01"){
-      console.log("data1");
+      update(dataPerMonth);
+    }
+    else if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-02"){
       update(data1);
     }
-    else {
-      console.log("data2");
+    else if(this.startYearMonth == "2022-02" && this.endYearMonth == "2022-02"){
       update(data2);
     }
   }
@@ -172,49 +174,55 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.updateChart();
   }
 
-//   async getSearchHistoryFromElasticSearch() {
-//     var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
-//     var cnt = [];
-//     var idx = -1;
-//     for(var i = 5 ; i < 17; i++){
-//       if(month[i] == c_month) {
-//         idx = i;
-//         break;
-//       }
-//     }
-//     if(idx == -1){
-//       console.log("IDX_ERROR");
-//     }
-//     for(var j = 0; j < 6; j ++){
-//       var m;
-//       if(month[idx] < 10){
-//         m = "0" + month[idx];
-//       }
-//       else {
-//         m = "" + month[idx];
-//       }
-//       //search_log-<year>.<month>
-//       var index = "search_log-" + y + "." + m;
-//       var count;
-//       try {
-//         count = await this.elasticsearchService.getSearchHistory(index);
-//         const hist = {date: "" + y + "." + m, freq: count["count"]};
-//         this.searchHistory.push(hist);
-//       }
-//       catch (e) {
-//         console.log("There is no log file for year: " + y + ", month: " + m);
-//         const hist = {date: "" + y + "." + m, freq: 0};
-//         this.searchHistory.push(hist);
-//       }
-//
-//       if(month[idx] < month[idx - 1]){
-//               y = y - 1;
-//       }
-//       idx = idx -1;
-//     }
-//     console.log("search history");
-//     console.log(this.searchHistory);
-//   }
+  async updateData(start, end) {
+    var searchHistory = [];
+    var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
+    var cnt = [];
+    var s_idx = -1;
+    var e_idx = -1;
+    for(var i = 5 ; i < 17; i++){
+      if(month[i] == +start.split("-")[1]) {
+        s_idx = i;
+      }
+      if(month[i] == +end.split("-")[1]) {
+        e_idx = i;
+      }
+    }
+    if(s_idx == -1 || e_idx == -1){
+      console.log("IDX_ERROR");
+    }
+    for(var i = s_idx; i <= e_idx; i ++){
+      var m;
+      var y = start.split("-")[0];
+
+      if(month[s_idx] < 10){
+        m = "0" + month[s_idx];
+      }
+      else {
+        m = "" + month[s_idx];
+      }
+      //search_log-<year>.<month>
+      var index = "search_log-" + y + "." + m;
+      var count;
+      try {
+        count = await this.elasticsearchService.getSearchHistory(index);
+        const hist = {date: "" + y + "." + m, freq: count["count"]};
+        searchHistory.push(hist);
+      }
+      catch (e) {
+        console.log("There is no log file for year: " + y + ", month: " + m);
+        const hist = {date: "" + y + "." + m, freq: 0};
+        searchHistory.push(hist);
+      }
+
+      if(month[s_idx] > month[s_idx - 1]){
+              y = +y;
+              y = y + 1;
+      }
+    }
+    console.log("search history");
+    return searchHistory;
+  }
 
   public get getSearchKeyword(): string {
     return this.searchKeyword;
