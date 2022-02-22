@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import { AppComponent } from '../../../features/app.component';
+import { ArticleLibraryComponent } from '../../../features/article-library/components/article-library-root/article-library.component';
 
 @Component({
   selector: "app-nav",
@@ -32,6 +33,7 @@ export class NavbarComponent implements OnInit {
     private ipService: IpService,
     private changeDetectorRef: ChangeDetectorRef,
     private appcomponent: AppComponent,
+    private articleLibrary: ArticleLibraryComponent,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -61,7 +63,6 @@ export class NavbarComponent implements OnInit {
         this.selectedSubMenu = event.url.split("/")[2];
       }
     });
-
     // this.resizeObservable$ = fromEvent(window, 'resize')
     // this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
     //   if(matchMedia("(max-width: 768px)").matches) {
@@ -103,16 +104,15 @@ export class NavbarComponent implements OnInit {
   useLanguage(language: string): void {
     if (language === 'en') {
       this.appcomponent.toEnglish();
-    }
-    else {
+    } else if (language === 'ko') {
       this.appcomponent.toKorean();
     }
-
+    this.articleLibrary.setArrayValues(language);
   }
   selectMobileMenu(): void {
     this.isHamburger = !this.isHamburger;
   }
-
+//getters and setters
   public get isSelectMobileMenu(): boolean {
     return this.isHamburger;
   }
