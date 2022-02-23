@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ChartConfiguration, ChartOptions, ChartType } from "chart.js";
@@ -49,20 +51,20 @@ export class ResearchStatusComponent implements OnInit {
                   .append("g")
                   .attr("transform", `translate(${width/2},${height/2})`);
 
-    // Create dummy data
+    var label = this.chartLabels;
     var value = this.chartData;
-    var label =this.chartLabels;
 
     var d = {};
 //     const returnedTarget = Object.assign(target, source);
     for(var i = 0; i < label.length; i ++){
-        d = Object.assign(d, {[label[i]]: value[i]});
+        var l:string = "" + label[i];
+        d = Object.assign(d, {[l]: value[i]});
     }
     const data = d;
 
     // set the color scale
     const color = d3.scaleOrdinal()
-                .domain(this.chartLabels)
+                .domain(label)
                 .range(d3.schemeDark2);
 
     // Compute the position of each group on the pie:
