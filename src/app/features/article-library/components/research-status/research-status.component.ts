@@ -57,11 +57,9 @@ export class ResearchStatusComponent implements OnInit {
     var d = {};
 //     const returnedTarget = Object.assign(target, source);
     for(var i = 0; i < label.length; i ++){
-        var l:string = "" + label[i];
-        d = Object.assign(d, {[l]: value[i]});
+        d = Object.assign(d, {[label[i]]: value[i]});
     }
     const data = d;
-
     // set the color scale
     const color = d3.scaleOrdinal()
                 .domain(label)
