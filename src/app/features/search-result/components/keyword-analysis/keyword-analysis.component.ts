@@ -89,6 +89,29 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     this.per = "month";
   }
 
+  getYearData(data){
+    var yearData = [];
+    var tmpYear = "-1";
+    var tmpIdx = 0;
+    for(var i = 0; i < data.length; i ++){
+      var year = data[i]["date"].split("\.")[0];
+      if(tmpYear == "-1"){
+        yearData.push({date: year, freq: data[i]["freq"]});
+        tmpYear = year;
+      }
+      else if(tmpYear == year){
+        yearData[tmpIdx]["freq"] = yearData[tmpIdx]["freq"] + data[i]["freq"];
+      }
+      else {
+        yearData.push({date: year, freq: data[i]["freq"]});
+        tmpIdx++;
+        tmpYear = year;
+      }
+    }
+    console.log(yearData)
+    return yearData;
+  }
+
   async updateChart(){
     this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
     this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
@@ -133,14 +156,19 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
        .attr("fill", "#69b3a2");
     }
     //For test
-    if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-01"){
-      update(dataPerMonth);
-    }
-    else if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-02"){
-      update(data1);
-    }
-    else if(this.startYearMonth == "2022-02" && this.endYearMonth == "2022-02"){
-      update(data2);
+    if(this.per == "month"){
+      if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-01"){
+        update(dataPerMonth);
+      }
+      else if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-02"){
+        update(data1);
+      }
+      else if(this.startYearMonth == "2022-02" && this.endYearMonth == "2022-02"){
+        update(data2);
+      }
+    } else{
+        var year_data = await this.getYearData(data1);
+        update(year_data)
     }
   }
 
