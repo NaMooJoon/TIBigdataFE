@@ -49,7 +49,7 @@ ul {
 }
 
 @media all and (min-width: 426px) and (max-width: 768px){
-  
+
   h1 {
     font-size: 3.5vw !important;
   }
@@ -211,10 +211,10 @@ td {
 }
 
 .popup{
-  position:absolute; 
-  right:20%; 
-  top:60%; 
-  width:100px; 
+  position:absolute;
+  right:20%;
+  top:60%;
+  width:100px;
   background: lightskyblue;
   display:none;
   border-radius:3px;
@@ -234,7 +234,7 @@ td {
   width: 1px;
   height: 1px;
 }
-  
+
   /* form | radio */
   .radio-items {
     margin: 0px 10px;
@@ -271,12 +271,12 @@ td {
       color: #fff;
   }
   }
-  
+
   .upload-dict{
       font-size:1.3rem;
 
   }
-  
+
 
 // Analysis
 
@@ -295,7 +295,7 @@ td {
 .pop-container{
   margin: 10px;
   background-color: white;
-  
+
   // border: 1px solid lightgray;
   // border-radius: 25px;
   display: flex;
@@ -330,7 +330,7 @@ td {
   align-items: center;
   display:none;
 }
-  
+
 
 
 // Manual
@@ -383,15 +383,16 @@ td {
 
 .popupmenu-title-eng{
   font-family: Helvetica;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 20px;
 }
 .manual-info{
   font-size:1.3rem;
   font-family: Noto Sans KR;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 15px;
   line-height: 196.7%;
+  border: 1px solid #DDDDDD;
 }
 
 // Frame
@@ -404,7 +405,7 @@ td {
     gap: 20px 20px;
     grid-template-areas: "menu menu menu menu menu body body body body body body body body body body ";
   }
-  
+
   app-analysis-menu {
     grid-area: menu;
   }
@@ -415,12 +416,18 @@ td {
     border-radius: 20px;
     padding: 1.6rem 2rem;
   }
-  
+
   .content > p {
     font-size: 1.5rem;
   }
 
-  .float-right { 
+  .content > hr{
+    border: 0.5px solid #DDDDDD;
+    margin-top : 20px;
+    margin-bottom: 10px;
+  }
+
+  .float-right {
     font-size:20px;
     font-weight: 600;
     width: 210px;
@@ -431,7 +438,7 @@ td {
     border-radius: 22.5px;
     color: #52B9FF;
   }
-  
+
   @media all and (max-width: 425px){
     .content-container {
       grid-area: main;
@@ -443,7 +450,7 @@ td {
       grid-template-areas: "menu menu menu menu menu menu menu menu menu menu"
                           "body body body body body body body body body body ";
     }
-  
+
     .content {
       grid-area: body;
       margin-top: 0;
@@ -451,4 +458,3 @@ td {
       padding: 1.6rem 2rem;
     }
   }
-    
