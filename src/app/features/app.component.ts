@@ -3,6 +3,7 @@ import { ElasticsearchService } from "src/app/core/services/elasticsearch-servic
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from '@ngx-translate/core';
+import { ArticleLibraryComponent } from './article-library/components/article-library-root/article-library.component';
 
 @Component({
   selector: "app-root",
@@ -15,17 +16,21 @@ export class AppComponent {
   private _isUserLoaded = false;
   private _isBackendAvailable;
   private _isSearchbarNeeded = true;
+  private language = '';
 
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router,
     private elasticsearchSearvice: ElasticsearchService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private articleLibrary: ArticleLibraryComponent,
   ) {
     this.isUserLoaded = false;
     this.isBackendAvailable = null;
     translate.setDefaultLang('ko');
     translate.use('ko');
+    this.language = 'ko';
+    //this.articleLibrary.setArrayValues('ko');
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         try {
@@ -61,11 +66,16 @@ export class AppComponent {
   }
   public toKorean() {
     this.translate.use('ko');
+    this.language = 'ko';
   }
   public toEnglish() {
     this.translate.use('en');
+    this.language = 'en';
   }
   // getters and setters
+  public get getLanguage() {
+    return this.language;
+  }
   public get isUserLoaded() {
     return this._isUserLoaded;
   }

@@ -6,6 +6,8 @@ import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import {DictionaryOption} from '../../../../core/enums/dictionary-option';
 
+
+
 @Component({
   selector: "app-category-library",
   templateUrl: "./article-library.component.html",
@@ -181,6 +183,35 @@ export class ArticleLibraryComponent implements OnInit {
   }
 
   // getters and setters
+  public setArrayValues(language): void {
+    if (language === 'ko') {
+      this.categories.splice(
+        0,
+        this.categories.length,
+        "전체",
+        "정치",
+        "경제",
+        "사회",
+        "국제",
+        "IT_과학",
+        "스포츠",
+        "문화");
+    }
+    else {
+      this.categories.splice(
+        0,
+        this.categories.length,
+        "Total",
+        "Politics",
+        "Economics",
+        "Social",
+        "International",
+        "IT_Science",
+        "Sports",
+        "Culture"
+      );
+    }
+  }
   public get toggleTopics(): boolean[] {
     return this._toggleTopics;
   }
