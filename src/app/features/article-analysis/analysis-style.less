@@ -16,7 +16,7 @@ h1 {
 }
 
 .sidebar-container {
-  height: 100%;
+  height: flex;
   display: flex;
   flex-direction: column;
 }
@@ -26,10 +26,9 @@ h1 {
   flex-direction: column;
   align-items: flex-end;
   border: 1px solid darkgray;
-  border-radius: 0px 30px 30px 0px;
+  border-radius: 0px 20px 20px 0px;
   border-left: none;
   height: 100%;
-  padding-bottom: 10rem;
 }
 
 ul {
@@ -40,6 +39,9 @@ ul {
 
 .menu-item {
   margin: 1.5rem 1.5rem 0 0;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 180%;
 }
 
 .menu-item:last-child {
@@ -47,7 +49,7 @@ ul {
 }
 
 @media all and (min-width: 426px) and (max-width: 768px){
-  
+
   h1 {
     font-size: 3.5vw !important;
   }
@@ -119,25 +121,25 @@ hr{
 
 // Table
 table {
+  table-layout: fixed;
   width:100%;
   border-collapse: separate;
   text-align : center;
   border-spacing: 1px;
-  line-height: 1.5;
-  
+  line-height: 3;
+  font-size: 15px;
 }
 
 
 th {
-  // width: 100%;
   padding    : 15px 0px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 700;
   color: #fff;
   background: lightskyblue ;
 }
 
 td {
-  // width: 100%;
   border-bottom : 1px solid lightgray;
   height        : 57px;
   vertical-align: middle;
@@ -149,7 +151,6 @@ td {
   height: 500px;
   margin: 1.5rem 0rem;
 }
-    
 
 .tablebtn{
   font-size: 1.2rem;
@@ -210,10 +211,10 @@ td {
 }
 
 .popup{
-  position:absolute; 
-  right:20%; 
-  top:60%; 
-  width:100px; 
+  position:absolute;
+  right:20%;
+  top:60%;
+  width:100px;
   background: lightskyblue;
   display:none;
   border-radius:3px;
@@ -233,7 +234,7 @@ td {
   width: 1px;
   height: 1px;
 }
-  
+
   /* form | radio */
   .radio-items {
     margin: 0px 10px;
@@ -270,12 +271,12 @@ td {
       color: #fff;
   }
   }
-  
+
   .upload-dict{
       font-size:1.3rem;
 
   }
-  
+
 
 // Analysis
 
@@ -294,7 +295,7 @@ td {
 .pop-container{
   margin: 10px;
   background-color: white;
-  
+
   // border: 1px solid lightgray;
   // border-radius: 25px;
   display: flex;
@@ -329,7 +330,7 @@ td {
   align-items: center;
   display:none;
 }
-  
+
 
 
 // Manual
@@ -361,14 +362,12 @@ td {
     display: block;
 }
 
-button { 
-  font-size:1.5rem;
-}
 .popupmenu-item {
   margin: 10px;
+  margin-left: 20px;
   background-color: white;
-  border-radius: 25px !important;
-  border: 1px solid lightgray;
+  border-radius: 21px !important;
+  border: 2px solid #DDDDDD;
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
@@ -377,8 +376,23 @@ button {
   font-size: 1.5rem;
 }
 
+.popupmenu-title{
+  font-size:20px;
+  font-weight: 500;
+}
+
+.popupmenu-title-eng{
+  font-family: Helvetica;
+  font-weight: 300;
+  font-size: 20px;
+}
 .manual-info{
   font-size:1.3rem;
+  font-family: Noto Sans KR;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 196.7%;
+  border: 1px solid #DDDDDD;
 }
 
 // Frame
@@ -391,22 +405,40 @@ button {
     gap: 20px 20px;
     grid-template-areas: "menu menu menu menu menu body body body body body body body body body body ";
   }
-  
+
   app-analysis-menu {
     grid-area: menu;
   }
   .content {
     grid-area: body;
-    margin-top: 4rem;
+    margin-top: 4.4rem;
     border: 1px solid darkgray;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 1.6rem 2rem;
   }
-  
+
   .content > p {
     font-size: 1.5rem;
   }
-  
+
+  .content > hr{
+    border: 0.5px solid #DDDDDD;
+    margin-top : 20px;
+    margin-bottom: 10px;
+  }
+
+  .float-right {
+    font-size:20px;
+    font-weight: 600;
+    width: 210px;
+    height: 45px;
+    border: 2px solid #52B9FF;
+    box-sizing: border-box;
+    margin-top: 25px;
+    border-radius: 22.5px;
+    color: #52B9FF;
+  }
+
   @media all and (max-width: 425px){
     .content-container {
       grid-area: main;
@@ -418,7 +450,7 @@ button {
       grid-template-areas: "menu menu menu menu menu menu menu menu menu menu"
                           "body body body body body body body body body body ";
     }
-  
+
     .content {
       grid-area: body;
       margin-top: 0;
@@ -426,4 +458,3 @@ button {
       padding: 1.6rem 2rem;
     }
   }
-    

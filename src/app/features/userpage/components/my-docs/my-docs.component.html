@@ -1,17 +1,23 @@
-<div class="folder-menu">
-  <button
-    class="folder"
-    (click)="openModal()"
-    id="logout-button"
-  >폴더편집</button>
-</div>
+
 <form *ngIf="!isSavedKeywordsEmpty" [formGroup]="form" novalidate>
   <section *ngIf="isSavedKeywordsLoaded" class="keyword-group">
     <div *ngFor="let key of savedKeywords; index as idx">
-      <button (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ parsingSavedDate(key.savedDate) }}</button>
+      <button
+        class="scroll"
+        id = "scroll-width"
+        (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ parsingSavedDate(key.savedDate) }}</button>
+    </div>
+    <div class="folder-menu">
+      <button
+        class="folder"
+        (click)="openModal()"
+        id="logout-button"
+      >폴더편집</button>
     </div>
   </section>
+
 </form>
+
 <div class="outline">
 <form *ngIf="!isSavedDocsEmpty" [formGroup]="form" novalidate>
   <div class="upside">

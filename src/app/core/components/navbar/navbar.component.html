@@ -22,7 +22,7 @@
             <div class="dropdown-container">
               <a (click)="toAnnouncement()">{{'community' | translate}}</a>
               <ul class="community-dropdown-menu">
-                <li><a (click)="toAnnouncement()">{{'announcements'|translate}}</a></li>
+                <li><a (click)="toAnnouncement()">{{'공지'|translate}}</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
                 <li><a (click)="toCommunity()">Q&A</a></li>
               </ul>
@@ -93,8 +93,8 @@
           </ul>
 
         <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
-          <li><a (click)="useLanguage('ko')"><img src="../../../../assets/icons/kor_lang.png"></a></li>
-          <li><a (click)="useLanguage('en')"><img src="../../../../assets/icons/eng_lang.png"></a></li>
+          <li><a (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
+          <li><a (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
             <a (click)="toLogin()">{{'signIn'|translate}}</a>
           </li>
@@ -137,8 +137,8 @@
   </div>
 
   <ul *ngIf="!getIsSignedIn()" class="login-menu">
-    <li><a (click)="useLanguage('ko')"><img src="../../../../assets/icons/kor_lang.png"></a></li>
-    <li><a (click)="useLanguage('en')"><img src="../../../../assets/icons/eng_lang.png"></a></li>
+    <li><a (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
+    <li><a (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
       <a (click)="toLogin()">{{'signIn'|translate}}</a>
     </li>
