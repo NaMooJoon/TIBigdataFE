@@ -119,15 +119,16 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 //     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
     var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
     console.log(dataPerMonth);
+    var jan = {date: "2022.01", freq: 18};
+    var feb = {date: "2022.02", freq: 30};
+    var mar = {date: "2022.03", freq: 55};
 
-    var data1 = [
-      {date: "2022.01", freq: 18},
-      {date: "2022.02", freq: 1}
-    ];
-
-    var data2 = [
-      {date: "2022.02", freq: 1}
-    ];
+    var data1 = [jan];
+    var data2 = [feb];
+    var data3 = [mar];
+    var data12 = [jan, feb];
+    var data13 = [jan, feb, mar];
+    var data23 = [feb, mar];
 
     var x = this.x;
     var xAxis = this.xAxis;
@@ -135,6 +136,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var yAxis = this.yAxis;
     var svg = this.svg;
     var height = this.height;
+    var width = this.width;
 
     function update(data) {
       // Update the X axis
@@ -142,7 +144,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
       xAxis.call(d3.axisBottom(x))
       // Update the Y axis
       y.domain([0, d3.max(data, function(d) { return d["freq"]; }) ] as number[]);
-      yAxis.transition().duration(1000).call(d3.axisLeft(y));
+      yAxis.transition().duration(1000).call(d3.axisLeft(y).ticks(5));
       // Create the u variable
       var u = svg.selectAll("rect")
                  .data(data);
@@ -153,21 +155,31 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
        .attr("y", d => y(d["freq"]))
        .attr("width", x.bandwidth())
        .attr("height", d => height - y(d["freq"]))
-       .attr("fill", "#69b3a2");
+       .attr("fill", "#38bdff");
     }
+
     //For test
     if(this.per == "month"){
       if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-01"){
-        update(dataPerMonth);
+        update(data1);
       }
       else if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-02"){
-        update(data1);
+        update(data12);
       }
       else if(this.startYearMonth == "2022-02" && this.endYearMonth == "2022-02"){
         update(data2);
       }
+      else if(this.startYearMonth == "2022-01" && this.endYearMonth == "2022-03"){
+        update(data13);
+      }
+      else if(this.startYearMonth == "2022-02" && this.endYearMonth == "2022-03"){
+        update(data23);
+      }
+      else if(this.startYearMonth == "2022-03" && this.endYearMonth == "2022-03"){
+        update(data3);
+      }
     } else{
-        var year_data = await this.getYearData(data1);
+        var year_data = await this.getYearData(data13);
         update(year_data)
     }
   }
@@ -175,7 +187,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   initFigure() {
     //related to drawing chart
     // set the dimensions and margins of the graph
-    this.margin = {top: 30, right: 30, bottom: 70, left: 60};
+    this.margin = {top: 30, right: 30, bottom: 30, left: 60};
     this.width = 460 - this.margin.left - this.margin.right;
     this.height = 400 - this.margin.top - this.margin.bottom;
 
@@ -190,7 +202,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     // Initialize the X axis
     this.x = d3.scaleBand()
                .range([ 0, this.width ])
-               .padding(0.2);
+               .padding(0.4);
     this.xAxis = this.svg.append("g")
                          .attr("transform", "translate(0," + this.height + ")");
 
