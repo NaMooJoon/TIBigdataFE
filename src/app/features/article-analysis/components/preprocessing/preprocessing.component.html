@@ -28,8 +28,7 @@
           </div>     
         </div>
         
-        <input type="file" (click)="openTextFile('synonym')"  id="upload-synonym" style="display:none">
-        <button class="upload-dict"><label for="upload-synonym">내 사전 업로드</label></button>
+        <button class="upload-dict"  (click)="openTextFile('synonym')"> 내 사전 업로드 </button>
       </li>
       <li class="option-dict">
         <strong>불용어</strong>
@@ -43,9 +42,7 @@
             <label for="stopword_user">내 사전 사용</label> 
           </div>     
         </div>
-        
-        <input type="file" (click)="openTextFile('stopword')"  id="upload-stopword" style="display:none">
-        <button class="upload-dict"><label for="upload-stopword">내 사전 업로드</label></button>
+        <button class="upload-dict"  (click)="openTextFile('stopword')"> 내 사전 업로드 </button>
       </li>
 
       <li class="option-dict">
@@ -61,8 +58,9 @@
           </div>     
         </div>
         
-        <input type="file" (click)="openTextFile('compound')"  id="upload-compound" style="display:none">
-        <button class="upload-dict"><label for="upload-compound">내 사전 업로드</label></button>
+        <button class="upload-dict"  (click)="openTextFile('compound')"> 내 사전 업로드 </button>
+
+        
       </li>
 
     </div>
