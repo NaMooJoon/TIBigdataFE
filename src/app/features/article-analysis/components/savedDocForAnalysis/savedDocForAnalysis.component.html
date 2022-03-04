@@ -5,24 +5,24 @@
 <section *ngIf="isSavedDocsLoaded" class="saved-document-list">
   <span class="section-header">내 보관함</span>
   <span class="section-info">분석하실 문서를 선택해주세요.</span>
-  
+
   <div class="savedDocTable">
   <table>
     <thead>
       <tr>
-        <th>선택</th>
-        <th>검색 키워드</th>
-        <th>문서목록</th>
-        <th>수집날짜</th>
+        <th class="choice">선택</th>
+        <th class="search-keyword">검색 키워드</th>
+        <th class="document-list">문서목록</th>
+        <th class="config-date">수집날짜</th>
         <!-- <th>통계</th> -->
-        <th>전처리</th>
+        <th class="preprocessing">전처리</th>
         </tr>
     </thead>
 
     <tbody>
       <tr *ngFor="let docSet of savedDocs;index as idx">
           <td>
-            <input 
+            <input
             class="article-radio"
             type="radio"
             name="selectDoc"
@@ -30,7 +30,7 @@
             (change)="emitData('select',docSet['keyword'], docSet['savedDate'], docSet['preprocessed'])"
           />
         </td>
-          
+
           <td class="text-center">{{ docSet['keyword'] }}</td>
           <td class="text-center"><ul *ngFor="let adoc of docSet['title']" class="text-left">
             <div class="savedAdocTable"> - {{adoc}}</div>
