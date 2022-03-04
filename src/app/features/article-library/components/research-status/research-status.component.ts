@@ -38,7 +38,7 @@ export class ResearchStatusComponent implements OnInit {
     // set the dimensions and margins of the graph
     const width = 450,
         height = 450,
-        margin = 40;
+        margin = 10;
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     const radius = Math.min(width, height) / 2 - margin
@@ -50,6 +50,21 @@ export class ResearchStatusComponent implements OnInit {
                   .attr("height", height)
                   .append("g")
                   .attr("transform", `translate(${width/2},${height/2})`);
+
+    // add circle in the middle of the doughnut graph
+    svg.append("svg:circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", radius * 0.38)
+        .style("fill", "#158cc4")
+        .append("g");
+
+    svg.append("text")
+       .text("통일연구동향")
+       .attr("x", -45)
+       .attr("y", 8)
+       .style("fill", "white")
+       .style("font-size", "19px");
 
     var label = this.chartLabels;
     var value = this.chartData;
@@ -67,19 +82,21 @@ export class ResearchStatusComponent implements OnInit {
 
     // Compute the position of each group on the pie:
     const pie = d3.pie()
-      .sort(null) // Do not sort group by size
+      .sort(function (a, b) {
+                      return b.count > (a.count);
+                    })
       .value(d => d[1])
     const data_ready = pie(Object.entries(data))
 
     // The arc generator
     const arc = d3.arc()
-      .innerRadius(radius * 0.5)         // This is the size of the donut hole
+      .innerRadius(radius * 0.4)         // This is the size of the donut hole
       .outerRadius(radius * 0.8)
 
     // Another arc that won't be drawn. Just for labels positioning
-    const outerArc = d3.arc()
-      .innerRadius(radius * 0.9)
-      .outerRadius(radius * 0.9)
+//     const outerArc = d3.arc()
+//       .innerRadius(radius * 0.9)
+//       .outerRadius(radius * 0.9)
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
     svg
@@ -87,7 +104,9 @@ export class ResearchStatusComponent implements OnInit {
       .data(data_ready)
       .join('path')
       .attr('d', arc)
-      .attr('fill', d => color(d.data[1]))
+      .attr('fill', "#38bdff")
+//       #b8e6ff
+//       .attr('fill', d => color(d.data[1]))
       .attr("stroke", "white")
       .style("stroke-width", "2px")
       .style("opacity", 0.7)
@@ -100,31 +119,42 @@ export class ResearchStatusComponent implements OnInit {
         .attr("stroke", "black")
         .style("fill", "none")
         .attr("stroke-width", 1)
-        .attr('points', function(d) {
-          const posA = arc.centroid(d) // line insertion in the slice
-          const posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
-          const posC = outerArc.centroid(d); // Label position = almost the same as posB
-          const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
-          posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
-          return [posA, posB, posC]
-        })
+//         .attr('points', function(d) {
+//           const posA = arc.centroid(d) // line insertion in the slice
+//           const posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
+//           const posC = outerArc.centroid(d); // Label position = almost the same as posB
+//           const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
+//           posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
+//           return [posA, posB]
+//           return [posA, posB, posC]
+//         })
 
     // Add the polylines between chart and labels:
-    svg
-      .selectAll('allLabels')
-      .data(data_ready)
-      .join('text')
-        .text(d => d.data[0])
-        .attr('transform', function(d) {
-            const pos = outerArc.centroid(d);
-            const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
-            pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
-            return `translate(${pos})`;
-        })
-        .style('text-anchor', function(d) {
-            const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
-            return (midangle < Math.PI ? 'start' : 'end')
-        })
+    svg.selectAll('allLabels')
+       .data(data_ready)
+       .enter()
+       .append('text')
+       .text(d => d.data[0])
+       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")";  })
+       .style("text-anchor", "middle")
+       .style("font-size", 13)
+       .style("fill", "white")
+
+//     svg
+//       .selectAll('allLabels')
+//       .data(data_ready)
+//       .join('text')
+//         .text(d => d.data[0])
+//         .attr('transform', function(d) {
+//             const pos = outerArc.centroid(d);
+//             const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+//             pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+//             return `translate(${pos})`;
+//         })
+//         .style('text-anchor', function(d) {
+//             const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+//             return (midangle < Math.PI ? 'start' : 'end')
+//         })
   }
 
   /**

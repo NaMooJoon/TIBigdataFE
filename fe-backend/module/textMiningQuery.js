@@ -6,6 +6,8 @@ const router = express.Router();
 router.post("/uploadDict", uploadDict);
 router.post("/getPreprocessedData",getPreprocessedData);
 router.post("/uploadChart", uploadChart);
+router.post("/getCharts", getCharts);
+router.post("/deleteCharts", deleteCharts)
 
 const usersDict = require("../models/usersDict");
 const preprocessing = require("../models/preprocessing");
@@ -110,5 +112,65 @@ async function uploadDict(req, res) {
           );;
       });
   }
+
+  async function getCharts(req, res) {
+    myAnalysis.find(
+      { $and : [{ userEmail : req.body.userEmail, keyword : req.body.keyword, savedDate : req.body.savedDate }]})
+      .then((result) => {
+      if(result){
+        console.log("successfully loaded");
+        return res
+          .status(200)
+          .json(
+            new Res(true, "successfully loaded", result)
+          );
+      }else{
+        console.log("no saved chart");
+        return res 
+          .status(400)
+          .json(
+            new Res(false, "no saved chart",null)
+          );
+      }
+    }).catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json(
+          new Res(false, "loading failed", null)
+        )
+    });
+  }
   
-module.exports = router;
+  async function deleteCharts(req, res){
+    myAnalysis.deleteOne(
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate } ]},
+      { upsert: true, returnNewDocument: true }
+    ).then((result) => {
+      if(result){
+        console.log("successfully deleted");
+        return res
+          .status(200)
+          .json(
+            new Res(true, "successfully deleted", result)
+          );
+      }else{
+        console.log("Not found");
+        return res
+          .status(400)
+          .json(
+            new Res(false, "not found", null)
+          );
+      }
+    }).catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json(
+          new Res(false, "failed", null)
+        )
+    });
+  }
+  
+  module.exports = router;
+  
