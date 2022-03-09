@@ -369,11 +369,10 @@ export class ElasticsearchService {
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
       this.countByInstComplete();
-    } else if (searchMode === SearchMode.DATE) {
-      this.searchByDateComplete(
+    } else if (searchMode === SearchMode.FILTER) {
+      this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-    } else if (searchMode === SearchMode.KEYWORDOPTION) {
       this.fullTextOptionSearchComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
@@ -384,16 +383,20 @@ export class ElasticsearchService {
     }
   }
 
+  searchBySearchFilterComplete(startIndex?: number) {
+    this.saveSearchResult(this.triggerSearchFilter(startIndex));
+  }
+
   triggerSearchFilter(selectedPageNum: number): void {
     let startIndex = selectedPageNum - 1;
     let docSize = this.numDocsPerPage;
-    let mustKeyword = this.mustKeyword;
-    let mustNotKeyword = this.mustNotKeyword;
 
     if (!startIndex) startIndex = 0;
     this.setCurrentSearchingPage(selectedPageNum);
+
 console.log(this.keyword)
 console.log(this.selectedInst)
+
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -403,34 +406,30 @@ console.log(this.selectedInst)
       body: {
         query: {
           bool: {
-            should: [
-              { match: { published_institution: this.selectedInst }},
-              { match: { post_title : this.keyword }},
-              { match: { file_extracted_content : this.keyword }},
-              { match: { post_body : this.keyword }}
+            must: [
+              {
+                term: { published_institution : this.selectedInst }
+              },
+              {
+                bool: {
+                  should: [
+                    {term: { post_body : this.keyword }},
+                    {term: { file_extracted_content : this.keyword }},
+                    {term: { post_title : this.keyword }},
+                  ]
+                }
+              },
+              {
+                range: {
+                  post_date: {
+                    gt: this.startTime,
+                    lt: this.endTime,
+                    format: "yyyy-MM-dd"
+                  }
+                },
+              }
             ]
           },
-
-          // post_filter: {
-          //   bool: {
-          //     must:
-          //       {
-          //         multi_match: {
-          //           query: this.mustKeyword,
-          //           fields: this.esQueryModel.getSearchField(),
-          //         }
-          //       },
-          //     must_not:
-          //       {
-          //         multi_match: {
-          //           query: this.mustNotKeyword,
-          //           fields: this.esQueryModel.getSearchField(),
-          //         }
-          //       }
-          //   }
-          // },
-
-          sort : this.sortOption
         },
       },
 
@@ -667,14 +666,32 @@ console.log(this.selectedInst)
   searchByTextOption(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
-    this.esQueryModel.setSelectedKeyword(this.mustKeyword, this.mustNotKeyword);
 
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchDocsWithTextOption(),
+      body: {
+        post_filter: {
+          bool: {
+            must:
+              {
+                multi_match: {
+                  query: this.mustKeyword,
+                  fields: ["post_title", "file_extracted_content", "post_body"],
+                }
+              },
+            must_not:
+              {
+                multi_match: {
+                  query: this.mustNotKeyword,
+                  fields: ["post_title", "file_extracted_content", "post_body"],
+                }
+              }
+          }
+        },
+      },
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -686,4 +703,26 @@ console.log(this.selectedInst)
   searchByDictionaryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByDictionary(startIndex));
   }
+
+  //remove   //remove   //remove
+  get getStartTime() : string {
+    return this.startTime;
+  }
+
+  get getEndTime() : string {
+    return this.endTime;
+  }
+
+  get getMustKeyword() : string{
+    return this.mustKeyword;
+  }
+
+  get getMustNotKeyword() : string{
+    return this.mustNotKeyword;
+  }
+
+  get getSelectedInst() : string{
+    return this.selectedInst;
+  }
+
 }
