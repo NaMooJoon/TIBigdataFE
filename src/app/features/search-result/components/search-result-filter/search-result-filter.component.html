@@ -40,9 +40,6 @@
               (change)="mustNotKeyword($event)"
               placeholder="키워드 제외"/>
           </div>
-       <!--   <button
-            (click)="selectKeywords($event)"
-            class="search-btn"></button>-->
         </div>
       </section>
       <section class="date-range">
@@ -120,10 +117,12 @@
         <button
           class="confirm-btn"
           id="confirm"
+          (click) = "confirm($event)"
         >확인</button>
         <button
           class="cancel-btn"
           id="cancel"
+          (click) = "resetSearch()"
         >취소</button>
       </div>
       <a

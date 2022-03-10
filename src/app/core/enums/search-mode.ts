@@ -3,9 +3,7 @@ export enum SearchMode {
   HASHKEYS,
   KEYWORD,
   INST,
-  MULTI,
-  DATE,
-  KEYWORDOPTION,
+  FILTER,
   TOPIC,
   DICTIONARY
 }

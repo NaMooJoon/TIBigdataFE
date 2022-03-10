@@ -25,9 +25,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _selectedDate: string;
 
   private _selectedTp: string;
+  private _startDate: string;
+  private _endDate: string;
+  private _mustKeyword: string;
+  private _mustNotKeyword: string;
 
-  private _mustKeyword: string = "";
-  private _mustNotKeyword : string = "";
 
   public _topics = [
     "정치",
@@ -55,6 +57,13 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       });
     this._datePickerEndDate = null;
     this._datePickerStartDate = null;
+
+    this.selectedInst = "";
+    this._selectedTp = "false";
+    this._startDate = null;
+    this._endDate = null;
+    this._mustKeyword = "";
+    this._mustNotKeyword = "";
   }
 
   ngOnInit() {
@@ -96,9 +105,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
    */
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
-    this.elasticsearchService.setSearchMode(SearchMode.INST);
-    this.elasticsearchService.setSelectedInst(inst.key);
-    this.elasticsearchService.triggerSearch(1);
   }
 
   resetFilters() {
@@ -138,8 +144,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedInst = value;
   }
 
-
-
   //new
   async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();
@@ -152,7 +156,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setDate(date.getDate() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -160,7 +165,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setDate(date.getDate() - 7));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -168,7 +174,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -176,7 +183,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 3));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -184,7 +192,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 6));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -192,14 +201,14 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setFullYear(date.getFullYear() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
       case "전체": {
-        this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
-        this.elasticsearchService.triggerSearch(1);
-
+        this._startDate = "0000-00-00";
+        this._endDate = "9999-99-99";
         break;
       }
 
@@ -207,13 +216,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         if ((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
           alert("날짜를 선택해 주세요.");
         } else {
-          let endTime2 = this.datePickerEndDate;
-          let startTime2 = this.datePickerStartDate;
+          this._endDate = this.datePickerEndDate;
+          this._startDate = this.datePickerStartDate;
 
-          if (startTime2 > endTime2) {
+          if (this._startDate > this._endDate) {
             alert("날짜를 다시 선택해 주세요.");
-          } else {
-            this.startDateSearch(startTime2, endTime2);
           }
         }
         break;
@@ -234,12 +241,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       return [year, month, day].join(delimiter);
     }
 
-  }
-
-  startDateSearch(startTime: string, endTime: string) {
-    this.elasticsearchService.setSearchMode(SearchMode.DATE);
-    this.elasticsearchService.setSelectedDate(startTime, endTime);
-    this.elasticsearchService.triggerSearch(1);
   }
 
   setDatePickerStartDate(e) {
@@ -305,14 +306,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
   }
 
-  selectKeywords($event) {
-    console.log(this._mustKeyword,this._mustNotKeyword)
-    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORDOPTION);
-    this.elasticsearchService.triggerSearch(1);
-
-  }
-
   toKeywordAnalysis(): void {
     this.router.navigateByUrl("/search/keywordAnalysis");
   }
@@ -325,4 +318,25 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._mustNotKeyword = e.target.value.toString();
   }
 
+  async resetSearch() {
+    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
+  async confirm($event) {
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+
+    console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
+    console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
+    console.log("startTime : ", this.elasticsearchService.getStartTime);
+    console.log("endTime : ", this.elasticsearchService.getEndTime);
+    console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
+
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    this.elasticsearchService.triggerSearch(1);
+    // this.elasticsearchService.searchBySearchFilterComplete(1);
+
+  }
 }
