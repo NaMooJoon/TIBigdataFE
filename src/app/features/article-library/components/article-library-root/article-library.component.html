@@ -1,14 +1,14 @@
 <div class="library-container">
   <section class="library">
     <div class="library-header">
-      <h1>{{'library'|translate}}</h1>
-      <button (click)="navToGraph()">{{'trendChart'|translate}}</button>
+      <h1>{{'article-library.library'|translate}}</h1>
+      <button (click)="navToGraph()">{{'article-library.rendChart'|translate}}</button>
     </div>
 
     <hr class="hr"/>
 
     <div class="selection-container topic-container">
-      <p>{{'byTopic'|translate}}</p>
+      <p>{{'article-library.byTopic'|translate}}</p>
       <div class="selection-buttons">
         <button
           *ngFor="let cat of categories; let i = index"
@@ -24,7 +24,7 @@
     <hr class="hr"/>
 
     <div class="selection-container dict-container">
-      <p>{{'lexicographic'|translate}}</p>
+      <p>{{'article-library.lexicographic'|translate}}</p>
       <div class="selection-buttons">
         <button
           *ngFor="let cat of dict_orders_1"
@@ -40,7 +40,7 @@
     <hr class="hr"/>
 
     <div class="selection-container inst-container">
-      <p>{{'organization'|translate}}</p>
+      <p>{{'article-library.organization'|translate}}</p>
       <div class="selection-buttons institutions">
         <button
           *ngIf="institutionList !== undefined"
