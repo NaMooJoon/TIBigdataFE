@@ -36,6 +36,7 @@ export class ElasticsearchService {
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
+  private topicHashKeys : string[] = [];
 
 
   constructor(
@@ -135,8 +136,8 @@ export class ElasticsearchService {
    * @param hashKeys
    */
   setHashKeys(hashKeys: string[]): void {
-    this.esQueryModel.setSearchHashKeys(hashKeys);
     this.hashKeys = hashKeys;
+    this.esQueryModel.setSearchHashKeys(this.hashKeys);
   }
 
   /**s
@@ -373,9 +374,6 @@ export class ElasticsearchService {
       this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-      this.fullTextOptionSearchComplete(
-        (selectedPageNum - 1) * this.getNumDocsPerPage()
-      );
     } else if (searchMode === SearchMode.DICTIONARY) {
       this.searchByDictionaryComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
@@ -408,8 +406,11 @@ console.log(this.selectedInst)
           bool: {
             must: [
               {
-                term: { published_institution : this.selectedInst }
+                terms: { hash_key: this.topicHashKeys }
               },
+              // {
+              //   term: { published_institution : this.selectedInst }
+              // },
               {
                 bool: {
                   should: [
@@ -419,18 +420,37 @@ console.log(this.selectedInst)
                   ]
                 }
               },
-              {
-                range: {
-                  post_date: {
-                    gt: this.startTime,
-                    lt: this.endTime,
-                    format: "yyyy-MM-dd"
-                  }
-                },
-              }
+              // {
+              //   range: {
+              //     post_date: {
+              //       gte: this.startTime,
+              //       lt: this.endTime,
+              //       format: "yyyy-MM-dd"
+              //     }
+              //   },
+              // }
             ]
           },
         },
+
+        // post_filter: {
+        //   bool: {
+        //     must:
+        //       {
+        //         multi_match: {
+        //           query: this.mustKeyword,
+        //           fields: ["post_title"],
+        //         }
+        //       },
+        //     must_not:
+        //       {
+        //         multi_match: {
+        //           query: this.mustNotKeyword,
+        //           fields: ["post_title"],
+        //         }
+        //       }
+        //   }
+        // },
       },
 
       _source: this.esQueryModel.getSearchSource(),
@@ -702,6 +722,10 @@ console.log(this.selectedInst)
 
   searchByDictionaryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByDictionary(startIndex));
+  }
+
+  setTopicHashKeys(hashKeys: string[]): void {
+    this.topicHashKeys = hashKeys;
   }
 
   //remove   //remove   //remove
