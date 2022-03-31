@@ -34,9 +34,9 @@
           <td class="text-center">{{ info['expiration_date'] }}</td>
           <td class="text-center">{{ info['traffic'] }}</td>
           <td class="text-center">
-            <button>수정</button>
-            <button (click)="reissue(info['_id'])">인증키 재발급</button>
-            <button (click)="delete(info['_id'])">삭제</button>
+            <button class="redefineBt" >수정</button>
+            <button class="reissueBt" (click)="reissue(info['_id'])">인증키 재발급</button>
+            <button class="deleteBt" (click)="delete(info['_id'])">삭제</button>
           </td>
         </tr>
       </tbody>

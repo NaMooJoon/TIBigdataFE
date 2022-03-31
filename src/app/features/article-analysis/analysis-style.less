@@ -34,12 +34,12 @@ h1 {
 ul {
   // display: flex;
   flex-direction: column;
-  align-items: center;
+  //align-items: center;
 }
 
 .menu-item {
   margin: 1.5rem 1.5rem 0 0;
-  font-size: 25px;
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 180%;
 }
@@ -52,10 +52,6 @@ ul {
 
   h1 {
     font-size: 3.5vw !important;
-  }
-
-  .menu-item {
-    font-size: 15px;
   }
 }
 
@@ -76,7 +72,7 @@ ul {
   ul {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
   }
 
   .menu-item:last-child{
@@ -85,7 +81,6 @@ ul {
 
   .menu-item {
     font-size: 4vw;
-    margin: 0px;
     padding: 5px 8px 5px 8px;
     border-bottom: 0.1rem solid #EEEEEE;
   }
@@ -126,7 +121,7 @@ table {
   border-spacing: 1px;
   text-align : center;
   line-height: 2;
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .choice{
@@ -169,6 +164,9 @@ td {
 
 
 // Preprocessing
+.option-dict-box{
+  height : 30%;
+}
 
 .option-header{
     margin: 1.0rem;
@@ -185,14 +183,18 @@ td {
     // list-style-type: square;
     font-size: 1.3rem;
     display: flex;
-    margin-left: 1.0rem;
-    padding-top: 1.0rem;
+    margin-left: 1.1rem;
+    margin-bottom: -5rem;
+    margin-top: -1rem;
+    padding-top: 0.5rem;
     text-align: center;
-    width: 100%;
+    width: 80%;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .option-dict>strong{
-  margin-top: 1.5rem;
+  margin-top: 4.8rem;
 }
 
 .upload-dict{
@@ -204,7 +206,7 @@ td {
   box-sizing: border-box;
   border-radius: 5px;
   font-size: 1.2rem;
-  padding: 0rem 0.35rem 0rem 0.35rem;
+  padding: 0.4rem 0.35rem 0.4rem 0.35rem;
   cursor: pointer;
   width: 100%;
 }
@@ -279,13 +281,18 @@ td {
     box-sizing: border-box;
     > div {
         display: table-cell;
-        padding: 1em;
         text-align: center;
+        padding-top : 3.0em;
+        padding-left: 1.6em;
+        padding-right: 1.6em;
+        padding-bottom: 3.0em; 
     }
+
     input[type="radio"] + label {
         display: inline-block;
         width: 100%;
         height: 100%;
+        padding: 0.5rem 0.25rem 0.5rem 0.25rem;
         color: #454a60;
         border: 1px solid #DDDDDD;
         border-radius: 21px;
@@ -298,8 +305,10 @@ td {
     }
     input[type="checkbox"] + label {
       display: inline-block;
-      width: 100%;
-      height: 100%;
+      width: 120%;
+      height: 130%;
+      padding: 0.3rem 1rem 0.3rem 1rem;
+      font-size: 1.2rem;
       color: #454a60;
       border: 1px solid #DDDDDD;
       border-radius: 21px;
@@ -387,7 +396,9 @@ td {
     display: none;
     position: absolute;
     margin: 0;
-    padding: .4em;
+    padding: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
     list-style: none;
     background: white;
     border: solid 1px #CCCCCC;
@@ -430,7 +441,7 @@ td {
 .popupmenu-title-eng{
   font-family: Helvetica;
   font-weight: 300;
-  font-size: 20px;
+  font-size: 1.7rem;
 }
 .manual-info{
   font-size:1.3rem;
@@ -442,21 +453,195 @@ td {
 }
 
 @media (max-width :768px){
+  .popupmenu-item ul.popupmenu-menu
+  {
+    width: 50%;
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: 0.6em;
+    padding-left: 1em;
+    padding-right: 1em;
+    list-style: none;
+    background: white;
+    border: solid 1px #CCCCCC;
+  }
+
   .popupmenu-wrapper{
     width: 100%;
   }
   .popupmenu-title{
-    width : 33%;
+    font-size : 0.4rem;
+    text-align: center;
   }
+  .popupmenu-title-eng{
+    font-family: Helvetica;
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  .pop-head{
+    font-size: 0.1rem;
+    margin:2px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pop-block{
+    width:25%;
+    margin: 10px;
+    flex: 1 1 32%;
+  }
+
+  .radio-items {
+    display: table;
+    width: 300px;
+    box-sizing: border-box;
+    > div {
+      display: table-cell;
+      text-align: center;
+      padding-top: 3em;
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+      padding-bottom: 3em;
+    }
+    input[type="radio"] + label {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem 0.25rem 0.5rem 0.25rem;
+      color: #454a60;
+      border: 1px solid #DDDDDD;
+      border-radius: 21px;
+      cursor: pointer;
+    }
+    input[type="radio"]:checked + label{
+      border: 2px solid #52B9FF;
+      border-radius: 21px;
+      color: #52B9FF;
+    }
+    input[type="checkbox"] + label {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 0.3rem 1rem 0.3rem 1rem;
+    font-size: 1.2rem;
+    color: #454a60;
+    border: 1px solid #DDDDDD;
+    border-radius: 21px;
+    cursor: pointer;
+    }
+    input[type="checkbox"]:checked + label{
+    border: 2px solid #52B9FF;
+    border-radius: 21px;
+    color: #52B9FF;
+    }
+  }
+
 }
 
 @media (max-width : 480px){
+  .popupmenu-item ul.popupmenu-menu
+  {
+    width : 55%;
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: 0.6em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    list-style: none;
+    background: white;
+    border: solid 1px #CCCCCC;
+  }
+  .popupmenu-item {
+    margin: 0.5rem 1rem 1.5rem 1.5rem;
+    background-color: white;
+    border-radius: 21px !important;
+    border: 2px solid #DDDDDD;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 36%;
+    font-size: 1.5rem;
+  }
+  
   .popupmenu-wrapper{
     width: 100%;
   }
   .popupmenu-title{
-    width : 50%;
+    width : 75%;
   }
+  .pop-head{
+    font-size: 0.1rem;
+    margin:2px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  
+  }
+
+  .pop-block{
+    width:25%;
+    margin: 10px;
+    flex: 1 1 27%;
+  }
+
+  .radio-items {
+    display: table;
+    width: 300px;
+    box-sizing: border-box;
+    > div {
+      display: table-cell;
+      text-align: center;
+      padding-top: 3em;
+      padding-left: 1.2rem;
+      padding-right: 0.2rem;
+      padding-bottom: 3em;
+    }
+    input[type="radio"] + label {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem 0.25rem 0.5rem 0.25rem;
+      color: #454a60;
+      border: 1px solid #DDDDDD;
+      border-radius: 21px;
+      cursor: pointer;
+    }
+    input[type="radio"]:checked + label{
+      border: 2px solid #52B9FF;
+      border-radius: 21px;
+      color: #52B9FF;
+    }
+    input[type="checkbox"] + label {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 0.3rem 1rem 0.3rem 1rem;
+    font-size: 1.2rem;
+    color: #454a60;
+    border: 1px solid #DDDDDD;
+    border-radius: 21px;
+    cursor: pointer;
+    }
+    input[type="checkbox"]:checked + label{
+    border: 2px solid #52B9FF;
+    border-radius: 21px;
+    color: #52B9FF;
+    }
+  }
+
+  .col-3 {width: 33%;}
+ 
 }
 
 

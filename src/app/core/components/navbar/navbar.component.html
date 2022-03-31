@@ -11,8 +11,9 @@
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
             <a i18n="library" (click)="navigateLibrary()">{{ 'library' | translate }}</a>
           </li>
-          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis')">
-            <a (click)="navigateSpecials()">{{'analysis' | translate}}</a>
+          <li 
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis-menu')">
+            <a (click)="navigateSpecials()">{{ 'analysis' | translate}}</a>
           </li>
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
