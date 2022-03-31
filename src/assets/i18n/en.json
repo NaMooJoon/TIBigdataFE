@@ -30,6 +30,9 @@
     "accountPolicy": "Account Policy",
     "infoPolicy": "Privacy Policy"
   },
+  "api-register": {
+    "api-term": ""
+  },
   "collected-info": {
     "dataPolicy": "Data Policy",
     "dataPolicy1": "Article 1. List of collected personal information",
@@ -199,6 +202,12 @@
     "analysisResultDetail": "Table and Graph illustration of Analysis Results.",
     "save2myAnalysis": "Save to My Analysis",
     "downloadChartImage": "Download the Chart Image",
+    "empty": "My documents is empty",
+    "chooseDocument": "Choose a document you want to analyze.",
+    "select": "Select",
+    "searchKeyword": "Search Keyword",
+    "documentList": "List of Documents",
+    "수집날짜": "Date of Collection",
     "manual": {
       "manual": "Manual",
       "process": "Data Analysis Process",
@@ -245,17 +254,71 @@
       "resultTable": "Table of Preprocessing Result",
       "preview": "Preprocessing Preview",
       "previewResult": "able of Preprocessing Result, Preview only shows upto 100."
-    },
-    "empty": "My documents is empty",
-    "chooseDocument": "Choose a document you want to analyze.",
-    "select": "Select",
-    "searchKeyword": "Search Keyword",
-    "documentList": "List of Documents",
-    "수집날짜": "Date of Collection"
+    }
   },
-
+  "open-api": {
+    "openAPIManual": "Open API Manual",
+    "howToUseOpenAPI": "How to Use Open API",
+    "goToAPI": "Go to API",
+    "exampleOfUse": "Example of Use",
+    "활용관리": "Utilization Management",
+    "활용관리line": "You can apply for Open API use or reissue authentication keys.",
+    "greeting": ", have a great day today!!!",
+    "howManyCalls1": "You have requested ",
+    "howManyCalls2": " calls.",
+    "callRequest": "Request for API",
+    "requestTitle": "Title for Request",
+    "requestReason": "Purpose for Request",
+    "requestDate": "Request Date",
+    "expiration": "Expiration Date",
+    "dataAmount": "Amount of Data",
+    "management": "Management",
+    "reissueAuthenticationKey": "Reissue the Authentication Key"
+  },
+  "membership": {
+    "loginWithGoogle": "Sign in with Google",
+    "signupComplete": "sign up is complete!",
+    "signupLine": "To use OpenABI, please go to My page > OpenAPI to sign up OpenAPI after the log in.",
+    "goToMain": "Go To Home",
+    "signin": "Sign in"
+  },
+  "search-result": {
+    "keywordAnalysis": "Keyword Analysis",
+    "keywordResult1": "The result of keyword analysis on ",
+    "keywordResult2": ".",
+    "yearly": "in years",
+    "monthly": "in months",
+    "viewDetails": "view details",
+    "documentInfo": "Document Information",
+    "issuer": "Issuer",
+    "issueDates": "Issue Dates",
+    "browseData": "Browse Data",
+    "documentSource": "Document Source",
+    "relatedDocuments": "Related Documents",
+    "wordCloud": "Word Cloud",
+    "underAnalysis": "This document is in progress for data analysis. Please check it later.",
+    "searchFilter": "Search Filter",
+    "searchWithin": "Search Within the result"
+  },
   "공지:": "Announcements",
   "다운로드": "Download",
-  "미리보기": "preview"
-
+  "미리보기": "preview",
+  "작성자: ": "writer: ",
+  "등록일: ": "date: ",
+  "수정": "edit",
+  "삭제": "delete",
+  "취소": "cancel",
+  "답변 등록": "leave comment",
+  "등록": "upload",
+  "목록": "list",
+  "확인": "confirm",
+  "직접입력": "type in",
+  "기간": "period",
+  "1일": "1 day",
+  "1주": "1 week",
+  "1개월": "1 month",
+  "3개월": "3 months",
+  "6개월": "6 months",
+  "1년": "1 year",
+  "전체": "all"
 }
