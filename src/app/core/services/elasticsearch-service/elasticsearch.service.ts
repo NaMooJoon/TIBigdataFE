@@ -392,10 +392,6 @@ export class ElasticsearchService {
     if (!startIndex) startIndex = 0;
     this.setCurrentSearchingPage(selectedPageNum);
 
-console.log(this.keyword)
-console.log(this.selectedInst)
-console.log(this.topicHashKeys)
-
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -406,12 +402,8 @@ console.log(this.topicHashKeys)
         query: {
           bool: {
             must: [
-              // {
-              //   terms: { hash_key: this.topicHashKeys }
-              // },
-              // {
-              //   term: { published_institution : this.selectedInst }
-              // },
+              this.getHashKeyQuery(),
+              this.getInstQuery(),
               {
                 bool: {
                   should: [
@@ -451,28 +443,79 @@ console.log(this.topicHashKeys)
           },
         },
 
-        // post_filter: {
-        //   bool: {
-        //     must:
-        //       {
-        //         multi_match: {
-        //           query: this.mustKeyword,
-        //           fields: ["post_title"],
-        //         }
-        //       },
-        //     must_not:
-        //       {
-        //         multi_match: {
-        //           query: this.mustNotKeyword,
-        //           fields: ["post_title"],
-        //         }
-        //       }
-        //   }
-        // },
+        post_filter: this.getKeywordOption(),
       },
 
       _source: this.esQueryModel.getSearchSource(),
     });
+  }
+
+  getKeywordOption(){
+    if(this.mustKeyword == "") {
+      return {
+        bool: {
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+    else{
+      return {
+        bool: {
+          must:
+            {
+              multi_match: {
+                query: this.mustKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            },
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+  }
+
+  getInstQuery(){
+    if(this.selectedInst == "" || this.selectedInst == null){
+      return {
+        regexp: {
+          published_institution : ".*"
+        }
+      };
+    }else{
+      return {
+        term: {
+          published_institution : this.selectedInst
+        }
+      };
+    }
+  }
+
+  getHashKeyQuery(){
+    if(this.topicHashKeys.length == 0){
+      return {
+        regexp: {
+          hash_key : ".*"
+        }
+      };
+    }else{
+      return {
+        terms: {
+          hash_key: this.topicHashKeys
+        }
+      };
+    }
   }
 
   /**

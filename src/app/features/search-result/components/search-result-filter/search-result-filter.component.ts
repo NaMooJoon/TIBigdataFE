@@ -69,6 +69,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadInstitutions();
     this.setSearchKeyword();
+    this.resetFilters();
   }
 
   ngOnDestroy() {
@@ -108,7 +109,18 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   resetFilters() {
-    this.selectInst = null;
+    this._datePickerEndDate = null;
+    this._datePickerStartDate = null;
+    this.selectedInst = "";
+    this._selectedTp = "false";
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this._mustKeyword = "";
+    this._mustNotKeyword = "";
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setTopicHashKeys([]);
   }
 
   selectSearchFilter(): void {
@@ -300,6 +312,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   async resetSearch() {
+    this.ngOnInit();
     this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
     this.elasticsearchService.triggerSearch(1);
   }
@@ -319,12 +332,12 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
     this.elasticsearchService.setTopicHashKeys(ids);
 
-    console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
-    console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
-    console.log("startTime : ", this.elasticsearchService.getStartTime);
-    console.log("endTime : ", this.elasticsearchService.getEndTime);
-    console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
-    console.log("selectedTp ",this.selectedTp);
+    // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
+    // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
+    // console.log("startTime : ", this.elasticsearchService.getStartTime);
+    // console.log("endTime : ", this.elasticsearchService.getEndTime);
+    // console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
+    // console.log("selectedTp : ",this.selectedTp);
 
     this.elasticsearchService.setSearchMode(SearchMode.FILTER);
     this.elasticsearchService.triggerSearch(1);
