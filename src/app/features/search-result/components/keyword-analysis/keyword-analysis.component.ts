@@ -270,7 +270,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   public get getCurrentYearMonth(): string {
       return this.currentYearMonth;
-    }
+  }
 }
 
 

@@ -8,11 +8,11 @@
   <table>
     <thead>
       <tr>
-        <th class="doc-num">{{'announceNo'|translate}}</th>
+        <th class="doc-num">{{'community-board.announceNo'|translate}}</th>
         <th class="doc-qna"></th>
-        <th class="doc-title">{{'announceTitle'|translate}}</th>
-        <th class="doc-writer">{{'writer'|translate}}</th>
-        <th class="doc-postdate">{{'announceDate'|translate}}</th>
+        <th class="doc-title">{{'community-board.announceTitle'|translate}}</th>
+        <th class="doc-writer">{{'community-board.writer'|translate}}</th>
+        <th class="doc-postdate">{{'community-board.announceDate'|translate}}</th>
       </tr>
     </thead>
 
@@ -20,8 +20,8 @@
       <tr *ngFor="let doc of docList; let i = index">
         <td class="doc-num">{{ doc["docId"] }}</td>
         <td>
-          <div *ngIf="isAnswered(doc)" class="qna-button complete">{{'completed'|translate}}</div>
-          <div *ngIf="!isAnswered(doc)" class="qna-button ongoing">{{'processing'|translate}}</div>
+          <div *ngIf="isAnswered(doc)" class="qna-button complete">{{'community-board.completed'|translate}}</div>
+          <div *ngIf="!isAnswered(doc)" class="qna-button ongoing">{{'community-board.processing'|translate}}</div>
         </td>
 
         <td class="doc-title">
@@ -44,7 +44,7 @@
   </table>
 
   <div class="buttons">
-    <button class="button-write" (click)="navToWriteNewDoc()">{{'write'|translate}}</button>
+    <button class="button-write" (click)="navToWriteNewDoc()">{{'community-board.write'|translate}}</button>
   </div>
 
   <div class="page-numbers">
