@@ -36,6 +36,7 @@ export class ElasticsearchService {
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
+  private topicHashKeys : string[] = [];
 
 
   constructor(
@@ -135,8 +136,8 @@ export class ElasticsearchService {
    * @param hashKeys
    */
   setHashKeys(hashKeys: string[]): void {
-    this.esQueryModel.setSearchHashKeys(hashKeys);
     this.hashKeys = hashKeys;
+    this.esQueryModel.setSearchHashKeys(this.hashKeys);
   }
 
   /**s
@@ -373,9 +374,6 @@ export class ElasticsearchService {
       this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-      this.fullTextOptionSearchComplete(
-        (selectedPageNum - 1) * this.getNumDocsPerPage()
-      );
     } else if (searchMode === SearchMode.DICTIONARY) {
       this.searchByDictionaryComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
@@ -394,9 +392,6 @@ export class ElasticsearchService {
     if (!startIndex) startIndex = 0;
     this.setCurrentSearchingPage(selectedPageNum);
 
-console.log(this.keyword)
-console.log(this.selectedInst)
-
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -407,9 +402,8 @@ console.log(this.selectedInst)
         query: {
           bool: {
             must: [
-              {
-                term: { published_institution : this.selectedInst }
-              },
+              this.getHashKeyQuery(),
+              this.getInstQuery(),
               {
                 bool: {
                   should: [
@@ -419,22 +413,109 @@ console.log(this.selectedInst)
                   ]
                 }
               },
+            ],
+            filter: [
               {
-                range: {
-                  post_date: {
-                    gt: this.startTime,
-                    lt: this.endTime,
-                    format: "yyyy-MM-dd"
-                  }
-                },
+                bool: {
+                  should: [
+                    {
+                        range: {
+                          post_date: {
+                            gte: this.startTime,
+                            lt: this.endTime,
+                            format: "yyyy-MM-dd"
+                          }
+                        },
+                    },
+                    {
+                      bool: {
+                        must_not: {
+                          exists: {
+                            field: "post_date"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
               }
-            ]
+            ],
           },
         },
+
+        post_filter: this.getKeywordOption(),
       },
 
       _source: this.esQueryModel.getSearchSource(),
     });
+  }
+
+  getKeywordOption(){
+    if(this.mustKeyword == "") {
+      return {
+        bool: {
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+    else{
+      return {
+        bool: {
+          must:
+            {
+              multi_match: {
+                query: this.mustKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            },
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+  }
+
+  getInstQuery(){
+    if(this.selectedInst == "" || this.selectedInst == null){
+      return {
+        regexp: {
+          published_institution : ".*"
+        }
+      };
+    }else{
+      return {
+        term: {
+          published_institution : this.selectedInst
+        }
+      };
+    }
+  }
+
+  getHashKeyQuery(){
+    if(this.topicHashKeys.length == 0){
+      return {
+        regexp: {
+          hash_key : ".*"
+        }
+      };
+    }else{
+      return {
+        terms: {
+          hash_key: this.topicHashKeys
+        }
+      };
+    }
   }
 
   /**
@@ -702,6 +783,10 @@ console.log(this.selectedInst)
 
   searchByDictionaryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByDictionary(startIndex));
+  }
+
+  setTopicHashKeys(hashKeys: string[]): void {
+    this.topicHashKeys = hashKeys;
   }
 
   //remove   //remove   //remove
