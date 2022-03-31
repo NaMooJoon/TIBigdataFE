@@ -60,8 +60,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
     this.selectedInst = "";
     this._selectedTp = "false";
-    this._startDate = null;
-    this._endDate = null;
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
     this._mustKeyword = "";
     this._mustNotKeyword = "";
   }
@@ -207,8 +207,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       }
 
       case "전체": {
-        this._startDate = "";
-        this._endDate = "";
+        this._startDate = "0001-01-01";
+        this._endDate = "9000-12-31";
         break;
       }
 
@@ -280,13 +280,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   async selectTopic($event) {
-    this.selectedTp = $event.target.innerText;;
-
-    // this.elasticsearchService.setKeyword(this.selectedTp);
-    // this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
-    // this.elasticsearchService.setArticleNumChange(hashKeys.length);
-    // this.elasticsearchService.setHashKeys(ids);
-    // this.elasticsearchService.multiHashKeySearchComplete();
+    this.selectedTp = $event.target.innerText;
   }
 
   async getDocIDsFromTopic(category) {

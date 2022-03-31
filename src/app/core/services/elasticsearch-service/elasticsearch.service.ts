@@ -394,6 +394,7 @@ export class ElasticsearchService {
 
 console.log(this.keyword)
 console.log(this.selectedInst)
+console.log(this.topicHashKeys)
 
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
@@ -405,9 +406,9 @@ console.log(this.selectedInst)
         query: {
           bool: {
             must: [
-              {
-                terms: { hash_key: this.topicHashKeys }
-              },
+              // {
+              //   terms: { hash_key: this.topicHashKeys }
+              // },
               // {
               //   term: { published_institution : this.selectedInst }
               // },
@@ -420,16 +421,33 @@ console.log(this.selectedInst)
                   ]
                 }
               },
-              // {
-              //   range: {
-              //     post_date: {
-              //       gte: this.startTime,
-              //       lt: this.endTime,
-              //       format: "yyyy-MM-dd"
-              //     }
-              //   },
-              // }
-            ]
+            ],
+            filter: [
+              {
+                bool: {
+                  should: [
+                    {
+                        range: {
+                          post_date: {
+                            gte: this.startTime,
+                            lt: this.endTime,
+                            format: "yyyy-MM-dd"
+                          }
+                        },
+                    },
+                    {
+                      bool: {
+                        must_not: {
+                          exists: {
+                            field: "post_date"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
           },
         },
 
