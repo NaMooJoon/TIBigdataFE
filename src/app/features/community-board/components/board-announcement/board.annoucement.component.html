@@ -4,10 +4,10 @@
   <table>
     <thead>
       <tr>
-        <th class="doc-num">{{'community-board.announcement.announceNo'|translate}}</th>
+        <th class="doc-num">{{'community-board.announceNo'|translate}}</th>
         <th class="doc-announcement"></th>
-        <th class="doc-title">{{'community-board.announcement.announceTitle'|translate}}</th>
-        <th class="doc-postdate">{{'community-board.announcement.announceDate'|translate}}</th>
+        <th class="doc-title">{{'community-board.announceTitle'|translate}}</th>
+        <th class="doc-postdate">{{'community-board.announceDate'|translate}}</th>
       </tr>
     </thead>
 
@@ -25,13 +25,13 @@
 
     <tbody *ngIf="!docList.length">
       <tr>
-        <td class="no-docs" rowspan="4" colspan="4">{{'community-board.announcement.noContents'|translate}}</td>
+        <td class="no-docs" rowspan="4" colspan="4">{{'community-board.noContents'|translate}}</td>
       </tr>
     </tbody>
   </table>
 
   <div class="buttons">
-    <button *ngIf="isAdmin" class="button-write" (click)="navToWriteNewDoc()">{{'community-board.announcement.write'|translate}}</button>
+    <button *ngIf="isAdmin" class="button-write" (click)="navToWriteNewDoc()">{{'community-board.write'|translate}}</button>
   </div>
 
 
