@@ -19,6 +19,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   private margin = 50;  private margina = {top: 10, right: 30, bottom: 30, left: 40};
   private width = 800 - (this.margin * 2);
   private height = 480 - (this.margin * 2);
+  public optionValue1: string;
+  public optionValue2: string;
+  public optionValue3: string;
 
   ngOnInit(): void {}
 
@@ -47,9 +50,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // Check the options
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
     if(!this.isSelectedPreprocessed) return alert('선택하신 문서는 전처리되지 않은 문서입니다. 전처리를 먼저 해주세요!');
-    let optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1'))!= null? (<HTMLInputElement> document.getElementById(activity+'_option1')).value:null;
-    let optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
-    let optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option3')).value:null;
+    this.optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1'))!= null? (<HTMLInputElement> document.getElementById(activity+'_option1')).value:null;
+    this.optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
+    this.optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option3')).value:null;
 
     this.LoadingWithMask();
     document.getElementById("cancelbtn").addEventListener("click", this.closeLoadingWithMask);
@@ -58,9 +61,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       'userEmail': this.email,
       'keyword': this.selectedKeyword,
       'savedDate': this.selectedSavedDate,
-      'option1': optionValue1,
-      'option2': optionValue2,
-      'option3': optionValue3,
+      'option1': this.optionValue1,
+      'option2': this.optionValue2,
+      'option3': this.optionValue3,
       'analysisName': activity,
     });
 
@@ -206,15 +209,17 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       for(let i=0;i<data['between_cen'].length;i++){
         const tr = tbody.append("tr");
         tr.append("td").text(i+1);
-        tr.append("td").text('단어: '+data['between_cen'][i]['word']+'\n값: '+data['between_cen'][i]['value']);
+        // tr.append("td").text(data['between_cen'][i]['word']+'/'+ Math.floor(data['between_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['closeness_cen'][i]['word']+'/'+ Math.floor(data['closeness_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['count'][i]['word']+'/'+ Math.floor(data['count'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['degree_cen'][i]['word']+'/'+ Math.floor(data['degree_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['eigenvector_cen'][i]['word']+'/'+ Math.floor(data['eigenvector_cen'][i]['value']*1000)/1000);
 
-        tr.append("td").text('단어: '+data['closeness_cen'][i]['word']+'\n값: '+data['closeness_cen'][i]['value']);
-
-        tr.append("td").text('단어: '+data['count'][i]['word']+'\n값: '+data['count'][i]['value']);
-
-        tr.append("td").text('단어: '+data['degree_cen'][i]['word']+'\n값: '+data['degree_cen'][i]['value']);
-
-        tr.append("td").text('단어: '+data['eigenvector_cen'][i]['word']+'\n값: '+data['eigenvector_cen'][i]['value']);
+        tr.append("td").text(data['between_cen'][i]['word']+'/'+ data['between_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['closeness_cen'][i]['word']+'/'+ data['closeness_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['count'][i]['word']+'/'+ data['count'][i]['value'].toExponential(3));
+        tr.append("td").text(data['degree_cen'][i]['word']+'/'+ data['degree_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['eigenvector_cen'][i]['word']+'/'+ data['eigenvector_cen'][i]['value'].toExponential(3));
         // tr.append("td").text(data[i]['value']);
       }
     }
@@ -688,8 +693,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     // console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 1000 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
+    width = 700 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
@@ -764,6 +769,29 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
         .style("top", (e.pageY) + "px");
       });
+
+      
+      const dataon = function(e,d){
+        console.log("mouse on",d);
+        svg
+        .selectAll("circle")
+        .attr("r", d.between_cen);
+      }
+
+      const dataoff = function(e,d){
+        svg
+        .selectAll("circle")
+        .attr("r", 7);
+      }
+
+      let buttons = d3.select("figure#network")
+      .append("button")
+      .data(data.nodes)
+      .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
+      .on("mouseover",dataon)
+      .on("mouseout",dataoff);
+
+
 
     // d3.select("svg")
     svg.append("g")
@@ -1013,6 +1041,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     svgAsPngUri(svg.node(),{scale:0.5}).then(uri => {
       //save uri to mongo DB
+      
       let data = JSON.stringify({
         'userEmail': this.email,
         'keyword': this.analysisedData.keyword,
@@ -1020,6 +1049,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         'analysisDate': this.analysisedData.analysisDate,
         'chartImg': uri,
         'activity': this.analysisedData.activity,
+        'option1': this.optionValue1,
+        'option2': this.optionValue2,
+        'option3': this.optionValue3,
         'jsonDocId': this.analysisedData.jsonDocId,
       });
 
