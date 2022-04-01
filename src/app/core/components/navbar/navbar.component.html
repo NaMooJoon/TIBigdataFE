@@ -9,19 +9,18 @@
         <ul class="common-menu">
           <li
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
-            <a i18n="library" (click)="navigateLibrary()">{{ 'library' | translate }}</a>
+            <a i18n="library" (click)="navigateLibrary()">{{ 'navbar.library' | translate }}</a>
           </li>
-          <li 
-            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis-menu')">
-            <a (click)="navigateSpecials()">{{ 'analysis' | translate}}</a>
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.analysis')">
+            <a (click)="navigateSpecials()">{{'navbar.analysis' | translate}}</a>
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.community')"
             class="community-menu"
           >
 <!--common-->
             <div class="dropdown-container">
-              <a (click)="toAnnouncement()">{{'community' | translate}}</a>
+              <a (click)="toAnnouncement()">{{'navbar.community' | translate}}</a>
               <ul class="community-dropdown-menu">
                 <li><a (click)="toAnnouncement()">{{'공지'|translate}}</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
@@ -32,7 +31,7 @@
             <div class="dropdown-container-tablet">
               <a
                 (click)="clickDropDownCommunity()"
-                class="dropdown-community">{{'community' | translate}}</a>
+                class="dropdown-community">{{'navbar.community' | translate}}</a>
               <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'announcement')"
@@ -48,37 +47,37 @@
 
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'navbar.about')"
             class="about-menu"
           >
             <!--common-->
             <div class="dropdown-container">
-              <a (click)="toSiteIntro()">{{'aboutUs'|translate}}</a>
+              <a (click)="toSiteIntro()">{{'navbar.aboutUs'|translate}}</a>
               <ul class="about-dropdown-menu">
-                <li><a (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
-                <li><a (click)="toServiceGuide()">{{'guide'|translate}}</a></li>
-                <li><a (click)="toCollectedInfo()">{{'privacy'|translate}}</a></li>
-                <li><a (click)="toMemberPolicy()">{{'accountPolicy'|translate}}</a></li>
+                <li><a (click)="toSiteIntro()">{{'navbar.introduction'|translate}}</a></li>
+                <li><a (click)="toServiceGuide()">{{'navbar.guide'|translate}}</a></li>
+                <li><a (click)="toCollectedInfo()">{{'navbar.privacy'|translate}}</a></li>
+                <li><a (click)="toMemberPolicy()">{{'navbar.accountPolicy'|translate}}</a></li>
               </ul>
             </div>
             <!--tablet and mobile-->
             <div class="dropdown-container-tablet">
               <a
                 (click)="clickDropDownSiteInfo()"
-                class="dropdown-about">{{'aboutUs'|translate}}</a>
+                class="dropdown-about">{{'navbar.aboutUs'|translate}}</a>
               <ul [ngClass]="isDropDownSiteInfo ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'intro')"
-                  (click)="toSiteIntro()">{{'introduction'|translate}}</a></li>
+                  (click)="toSiteIntro()">{{'navbar.introduction'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'service-guide')"
-                  (click)="toServiceGuide()">{{'guide'|translate}}</a></li>
+                  (click)="toServiceGuide()">{{'navbar.guide'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'collected-info')"
-                  (click)="toCollectedInfo()">{{'infoPolicy'|translate}}</a></li>
+                  (click)="toCollectedInfo()">{{'navbar.infoPolicy'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-policy')"
-                  (click)="toMemberPolicy()">{{'privacyPolicy'|translate}}</a></li>
+                  (click)="toMemberPolicy()">{{'navbar.privacyPolicy'|translate}}</a></li>
               </ul>
             </div>
           </li>
@@ -97,33 +96,33 @@
           <li><a (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
           <li><a (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
-            <a (click)="toLogin()">{{'signIn'|translate}}</a>
+            <a (click)="toLogin()">{{'navbar.signIn'|translate}}</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
-            <a (click)="toRegister()">{{'register'|translate}}</a>
+            <a (click)="toRegister()">{{'navbar.register'|translate}}</a>
           </li>
         </ul>
 
         <ul *ngIf="getIsSignedIn()" class="user-menu-tablet">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
-               class="dropdown-userpage">{{'myPage' | translate}}</a>
+               class="dropdown-userpage">{{'navbar.myPage' | translate}}</a>
             <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-docs')"
-                (click)="toMyDocs()">{{'myDocuments' | translate}}</a></li>
+                (click)="toMyDocs()">{{'navbar.myDocuments' | translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-analysis')"
-                (click)="toMyAnalysis()">{{'myAnalysis'|translate}}</a></li>
+                (click)="toMyAnalysis()">{{'navbar.myAnalysis'|translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-info')"
-                (click)="toMemberInfo()">{{'privacy'|translate}}</a></li>
+                (click)="toMemberInfo()">{{'navbar.privacy'|translate}}</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
                 (click)="toOpenAPI()">Open API</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
-                (click)="toSecession()">{{'rmAccount'|translate}}</a></li>
+                (click)="toSecession()">{{'navbar.rmAccount'|translate}}</a></li>
             </ul>
           </li>
           <li><a (click)="logOut()">{{'signOut'|translate}}</a></li>
@@ -141,17 +140,17 @@
     <li><a (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
     <li><a (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
-      <a (click)="toLogin()">{{'signIn'|translate}}</a>
+      <a (click)="toLogin()">{{'navbar.signIn'|translate}}</a>
     </li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
-      <a (click)="toRegister()">{{'register'|translate}}</a>
+      <a (click)="toRegister()">{{'navbar.register'|translate}}</a>
     </li>
   </ul>
 
   <ul *ngIf="getIsSignedIn()" class="user-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
-      <a (click)="toUserPage()">{{'myPage' | translate}}</a>
+      <a (click)="toUserPage()">{{'navbar.myPage' | translate}}</a>
     </li>
-    <li><a (click)="logOut()">{{'signOut'|translate}}</a></li>
+    <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
   </ul>
 </header>
