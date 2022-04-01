@@ -97,10 +97,10 @@ export abstract class abstractAnalysis{
         const figure = d3.select("figure#pretable")
             // .attr('class','result-pretable');
         if(activity=="preview"){
-            // data= dataArray['tokenList'][0];
+            data= dataArray['tokenList'][0];
 
-            data = dataArray['tokenList'];
-            console.log("preview",data);
+            // data = dataArray['tokenList'];
+            // console.log("preview",data);
         }
         else if(activity=="runProcessing"){
             data = dataArray['tokenList'];

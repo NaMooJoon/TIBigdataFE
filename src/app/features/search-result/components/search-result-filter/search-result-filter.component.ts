@@ -60,8 +60,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
     this.selectedInst = "";
     this._selectedTp = "false";
-    this._startDate = null;
-    this._endDate = null;
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
     this._mustKeyword = "";
     this._mustNotKeyword = "";
   }
@@ -69,6 +69,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadInstitutions();
     this.setSearchKeyword();
+    this.resetFilters();
   }
 
   ngOnDestroy() {
@@ -108,7 +109,18 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   resetFilters() {
-    this.selectInst = null;
+    this._datePickerEndDate = null;
+    this._datePickerStartDate = null;
+    this.selectedInst = "";
+    this._selectedTp = "false";
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this._mustKeyword = "";
+    this._mustNotKeyword = "";
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setTopicHashKeys([]);
   }
 
   selectSearchFilter(): void {
@@ -207,8 +219,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       }
 
       case "전체": {
-        this._startDate = "0000-00-00";
-        this._endDate = "9999-99-99";
+        this._startDate = "0001-01-01";
+        this._endDate = "9000-12-31";
         break;
       }
 
@@ -216,8 +228,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         if ((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
           alert("날짜를 선택해 주세요.");
         } else {
-          this._endDate = this.datePickerEndDate;
           this._startDate = this.datePickerStartDate;
+          this._endDate = this.datePickerEndDate;
 
           if (this._startDate > this._endDate) {
             alert("날짜를 다시 선택해 주세요.");
@@ -280,26 +292,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   async selectTopic($event) {
-    this.selectedTp = $event.target.innerText;;
-
-    let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
-    hashKeys.map((e) => this.articleService.addHashKey(e));
-
-    let partialIDs: Object[] = this.articleService
-      .getList()
-      .slice(0, this.elasticsearchService.getNumDocsPerPage());
-
-    const ids: string[] = [];
-
-    for (let i = 0; i < partialIDs.length; i++) {
-      ids.push(partialIDs[i]["hashKey"]);
-    }
-
-    this.elasticsearchService.setKeyword(this.selectedTp);
-    this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
-    this.elasticsearchService.setArticleNumChange(hashKeys.length);
-    this.elasticsearchService.setHashKeys(ids);
-    this.elasticsearchService.multiHashKeySearchComplete();
+    this.selectedTp = $event.target.innerText;
   }
 
   async getDocIDsFromTopic(category) {
@@ -319,24 +312,35 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   async resetSearch() {
+    this.ngOnInit();
     this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
     this.elasticsearchService.triggerSearch(1);
   }
 
-  async confirm($event) {
+  async confirm() {
+    //save the hashkey that selected topic
+    this.articleService.clearList();
+    let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
+    let ids: string[] = [];
+    hashKeys.map((e) =>
+      ids.push(e["hashKey"])
+    );
+
+    //set user options
     this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
     this.elasticsearchService.setSelectedInst(this.selectedInst);
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setTopicHashKeys(ids);
 
-    console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
-    console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
-    console.log("startTime : ", this.elasticsearchService.getStartTime);
-    console.log("endTime : ", this.elasticsearchService.getEndTime);
-    console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
+    // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
+    // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
+    // console.log("startTime : ", this.elasticsearchService.getStartTime);
+    // console.log("endTime : ", this.elasticsearchService.getEndTime);
+    // console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
+    // console.log("selectedTp : ",this.selectedTp);
 
     this.elasticsearchService.setSearchMode(SearchMode.FILTER);
     this.elasticsearchService.triggerSearch(1);
-    // this.elasticsearchService.searchBySearchFilterComplete(1);
-
+    this.elasticsearchService.searchBySearchFilterComplete(1);
   }
 }
