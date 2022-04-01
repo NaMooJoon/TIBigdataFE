@@ -9,6 +9,7 @@ import { UserpageRootComponent } from './components/userpage-root/userpage-root.
 import { UserpageSidebarComponent } from './components/userpage-sidebar/userpage-sidebar.component';
 import { UserpageHeaderComponent } from './components/userpage-header/userpage-header.component';
 import { ReactiveFormsModule } from "@angular/forms";
+import { ModalComponent } from "./components/my-analysis/modal/showDetail.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from "@angular/forms";
     SecessionComponent,
     UserpageSidebarComponent,
     UserpageHeaderComponent,
+    ModalComponent,
   ],
-  imports: [CommonModule, UserpageRoutingModule, ReactiveFormsModule],
+  imports: [CommonModule, UserpageRoutingModule, ReactiveFormsModule ],
 })
 export class UserpageModule { }

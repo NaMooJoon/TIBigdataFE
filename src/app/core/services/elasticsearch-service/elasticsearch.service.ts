@@ -36,6 +36,7 @@ export class ElasticsearchService {
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
+  private topicHashKeys : string[] = [];
 
 
   constructor(
@@ -135,8 +136,8 @@ export class ElasticsearchService {
    * @param hashKeys
    */
   setHashKeys(hashKeys: string[]): void {
-    this.esQueryModel.setSearchHashKeys(hashKeys);
     this.hashKeys = hashKeys;
+    this.esQueryModel.setSearchHashKeys(this.hashKeys);
   }
 
   /**s
@@ -369,12 +370,8 @@ export class ElasticsearchService {
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
       this.countByInstComplete();
-    } else if (searchMode === SearchMode.DATE) {
-      this.searchByDateComplete(
-        (selectedPageNum - 1) * this.getNumDocsPerPage()
-      );
-    } else if (searchMode === SearchMode.KEYWORDOPTION) {
-      this.fullTextOptionSearchComplete(
+    } else if (searchMode === SearchMode.FILTER) {
+      this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
     } else if (searchMode === SearchMode.DICTIONARY) {
@@ -384,16 +381,17 @@ export class ElasticsearchService {
     }
   }
 
+  searchBySearchFilterComplete(startIndex?: number) {
+    this.saveSearchResult(this.triggerSearchFilter(startIndex));
+  }
+
   triggerSearchFilter(selectedPageNum: number): void {
     let startIndex = selectedPageNum - 1;
     let docSize = this.numDocsPerPage;
-    let mustKeyword = this.mustKeyword;
-    let mustNotKeyword = this.mustNotKeyword;
 
     if (!startIndex) startIndex = 0;
     this.setCurrentSearchingPage(selectedPageNum);
-console.log(this.keyword)
-console.log(this.selectedInst)
+
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -403,39 +401,121 @@ console.log(this.selectedInst)
       body: {
         query: {
           bool: {
-            should: [
-              { match: { published_institution: this.selectedInst }},
-              { match: { post_title : this.keyword }},
-              { match: { file_extracted_content : this.keyword }},
-              { match: { post_body : this.keyword }}
-            ]
+            must: [
+              this.getHashKeyQuery(),
+              this.getInstQuery(),
+              {
+                bool: {
+                  should: [
+                    {term: { post_body : this.keyword }},
+                    {term: { file_extracted_content : this.keyword }},
+                    {term: { post_title : this.keyword }},
+                  ]
+                }
+              },
+            ],
+            filter: [
+              {
+                bool: {
+                  should: [
+                    {
+                        range: {
+                          post_date: {
+                            gte: this.startTime,
+                            lt: this.endTime,
+                            format: "yyyy-MM-dd"
+                          }
+                        },
+                    },
+                    {
+                      bool: {
+                        must_not: {
+                          exists: {
+                            field: "post_date"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
           },
-
-          // post_filter: {
-          //   bool: {
-          //     must:
-          //       {
-          //         multi_match: {
-          //           query: this.mustKeyword,
-          //           fields: this.esQueryModel.getSearchField(),
-          //         }
-          //       },
-          //     must_not:
-          //       {
-          //         multi_match: {
-          //           query: this.mustNotKeyword,
-          //           fields: this.esQueryModel.getSearchField(),
-          //         }
-          //       }
-          //   }
-          // },
-
-          sort : this.sortOption
         },
+
+        post_filter: this.getKeywordOption(),
       },
 
       _source: this.esQueryModel.getSearchSource(),
     });
+  }
+
+  getKeywordOption(){
+    if(this.mustKeyword == "") {
+      return {
+        bool: {
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+    else{
+      return {
+        bool: {
+          must:
+            {
+              multi_match: {
+                query: this.mustKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            },
+          must_not:
+            {
+              multi_match: {
+                query: this.mustNotKeyword,
+                fields: ["post_title", "file_extracted_content", "post_body"],
+              }
+            }
+        }
+      };
+    }
+  }
+
+  getInstQuery(){
+    if(this.selectedInst == "" || this.selectedInst == null){
+      return {
+        regexp: {
+          published_institution : ".*"
+        }
+      };
+    }else{
+      return {
+        term: {
+          published_institution : this.selectedInst
+        }
+      };
+    }
+  }
+
+  getHashKeyQuery(){
+    if(this.topicHashKeys.length == 0){
+      return {
+        regexp: {
+          hash_key : ".*"
+        }
+      };
+    }else{
+      return {
+        terms: {
+          hash_key: this.topicHashKeys
+        }
+      };
+    }
   }
 
   /**
@@ -667,14 +747,32 @@ console.log(this.selectedInst)
   searchByTextOption(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
-    this.esQueryModel.setSelectedKeyword(this.mustKeyword, this.mustNotKeyword);
 
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchDocsWithTextOption(),
+      body: {
+        post_filter: {
+          bool: {
+            must:
+              {
+                multi_match: {
+                  query: this.mustKeyword,
+                  fields: ["post_title", "file_extracted_content", "post_body"],
+                }
+              },
+            must_not:
+              {
+                multi_match: {
+                  query: this.mustNotKeyword,
+                  fields: ["post_title", "file_extracted_content", "post_body"],
+                }
+              }
+          }
+        },
+      },
       _source: this.esQueryModel.getSearchSource(),
     });
   }
@@ -686,4 +784,30 @@ console.log(this.selectedInst)
   searchByDictionaryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByDictionary(startIndex));
   }
+
+  setTopicHashKeys(hashKeys: string[]): void {
+    this.topicHashKeys = hashKeys;
+  }
+
+  //remove   //remove   //remove
+  get getStartTime() : string {
+    return this.startTime;
+  }
+
+  get getEndTime() : string {
+    return this.endTime;
+  }
+
+  get getMustKeyword() : string{
+    return this.mustKeyword;
+  }
+
+  get getMustNotKeyword() : string{
+    return this.mustNotKeyword;
+  }
+
+  get getSelectedInst() : string{
+    return this.selectedInst;
+  }
+
 }

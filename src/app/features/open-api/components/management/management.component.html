@@ -1,27 +1,27 @@
 <div class="content-container">
   <app-open-api-menu></app-open-api-menu>
-  
+
   <section class="content">
-    <span class="section-header">활용 관리</span>
-    <span class="section-info">Open API 활용을 신청하거나 인증키 재발급을 받을 수 있습니다.</span>
+    <span class="section-header">{{'open-api.활용관리'|translate}}</span>
+    <span class="section-info">{{'open-api.활용관리line'|translate}}</span>
     <hr>
-    <p> 
-      {{name}} 님 오늘도 즐거운 하루 되세요!!!
+    <p>
+      {{name}} {{'open-api.greeting'|translate}}
       <br>
-      현재까지 당신이 신청한 활용은 {{count}} 개 입니다.
+      {{'open-api.howManyCalls1'|translate}}{{count}}{{'open-api.howManyCalls2'|translate}}
     </p>
-      <button (click)=toRegister()>활용신청</button>
+      <button (click)=toRegister()>{{'open-api.callRequest'|translate}}</button>
 
     <table>
       <thead>
         <tr>
           <th class="doc-num">No.</th>
-          <th class="doc-title">활용명</th>
-          <th class="doc-purpose">활용목적</th>
-          <th class="doc-postdate">등록일</th>
-          <th class="doc-postdate">만료일</th>
-          <th class="doc-postdate">데이터량</th>
-          <th class="doc-manage">관리</th>
+          <th class="doc-title">{{'open-api.requestTitle'|translate}}</th>
+          <th class="doc-purpose">{{'open-api.requestReason'|translate}}</th>
+          <th class="doc-postdate">{{'open-api.requestDate'|translate}}</th>
+          <th class="doc-postdate">{{'open-api.expiration'|translate}}</th>
+          <th class="doc-postdate">{{'open-api.dataAmount'|translate}}</th>
+          <th class="doc-manage">{{'open-api.management'|translate}}</th>
         </tr>
       </thead>
 
@@ -35,8 +35,8 @@
           <td class="text-center">{{ info['traffic'] }}</td>
           <td class="text-center">
             <button>수정</button>
-            <button (click)="reissue(info['_id'])">인증키 재발급</button>
-            <button (click)="delete(info['_id'])">삭제</button>
+            <button (click)="reissue(info['_id'])">{{'open-api.reissueAuthenticationKey'|translate}}</button>
+            <button (click)="delete(info['_id'])">{{'삭제'|translate}}</button>
           </td>
         </tr>
       </tbody>

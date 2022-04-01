@@ -19,9 +19,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   private margin = 50;  private margina = {top: 10, right: 30, bottom: 30, left: 40};
   private width = 800 - (this.margin * 2);
   private height = 480 - (this.margin * 2);
-  
+  public optionValue1: string;
+  public optionValue2: string;
+  public optionValue3: string;
+
   ngOnInit(): void {}
- 
+
   /**
   * @description show pop up when the analysis name is on click
   */
@@ -33,7 +36,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     }
     else{
       document.getElementById(analName).style.display='inline';
-      document.getElementById(analName+"-head").style.background='lightskyblue';
+      document.getElementById(analName+"-head").style.background='#52B9FF';
       document.getElementById(analName+"-head").style.color='white';
     }
   }
@@ -47,28 +50,28 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // Check the options
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
     if(!this.isSelectedPreprocessed) return alert('선택하신 문서는 전처리되지 않은 문서입니다. 전처리를 먼저 해주세요!');
-    let optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1'))!= null? (<HTMLInputElement> document.getElementById(activity+'_option1')).value:null;
-    let optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
-    let optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option3')).value:null;
+    this.optionValue1 =  (<HTMLInputElement> document.getElementById(activity+'_option1'))!= null? (<HTMLInputElement> document.getElementById(activity+'_option1')).value:null;
+    this.optionValue2 =  (<HTMLInputElement> document.getElementById(activity+'_option2')) != null? (<HTMLInputElement> document.getElementById(activity+'_option2')).value:null;
+    this.optionValue3 =  (<HTMLInputElement> document.getElementById(activity+'_option3')) != null? (<HTMLInputElement> document.getElementById(activity+'_option3')).value:null;
 
     this.LoadingWithMask();
     document.getElementById("cancelbtn").addEventListener("click", this.closeLoadingWithMask);
 
     let data = JSON.stringify({
-      'userEmail': this.email, 
-      'keyword': this.selectedKeyword, 
+      'userEmail': this.email,
+      'keyword': this.selectedKeyword,
       'savedDate': this.selectedSavedDate,
-      'option1': optionValue1,
-      'option2': optionValue2,
-      'option3': optionValue3,
+      'option1': this.optionValue1,
+      'option2': this.optionValue2,
+      'option3': this.optionValue3,
       'analysisName': activity,
     });
-    
+
     this.clearResult();
     // if(activity!='topicLDA'){
     // Send Requests to Flask
     let res = await this.middlewareService.postDataToMiddleware('/textmining',data);
-    
+
     if(res==null){
       this.isDataAnalysised = false;
       alert("내부적인 오류가 발생했습니다. 잠시후 다시 시도해주세요");
@@ -81,7 +84,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       this.closeLoadingWithMask();
       return ;
     };
-    
+
     this.analysisedData = res;
     this.isDataAnalysised = true;
     this.isDataPreview =false;
@@ -91,7 +94,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     //   temp.push({word:Object.keys(this.analysisedData)[i], count:this.analysisedData[Object.keys(this.analysisedData)[i]]});
     // }
 
-    
+
     if(activity=='count'|| activity=='tfidf'){
       this.drawTable(activity, JSON.stringify(this.analysisedData.result_graph));
       this.drawBarChart(JSON.stringify(this.analysisedData.result_graph));
@@ -136,7 +139,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style('padding','15px 0px')
       .style('font-weight','500')
       .style('text-align','center');
-      
+
       th.append('th').text('No');
       th.append('th').text('단어');
       th.append('th').text('값');
@@ -157,7 +160,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style('padding','15px 0px')
       .style('font-weight','500')
       .style('text-align','center');
-      
+
       th.append('th').text('category');
       th.append('th').text('title');
       // th.append('th').text('값');
@@ -189,14 +192,14 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style('padding','15px 0px')
       .style('font-weight','500')
       .style('text-align','center');
-      
+
       th.append('th').attr('width','10%').text('index');
       th.append('th').attr('width','18%').text('사이중심성');
       th.append('th').attr('width','18%').text('근접중심성');
       th.append('th').attr('width','18%').text('빈도수');
       th.append('th').attr('width','18%').text('연결중심성');
       th.append('th').attr('width','18%').text('eigenvector');
-      
+
       // th.append('th').text('값');
 
       console.log(data);
@@ -206,15 +209,17 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       for(let i=0;i<data['between_cen'].length;i++){
         const tr = tbody.append("tr");
         tr.append("td").text(i+1);
-        tr.append("td").text('단어: '+data['between_cen'][i]['word']+'\n값: '+data['between_cen'][i]['value']);
-        
-        tr.append("td").text('단어: '+data['closeness_cen'][i]['word']+'\n값: '+data['closeness_cen'][i]['value']);
-        
-        tr.append("td").text('단어: '+data['count'][i]['word']+'\n값: '+data['count'][i]['value']);
-        
-        tr.append("td").text('단어: '+data['degree_cen'][i]['word']+'\n값: '+data['degree_cen'][i]['value']);
+        // tr.append("td").text(data['between_cen'][i]['word']+'/'+ Math.floor(data['between_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['closeness_cen'][i]['word']+'/'+ Math.floor(data['closeness_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['count'][i]['word']+'/'+ Math.floor(data['count'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['degree_cen'][i]['word']+'/'+ Math.floor(data['degree_cen'][i]['value']*1000)/1000);
+        // tr.append("td").text(data['eigenvector_cen'][i]['word']+'/'+ Math.floor(data['eigenvector_cen'][i]['value']*1000)/1000);
 
-        tr.append("td").text('단어: '+data['eigenvector_cen'][i]['word']+'\n값: '+data['eigenvector_cen'][i]['value']);
+        tr.append("td").text(data['between_cen'][i]['word']+'/'+ data['between_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['closeness_cen'][i]['word']+'/'+ data['closeness_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['count'][i]['word']+'/'+ data['count'][i]['value'].toExponential(3));
+        tr.append("td").text(data['degree_cen'][i]['word']+'/'+ data['degree_cen'][i]['value'].toExponential(3));
+        tr.append("td").text(data['eigenvector_cen'][i]['word']+'/'+ data['eigenvector_cen'][i]['value'].toExponential(3));
         // tr.append("td").text(data[i]['value']);
       }
     }
@@ -234,20 +239,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     //   {word:"문재인",count:9},
     //   {word:"박근혜",count:8}
     // ];
-    
+
     let margin = ({top: 20, right: 0, bottom: 30, left: 40});
     let width = 1000;
     let height = 500;
 
     function zoom(svg) {
       const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
-    
+
       svg.call(d3.zoom()
           .scaleExtent([1, 8])
           .translateExtent(extent)
           .extent(extent)
           .on("zoom", zoomed));
-    
+
       function zoomed(event) {
         x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
         svg.selectAll(".bars rect").attr("x", d => x(d.word)).attr("width", x.bandwidth());
@@ -310,7 +315,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .call(xAxis)
       .selectAll("text")
       .attr("transform", "rotate(-45)")
-      .style("text-anchor", "end"); 
+      .style("text-anchor", "end");
 
     // Draw the Y-axis on the DOM
     svg.append("g")
@@ -348,20 +353,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     function zoom(svg) {
       const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
-    
+
       svg.call(d3.zoom()
           .scaleExtent([1, 8])
           .translateExtent(extent)
           .extent(extent)
           .on("zoom", zoomed));
-    
+
       function zoomed(event) {
         x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
         svg.selectAll(".dots circle").attr("x", d => x(d.x))//.attr("width", x.bandwidth());
         svg.selectAll(".x-axis").call(xAxis);
       }
     }
-  
+
 
     // Add X axis
     const x = d3.scaleLinear()
@@ -382,7 +387,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")")
-        
+
 
     const xAxis = g => g
     .attr("transform", `translate(0,${height})`)
@@ -410,7 +415,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .domain([0, d3.max(data, d => d.category)])
     .interpolator(d3.interpolateSinebow)
 
-    
+
     // console.log(color('0'));
     // Highlight the specie that is hovered
     const highlight = function(e,d){
@@ -429,13 +434,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", colorset)
         .attr("r", 7)
-      
+
       tooltip
         .html("Title: "+d.title +"<br>category: "+d.category)
         .style("opacity", 1)
 
       d3.selectAll(".dottext")
-        .style("opacity", 0)  
+        .style("opacity", 0)
     }
 
     // Highlight the specie that is hovered
@@ -445,7 +450,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", "lightgrey")
         .attr("r", 5)
-      
+
       tooltip
       .style("opacity", 0)
       .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
@@ -500,7 +505,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style("padding", "10px");
   }
 
-  
+
   /**
    * @description draw a scatter chart for word-2-vec using the data using d3
    */
@@ -520,20 +525,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     function zoom(svg) {
       const extent : [[number,number],[number,number]] = [[margin.left, margin.top], [width - margin.right, height - margin.top]];
-    
+
       svg.call(d3.zoom()
           .scaleExtent([1, 8])
           .translateExtent(extent)
           .extent(extent)
           .on("zoom", zoomed));
-    
+
       function zoomed(event) {
         x.range([margin.left, width - margin.right].map(d => event.transform.applyX(d)));
         svg.selectAll(".dots circle").attr("x", d => x(d.x))//.attr("width", x.bandwidth());
         svg.selectAll(".x-axis").call(xAxis);
       }
     }
-  
+
 
     // Add X axis
     const x = d3.scaleLinear()
@@ -554,7 +559,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")")
-        
+
 
     const xAxis = g => g
     .attr("transform", `translate(0,${height})`)
@@ -576,7 +581,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .call(yAxis)
     // .call(d3.axisLeft(y));
 
-    
+
     // console.log(color('0'));
     // Highlight the specie that is hovered
     const highlight = function(e,d){
@@ -593,13 +598,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", "red")
         .attr("r", d=> 7*(d['wcount']+1))
-      
+
       tooltip
         .html("Word: "+d.word +"<br>x: " + d.x + "<br>y: " + d.y)
         .style("opacity", 1)
 
       d3.selectAll(".dottext")
-        .style("opacity", 0)  
+        .style("opacity", 0)
     }
 
     // Highlight the specie that is hovered
@@ -609,7 +614,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", "lightgrey")
         .attr("r", d=>5*(d['wcount']+1))
-      
+
       tooltip
       .style("opacity", 0)
       .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
@@ -681,16 +686,16 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   //       "closeness_cen":number,
   //       "degree_cen":number,
   //       "eigenvector_cen":number,
-  //       "id":number, 
+  //       "id":number,
   //       "name":string}>
-  // } 
+  // }
   = JSON.parse(data_str);
 
     // console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 1000 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
-    
+    width = 700 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
     .append("svg")
@@ -703,7 +708,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     // Highlight the specie that is hovered
     const highlight = function(e,d){
-     
+
       d3.selectAll(".dot")
         .transition()
         .duration(200)
@@ -715,7 +720,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", "red")
         .attr("r", 7)
-      
+
       tooltip
         .html(d.name)
         .style("opacity", 1)
@@ -728,7 +733,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .duration(200)
         .style("fill", "lightgrey")
         .attr("r", 5)
-      
+
       tooltip
       .style("opacity", 0)
       .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
@@ -764,6 +769,29 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
         .style("top", (e.pageY) + "px");
       });
+
+      
+      const dataon = function(e,d){
+        console.log("mouse on",d);
+        svg
+        .selectAll("circle")
+        .attr("r", d.between_cen);
+      }
+
+      const dataoff = function(e,d){
+        svg
+        .selectAll("circle")
+        .attr("r", 7);
+      }
+
+      let buttons = d3.select("figure#network")
+      .append("button")
+      .data(data.nodes)
+      .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
+      .on("mouseover",dataon)
+      .on("mouseout",dataoff);
+
+
 
     // d3.select("svg")
     svg.append("g")
@@ -834,28 +862,28 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         d['_children'] = d['children'];
         // if (d['depth'] && d['data']['name']['length'] !== 7) d['children'] = null;
       });
-    
+
     const svg = d3.select("figure#tree")
       .append("svg")
         .attr("viewBox", [-margin.left, -margin.top, width, dx].join())
         .style("font", "10px sans-serif")
         .style("user-select", "none");
-  
+
     const gLink = svg.append("g")
         .attr("fill", "none")
         .attr("stroke", "#555")
         .attr("stroke-opacity", 0.4)
         .attr("stroke-width", 1.5);
-  
+
     const gNode = svg.append("g")
         .attr("cursor", "pointer")
         .attr("pointer-events", "all");
-  
+
     function update(source) {
       // const duration = d3.event && d3.event.altKey ? 2500 : 250;
       const nodes = root.descendants().reverse();
       const links = root.links();
-    
+
       // Compute the new tree layout.
       tree(root);
 
@@ -886,7 +914,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
             d['children'] = d['children'] ? null : d['_children'];
             update(d);
           });
-      
+
       nodeEnter.append("circle")
           .attr("r", 2.5)
           .attr("fill", d => d['_children'] ? "#555" : "#999")
@@ -928,23 +956,23 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         // Transition links to their new position.
         link.merge(linkEnter).transition(transition)
             .attr("d", <null>diagonal);
-    
+
         // Transition exiting nodes to the parent's new position.
         link.exit().transition(transition).remove()
             .attr("d", d => {
               const o = {x: source['x'], y: source['y']};
               return diagonal({source: o, target: o});
             });
-    
+
         // Stash the old positions for transition.
         root.eachBefore(d => {
           d['x0'] = d['x'];
           d['y0'] = d['y'];
         });
       }
-    
+
       update(root);
-    
+
       return svg.node();
   }
 
@@ -966,14 +994,14 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       // let s = document.createElement('script');
       // s.src = url;
       // s.async = true;
-      // // s.onreadystatechange = 
+      // // s.onreadystatechange =
       // node.onload = callback;
       // s.onerror = function(){
       //   console.warn("failed to load library " + url);
       // };
       // document.getElementById("topic").appendChild(s);
     // }
-  
+
     // LDAvis
 
     // if(typeof(LDAvis) !== "undefined"){
@@ -1010,9 +1038,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   async saveSvg(): Promise<void>{
     const svg = d3.select("svg");
     if(!this.analysisedData || !svg) return alert("분석이 완료되지 않았거나 문제가 발생했습니다.\n잠시후 다시 시도해주세요");
-  
+
     svgAsPngUri(svg.node(),{scale:0.5}).then(uri => {
       //save uri to mongo DB
+      
       let data = JSON.stringify({
         'userEmail': this.email,
         'keyword': this.analysisedData.keyword,
@@ -1020,13 +1049,16 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         'analysisDate': this.analysisedData.analysisDate,
         'chartImg': uri,
         'activity': this.analysisedData.activity,
+        'option1': this.optionValue1,
+        'option2': this.optionValue2,
+        'option3': this.optionValue3,
         'jsonDocId': this.analysisedData.jsonDocId,
       });
-        
+
       // console.log(data);
       this.middlewareService.postDataToFEDB('/textmining/uploadChart', data).then( res=>{});
     });
-      
+
   }
 
   downloadPng(){

@@ -25,9 +25,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _selectedDate: string;
 
   private _selectedTp: string;
+  private _startDate: string;
+  private _endDate: string;
+  private _mustKeyword: string;
+  private _mustNotKeyword: string;
 
-  private _mustKeyword: string = "";
-  private _mustNotKeyword : string = "";
 
   public _topics = [
     "정치",
@@ -55,11 +57,19 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       });
     this._datePickerEndDate = null;
     this._datePickerStartDate = null;
+
+    this.selectedInst = "";
+    this._selectedTp = "false";
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this._mustKeyword = "";
+    this._mustNotKeyword = "";
   }
 
   ngOnInit() {
     this.loadInstitutions();
     this.setSearchKeyword();
+    this.resetFilters();
   }
 
   ngOnDestroy() {
@@ -96,13 +106,21 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
    */
   selectInst(inst: { key: string; doc_num: number }) {
     this.selectedInst = inst.key;
-    this.elasticsearchService.setSearchMode(SearchMode.INST);
-    this.elasticsearchService.setSelectedInst(inst.key);
-    this.elasticsearchService.triggerSearch(1);
   }
 
   resetFilters() {
-    this.selectInst = null;
+    this._datePickerEndDate = null;
+    this._datePickerStartDate = null;
+    this.selectedInst = "";
+    this._selectedTp = "false";
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this._mustKeyword = "";
+    this._mustNotKeyword = "";
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setTopicHashKeys([]);
   }
 
   selectSearchFilter(): void {
@@ -138,8 +156,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedInst = value;
   }
 
-
-
   //new
   async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();
@@ -152,7 +168,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setDate(date.getDate() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -160,7 +177,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setDate(date.getDate() - 7));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -168,7 +186,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -176,7 +195,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 3));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -184,7 +204,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setMonth(date.getMonth() - 6));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
@@ -192,14 +213,14 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         endTime = new Date()
         startTime = new Date(date.setFullYear(date.getFullYear() - 1));
 
-        this.startDateSearch(toStringByFormatting(startTime), toStringByFormatting(endTime));
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
         break;
       }
 
       case "전체": {
-        this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
-        this.elasticsearchService.triggerSearch(1);
-
+        this._startDate = "0001-01-01";
+        this._endDate = "9000-12-31";
         break;
       }
 
@@ -207,13 +228,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         if ((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
           alert("날짜를 선택해 주세요.");
         } else {
-          let endTime2 = this.datePickerEndDate;
-          let startTime2 = this.datePickerStartDate;
+          this._startDate = this.datePickerStartDate;
+          this._endDate = this.datePickerEndDate;
 
-          if (startTime2 > endTime2) {
+          if (this._startDate > this._endDate) {
             alert("날짜를 다시 선택해 주세요.");
-          } else {
-            this.startDateSearch(startTime2, endTime2);
           }
         }
         break;
@@ -234,12 +253,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       return [year, month, day].join(delimiter);
     }
 
-  }
-
-  startDateSearch(startTime: string, endTime: string) {
-    this.elasticsearchService.setSearchMode(SearchMode.DATE);
-    this.elasticsearchService.setSelectedDate(startTime, endTime);
-    this.elasticsearchService.triggerSearch(1);
   }
 
   setDatePickerStartDate(e) {
@@ -279,38 +292,11 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   async selectTopic($event) {
-    this.selectedTp = $event.target.innerText;;
-
-    let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
-    hashKeys.map((e) => this.articleService.addHashKey(e));
-
-    let partialIDs: Object[] = this.articleService
-      .getList()
-      .slice(0, this.elasticsearchService.getNumDocsPerPage());
-
-    const ids: string[] = [];
-
-    for (let i = 0; i < partialIDs.length; i++) {
-      ids.push(partialIDs[i]["hashKey"]);
-    }
-
-    this.elasticsearchService.setKeyword(this.selectedTp);
-    this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
-    this.elasticsearchService.setArticleNumChange(hashKeys.length);
-    this.elasticsearchService.setHashKeys(ids);
-    this.elasticsearchService.multiHashKeySearchComplete();
+    this.selectedTp = $event.target.innerText;
   }
 
   async getDocIDsFromTopic(category) {
     return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
-  }
-
-  selectKeywords($event) {
-    console.log(this._mustKeyword,this._mustNotKeyword)
-    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORDOPTION);
-    this.elasticsearchService.triggerSearch(1);
-
   }
 
   toKeywordAnalysis(): void {
@@ -325,4 +311,36 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._mustNotKeyword = e.target.value.toString();
   }
 
+  async resetSearch() {
+    this.ngOnInit();
+    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
+  async confirm() {
+    //save the hashkey that selected topic
+    this.articleService.clearList();
+    let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
+    let ids: string[] = [];
+    hashKeys.map((e) =>
+      ids.push(e["hashKey"])
+    );
+
+    //set user options
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+    this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+    this.elasticsearchService.setTopicHashKeys(ids);
+
+    // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
+    // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
+    // console.log("startTime : ", this.elasticsearchService.getStartTime);
+    // console.log("endTime : ", this.elasticsearchService.getEndTime);
+    // console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
+    // console.log("selectedTp : ",this.selectedTp);
+
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    this.elasticsearchService.triggerSearch(1);
+    this.elasticsearchService.searchBySearchFilterComplete(1);
+  }
 }

@@ -6,25 +6,25 @@
         [ngStyle]="selectedStyleObject(currentMenu == 'intro')"
         class="menu-item"
         >
-        <a (click)="toSiteIntro()">{{'introduction'|translate}}</a>
+        <a (click)="toSiteIntro()">{{'about-side-menu.introduction'|translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'service-guide')"
         class="menu-item"
         >
-        <a (click)="toServiceGuide()">{{"guide" | translate}}</a>
+        <a (click)="toServiceGuide()">{{"about-side-menu.guide" | translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'collected-info')"
         class="menu-item"
         >
-        <a (click)="toCollectedInfo()">{{'infoPolicy' | translate}}</a>
+        <a (click)="toCollectedInfo()">{{'about-side-menu.infoPolicy' | translate}}</a>
       </li>
       <li
         [ngStyle]="selectedStyleObject(currentMenu == 'member-policy')"
         class="menu-item"
         >
-        <a (click)="toMemberPolicy()">{{'accountPolicy' | translate}}</a>
+        <a (click)="toMemberPolicy()">{{'about-side-menu.accountPolicy' | translate}}</a>
       </li>
     </ul>
   </div>

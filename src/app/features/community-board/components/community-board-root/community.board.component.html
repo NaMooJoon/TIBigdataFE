@@ -1,6 +1,6 @@
 <div class="community-board-container">
   <section class="community-board">
-    <h1 class="mobileTitle">{{'community'|translate}}</h1>
+    <h1 class="mobileTitle">{{'community-board.community'|translate}}</h1>
     <div *ngIf="isNavbarNeeded()" class="board-nav-container">
       <nav class="community-nav">
         <ul>
@@ -10,7 +10,7 @@
                 color: selectedMenu === 'announcement' ? 'black' : 'lightgray'
               }"
             >
-              <a (click)="navToAnnouncement()">{{'공지'|translate}}</a>
+              <a (click)="navToAnnouncement()">{{'community-board.공지'|translate}}</a>
             </h1>
           </li>
           <li>
@@ -40,13 +40,13 @@
           *ngIf="selectedMenu === 'announcement'"
           class="menu-info-announcement"
         >
-          {{'noticeBoard'|translate}}
+          {{'community-board.noticeBoard'|translate}}
         </div>
         <div *ngIf="selectedMenu === 'faq'" class="menu-info-faq">
-          {{'frequentlyAsked'|translate}}
+          {{'community-board.frequentlyAsked'|translate}}
         </div>
         <div *ngIf="selectedMenu === 'qna'" class="menu-info-qna">
-          {{'pleaseAsk'|translate}}
+          {{'community-board.pleaseAsk'|translate}}
         </div>
       </section>
     </div>

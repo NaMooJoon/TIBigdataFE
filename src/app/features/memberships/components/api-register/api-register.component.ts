@@ -48,4 +48,8 @@ export class ApiRegisterComponent implements OnInit {
   gotoMain(): void {
     this._router.navigateByUrl("");
   }
+
+  public get isMain():boolean{
+    return this._isMain;
+  }
 }
