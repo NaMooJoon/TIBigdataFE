@@ -16,6 +16,7 @@
       <thead>
         <tr>
           <th class="doc-num">No.</th>
+          <th class="doc-type">활용타입</th>
           <th class="doc-title">활용명</th>
           <th class="doc-purpose">활용목적</th>
           <th class="doc-postdate">등록일</th>
@@ -28,6 +29,7 @@
       <tbody>
         <tr *ngFor="let info of infos; index as idx">
           <td class="text-center">{{ idx+1 }}</td>
+          <td class="text-center">{{ info['app_type']=='private'?'전문가용':'일반인용'}}</td>
           <td class="text-center">{{ info['app_name'] }}</td>
           <td class="text-center">{{ info['app_purpose'] }}</td>
           <td class="text-center">{{ info['reporting_date'] }}</td>
