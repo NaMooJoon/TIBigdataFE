@@ -42,9 +42,11 @@ export class ArticleCardViewComponent implements OnInit {
   loadTopKeywords(): void {
     this.db.getTfidfVal(this.docHashKey).then((res) => {
       let data = res as [];
-      for (let n = 0; n < data.length; n++) {
-        let tfVal = data[n]["tfidf"];
-        this.keywords.push(tfVal);
+      if(data != null){
+        for (let n = 0; n < data.length; n++) {
+          let tfVal = data[n]["tfidf"];
+          this.keywords.push(tfVal);
+        }
       }
     });
   }
