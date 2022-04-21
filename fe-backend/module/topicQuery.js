@@ -42,7 +42,7 @@ router.post("/getOneTopicDocs", (req, res) => {
       },
       {
         $project: {
-          hashKey: 1,
+          hash_key: 1,
           _id : 0,
         },
       },

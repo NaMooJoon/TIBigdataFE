@@ -36,7 +36,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     "경제",
     "사회",
     "국제",
-    "IT_과학",
+    "IT과학",
     "스포츠",
     "문화",
   ];
@@ -323,7 +323,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
     let ids: string[] = [];
     hashKeys.map((e) =>
-      ids.push(e["hashKey"])
+      ids.push(e["hash_key"])
     );
 
     //set user options

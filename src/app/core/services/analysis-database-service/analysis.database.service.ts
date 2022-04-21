@@ -35,7 +35,6 @@ export class AnalysisDatabaseService {
     let res = await this.http
       .post<any>(this.GET_ONE_TOPIC_DOCS_URL, body)
       .toPromise();
-
     return res;
   }
 
