@@ -349,7 +349,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     }else{
       return {
         "background-image":
-          "url(../../../../assets/icons/arrow-down_3d3d3d_reverse.png)",
+          "url(../../../../assets/icons/arrow-down_3d3d3d_2.png)",
       };
     }
   }

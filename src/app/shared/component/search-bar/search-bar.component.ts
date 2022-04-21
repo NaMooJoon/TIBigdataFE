@@ -43,7 +43,7 @@ export class SearchBarComponent implements OnInit {
     "경제",
     "사회",
     "국제",
-    "IT_과학",
+    "IT과학",
     "스포츠",
     "문화",
   ];
