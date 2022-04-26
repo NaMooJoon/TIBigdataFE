@@ -279,6 +279,7 @@
     "howManyCalls2": " 개 입니다.",
     "callRequest": "활용신청",
     "requestTitle": "활용명",
+    "requestType" : "활용타입",
     "requestReason": "활용목적",
     "requestDate": "등록일",
     "expiration": "만료일",

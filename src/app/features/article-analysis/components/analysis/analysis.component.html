@@ -38,7 +38,7 @@
       <div class="pop-body" id="kmeans">
         {{'analysis.clusterNum'|translate}}<input type="number" value="5" min='1' max='500' id='kmeans_option1'>
 
-        <button (click)="runAnalysis('kmeans')">{{'startAnalysis'|translate}}</button>
+        <button (click)="runAnalysis('kmeans')">{{'analysis.startAnalysis'|translate}}</button>
       </div>
   </div>
 
@@ -52,7 +52,7 @@
       {{'analysis.numOfWords'|translate}}<input type="number" value="100" min='1' max='500' id='network_option1'>
       <br>
       {{'analysis.connectionIntensity'|translate}}<input type="number" value="75" min='1' max='100' id='network_option2'>
-      <button (click)="runAnalysis('network')">{{'startAnalysis'|translate}}</button>
+      <button (click)="runAnalysis('network')">{{'analysis.startAnalysis'|translate}}</button>
     </div>
   </div>
 

@@ -278,6 +278,7 @@
     "howManyCalls2": " calls.",
     "callRequest": "Request for API",
     "requestTitle": "Title for Request",
+    "requestType" : "Type for Request",
     "requestReason": "Purpose for Request",
     "requestDate": "Request Date",
     "expiration": "Expiration Date",
