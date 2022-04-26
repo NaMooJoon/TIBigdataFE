@@ -19,12 +19,12 @@
         type="checkbox"
         (change)="onCheckboxChange($event)"
         value="toggleAll"
-      />전체선택
+      />{{'전체선택'|translate}}
     </label>
   </div>
   <div class="upside3">
-      <button (click)="deleteSelectedCharts()">선택삭제</button>
-      <button (click)="deleteAllCharts()">전체삭제</button>
+      <button (click)="deleteSelectedCharts()">{{'선택삭제'|translate}}</button>
+      <button (click)="deleteAllCharts()">{{'전체삭제'|translate}}</button>
   </div>
 </div>
 <br>
@@ -38,15 +38,15 @@
       name="selectChart"
       [value]="chart['analysisDate']"
       (change)="onCheckboxChange($event)"
-    />      
+    />
     <button (click)="openModal(chart)">
       <img [src]="chart.chartImg">
       <div>
-        분석 유형: {{ activityInfo(chart) }}<br> 
+        {{'userpage.TypeOfAnalysis'|translate}}{{ activityInfo(chart) }}<br>
         <span *ngIf="option1">{{ option1Info(chart) }}<br></span>
         <span *ngIf="option2">{{ option2Info(chart) }}<br></span>
         <span *ngIf="option3">{{ option3Info(chart) }}<br></span>
-        분석 날짜: {{ chart.analysisDate | date:'YYYY-M-d HH:mm:ss'}}
+        {{'userpage.DateOfAnalysis'|translate}}{{ chart.analysisDate | date:'YYYY-M-d HH:mm:ss'}}
       </div>
     </button>
   </div>
@@ -60,5 +60,5 @@
   <figure id="scatter"></figure>
   <figure id="network"></figure>
   <figure id="tree"></figure>
-  <button (click)="downloadPng()">차트 이미지 다운로드</button>
+  <button (click)="downloadPng()">{{'userpage.DownloadChart'}}</button>
 </jw-modal>

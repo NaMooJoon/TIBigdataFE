@@ -169,7 +169,7 @@
             <option class="dropdown-default" value="">
               {{'register.occupation'|translate}}
             </option>
-            <option *ngFor="let status of statusList">{{ status }}</option>
+            <option *ngFor="let status of statusList">{{ status |translate}}</option>
           </select>
           <div
             class="required"
@@ -184,7 +184,7 @@
         <div class="field inst-field">
           <input
             formControlName="inst"
-            placeholder="소속된 기관을 입력해주세요."
+            placeholder="{{'소속기관'|translate}}"
           />
           <div
             class="required"
@@ -193,7 +193,7 @@
               registerForm.get('inst').errors?.required
             "
           >
-            {{'Type the name of your organization'|translate}}
+
           </div>
         </div>
         <div class="buttons">

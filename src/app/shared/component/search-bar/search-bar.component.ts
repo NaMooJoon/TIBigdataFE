@@ -5,6 +5,7 @@ import { SearchMode } from "src/app/core/enums/search-mode";
 import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: "app-search-bar",
@@ -29,7 +30,7 @@ export class SearchBarComponent implements OnInit {
   private articleSubscriber: Subscription;
 
   private _dateList: Array<String> = [
-    "전체",
+    '전체',
     "1일",
     "1주일",
     "1개월",
@@ -66,6 +67,7 @@ export class SearchBarComponent implements OnInit {
 
   constructor(
     public _router: Router,
+    public translate: TranslateService,
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
     private analysisDatabaseService: AnalysisDatabaseService
