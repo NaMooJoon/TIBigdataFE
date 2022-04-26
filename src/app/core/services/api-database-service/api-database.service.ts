@@ -50,10 +50,10 @@ private headers = new HttpHeaders().set("Content-Type", "application/json");
     return <ApiInfo> res.payload;
   }
   
-  async reissueKey(_id: string): Promise<{authKey:string}> {
+  async reissueKey(email:string, _id: string): Promise<{authKey:string}> {
     let res: {authKey:string} = await this.httpClient
       .post<any>(this.OpenAPI_URL +'/reissue', 
-        '_id='+_id,
+      'email='+email+'&_id='+_id,
         {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}},
       )
       .toPromise();
