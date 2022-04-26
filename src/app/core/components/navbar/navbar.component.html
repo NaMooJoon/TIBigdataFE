@@ -106,7 +106,8 @@
         <ul *ngIf="getIsSignedIn()" class="user-menu-tablet">
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
-               class="dropdown-userpage">{{'navbar.myPage' | translate}}</a>
+               class="dropdown-userpage">마이페이지</a>
+<!--            {{'navbar.myPage' | translate}}-->
             <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'my-docs')"
@@ -149,7 +150,8 @@
 
   <ul *ngIf="getIsSignedIn()" class="user-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
-      <a (click)="toUserPage()">{{'navbar.myPage' | translate}}</a>
+<!--      {{'navbar.myPage' | translate}}-->
+      <a (click)="toUserPage()">마이페이지</a>
     </li>
     <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
   </ul>

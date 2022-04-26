@@ -137,7 +137,7 @@
   },
   "article-library": {
     "library": "Library",
-    "trendChart": "Reunion Research Trend Charts",
+    "trendChart": "Unification Research Trend Charts",
     "byTopic": "Topics",
     "lexicographic": "Lexicography",
     "organization": "Institutions"
@@ -169,15 +169,25 @@
     }
   },
   "register": {
-    "doYouAgree": "I read above terms and agree to all of them.",
+    "doYouAgree": "I have read above terms and agreed to all of them.",
     "occupation": "Select your occupation.",
     "org:": "Type the name of your institution.",
     "doGoogle": "Sign up with a Google account"
   },
   "search-bar": {
-    "searchfilter": "Filter",
+    "searchFilter": "Filter",
     "filter-org": "Inst.",
-    "help": "Help"
+    "help": "Help",
+    "relatedSearchWords": "Related Search Words",
+    "howToUse": "How to Use Search Operators",
+    "howToUse1": "Using more search operators can result more precise results.",
+    "howToUse1-1": "* The search operators(AND, OR, and NOT) must be written in upper case",
+    "howToUse2": "For results including more than one word from your search words",
+    "howToUse2-1": "Add 'OR' between words",
+    "howToUse3": "For results including all your search words",
+    "howToUse3-1": "Add either one space, 'And' or '+' between your search words",
+    "howToUse4": "For results of identical words",
+    "howToUse4-1": "enclose a word/words within a pair of quotation marks(\"\")."
   },
   "analysis": {
     "analysisSelection": "Analysis Selection",
@@ -300,6 +310,21 @@
     "searchFilter": "Search Filter",
     "searchWithin": "Search Within the result"
   },
+  "article-card": {
+    "keywords": "Keywords"
+  },
+  "article-list": {
+    "searchResult1": "For the search result on ",
+    "searchResult2": ", we have ",
+    "searchResult3": " results",
+    "viewEach": "items view",
+    "noResult1": "There is no result on ",
+    "noResult2": ".",
+    "noResultGuide1": "Please check if you spelled correctly.",
+    "noResultGuide2": "or please check if you typed an english word in korean or vice versa.",
+    "noResultGuide3": "Otherwise, reduce the number of words or try with more generalized search words.",
+    "resultProcessing": "'s result is on its way. Please hold on!"
+  },
   "공지:": "Announcements",
   "다운로드": "Download",
   "미리보기": "preview",
@@ -320,5 +345,7 @@
   "3개월": "3 months",
   "6개월": "6 months",
   "1년": "1 year",
-  "전체": "all"
+  "전체": "all",
+  "전체선택": "Select All",
+  "연관문서": "Related Documents"
 }

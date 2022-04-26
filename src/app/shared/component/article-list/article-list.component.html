@@ -1,7 +1,7 @@
 <div class="result-header">
   <!-- Show number of result -->
   <div *ngIf="isResultFound && isMainSearch" class="result-count">
-    "{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.
+    {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}
   </div>
 
   <div *ngIf="isResultFound" class="dropdown-menus">
@@ -19,14 +19,14 @@
       [(ngModel)]="pageSize"
     >
       <option *ngFor="let amt of amounts" [value]="amt">
-        {{ amt }}건씩 보기
+        {{ amt }}{{'article-list.viewEach'|translate}}
       </option>
     </select>
   </div>
 </div>
 
 <div *ngIf="isResultFound && isMainSearch" class="result-count-tablet">
-  "{{ searchKeyword }}"에 대한 검색결과는 {{ searchResultNum }}건 입니다.
+  {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}
 </div>
 
 <div *ngIf="isResultFound && isSearchDone" class="result-body">
@@ -38,7 +38,7 @@
         [(checked)]="toggle_all"
         (change)="onCheckboxChange($event)"
         value="toggleAll"
-      />전체선택
+      />{{'전체선택'|translate}}
     </label>
     <div
       *ngFor="let articleSource of articleSources; index as i"
@@ -66,7 +66,7 @@
           (click)="openRelatedDocList(i)"
           [ngStyle]="toggleArrowStyle(i)"
         >
-          연관문서
+          {{'연관문서'|translate}}
         </button>
         <div *ngIf="relatedDocBtnToggle[i]">
           <div
@@ -117,16 +117,16 @@
 </div>
 
 <div *ngIf="!isResultFound && isSearchDone" class="result-not-found-body">
-  <p>"{{ searchKeyword }}"에 대한 검색결과가 없습니다.</p>
+  <p>{{'article-list.noResult1'|translate}}"{{ searchKeyword }}"{{'article-list.noResult2'|translate}}</p>
   <ul>
-    <li>단어의 철자가 정확한지 확인해 보세요.</li>
-    <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+    <li>{{'article-list.noResultGuide1'|translate}}</li>
+    <li>{{'article-list.noResultGuide2'|translate}}</li>
     <li>
-      검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.
+      {{'article-list.noResultGuide3'|translate}}
     </li>
   </ul>
 </div>
 
 <div *ngIf="!isSearchDone" class="result-not-found-body">
-  <p>"{{ searchKeyword }}"에 대한 문서를 검색 중입니다. 잠시만 기다려주세요.</p>
+  <p>"{{ searchKeyword }}"{{'article-list.resultProcessing'|translate}}</p>
 </div>
