@@ -15,11 +15,6 @@
       >
     </div>
 
-    <u1 *ngIf="isDataEmpty(article.post_body)" class="detail-body empty-data">
-      <h1 class="article-content-subtitle">{{'search-result.documentInfo'|translate}}</h1>
-      <hr />
-    </u1>
-
     <ul class="article-info">
       <li *ngIf="!isDataEmpty(article.published_institution)" class="info">
         <div class="info-title">{{'search-result.issuer'|translate}}</div>

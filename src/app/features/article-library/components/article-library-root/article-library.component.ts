@@ -38,7 +38,7 @@ export class ArticleLibraryComponent implements OnInit {
     "경제",
     "사회",
     "국제",
-    "IT_과학",
+    "IT과학",
     "스포츠",
     "문화",
   ];
@@ -58,6 +58,9 @@ export class ArticleLibraryComponent implements OnInit {
     "타",
     "파",
     "하",
+    "영문",
+    "숫자",
+    "기타"
   ];
 
 
@@ -304,7 +307,7 @@ export class ArticleLibraryComponent implements OnInit {
       const ids: string[] = [];
 
       for (let i = 0; i < partialIDs.length; i++) {
-        ids.push(partialIDs[i]["hashKey"]);
+        ids.push(partialIDs[i]["hash_key"]);
       }
 
       this.elasticsearchService.setKeyword(tp);

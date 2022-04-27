@@ -216,7 +216,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    */
   openSelectedDoc(articleSourceIdx: number, RelatedDocIdx: number): void {
     this.articleService.setSelectedHashKey(
-      this.relatedDocs[articleSourceIdx][RelatedDocIdx]["hashKey"]
+      this.relatedDocs[articleSourceIdx][RelatedDocIdx]["id"]
     );
     this.navToDocDetail();
   }
@@ -234,11 +234,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
    * @description Load related articles of selected article.
    * @param idx Index number of article from relatedDocs.
    */
-  loadRelatedDocs(idx: number): void {
+  loadRelatedDocs(hashKey: number): void {
     this.analysisDatabaseService
-      .loadRelatedDocs(this.articleService.getHashKeyByIdx(idx))
+      .loadRelatedDocs(this.articleService.getHashKeyByIdx(hashKey))
       .then((res) => {
-        this.relatedDocs[idx] = res as [];
+        this.relatedDocs[hashKey] = res as [];
       });
   }
 
@@ -282,7 +282,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         }
         j++;
       });
-    } 
+    }
 
     for (let i = 0; i < this.articleSources.length; i++) {
       this.articleSources[i]["isSelected"] = isCheckAll;
@@ -345,6 +345,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       return {
         "background-image":
           "url(../../../../assets/icons/arrow-down_3d3d3d.png)",
+      };
+    }else{
+      return {
+        "background-image":
+          "url(../../../../assets/icons/arrow-down_3d3d3d_2.png)",
       };
     }
   }

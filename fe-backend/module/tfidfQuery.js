@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 router.get("/test", (req, res) => {
   console.log("work!");
   let id = "5f65aececd17436ac6436f4a";
-  Keywords.findOne({ docID: id }, (error, val) => {
+  Keywords.findOne({ hash_key: id }, (error, val) => {
     if (error) {
       console.log(error);
     }
@@ -30,9 +30,9 @@ function getKeyVal(req, res) {
 
   if (typeof ids == "string")
     //only send one string
-    matchQuery = { docID: ids };
+    matchQuery = { hash_key: ids };
   //when send string array
-  else matchQuery = { docID: { $in: ids } };
+  else matchQuery = { hash_key: { $in: ids } };
 
   let isVal = req.body["isVal"]; //tfidf 값에 해당하는 키워드를 반환할 때 tfidf 값도 함께 반환할 것인지 파악.
 
