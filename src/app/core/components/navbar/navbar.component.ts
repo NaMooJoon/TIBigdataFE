@@ -6,6 +6,7 @@ import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import { AppComponent } from '../../../features/app.component';
 import { ArticleLibraryComponent } from '../../../features/article-library/components/article-library-root/article-library.component';
+import {SearchBarComponent} from '../../../shared/component/search-bar/search-bar.component';
 
 @Component({
   selector: "app-nav",
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   private _isFolderBtn: boolean = false;
   private mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
+  private _isMain : boolean = false
 
   constructor(
     public router: Router,
@@ -34,6 +36,7 @@ export class NavbarComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private appcomponent: AppComponent,
     private articleLibrary: ArticleLibraryComponent,
+    private searchBar : SearchBarComponent,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -47,7 +50,7 @@ export class NavbarComponent implements OnInit {
         this.userEmail = null;
       }
     });
-
+    this._isMain = searchBar.checkRouterIsMainBoolean();
     this.mobileQuery = matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
