@@ -12,7 +12,7 @@
         class="folder"
         (click)="openModal()"
         id="logout-button"
-      >폴더편집</button>
+      >{{'userpage.EditFolder'|translate}}</button>
     </div>
   </section>
 
@@ -28,12 +28,12 @@
           type="checkbox"
           (change)="onCheckboxChange($event)"
           value="toggleAll"
-        />전체선택
+        />{{'전체선택'|translate}}
       </label>
     </div>
     <div *ngIf="!isSavedDocsEmpty" class="upside3">
-      <button (click) = "deleteSelectedDocs()">선택삭제</button>
-      <button (click)="deleteAllMyDocs()">전체삭제</button>
+      <button (click) = "deleteSelectedDocs()">{{'선택삭제'|translate}}</button>
+      <button (click)="deleteAllMyDocs()">{{'전체삭제'|translate}}</button>
     </div>
   </div>
   <br />

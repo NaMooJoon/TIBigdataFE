@@ -34,7 +34,7 @@
       />
     </div>
     <button [ngStyle]="selectedStyleObject(isDateSelected)" type="button">
-      {{ selectedDate }}
+      {{ selectedDate |translate}}
     </button>
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
@@ -42,8 +42,8 @@
           <a
             class = "a-date"
             [ngStyle]="selectedStyleObject(selectedDate === date)"
-            (click)="updateDate(date)"
-          >{{ date }}</a>
+            (click)="updateDate(translate.instant(date))"
+          >{{ date |translate}}</a>
         </li>
 <!--        <li class="date-input">-->
 <!--          <span> 직접입력 </span>-->
@@ -69,16 +69,16 @@
     </div>
 
     <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">
-      {{ selectedTopic }}
+      {{ selectedTopic |translate}}
     </button>
     <div uk-dropdown="pos: bottom-justify">
       <ul class="uk-nav uk-dropdown-nav">
         <li *ngFor="let topic of topicList">
           <a
             [ngStyle]="selectedStyleObject(selectedTopic === topic)"
-            (click)="updateTopic(topic)"
+            (click)="updateTopic(translate.instant(topic))"
             id="topic"
-          >{{ topic }}</a>
+          >{{ topic |translate }}</a>
         </li>
       </ul>
     </div>

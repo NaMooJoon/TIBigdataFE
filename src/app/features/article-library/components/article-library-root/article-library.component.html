@@ -16,7 +16,7 @@
           id="topic"
           (click)="selectCategory($event)"
         >
-          {{ cat }}
+          {{ cat |translate}}
         </button>
       </div>
     </div>
@@ -48,7 +48,7 @@
           id="inst"
           (click)="selectCategory($event, null)"
         >
-          전체  {{ totalSavedDocsNum }}
+          {{'전체'|translate}}  {{ totalSavedDocsNum }}
         </button>
         <button
           *ngFor="let inst of institutionList"

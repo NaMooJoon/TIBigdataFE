@@ -7,7 +7,7 @@
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
     <select class="order-drop" id="order" name="order">
-      <option *ngFor="let ord of orders" [value]="ord">{{ ord }}</option>
+      <option *ngFor="let ord of orders" [value]="ord">{{ ord |translate}}</option>
     </select>
 
     <!-- Set number of doc per page -->
@@ -19,7 +19,7 @@
       [(ngModel)]="pageSize"
     >
       <option *ngFor="let amt of amounts" [value]="amt">
-        {{ amt }}{{'article-list.viewEach'|translate}}
+        {{'article-list.viewEach1'|translate}}{{ amt }}{{'article-list.viewEach2'|translate}}
       </option>
     </select>
   </div>

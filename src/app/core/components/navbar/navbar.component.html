@@ -22,7 +22,7 @@
             <div class="dropdown-container">
               <a (click)="toAnnouncement()">{{'navbar.community' | translate}}</a>
               <ul class="community-dropdown-menu">
-                <li><a (click)="toAnnouncement()">{{'공지'|translate}}</a></li>
+                <li><a (click)="toAnnouncement()">{{'navbar.community'|translate}}</a></li>
                 <li><a (click)="toFaq()">FAQ</a></li>
                 <li><a (click)="toCommunity()">Q&A</a></li>
               </ul>
@@ -35,7 +35,7 @@
               <ul [ngClass]="isDropDownCommunity ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'announcement')"
-                  (click)="toAnnouncement()">{{'announcements'|translate}}</a></li>
+                  (click)="toAnnouncement()">{{'공지'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'faq')"
                   (click)="toFaq()">FAQ</a></li>
@@ -151,7 +151,7 @@
   <ul *ngIf="getIsSignedIn()" class="user-menu">
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
 <!--      {{'navbar.myPage' | translate}}-->
-      <a (click)="toUserPage()">마이페이지</a>
+      <a (click)="toUserPage()">{{'마이페이지'|translate}}</a>
     </li>
     <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
   </ul>
