@@ -178,16 +178,6 @@ export class SearchBarComponent implements OnInit {
     }
   }
 
-  checkRouterIsMainBoolean(): boolean {
-    let rootUrl = this._router.routerState.snapshot.url;
-
-    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search")){
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   /**
    * @description Check if current url is search/result
    */
