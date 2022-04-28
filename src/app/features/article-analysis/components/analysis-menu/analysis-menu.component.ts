@@ -51,7 +51,7 @@ export class AnalysisMenuComponent implements OnInit {
   setTitle(currentAddress: string) {
     if (currentAddress === "manual") this.title = "매뉴얼";
     if (currentAddress === "preprocessing") this.title = "전처리";
-    if (currentAddress === "analysis") this.title = "분석";
+    if (currentAddress === "analysis") this.title = "자료분석";
   }
 
   toManual() {
