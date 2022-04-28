@@ -29,6 +29,7 @@ export class ApiRegisterComponent implements OnInit {
   async registerApi(): Promise<void> {
     let res = await this.authenticationService.apiRegister();
     if (res) {
+      this.authenticationService.getCurrentUser().isApiUser=true;
       window.alert("가입이 완료되었습니다!");
       this._router.navigateByUrl("/");
     }

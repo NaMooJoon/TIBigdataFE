@@ -34,7 +34,8 @@
               "src/assets/logos",
               "src/assets/icons",
               "src/assets/manual.pdf",
-              "src/assets/i18n"
+              "src/assets/i18n",
+              "src/assets/User_Manual.html"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

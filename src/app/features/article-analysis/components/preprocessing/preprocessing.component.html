@@ -27,9 +27,11 @@
             <label for="synonym_user">{{'analysis.preprocessing.myDictionary'|translate}}</label>
           </div>
         </div>
-        <input type="file" (click)="openTextFile('synonym')"  id="upload-synonym" style="display:none">
-        <button class="upload-dict">
+        <button class="upload-dict" (click)="openTextFile('synonym')">
           <label class="upload-but" for="upload-synonym">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
+        </button>
+        <button class="upload-dict" (click)="previewDict('synonym')">
+          <label class="upload-but" for="upload-stopword">사전 미리보기</label>
         </button>
       </li>
       <li class="option-dict">
@@ -44,10 +46,11 @@
             <label for="stopword_user">{{'analysis.preprocessing.myDictionary'|translate}}</label>
           </div>
         </div>
-        <input class="hide-but" type="file" (click)="openTextFile('stopword')"  id="upload-stopword" style="display:none">
-
-        <button class="upload-dict">
+        <button class="upload-dict" (click)="openTextFile('stopword')">
           <label class="upload-but" for="upload-stopword">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
+        </button>
+        <button class="upload-dict" (click)="previewDict('stopword')">
+          <label class="upload-but" for="upload-stopword">사전 미리보기</label>
         </button>
       </li>
 
@@ -63,13 +66,16 @@
             <label for="compound_user">{{'analysis.preprocessing.myDictionary'|translate}}</label>
           </div>
         </div>
-        <input type="file" (click)="openTextFile('compound')"  id="upload-compound" style="display:none">
-          <button class="upload-dict">
+          <button class="upload-dict" (click)="openTextFile('compound')">
             <label class="upload-but" for="upload-compound">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
           </button>
+          <button class="upload-dict" (click)="previewDict('compound')">
+            <label class="upload-but" for="upload-stopword">사전 미리보기</label>
+          </button>
       </li>
-
     </div>
+    <br><br>
+    <figure id="table"></figure>
 
 
 

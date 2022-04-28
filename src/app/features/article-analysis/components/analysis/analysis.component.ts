@@ -750,8 +750,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .enter()
     .append("line")
       .style("stroke", "#aaa")
-      // .style("stroke-width", 5);
-      .style("stroke-width", d=>d['weight']/10);
+      .style("stroke-width", 5);
+      // .style("stroke-width", d=>d['weight']/10);
 
     // Initialize the nodes
     let node = svg
@@ -784,12 +784,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .attr("r", 7);
       }
 
-      let buttons = d3.select("figure#network")
-      .append("button")
-      .data(data.nodes)
-      .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
-      .on("mouseover",dataon)
-      .on("mouseout",dataoff);
+      // let buttons = d3.select("figure#network")
+      // .append("button")
+      // .data(data.nodes)
+      // .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
+      // .on("mouseover",dataon)
+      // .on("mouseout",dataoff);
 
 
 
@@ -1024,8 +1024,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // else{
       // require.js not available: dynamically load d3 & LDAvis
       // LDAvis_load_lib("https://d3js.org/d3.v5.js", function(){
+        lda.ldavis('#ldavis', data);
           // LDAvis_load_lib("https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.2.2/pyLDAvis/js/ldavis.v3.0.0.js", function(){
-                  lda.ldavis("#ldavis", data);
+          // var win = window.open('./ldavis.html', 'Topic Modeling','width=#, height=#');
+          // win.document.write("<script>lda.ldavis('#ldavis', data);</script>");
+
               // })
           // });
     // }
