@@ -229,7 +229,7 @@
       "explain3-1-1": "The first word you write becomes the representative word.",
       "explain3-1-2": "ex) Supreme leader Jung-Eun Kim, Kim Jung Eun, supreme leader Kim -> the first word \"Supreme leader Jung-Eun Kim\" becomes the representative word.",
       "explain3-2": "2. Stopwords dictionry: Meaningless words can be registered in the dictionary, and the word can be excluded from the analysis.",
-      "explain3-2=1": "ex) eventually, this, attatched",
+      "explain3-2-1": "ex) eventually, this, attatched",
       "explain3-3": "3. Compound words dictionary: It is used when you want to register new words as a user dictionary.",
       "explain3-3-1": "ex) COVID-19",
       "frequencyAnalysis": "An analysis method to extract key words by analyzing the frequency of appearance of words that appear a lot in text",
