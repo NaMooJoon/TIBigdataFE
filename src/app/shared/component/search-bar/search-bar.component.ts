@@ -207,24 +207,24 @@ export class SearchBarComponent implements OnInit {
     this.relatedKeywords = [];
     this.relatedKeywords_mobile = [];
     await this.analysisDatabaseService
-      .getTfidfVal(this.articleService.getList())
+      .getCountVal(this.articleService.getList())
       .then((res) => {
         let data = res as [];
         for (let n = 0; n < data.length; n++) {
-          let tfVal = data[n]["tfidf"];
+          let coVal = data[n]["count"];
           if (
             this.relatedKeywords.length < 6 &&
-            tfVal[0] !== this.searchKeyword &&
-            !this.relatedKeywords.includes(tfVal[0])
+            coVal[0] !== this.searchKeyword &&
+            !this.relatedKeywords.includes(coVal[0])
           )
-            this.relatedKeywords.push(tfVal[0]);
+            this.relatedKeywords.push(coVal[0]);
           /*mobile relatedKeywords_mobile*/
           if (
             this.relatedKeywords_mobile.length < 4 &&
-            tfVal[0] !== this.searchKeyword &&
-            !this.relatedKeywords_mobile.includes(tfVal[0])
+            coVal[0] !== this.searchKeyword &&
+            !this.relatedKeywords_mobile.includes(coVal[0])
           )
-            this.relatedKeywords_mobile.push(tfVal[0]);
+            this.relatedKeywords_mobile.push(coVal[0]);
         }
       });
     this.isKeyLoaded = true;

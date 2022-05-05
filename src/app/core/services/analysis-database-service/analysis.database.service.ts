@@ -47,7 +47,7 @@ export class AnalysisDatabaseService {
     }
   }
 
-  async getTfidfVal(ids: string | string[], num?: number, isVal?: boolean) {
+  async getCountVal(ids: string | string[], num?: number, isVal?: boolean) {
     return new Promise((resolve) => {
       this.http
         .post<any>(this.GET_KEYWORDS_URL, { id: ids, num: num, isVal: isVal })
