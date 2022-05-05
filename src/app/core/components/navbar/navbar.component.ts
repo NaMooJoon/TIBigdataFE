@@ -6,6 +6,7 @@ import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import { AppComponent } from '../../../features/app.component';
 import { ArticleLibraryComponent } from '../../../features/article-library/components/article-library-root/article-library.component';
+import {SearchBarComponent} from '../../../shared/component/search-bar/search-bar.component';
 
 @Component({
   selector: "app-nav",
@@ -34,6 +35,7 @@ export class NavbarComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private appcomponent: AppComponent,
     private articleLibrary: ArticleLibraryComponent,
+    private searchBarComponent: SearchBarComponent,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -51,7 +53,6 @@ export class NavbarComponent implements OnInit {
     this.mobileQuery = matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-
   }
   ngOnInit(): void {
     this.selectedMenu = this.router.url.split("/")[1];
@@ -70,7 +71,7 @@ export class NavbarComponent implements OnInit {
     //   }
     //   console.log('event: ', evt);
     // });
-
+    // this.checkRouterIsMain();
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
@@ -97,6 +98,19 @@ export class NavbarComponent implements OnInit {
           color: "black",
           "background-color": "transparent",
         };
+      }
+    }
+  }
+
+  disableObject(flag: boolean): Object {
+    // console.log("main : ",flag);
+    if(flag){
+      return {
+        "display" : "block"
+      }
+    }else{
+      return {
+        "display" : "block"
       }
     }
   }
@@ -301,6 +315,10 @@ export class NavbarComponent implements OnInit {
   toSecession() {
     this.isHamburger = false;
     this.router.navigateByUrl("/userpage/secession");
+  }
+
+  public get isMain(): boolean {
+    return this.searchBarComponent.isMain;
   }
 
 }

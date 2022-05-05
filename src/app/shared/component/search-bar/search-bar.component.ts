@@ -70,7 +70,7 @@ export class SearchBarComponent implements OnInit {
     public translate: TranslateService,
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
-    private analysisDatabaseService: AnalysisDatabaseService
+    private analysisDatabaseService: AnalysisDatabaseService,
   ) {
     this.searchStatusChange$.subscribe((status) => {
       if (status === true) this.setRelatedKeywords();
@@ -176,6 +176,7 @@ export class SearchBarComponent implements OnInit {
     } else {
       this.isMain = true;
     }
+    // console.log("Searchbar Main : ",this.isMain);
   }
 
   /**

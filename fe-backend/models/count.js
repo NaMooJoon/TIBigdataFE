@@ -2,12 +2,11 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const tfidfSchema = new Schema({
+const countSchema = new Schema({
   hash_key: String,
   docTitle: String,
-  tfidf: [],
-  lastUpdate: Date,
+  count: [],
 });
 
 const conn = require("../connection/dataConn");
-module.exports = conn.model("tfidf", tfidfSchema);
+module.exports = conn.model("count", countSchema);

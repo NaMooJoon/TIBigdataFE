@@ -50,21 +50,21 @@ function getKeyVal(req, res) {
       // { $addFields : { keywords : }},
       {
         $project: {
-          tfidf: {
-            $slice: ["$tfidf", num, num], //3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
+          count: {
+            $slice: ["$count", num, num], //3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
           },
         },
       },
       {
-        $unwind: "$tfidf", //array을 풀어서 하나의 array으로 만든다.
+        $unwind: "$count", //array을 풀어서 하나의 array으로 만든다.
       },
       {
         $project: {
-          tfidf: {
+          count: {
             $cond: {
               if: isVal,
-              then: "$tfidf",
-              else: { $arrayElemAt: ["$tfidf", 0] },
+              then: "$count",
+              else: { $arrayElemAt: ["$count", 0] },
             },
           },
         },
@@ -72,7 +72,7 @@ function getKeyVal(req, res) {
       {
         $group: {
           _id: "$_id",
-          tfidf: { $addToSet: "$tfidf" },
+          count: { $addToSet: "$count" },
         },
       },
     ],
