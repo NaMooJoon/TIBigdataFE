@@ -57,10 +57,7 @@ export class ArticleLibraryComponent implements OnInit {
     "카",
     "타",
     "파",
-    "하",
-    "영문",
-    "숫자",
-    "기타"
+    "하"
   ];
 
 

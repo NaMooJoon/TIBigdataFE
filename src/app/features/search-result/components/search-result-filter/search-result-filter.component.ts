@@ -55,21 +55,12 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setSearchKeyword();
       });
-    this._datePickerEndDate = null;
-    this._datePickerStartDate = null;
-
-    this.selectedInst = "";
-    this._selectedTp = "false";
-    this._startDate = "0001-01-01";
-    this._endDate = "9000-12-31";
-    this._mustKeyword = "";
-    this._mustNotKeyword = "";
+    this.resetFilters();
   }
 
   ngOnInit() {
     this.loadInstitutions();
     this.setSearchKeyword();
-    this.resetFilters();
   }
 
   ngOnDestroy() {
@@ -109,18 +100,24 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   }
 
   resetFilters() {
-    this._datePickerEndDate = null;
-    this._datePickerStartDate = null;
-    this.selectedInst = "";
-    this._selectedTp = "false";
-    this._startDate = "0001-01-01";
-    this._endDate = "9000-12-31";
     this._mustKeyword = "";
     this._mustNotKeyword = "";
-    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
-    this.elasticsearchService.setSelectedInst(this.selectedInst);
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
+
+    this._datePickerEndDate = null;
+    this._datePickerStartDate = null;
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this.selectedDate = "";
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+
+    this.selectedInst = "";
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+
+    this._selectedTp = "false";
     this.elasticsearchService.setTopicHashKeys([]);
+
+    this.ngOnInit();
   }
 
   selectSearchFilter(): void {
@@ -228,6 +225,7 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         if ((this.datePickerStartDate === null) || (this.datePickerEndDate === null)) {
           alert("날짜를 선택해 주세요.");
         } else {
+          alert("날짜 범위가 설정되었습니다.");
           this._startDate = this.datePickerStartDate;
           this._endDate = this.datePickerEndDate;
 
@@ -309,12 +307,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   mustNotKeyword(e) {
     this._mustNotKeyword = e.target.value.toString();
-  }
-
-  async resetSearch() {
-    this.ngOnInit();
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
-    this.elasticsearchService.triggerSearch(1);
   }
 
   async confirm() {
