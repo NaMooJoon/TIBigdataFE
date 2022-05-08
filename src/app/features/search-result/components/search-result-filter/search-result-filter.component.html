@@ -38,7 +38,8 @@
             <input
               type="text"
               (change)="mustNotKeyword($event)"
-              placeholder="키워드 제외"/>
+              placeholder="키워드 제외"
+            />
           </div>
         </div>
       </section>
@@ -122,7 +123,7 @@
         <button
           class="cancel-btn"
           id="cancel"
-          (click) = "resetSearch()"
+          (click) = "resetFilters()"
         >{{'취소'|translate}}</button>
       </div>
       <a
