@@ -14,10 +14,11 @@ export class WordcloudService {
    */
   async createCloud(hash_key: string) {
     let cloudData = new Array<CloudData>();
-    let data = await this.db.getTfidfVal(hash_key, 15, true);
-    let tfidfData = data[0] as [];
-    let tfIdfVal = tfidfData["tfidf"] as [];
-    tfIdfVal.map((v) => {
+    let data = await this.db.getCountVal(hash_key, 15, true);
+    let countData = data[0] as [];
+    console.log(countData);
+    let countVal = countData["count"] as [];
+    countVal.map((v) => {
       cloudData.push({
         text: v[0],
         weight: v[1],

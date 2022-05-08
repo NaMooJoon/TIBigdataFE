@@ -346,9 +346,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
           "y" : number
       }>= JSON.parse(data_str);
 
-    let margin = {top: 10, right: 30, bottom: 30, left: 60},
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+    let margin = ({top: 10, right: 30, bottom: 30, left: 60});
+    let  width = 1000 - margin.left - margin.right;
+    let height = 1000 - margin.top - margin.bottom;
 
 
     function zoom(svg) {
@@ -381,8 +381,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     const svg = d3.select("figure#scatter")
       .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        // .attr("width", width + margin.left + margin.right)
+        // .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
         .call(zoom)
       .append("g")
         .attr("transform",
@@ -519,8 +520,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       }>= JSON.parse(data_str);
 
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
-      width = 460 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+      width = 1000 - margin.left - margin.right,
+      height = 1000 - margin.top - margin.bottom;
 
 
     function zoom(svg) {
@@ -553,8 +554,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     const svg = d3.select("figure#scatter")
       .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
+        // .attr("width", width + margin.left + margin.right)
+        // .attr("height", height + margin.top + margin.bottom)
         .call(zoom)
       .append("g")
         .attr("transform",
@@ -674,7 +676,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
    * @description draw a network chart using the data using d3
    */
 
-  drawNetworkChart(data_str:string){
+  drawOldNetworkChart(data_str:string){
     let data:any
   //   {
   //     "links" : Array<
@@ -693,15 +695,16 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     // console.log(data);
     const margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 700 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 1000 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
     .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+      // .attr("width", width + margin.left + margin.right)
+      // .attr("height", height + margin.top + margin.bottom)
+      .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
+      .append("g")
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
@@ -750,8 +753,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     .enter()
     .append("line")
       .style("stroke", "#aaa")
-      // .style("stroke-width", 5);
-      .style("stroke-width", d=>d['weight']/10);
+      .style("stroke-width", 5);
+      // .style("stroke-width", d=>d['weight']/10);
 
     // Initialize the nodes
     let node = svg
@@ -784,12 +787,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .attr("r", 7);
       }
 
-      let buttons = d3.select("figure#network")
-      .append("button")
-      .data(data.nodes)
-      .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
-      .on("mouseover",dataon)
-      .on("mouseout",dataoff);
+      // let buttons = d3.select("figure#network")
+      // .append("button")
+      // .data(data.nodes)
+      // .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
+      // .on("mouseover",dataon)
+      // .on("mouseout",dataoff);
 
 
 
@@ -835,6 +838,140 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .style("border-radius", "5px")
       .style("padding", "10px");
   };
+
+  /**
+   * @description draw a network chart using the data using d3
+   */
+
+   drawNetworkChart(data_str:string){
+    let data:any
+  //   {
+  //     "links" : Array<
+  //       {"source":number,
+  //       "target":number,
+  //       "weight":number}>,
+  //     "nodes" :  Array<{
+  //       "between_cen":number,
+  //       "closeness_cen":number,
+  //       "degree_cen":number,
+  //       "eigenvector_cen":number,
+  //       "id":number,
+  //       "name":string}>
+  // }
+  = JSON.parse(data_str);
+    	//Set margins and sizes
+	var margin = {
+		top: 20,
+		bottom: 50,
+		right: 30,
+		left: 50
+	};
+  
+  //Extract data from dataset
+  var nodes = data.nodes,
+    links = data.links;
+	var width = 500 - margin.left - margin.right;
+	var height = 500 - margin.top - margin.bottom;
+	//Load Color Scale
+	var color = d3.scaleSequential()
+  .domain([0, nodes.length])
+  .interpolator(d3.interpolateSinebow)
+
+	//Create an SVG element and append it to the DOM
+	var svgElement = d3.select("figure#network")
+    .append("svg")
+      .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
+    .append("g")
+    .attr("transform","translate("+margin.left+","+margin.top+")");	
+
+	//Load External Data
+	// d3.json("got_social_graph.json", function(dataset){
+		
+		//Create Force Layout
+		var force = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink()                               // This force provides links between nodes
+      .id(function(d) { return d['id']; })                     // This provide  the id of a node
+      .links(data.links)                                    // and this the list of links
+    )
+    .force("charge", d3.forceManyBody().strength(-200))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    
+    // Highlight the specie that is hovered
+    const highlight = function(e,d){
+
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", 3)
+
+      d3.selectAll(".type" + d.id)
+        .transition()
+        .duration(200)
+        .style("fill", "red")
+        .attr("r", 7)
+    }
+
+    // Highlight the specie that is hovered
+    const doNotHighlight = function(e,d){
+      d3.selectAll(".dot")
+        .transition()
+        .duration(200)
+        .style("fill", "lightgrey")
+        .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
+
+      d3.selectAll(".dottext")
+        .style("opacity", 1)
+    }
+
+		//Add links to SVG
+		var link = svgElement.selectAll(".link")
+					.data(links)
+					.enter()
+					.append("line")
+            .style("stroke-width", function(d){ return d['weight']/100; })
+            .attr("class", "link")
+            .style("stroke", "#aaa")
+
+		//Add nodes to SVG
+		var node = svgElement.selectAll(".node")
+					.data(nodes)
+					.enter()
+					.append("g")
+					.attr("class", "node")
+
+		//Add labels to each node
+		var label = node.append("text")
+						.attr("dx", 12)
+						.attr("dy", "0.35em")
+						.attr("font-size", function(d){ return d['count']/300>9? d['count']/300: 9; })
+						.text(function(d){ return d['name']; });
+
+		//Add circles to each node
+		var circle = node.append("circle")
+      .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
+      .attr("fill", function(d){ return color(d['id']); })
+      .attr("class", function (d) { return "dot type" + d['id']} )
+      .on("mouseover", highlight)
+      .on("mouseout", doNotHighlight )
+
+		//This function will be executed for every tick of force layout 
+		force.on("tick", function(){
+			//Set X and Y of node
+			node.attr("r", function(d){ return d['degree_cen']; })
+				.attr("cx", function(d){ return d['x']; })
+				.attr("cy", function(d){ return d['y']; });
+			//Set X, Y of link
+      link
+        .attr("x1", function(d) { return d['source']['x']; })
+        .attr("y1", function(d) { return d['source']['y']; })
+        .attr("x2", function(d) { return d['target']['x']; })
+        .attr("y2", function(d) { return d['target']['y']; });
+			//Shift node a little
+		    node.attr("transform", function(d) { return "translate(" + d['x'] + "," + d['y'] + ")"; });
+    });
+
+   }
 
 
   /**
@@ -1024,8 +1161,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // else{
       // require.js not available: dynamically load d3 & LDAvis
       // LDAvis_load_lib("https://d3js.org/d3.v5.js", function(){
+        lda.ldavis('#ldavis', data);
           // LDAvis_load_lib("https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.2.2/pyLDAvis/js/ldavis.v3.0.0.js", function(){
-                  lda.ldavis("#ldavis", data);
+          // var win = window.open('./ldavis.html', 'Topic Modeling','width=#, height=#');
+          // win.document.write("<script>lda.ldavis('#ldavis', data);</script>");
+
               // })
           // });
     // }

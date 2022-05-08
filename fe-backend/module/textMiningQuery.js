@@ -4,6 +4,7 @@ const Res = require("../models/Res");
 const router = express.Router();
 
 router.post("/uploadDict", uploadDict);
+router.post("/findDict", findDict);
 router.post("/getPreprocessedData",getPreprocessedData);
 router.post("/uploadChart", uploadChart);
 router.post("/getCharts", getCharts);
@@ -46,6 +47,32 @@ async function uploadDict(req, res) {
             );
   }
 
+  async function findDict(req, res){
+    usersDict.findOne(
+      { $and : [{ userEmail : req.body.userEmail }]}
+    ).then((result) => {
+      if(result) {
+        return res
+          .status(200)
+          .json(
+            new Res(true, "successfully found", result)
+          );
+      }else{
+        return res
+          .status(200)
+          .json(
+            new Res(false, "no saved dict", null)
+          );
+      }
+    }).catch((err) => {
+      console.log(err);
+      return res
+        .status(400)
+        .json(
+          new Res(false, "loading failed", null)
+        )
+    });
+  }
 
   async function getPreprocessedData(req, res) {
     let userEmail = req.body.userEmail;
