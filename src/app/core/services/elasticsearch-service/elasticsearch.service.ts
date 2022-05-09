@@ -71,6 +71,7 @@ export class ElasticsearchService {
    * @param searchMode
    */
   setSearchMode(searchMode: SearchMode): void {
+    console.log("SearchMode : ",searchMode);
     this.searchMode = searchMode;
   }
 
@@ -145,17 +146,17 @@ export class ElasticsearchService {
    * @param string: index name => search_log-<year>.<month>
    */
   getSearchHistory(index: string): Promise<any> {
-     return this.client.count({
-        index: index,
-        body: {
-          query: {
-            match: {
-              search_word: this.getKeyword(),
-            },
+    return this.client.count({
+      index: index,
+      body: {
+        query: {
+          match: {
+            search_word: this.getKeyword(),
           },
-        }
-      });
-    }
+        },
+      }
+    });
+  }
 
   /**
    * @description Send query to get information of all articles exist in backend database.
@@ -244,11 +245,25 @@ export class ElasticsearchService {
     });
   }
 
+  countByFilter(): Promise<any> {
+    return this.client.count({
+      index: this.ipSvc.ES_INDEX,
+      filterPath: this.esQueryModel.getFilterPath(),
+      body: this.esQueryModel.getSearchDocCount(),
+    });
+  }
+
   /**
    * @description Update number of articles for all subscribers.
    */
   countByTextComplete(): void {
     this.countByText().then((articleNum) =>
+      this.articleNum.next(articleNum.count)
+    );
+  }
+
+  countByFilterComplete(): void {
+    this.countByFilter().then((articleNum) =>
       this.articleNum.next(articleNum.count)
     );
   }
@@ -374,6 +389,7 @@ export class ElasticsearchService {
       this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
+      // this.countByFilterComplete();
     } else if (searchMode === SearchMode.DICTIONARY) {
       this.searchByDictionaryComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
@@ -402,47 +418,17 @@ export class ElasticsearchService {
         query: {
           bool: {
             must: [
+              //hashKey option
               this.getHashKeyQuery(),
+              //Inst option
               this.getInstQuery(),
-              {
-                bool: {
-                  should: [
-                    {term: { post_body : this.keyword }},
-                    {term: { file_extracted_content : this.keyword }},
-                    {term: { post_title : this.keyword }},
-                  ]
-                }
-              },
-            ],
-            filter: [
-              {
-                bool: {
-                  should: [
-                    {
-                        range: {
-                          post_date: {
-                            gte: this.startTime,
-                            lt: this.endTime,
-                            format: "yyyy-MM-dd"
-                          }
-                        },
-                    },
-                    {
-                      bool: {
-                        must_not: {
-                          exists: {
-                            field: "post_date"
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
+              //keyword option
+              this.getKeywordQuery(),
+              //date option
+              this.getDateQuery()
             ],
           },
         },
-
         post_filter: this.getKeywordOption(),
       },
 
@@ -487,15 +473,33 @@ export class ElasticsearchService {
   }
 
   getInstQuery(){
+    console.log("selectedInst : "+this.selectedInst);
     if(this.selectedInst == "" || this.selectedInst == null){
+      console.log("selectedInst In : "+this.selectedInst);
       return {
-        regexp: {
-          published_institution : ".*"
+        bool: {
+          should: [
+            {
+              regexp: {
+                published_institution:".*"
+              }
+            },
+            {
+              bool: {
+                must_not: {
+                  exists: {
+                    field: "published_institution"
+                  }
+                }
+              }
+            }
+          ]
         }
       };
+
     }else{
       return {
-        term: {
+        match_phrase: {
           published_institution : this.selectedInst
         }
       };
@@ -504,9 +508,25 @@ export class ElasticsearchService {
 
   getHashKeyQuery(){
     if(this.topicHashKeys.length == 0){
+      console.log(this.topicHashKeys);
       return {
-        regexp: {
-          hash_key : ".*"
+        bool: {
+          should: [
+            {
+              regexp: {
+                hash_key:".*"
+              }
+            },
+            {
+              bool: {
+                must_not: {
+                  exists: {
+                    field: "hash_key"
+                  }
+                }
+              }
+            }
+          ]
         }
       };
     }else{
@@ -516,6 +536,42 @@ export class ElasticsearchService {
         }
       };
     }
+  }
+
+  getDateQuery(){
+    return {
+      bool: {
+        should: [
+          {
+            range: {
+              post_date: {
+                gte: this.startTime,
+                lt: this.endTime,
+                format: "yyyy-MM-dd"
+              }
+            },
+          },
+          {
+            bool: {
+              must_not: {
+                exists: {
+                  field: "post_date"
+                }
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  getKeywordQuery(){
+    return {
+      multi_match: {
+        query: this.keyword,
+        fields: ["post_title", "file_extracted_content", "post_body"],
+      },
+    };
   }
 
   /**
@@ -811,3 +867,4 @@ export class ElasticsearchService {
   }
 
 }
+
