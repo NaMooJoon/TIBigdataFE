@@ -154,7 +154,7 @@ export class SearchBarComponent implements OnInit {
    * @description set search configuration and navigate to search result page.
    */
   async search(): Promise<void> {
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
     this.elasticsearchService.setSearchStatus(false);
     this.elasticsearchService.searchKeyword(this.searchKeyword);
     this.elasticsearchService.setCurrentSearchingPage(1);

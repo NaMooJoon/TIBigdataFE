@@ -246,10 +246,10 @@ export class ElasticsearchService {
   }
 
   countByFilter(): Promise<any> {
+
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
-      filterPath: this.esQueryModel.getFilterPath(),
-      body: this.esQueryModel.getSearchDocCount(),
+      body: this.getSearchFilterQuery(),
     });
   }
 
@@ -389,7 +389,7 @@ export class ElasticsearchService {
       this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
-      // this.countByFilterComplete();
+      this.countByFilterComplete();
     } else if (searchMode === SearchMode.DICTIONARY) {
       this.searchByDictionaryComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
@@ -434,7 +434,7 @@ export class ElasticsearchService {
           ],
         },
       },
-      post_filter: this.getKeywordOption(),
+      // post_filter: this.getKeywordOption(),
     };
   }
 
