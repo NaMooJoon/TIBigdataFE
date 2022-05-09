@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import { CSVDownloadService } from "src/app/core/services/csv-download-service/csv-download.service";
 
 @Component({
   selector: "app-preprocessing",
@@ -19,13 +20,18 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   private _isStopwordEmpty : boolean;
 
   private _userProfile : any;
+  private _dictData : any;
+
   // private _uploadedDict: Object;
   // private _previewPreprocessed: boolean;
+
+  private _dictType : string;
 
   constructor(
     _middlewareService : AnalysisOnMiddlewareService,
     _userSavedDocumentService : UserSavedDocumentService,
     private authService : AuthenticationService,
+    private csvDownload : CSVDownloadService,
   ){
     super(_middlewareService, _userSavedDocumentService); //Analysis Component로부터 상속
     this.userProfile = this.authService.getCurrentUser();
@@ -249,10 +255,9 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
       })
     }
 
-    let res = await this.middlewareService.postDataToFEDB('/textMining/findDict', data);
-    //let res = await this.middlewareService.postDataToFEDB('/textMining/uploadDict', data);
-    console.log(res);
-    this.showDictData(dictType, res);    
+    this.dictData = await this.middlewareService.postDataToFEDB('/textMining/findDict', data);
+    this.dictType = dictType;
+    this.showDictData(dictType, this.dictData);    
   }
   
   showDictData( dictType: string, data : any ){
@@ -350,8 +355,8 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     document.getElementById("download-dict").style.float='right';
   }
 
-  downloadDict(){
-    console.log("hello");
+  downloadDict() {
+    this.csvDownload.downloadCSV_dict(this.dictType, this.dictData);
   }
 
   public get preprocessedData(){
@@ -367,6 +372,20 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   }
   public set userProfile(value : any){
     this._userProfile = value;
+  }
+
+  public get dictData() : any{
+    return this._dictData;
+  }
+  public set dictData(value : any){
+    this._dictData = value;
+  }
+
+  public get dictType() : string{
+    return this._dictType;
+  }
+  public set dictType(value : string){
+    this._dictType = value;
   }
 
   public get isSynonymEmpty() : boolean{
