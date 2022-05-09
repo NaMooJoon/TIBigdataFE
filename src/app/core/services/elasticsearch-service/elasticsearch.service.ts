@@ -413,28 +413,31 @@ export class ElasticsearchService {
       from: startIndex,
       size: docSize,
       filterPath: this.esQueryModel.getFilterPath(),
-
-      body: {
-        query: {
-          bool: {
-            must: [
-              //hashKey option
-              this.getHashKeyQuery(),
-              //Inst option
-              this.getInstQuery(),
-              //keyword option
-              this.getKeywordQuery(),
-              //date option
-              this.getDateQuery()
-            ],
-          },
-        },
-        post_filter: this.getKeywordOption(),
-      },
-
+      body: this.getSearchFilterQuery(),
       _source: this.esQueryModel.getSearchSource(),
     });
   }
+
+  getSearchFilterQuery(){
+    return {
+      query: {
+        bool: {
+          must: [
+            //hashKey option
+            this.getHashKeyQuery(),
+            //Inst option
+            this.getInstQuery(),
+            //keyword option
+            this.getKeywordQuery(),
+            //date option
+            this.getDateQuery()
+          ],
+        },
+      },
+      post_filter: this.getKeywordOption(),
+    };
+  }
+
 
   getKeywordOption(){
     if(this.mustKeyword == "") {
@@ -473,30 +476,12 @@ export class ElasticsearchService {
   }
 
   getInstQuery(){
-    console.log("selectedInst : "+this.selectedInst);
     if(this.selectedInst == "" || this.selectedInst == null){
-      console.log("selectedInst In : "+this.selectedInst);
       return {
-        bool: {
-          should: [
-            {
-              regexp: {
-                published_institution:".*"
-              }
-            },
-            {
-              bool: {
-                must_not: {
-                  exists: {
-                    field: "published_institution"
-                  }
-                }
-              }
-            }
-          ]
+        regexp: {
+          published_institution : ".*"
         }
       };
-
     }else{
       return {
         match_phrase: {
@@ -508,25 +493,9 @@ export class ElasticsearchService {
 
   getHashKeyQuery(){
     if(this.topicHashKeys.length == 0){
-      console.log(this.topicHashKeys);
       return {
-        bool: {
-          should: [
-            {
-              regexp: {
-                hash_key:".*"
-              }
-            },
-            {
-              bool: {
-                must_not: {
-                  exists: {
-                    field: "hash_key"
-                  }
-                }
-              }
-            }
-          ]
+        regexp: {
+          hash_key : ".*"
         }
       };
     }else{
