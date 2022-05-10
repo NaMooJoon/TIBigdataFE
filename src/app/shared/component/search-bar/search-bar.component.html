@@ -33,7 +33,9 @@
         alt="filter-reset"
       />
     </div>
-    <button [ngStyle]="selectedStyleObject(isDateSelected)" type="button">
+    <button [ngStyle]="selectedStyleObject(isDateSelected)"
+            (click)="selectDate($event)"
+            type="button">
       {{ selectedDate |translate}}
     </button>
     <div uk-dropdown="pos: bottom-justify">
