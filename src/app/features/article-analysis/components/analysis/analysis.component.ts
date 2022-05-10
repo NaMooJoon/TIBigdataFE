@@ -902,13 +902,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       d3.selectAll(".dot")
         .transition()
         .duration(200)
-        .style("fill", "lightgrey")
+        .style("fill", "#FEE2C5")
         .attr("r", 3)
 
       d3.selectAll(".type" + d.id)
         .transition()
         .duration(200)
-        .style("fill", "red")
+        .style("fill", "#F66B0E")
         .attr("r", 7)
     }
 
@@ -917,7 +917,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       d3.selectAll(".dot")
         .transition()
         .duration(200)
-        .style("fill", "lightgrey")
+        .style("fill", "#7FB5FF")
         .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
 
       d3.selectAll(".dottext")
@@ -931,7 +931,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 					.append("line")
             .style("stroke-width", function(d){ return d['weight']/100; })
             .attr("class", "link")
-            .style("stroke", "#aaa")
+            .style("stroke", "#C4DDFF")
 
 		//Add nodes to SVG
 		var node = svgElement.selectAll(".node")
@@ -950,7 +950,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 		//Add circles to each node
 		var circle = node.append("circle")
       .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
-      .attr("fill", function(d){ return color(d['id']); })
+      .attr("fill", "#7FB5FF")
+      // .attr("fill", function(d){ return color(d['id']); })
       .attr("class", function (d) { return "dot type" + d['id']} )
       .on("mouseover", highlight)
       .on("mouseout", doNotHighlight )
