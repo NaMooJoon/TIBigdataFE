@@ -14,6 +14,7 @@ export class ElasticSearchQueryModel {
     "post_body",
     "file_download_url",
     "hash_key",
+    "doc_type"
   ];
   private searchField: string[] = [
     "post_title",
