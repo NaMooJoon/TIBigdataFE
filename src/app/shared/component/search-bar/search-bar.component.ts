@@ -6,6 +6,7 @@ import { AnalysisDatabaseService } from "src/app/core/services/analysis-database
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { TranslateService } from '@ngx-translate/core';
+// import { SearchResultFilterComponent } from '../../../features/search-result/components/search-result-filter/search-result-filter.component';
 
 @Component({
   selector: "app-search-bar",
@@ -71,6 +72,7 @@ export class SearchBarComponent implements OnInit {
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
     private analysisDatabaseService: AnalysisDatabaseService,
+    // private searchResultFilterComponent: SearchResultFilterComponent,
   ) {
     this.searchStatusChange$.subscribe((status) => {
       if (status === true) this.setRelatedKeywords();
@@ -154,7 +156,7 @@ export class SearchBarComponent implements OnInit {
    * @description set search configuration and navigate to search result page.
    */
   async search(): Promise<void> {
-    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
     this.elasticsearchService.setSearchStatus(false);
     this.elasticsearchService.searchKeyword(this.searchKeyword);
     this.elasticsearchService.setCurrentSearchingPage(1);
@@ -176,7 +178,6 @@ export class SearchBarComponent implements OnInit {
     } else {
       this.isMain = true;
     }
-    // console.log("Searchbar Main : ",this.isMain);
   }
 
   /**
@@ -290,6 +291,7 @@ export class SearchBarComponent implements OnInit {
     return this._selectedDate;
   }
   public set selectedDate(value: string) {
+
     this._selectedDate = value;
   }
   public get searchKeyword(): string {
@@ -314,11 +316,12 @@ export class SearchBarComponent implements OnInit {
   }
 
   selectInst(inst: { key: string; doc_num: number }) {
-    this.isInstSelected = true;
-    this.selectedInst = inst.key;
-    this.elasticsearchService.setSearchMode(SearchMode.INST);
-    this.elasticsearchService.setSelectedInst(inst.key);
-    this.elasticsearchService.triggerSearch(1);
+    // this.searchResultFilterComponent.selectInst(inst);
   }
+
+  async selectDate(e) {
+    // await this.searchResultFilterComponent.selectDate(e);
+  }
+
 
 }

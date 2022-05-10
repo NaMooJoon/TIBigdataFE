@@ -6,7 +6,6 @@ import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import { AppComponent } from '../../../features/app.component';
 import { ArticleLibraryComponent } from '../../../features/article-library/components/article-library-root/article-library.component';
-import {SearchBarComponent} from '../../../shared/component/search-bar/search-bar.component';
 
 @Component({
   selector: "app-nav",
@@ -35,7 +34,6 @@ export class NavbarComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private appcomponent: AppComponent,
     private articleLibrary: ArticleLibraryComponent,
-    private searchBarComponent: SearchBarComponent,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -110,7 +108,7 @@ export class NavbarComponent implements OnInit {
       }
     }else{
       return {
-        "display" : "block"
+        "display" : "none"
       }
     }
   }
@@ -318,8 +316,13 @@ export class NavbarComponent implements OnInit {
   }
 
   public get isMain(): boolean {
-    return this.searchBarComponent.isMain;
+    let rootUrl = this.router.routerState.snapshot.url;
+
+    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search") || rootUrl.startsWith("/api") || rootUrl.startsWith("/login") || rootUrl.startsWith("/register")){
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }
-
