@@ -43,10 +43,14 @@
     <div
       *ngFor="let articleSource of articleSources; index as i"
       class="article"
+      [ngStyle]="{
+        'background': articleSource['_source']['doc_type'] != 'paper' ? '#f2f2f2' : 'transparent',
+        'border-radius': articleSource['_source']['doc_type'] != 'paper' ? '15px' : '0px'
+      }"
     >
       <label>
         <input
-          *ngIf="isLoggedIn"
+          *ngIf="isLoggedIn && (articleSource['_source']['doc_type'] == 'paper')"
           class="article-checkbox"
           type="checkbox"
           [(checked)]="articleSource.isSelected"
@@ -56,6 +60,7 @@
         />
       </label>
       <div class="article-info-container">
+<!--        <a *ngIf="articleSource['_source']['doc_type'] != 'paper'" href="{{ articleSource['_source']['original_url'] }}" >{{ articleSource['_source']['post_title'] }}</a>-->
         <app-article-details
           class="article-component"
           [article]="articleSource"
@@ -76,7 +81,7 @@
             <a (click)="openSelectedDoc(i, r)">{{ rcmd["title"] }}</a>
           </div>
         </div>
-        <hr *ngIf="i !== pageSize - 1" class="sep" />
+        <hr *ngIf="i !== pageSize - 1" class="sep"/>
       </div>
     </div>
     <input *ngIf="isLoggedIn" type="submit" class="mydoc" value="담기" />

@@ -64,10 +64,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.resetSearchOptions();
       this.setArticleHashKeyList();
       this.setCheckbox();
-
       this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
-
     });
 
     // Check if it is still searching
@@ -267,7 +265,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (isCheckAll) {
       this.toggle_all = true;
       for (let i = 0; i < this.articleSources.length; i++) {
-        checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
+        if(this.articleSources[i]["_source"]["doc_type"] == 'paper')
+          checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
       }
     } else {
       this.toggle_all = false;
@@ -356,6 +355,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   navToDocDetail(): void {
     this.router.navigateByUrl("search/read");
+  }
+
+  docBackgroundStyle(): void {
+
   }
 
   // getters and setters
