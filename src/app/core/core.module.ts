@@ -15,6 +15,8 @@ import { PaginationService } from "./services/pagination-service/pagination.serv
 import { UserSavedDocumentService } from "./services/user-saved-document-service/user-saved-document.service";
 import { WordcloudService } from "./services/wordcloud-service/wordcloud.service";
 import {TranslateModule} from '@ngx-translate/core';
+import { CSVDownloadService } from "./services/csv-download-service/csv-download.service";
+
 
 
 
@@ -37,6 +39,7 @@ export const PROVIDER_ID: string =
     AuthenticationService,
     TokenInterceptorService,
     ArticleService,
+    CSVDownloadService,
     AuthGuard,
     {
       provide: "SocialAuthServiceConfig",

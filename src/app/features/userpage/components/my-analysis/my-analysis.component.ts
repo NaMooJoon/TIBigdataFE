@@ -7,6 +7,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { AnalysisComponent } from 'src/app/features/article-analysis/components/analysis/analysis.component'
 import { ModalService } from './modal/modal.service';
 import * as d3 from 'd3';
+import { CSVDownloadService } from 'src/app/core/services/csv-download-service/csv-download.service';
 
 @Component({
   selector: 'app-my-analysis',
@@ -34,13 +35,15 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   private _option2 : boolean = false;
   private _option3 : boolean = false;
   
+  private _activity : string; 
   
   constructor(
     _middlewareService : AnalysisOnMiddlewareService,
     _userSavedDocumentService : UserSavedDocumentService,
     private authService : AuthenticationService,
     private formBuilder : FormBuilder,
-    private modalService : ModalService
+    private modalService : ModalService,
+    private csvDownloadService : CSVDownloadService
   ){
     super(_middlewareService, _userSavedDocumentService); //Analysis Component로부터 상속
     this.userProfile = this.authService.getCurrentUser();
@@ -119,6 +122,7 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   //show detail
   async openModal(chart: any){
     this.clearResult();
+    this.activity = chart.activity;
     this.chartData = await this.getChartData(chart);
     if(!this.chartData){
       alert("데이터 로딩 실패");
@@ -310,24 +314,25 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
     return result;
   }
   
-  selectedNum : number = 0;
   async deleteSelectedCharts() : Promise<void>{
-    if(this.form.value["checkArray"].length == 0){
+    let frmArray = this.form.get("checkArray") as FormArray;
+    if(frmArray.value.length == 0){
       alert("삭제할 차트가 없습니다! 삭제할 차트를 선택해주세요.")
     }else{
-      this.selectedNum = this.form.value["checkArray"].length - this.selectedNum;
-      let deleteConfirm = confirm("총 " + this.selectedNum + "개를 삭제하시겠습니까? ")
+      let deleteConfirm = confirm("총 " + frmArray.value.length + "개를 삭제하시겠습니까? ")
       if(deleteConfirm){
-        for(let i in this.form.value["checkArray"]){
+        for(let i in frmArray.value){
           let data = JSON.stringify({
             'userEmail' : this.userProfile.email,
-            'analysisDate': this.form.value["checkArray"][i]
+            'analysisDate': frmArray.value[i]
           });
-          await this.middlewareService.postDataToFEDB('/textMining/deleteCharts',data); 
+          await this.middlewareService.postDataToFEDB('/textMining/deleteCharts',data);
+          frmArray.clear(); 
         }
-      }
+      } else{
+        frmArray.clear();
+      } 
     this.getCharts(this.keyword, this.savedDate);
-    this.form.value["checkArray"].clear;
    }
   }
 
@@ -371,6 +376,29 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
         });
       }
     }
+  }
+
+  downloadCSV(){
+    let data : any;
+    console.log(this.activity);
+    console.log(this.chartData);
+    if(this.activity == 'count'){
+      data = this.chartData.result_graph;
+    }
+    else if(this.activity == 'tfidf'){
+      data = this.chartData.result_graph;
+    }
+    else if(this.activity == 'network'){
+      data = this.chartData.resultGraphJson.nodes;
+    }
+    else if(this.activity == 'kmeans'){
+      data = this.chartData.resultPCAList;
+    }
+    else if(this.activity == 'word2vec'){
+      data = this.chartData.result_graph;
+    }
+
+    this.csvDownloadService.downloadCSV_analysis(data, this.activity);
   }
 
   public get charts() : any{
@@ -462,5 +490,12 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   }
   public set option3(value: boolean){
     this._option3 = value;
+  }
+
+  public get activity(): string {
+    return this._activity;
+  }
+  public set activity(value: string){
+    this._activity = value;
   }
 }
