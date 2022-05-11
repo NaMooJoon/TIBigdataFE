@@ -578,7 +578,10 @@ export class ElasticsearchService {
       body: {
         size: 0,
         aggs: {
-          count: { terms: { field: "published_institution.keyword" } },
+          count: { terms: {
+            field: "published_institution.keyword",
+              size: 20
+          } },
         },
         query: {
           multi_match: {
@@ -600,7 +603,10 @@ export class ElasticsearchService {
       body: {
         size: 0,
         aggs: {
-          count: { terms: { field: "published_institution.keyword" } },
+          count: { terms: {
+            field: "published_institution.keyword",
+            size: 20
+          } },
         },
       },
     });
