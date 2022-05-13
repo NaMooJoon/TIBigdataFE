@@ -59,34 +59,123 @@ export abstract class abstractAnalysis{
      * @description get the data to preview from middleware and show in a result table
      */
 
-    async previewData(selectedKeyword:string, selectedSavedDate:string){
+     async previewData(selectedKeyword:string, selectedSavedDate:string){
         let data = JSON.stringify({
             'userEmail': this.email,
             'keyword': selectedKeyword,
             'savedDate': selectedSavedDate,
           });
 
-        this.LoadingWithMask();
+        //this.LoadingWithMask();
 
         let result = await this.middlewareService.postDataToFEDB('/textmining/getPreprocessedData', data);
-        console.log("preview", result);
-
         this.clearResult();
+        let titles = Object.values(result.titleList);
+        let tokens = Object.values(result.tokenList);
+        let tokenData = new Array;
+       
+        let tmp = new Array();
+        let res = new Array();
+
+        for(let i in tokens){
+            tokenData[i] = this.cleanArray(tokens[i]);
+            tmp[i] = new Array();
+            res[i] = new Array();
+        }
+
+        for(let i in tokenData){
+            for(let j=0; j<tokenData[i].length; j++){
+                tmp[i] = tmp[i].concat(tokenData[i][j]);
+            }
+        }
+
+        for(let i in tokenData){
+            if(tmp[i].length != 0){
+                for(let j=0; j<10; j++){
+                    res[i] = res[i].concat(tmp[i][j]);
+                }
+            }
+        }
+        console.log(res);
+        result.tokenList = res;
+        console.log(result);
         this.drawPreTable(result, "preview");
+
 
         this.isDataPreprocessed = false;
         this.isDataPreview =true;
         this.closeLoadingWithMask();
     }
 
+    cleanArray( tmp: any){
+        let newArray= new Array();
+        for(let i=0; i<tmp.length; i++){
+            if(tmp[i].length != 0 )
+                newArray.push(tmp[i]);
+        }
+        return newArray;
+    }
+
     /**
      * @description get the data to preview from middleware and make csv file and give a user as a file download method
      */
 
-    downloadData(selectedKeyword:string, selectedSavedDate:string){
+    async downloadData(selectedKeyword:string, selectedSavedDate:string) : Promise<void> {
+        let data = JSON.stringify({
+            'userEmail': this.email,
+            'keyword': selectedKeyword,
+            'savedDate': selectedSavedDate,
+          });
 
+        //this.LoadingWithMask();
+
+        let result = await this.middlewareService.postDataToFEDB('/textmining/getPreprocessedData', data);
+        let titles = Object.values(result.titleList);
+        let tokens = Object.values(result.tokenList);
+        let tokenData = new Array;
+       
+        let tmp = new Array();
+        let res = new Array();
+
+        for(let i in tokens){
+            tokenData[i] = this.cleanArray(tokens[i]);
+        }
+
+        for(let i in tokenData){
+            tmp[i] = new Array();
+            for(let j=0; j<tokenData[i].length; j++){
+                tmp[i] = tmp[i].concat(tokenData[i][j]);
+            }
+        }
+
+        for(let i in tokenData){
+            res[i] = new Array();
+            if(tmp[i].length != 0){
+                for(let j=0; j<100; j++){
+                    res[i] = res[i].concat(tmp[i][j]);
+                }
+            }
+        }
+        let str ='';
+        for(let i in titles){
+            let line = '';
+            line += titles[i];
+            if(res[i].length != 0){
+                for(let j=0; j<50; j++){
+                    line += ',' + res[i][j];
+                }
+            }
+            str += line + '\r\n';
+        }
+        console.log(str);
+
+        const link = document.createElement("a");
+        const fileName = 'pre' + '.csv';
+        const blob = new Blob(["\uFEFF"+str], { type: 'text/csv; charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        $(link).attr({"download" : fileName, "href": url});
+        link.click();         
     }
-
 
     /**
      * @description draw a preprocessing result table using d3 library.
