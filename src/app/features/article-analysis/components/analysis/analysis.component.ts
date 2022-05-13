@@ -100,7 +100,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       this.drawBarChart(JSON.stringify(this.analysisedData.result_graph));
     }
     else if(activity=='network' || activity=='ngrams'){
-      if(activity=='network') this.drawTable(activity, JSON.stringify(res.result_table));
+      if(activity=='network') {this.drawTable(activity, JSON.stringify(res.result_table));}
       this.drawNetworkChart(JSON.stringify(this.analysisedData.result_graph));
     }
     else if(activity=='kmeans'){
@@ -347,8 +347,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       }>= JSON.parse(data_str);
 
     let margin = ({top: 10, right: 30, bottom: 30, left: 60});
-    let  width = 1000 - margin.left - margin.right;
-    let height = 1000 - margin.top - margin.bottom;
+    let  width = 750 - margin.left - margin.right;
+    let height = 750 - margin.top - margin.bottom;
 
 
     function zoom(svg) {
@@ -520,8 +520,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       }>= JSON.parse(data_str);
 
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
-      width = 1000 - margin.left - margin.right,
-      height = 1000 - margin.top - margin.bottom;
+      width = 750 - margin.left - margin.right,
+      height = 750 - margin.top - margin.bottom;
 
 
     function zoom(svg) {
@@ -932,6 +932,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
             .style("stroke-width", function(d){ return d['weight']/100; })
             .attr("class", "link")
             .style("stroke", "#C4DDFF")
+          // .call(d3.drag()
+          //   .on("start", function(d){d3.select(this).raise().classed("active", true);})
+          //   .on("drag", function(d) {d3.select(this).attr("cx", d.x = e.x).attr("cy", d.y = e.y);})
+          //   .on("end",  function(d) {d3.select(this).classed("active", false);})
+          //   );
 
 		//Add nodes to SVG
 		var node = svgElement.selectAll(".node")
