@@ -18,10 +18,18 @@ export class ArticleCardViewComponent implements OnInit {
   ) { }
   private keywords: any[] = [];
   private docHashKey: string;
+  private isDoc: string;
+  private originalUrl: string;
 
   ngOnInit() {
     this.docHashKey = this.article._source.hash_key;
     this.article = this.article._source;
+    if(this.article.doc_type == "paper"){
+      this.isDoc = this.article.doc_type
+    }else{
+      this.isDoc = "news"
+    }
+    this.originalUrl = this.article.original_url
     this.loadTopKeywords();
     if (this.article.file_download_url === undefined) {
       this.article.file_download_url = this.article.published_institution_url;
@@ -33,7 +41,11 @@ export class ArticleCardViewComponent implements OnInit {
    */
   openDocDetail(): void {
     this.documentService.setSelectedHashKey(this.docHashKey);
-    this.navToDocDetail();
+    if(this.isDoc == "paper"){
+      this.navToDocDetail();
+    }else{
+      window.open(this.originalUrl)
+    }
   }
 
   /**

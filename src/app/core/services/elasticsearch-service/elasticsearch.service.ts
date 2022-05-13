@@ -422,19 +422,19 @@ export class ElasticsearchService {
     return {
       query: {
         bool: {
-          must: [
-            //hashKey option
-            this.getHashKeyQuery(),
-            //Inst option
-            this.getInstQuery(),
-            //keyword option
-            this.getKeywordQuery(),
-            //date option
-            this.getDateQuery()
-          ],
-        },
+          must : this.getKeywordQuery(),
+          filter: {
+            bool: {
+              must: [
+                this.getHashKeyQuery(),
+                this.getInstQuery(),
+                this.getDateQuery(),
+                this.getKeywordOption(),
+              ]
+            }
+          }
+        }
       },
-      // post_filter: this.getKeywordOption(),
     };
   }
 
@@ -578,7 +578,10 @@ export class ElasticsearchService {
       body: {
         size: 0,
         aggs: {
-          count: { terms: { field: "published_institution.keyword" } },
+          count: { terms: {
+            field: "published_institution.keyword",
+              size: 20
+          } },
         },
         query: {
           multi_match: {
@@ -600,7 +603,10 @@ export class ElasticsearchService {
       body: {
         size: 0,
         aggs: {
-          count: { terms: { field: "published_institution.keyword" } },
+          count: { terms: {
+            field: "published_institution.keyword",
+            size: 20
+          } },
         },
       },
     });
