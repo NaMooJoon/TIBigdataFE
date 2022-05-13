@@ -77,30 +77,27 @@ async function uploadDict(req, res) {
   async function getPreprocessedData(req, res) {
     let userEmail = req.body.userEmail;
     let savedDate = req.body.savedDate;
-  
+    
     preprocessing
       .findOne(
-        { $and: [ { userEmail: userEmail }, {'savedDate' : new Date(savedDate).toISOString() } ] },
-        // sort=[('processedDate', 1)]
-        )
+        { $and : [ { 'userEmail' : userEmail }, { 'savedDate' : savedDate }] }
+      )
+      .limit(1)
+      .sort({ $natural: -1})
       .then((result) => {
-        // console.log(result);
-        // for(let i=0;i<result.tokenList.length;i++)
-        // // let i=0;
-        //   result.tokenList[i] = result.tokenList[i].slice(0,10);
-        result.tokenList = result.tokenList[0].slice(0,100);
-        // console.log(result);
+        //for(let i=0;i<result.tokenList.length;i++)
+          //result.tokenList[i] = result.tokenList[i].slice(0,10);
         if (result)
           return res
             .status(200)
             .json(
-              new Res(true, "successfully recieved preprocessed data", result)
+              new Res(true, "successfully loaded preprocessed data", result)
             );
         else{
           return res
-          .status(200)
+          .status(400)
           .json(
-            new Res(false, "no preprocessed data", [])
+            new Res(false, "no saved docs", [])
           );
         }
       })
@@ -110,6 +107,40 @@ async function uploadDict(req, res) {
           .status(400)
           .json(new Res(false, "successfully saved doc HashKeys", null));
       });
+      
+    /*
+    preprocessing
+      .findOne(
+        { $and: [ { 'userEmail': userEmail }, {'savedDate' : new Date(savedDate).toISOString() } ] },
+        // sort=[('processedDate', 1)]
+        )
+      .then((result) => {
+        // console.log(result);
+        // for(let i=0;i<result.tokenList.length;i++)
+        // // let i=0;
+        //   result.tokenList[i] = result.tokenList[i].slice(0,10);
+        result.tokenList = result.tokenList[0].slice(0,10);
+        if (result)
+          return res
+            .status(200)
+            .json(
+              new Res(true, "successfully saved doc HashKeys", result)
+            );
+        else{
+          return res
+          .status(200)
+          .json(
+            new Res(false, "no saved docs", [])
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        return res
+          .status(400)
+          .json(new Res(false, "successfully saved doc HashKeys", null));
+      });
+    */
   }
 
   async function uploadChart(req, res) {
