@@ -78,7 +78,8 @@
             class="related-docs-link"
             *ngFor="let rcmd of relatedDocs[i]; index as r"
           >
-            <a (click)="openSelectedDoc(i, r)">{{ rcmd["title"] }}</a>
+            <a *ngIf="articleSource['_source']['doc_type'] == 'paper'" (click)="openSelectedDoc(i, r)">{{ rcmd["title"] }}</a>
+            <a *ngIf="articleSource['_source']['doc_type'] != 'paper'" href="{{ articleSource['_source']['original_url'] }}" target='_blank'>{{ rcmd["title"] }}</a>
           </div>
         </div>
         <hr *ngIf="i !== pageSize - 1" class="sep"/>
