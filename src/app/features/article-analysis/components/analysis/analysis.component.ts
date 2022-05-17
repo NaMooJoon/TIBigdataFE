@@ -46,6 +46,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
    */
 
   async runAnalysis(activity:string): Promise<void>{
+    
 
     // Check the options
     if(this.selectedSavedDate==null) return alert('문서를 선택해주세요!');
@@ -99,8 +100,11 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       this.drawTable(activity, JSON.stringify(this.analysisedData.result_graph));
       this.drawBarChart(JSON.stringify(this.analysisedData.result_graph));
     }
-    else if(activity=='network' || activity=='ngrams'){
-      if(activity=='network') {this.drawTable(activity, JSON.stringify(res.result_table));}
+    else if(activity=='network'){
+      this.drawTable(activity, JSON.stringify(res.result_table));
+      this.drawNetworkChart(JSON.stringify(this.analysisedData.result_graph));
+    }
+    else if(activity=='ngrams'){
       this.drawNetworkChart(JSON.stringify(this.analysisedData.result_graph));
     }
     else if(activity=='kmeans'){
@@ -132,7 +136,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .attr('class','result-pretable')
       .append("table")
       .attr('width','100%')
-      .attr('height','200px')
+      .attr('height','300px')
 
     if(analType=='count'||analType=='tfidf'){
       const th = table.append("tr")
@@ -870,19 +874,27 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   //Extract data from dataset
   var nodes = data.nodes,
     links = data.links;
-	var width = 500 - margin.left - margin.right;
-	var height = 500 - margin.top - margin.bottom;
+	var width = 1000 - margin.left - margin.right;
+	var height = 1000 - margin.top - margin.bottom;
 	//Load Color Scale
 	var color = d3.scaleSequential()
   .domain([0, nodes.length])
   .interpolator(d3.interpolateSinebow)
 
 	//Create an SVG element and append it to the DOM
-	var svgElement = d3.select("figure#network")
+	var svg = d3.select("figure#network")
     .append("svg")
       .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
-    .append("g")
-    .attr("transform","translate("+margin.left+","+margin.top+")");	
+      .call(d3.zoom()
+      //   .extent([[0, 0], [width, height]])
+      //   .scaleExtent([1, 10])
+        .on("zoom", function (e,d) {
+        g.attr("transform", e.transform)
+     }))
+
+  var g = svg.append("g")
+    .attr("transform","translate("+margin.left+","+margin.top+")")
+    
 
 	//Load External Data
 	// d3.json("got_social_graph.json", function(dataset){
@@ -898,7 +910,6 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     
     // Highlight the specie that is hovered
     const highlight = function(e,d){
-
       d3.selectAll(".dot")
         .transition()
         .duration(200)
@@ -924,22 +935,20 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .style("opacity", 1)
     }
 
+    
+
 		//Add links to SVG
-		var link = svgElement.selectAll(".link")
+		var link = g.selectAll(".link")
 					.data(links)
 					.enter()
 					.append("line")
-            .style("stroke-width", function(d){ return d['weight']/100; })
+            .style("stroke-width", function(d){ return d['weight']/100 < 1 ? 1 :(d['weight']/100>5?5:d['weight']); })
             .attr("class", "link")
             .style("stroke", "#C4DDFF")
-          // .call(d3.drag()
-          //   .on("start", function(d){d3.select(this).raise().classed("active", true);})
-          //   .on("drag", function(d) {d3.select(this).attr("cx", d.x = e.x).attr("cy", d.y = e.y);})
-          //   .on("end",  function(d) {d3.select(this).classed("active", false);})
-          //   );
+    
 
 		//Add nodes to SVG
-		var node = svgElement.selectAll(".node")
+		var node = g.selectAll(".node")
 					.data(nodes)
 					.enter()
 					.append("g")
@@ -960,6 +969,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .attr("class", function (d) { return "dot type" + d['id']} )
       .on("mouseover", highlight)
       .on("mouseout", doNotHighlight )
+      
 
 		//This function will be executed for every tick of force layout 
 		force.on("tick", function(){
