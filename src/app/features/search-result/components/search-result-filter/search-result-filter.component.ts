@@ -30,6 +30,8 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _mustKeyword: string;
   private _mustNotKeyword: string;
 
+  private _selectedDoctype: string;
+
 
   public _topics = [
     "정치",
@@ -117,6 +119,9 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedTp = "false";
     this.elasticsearchService.setTopicHashKeys([]);
 
+    this.selectedDoctype = null;
+    this.elasticsearchService.setDoctype(null);
+
     this.ngOnInit();
   }
 
@@ -151,6 +156,18 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
 
   public set selectedInst(value: string) {
     this._selectedInst = value;
+  }
+
+  public get selectedDoctype(): string {
+    return this._selectedDoctype;
+  }
+
+  public set selectedDoctype(value: string) {
+    this._selectedDoctype = value;
+  }
+
+  async selectDoc(e) {
+    this.selectedDoctype = e.target.innerText.toString();
   }
 
   //new
@@ -318,11 +335,24 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       ids.push(e["hash_key"])
     );
 
+    let doctype;
+    switch (this.selectedDoctype){
+      case '문서': {
+        doctype = 'paper'
+        break;
+      }
+      case '기사': {
+        doctype = 'news'
+        break;
+      }
+    }
+    console.log(this.selectedDoctype)
     //set user options
     this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
     this.elasticsearchService.setSelectedInst(this.selectedInst);
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
     this.elasticsearchService.setTopicHashKeys(ids);
+    this.elasticsearchService.setDoctype(doctype);
 
     // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
     // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);

@@ -26,6 +26,19 @@
         />
         </h2>
       </section>
+      <section class="doctype">
+        <h3>{{'문서 종류'|translate}}</h3>
+        <div class="doctype-container">
+          <button
+            (click)="selectDoc($event)"
+            [ngStyle]="selectedStyleObject(selectedDoctype === '문서')"
+          >{{ '문서' }}</button>
+          <button
+            (click)="selectDoc($event)"
+            [ngStyle]="selectedStyleObject(selectedDoctype === '기사')"
+          >{{ '기사' }}</button>
+        </div>
+      </section>
       <section class="keyword-search">
         <h3>{{'search-result.searchWithin'|translate}}</h3>
         <div class="input-container">

@@ -37,6 +37,7 @@ export class ElasticsearchService {
   private mustNotKeyword: string = "";
   private firstChar = "";
   private topicHashKeys : string[] = [];
+  private doctype: string = null;
 
 
   constructor(
@@ -246,7 +247,6 @@ export class ElasticsearchService {
   }
 
   countByFilter(): Promise<any> {
-
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
       body: this.getSearchFilterQuery(),
@@ -430,6 +430,7 @@ export class ElasticsearchService {
                 this.getInstQuery(),
                 this.getDateQuery(),
                 this.getKeywordOption(),
+                this.getDoctypeQuery(),
               ]
             }
           }
@@ -502,6 +503,23 @@ export class ElasticsearchService {
       return {
         terms: {
           hash_key: this.topicHashKeys
+        }
+      };
+    }
+  }
+
+  getDoctypeQuery(){
+    console.log(this.doctype)
+    if(this.doctype == null){
+      return {
+        regexp: {
+          doc_type : ".*"
+        }
+      };
+    }else{
+      return {
+        match: {
+          doc_type: this.doctype
         }
       };
     }
@@ -739,6 +757,10 @@ export class ElasticsearchService {
   setSelectedDate(startTime: string, endTime: string) {
     this.startTime = startTime;
     this.endTime = endTime;
+  }
+
+  setDoctype(doctype: string){
+    this.doctype = doctype;
   }
 
   searchByDateComplete(startIndex?: number) {
