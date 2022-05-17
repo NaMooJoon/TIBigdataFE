@@ -70,7 +70,6 @@ export abstract class abstractAnalysis{
 
         let result = await this.middlewareService.postDataToFEDB('/textmining/getPreprocessedData', data);
         this.clearResult();
-        let titles = Object.values(result.titleList);
         let tokens = Object.values(result.tokenList);
         let tokenData = new Array;
        
@@ -81,26 +80,21 @@ export abstract class abstractAnalysis{
             tokenData[i] = this.cleanArray(tokens[i]);
             tmp[i] = new Array();
             res[i] = new Array();
-        }
-
-        for(let i in tokenData){
             for(let j=0; j<tokenData[i].length; j++){
                 tmp[i] = tmp[i].concat(tokenData[i][j]);
             }
-        }
-
-        for(let i in tokenData){
             if(tmp[i].length != 0){
-                for(let j=0; j<10; j++){
-                    res[i] = res[i].concat(tmp[i][j]);
+                if(tmp[i].length < 10){
+                    for(let j=0; j<tmp[i].length; j++)
+                        res[i] = res[i].concat(tmp[i][j]);
+                }else{
+                    for(let j=0; j<10; j++)
+                        res[i] = res[i].concat(tmp[i][j]);
                 }
             }
         }
-        console.log(res);
         result.tokenList = res;
-        console.log(result);
         this.drawPreTable(result, "preview");
-
 
         this.isDataPreprocessed = false;
         this.isDataPreview =true;
@@ -139,42 +133,40 @@ export abstract class abstractAnalysis{
 
         for(let i in tokens){
             tokenData[i] = this.cleanArray(tokens[i]);
-        }
-
-        for(let i in tokenData){
             tmp[i] = new Array();
+            res[i] = new Array();
             for(let j=0; j<tokenData[i].length; j++){
                 tmp[i] = tmp[i].concat(tokenData[i][j]);
             }
-        }
-
-        for(let i in tokenData){
-            res[i] = new Array();
             if(tmp[i].length != 0){
-                for(let j=0; j<100; j++){
-                    res[i] = res[i].concat(tmp[i][j]);
+                if(tmp[i].length < 50){
+                    for(let j=0; j<tmp[i].length; j++)
+                        res[i] = res[i].concat(tmp[i][j]);
+                }else{
+                    for(let j=0; j<50; j++)
+                        res[i] = res[i].concat(tmp[i][j]);
                 }
             }
         }
+
         let str ='';
         for(let i in titles){
             let line = '';
             line += titles[i];
             if(res[i].length != 0){
-                for(let j=0; j<50; j++){
+                for(let j=0; j<res[i].length; j++)
                     line += ',' + res[i][j];
-                }
             }
             str += line + '\r\n';
         }
         console.log(str);
-
+        
         const link = document.createElement("a");
-        const fileName = 'pre' + '.csv';
+        const fileName = selectedKeyword + '.csv';
         const blob = new Blob(["\uFEFF"+str], { type: 'text/csv; charset=utf-8'});
         const url = URL.createObjectURL(blob);
         $(link).attr({"download" : fileName, "href": url});
-        link.click();         
+        link.click();    
     }
 
     /**
@@ -186,10 +178,9 @@ export abstract class abstractAnalysis{
         const figure = d3.select("figure#pretable")
             // .attr('class','result-pretable');
         if(activity=="preview"){
-            data= dataArray['tokenList'][0];
+            //data= dataArray['tokenList'][0];
 
-            // data = dataArray['tokenList'];
-            // console.log("preview",data);
+            data = dataArray['tokenList'];
         }
         else if(activity=="runProcessing"){
             data = dataArray['tokenList'];
@@ -289,6 +280,7 @@ export abstract class abstractAnalysis{
      * @description clear the result table
      */
     clearResult(){
+        d3.selectAll('.result-pretable').remove();
         d3.selectAll('figure > *').remove();
     }
 
