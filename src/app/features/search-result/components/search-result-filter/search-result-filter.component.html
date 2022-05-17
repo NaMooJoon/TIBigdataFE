@@ -18,12 +18,15 @@
       </div>
       <section>
         <h2>
-          {{'search-result.searchFilter'|translate}}<img
+          {{'search-result.searchFilter'|translate}}
+          <img
           (click)="resetFilters()"
           class="reset-btn"
           src="../../../../../assets/icons/reset-filter.png"
           alt="filter-reset"
-        />
+          type="reset"
+          onclick="document.getElementById('mustKeyword').value = '';document.getElementById('mustNotKeyword').value = ''"
+          />
         </h2>
       </section>
       <section class="doctype">
@@ -44,11 +47,13 @@
         <div class="input-container">
           <div class="text-inputs">
             <input
+              id="mustKeyword"
               type="text"
               placeholder="키워드 포함"
               (change)="mustKeyword($event)"
               />
             <input
+              id="mustNotKeyword"
               type="text"
               (change)="mustNotKeyword($event)"
               placeholder="키워드 제외"
@@ -95,10 +100,12 @@
             (click)="selectDate($event)"
             [ngStyle]="selectedStyleObject(selectedDate === '확인')"
             class = datepicker-btn
+            type="reset"
+            onclick="document.getElementById('startPicker').value = '';document.getElementById('endPicker').value = ''"
           > {{'확인'|translate}} </button>
           </p>
-          <input type="date" value="startDate" (change)="setDatePickerStartDate($event)"/>
-          <input type="date" value="endDate" (change)="setDatePickerEndDate($event)"/>
+          <input id="startPicker" type="date" value="startDate" (change)="setDatePickerStartDate($event)"/>
+          <input id="endPicker"  type="date" value="endDate" (change)="setDatePickerEndDate($event)"/>
         </div>
       </section>
       <section class="inst">
