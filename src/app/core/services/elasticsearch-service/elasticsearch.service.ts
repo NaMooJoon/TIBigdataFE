@@ -31,8 +31,8 @@ export class ElasticsearchService {
   private currentSearchingPage: number = 1;
 
   //new
-  private startTime: string = null;
-  private endTime: string = null;
+  private startTime: string = "0001-01-01";
+  private endTime: string = "9000-12-31";
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
@@ -54,7 +54,7 @@ export class ElasticsearchService {
    * @param keyword
    */
   searchKeyword(keyword: string): void {
-    this.searchMode = SearchMode.KEYWORD;
+    this.searchMode = SearchMode.FILTER;
     this.setKeyword(keyword);
     this.triggerSearch(1);
   }
@@ -202,6 +202,7 @@ export class ElasticsearchService {
    * @param docSize Number of articles to search at one time.
    */
   searchByText(startIndex?: number, docSize?: number): Promise<any> {
+    console.log("trigger 1")
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
 
@@ -386,6 +387,7 @@ export class ElasticsearchService {
       );
       this.countByInstComplete();
     } else if (searchMode === SearchMode.FILTER) {
+      console.log("trigger 4")
       this.searchBySearchFilterComplete(
         (selectedPageNum - 1) * this.getNumDocsPerPage()
       );
@@ -398,10 +400,21 @@ export class ElasticsearchService {
   }
 
   searchBySearchFilterComplete(startIndex?: number) {
+    if (startIndex < 0) startIndex = 0;
     this.saveSearchResult(this.triggerSearchFilter(startIndex));
   }
 
   triggerSearchFilter(selectedPageNum: number): void {
+    console.log("--------es---------")
+    console.log(this.startTime)
+    console.log(this.endTime)
+    console.log(this.selectedInst)
+    console.log(this.hashKeys.length)
+    console.log(this.mustKeyword)
+    console.log(this.mustNotKeyword)
+    console.log(this.keyword)
+    console.log("--------es---------")
+
     let startIndex = selectedPageNum - 1;
     let docSize = this.numDocsPerPage;
 

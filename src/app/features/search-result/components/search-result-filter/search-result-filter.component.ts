@@ -25,13 +25,12 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _selectedDate: string;
 
   private _selectedTp: string;
-  private _startDate: string;
-  private _endDate: string;
+  private _startDate: string = "0001-01-01";
+  private _endDate: string = "9000-12-31";
   private _mustKeyword: string;
   private _mustNotKeyword: string;
 
   private _selectedDoctype: string;
-
 
   public _topics = [
     "정치",
@@ -170,7 +169,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.selectedDoctype = e.target.innerText.toString();
   }
 
-  //new
   async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();
     let startTime: Date;

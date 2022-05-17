@@ -166,6 +166,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     );
     this.setPageInfo(pageInfo);
 
+    this.searchPaperResultNum = "0";
+    this.searchNewsResultNum = "0";
     let res = this.elasticsearchService.getDoctypeWithTextSearch();
     res.then((count)=>{
       for(let name of count["aggregations"]["count"]["buckets"]){
