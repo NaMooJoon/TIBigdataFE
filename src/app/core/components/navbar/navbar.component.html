@@ -11,11 +11,11 @@
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
             <a i18n="library" (click)="navigateLibrary()">{{ 'navbar.library' | translate }}</a>
           </li>
-          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.analysis')">
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis-menu')">
             <a (click)="navigateSpecials()">{{'navbar.analysis' | translate}}</a>
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.community')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
             class="community-menu"
           >
 <!--common-->
@@ -47,7 +47,7 @@
 
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'navbar.about')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
             class="about-menu"
           >
             <!--common-->
@@ -120,9 +120,6 @@
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-info')"
                 (click)="toMemberInfo()">{{'navbar.privacy'|translate}}</a></li>
-              <li><a
-                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
-                (click)="toOpenAPI()">Open API</a></li>
               <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
                 (click)="toSecession()">{{'navbar.rmAccount'|translate}}</a></li>

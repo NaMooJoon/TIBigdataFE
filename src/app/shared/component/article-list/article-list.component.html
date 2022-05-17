@@ -1,7 +1,11 @@
 <div class="result-header">
   <!-- Show number of result -->
   <div *ngIf="isResultFound && isMainSearch" class="result-count">
-    {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}
+    <a>"{{ searchKeyword }}"에 대한 검색 결과는 </a>
+    <a *ngIf="this.searchPaperResultNum != '0'" >문서 {{searchPaperResultNum}}건 </a>
+    <a *ngIf="this.searchNewsResultNum != '0'" >기사 {{searchNewsResultNum}}건 </a>
+    <a>입니다.</a>
+<!--    {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}-->
   </div>
 
   <div *ngIf="isResultFound" class="dropdown-menus">

@@ -118,7 +118,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
 //     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
     var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
-    console.log(dataPerMonth);
+    // console.log(dataPerMonth);
 //     var jan = {date: "2022.01", freq: 18};
 //     var feb = {date: "2022.02", freq: 30};
 //     var mar = {date: "2022.03", freq: 55};

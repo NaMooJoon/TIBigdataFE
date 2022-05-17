@@ -258,6 +258,7 @@ export class NavbarComponent implements OnInit {
   // }
 
   getSelectedMenu(): string {
+    console.log(this.selectedMenu)
     return this.selectedMenu;
   }
 
@@ -318,7 +319,7 @@ export class NavbarComponent implements OnInit {
   public get isMain(): boolean {
     let rootUrl = this.router.routerState.snapshot.url;
 
-    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search") || rootUrl.startsWith("/api") || rootUrl.startsWith("/login") || rootUrl.startsWith("/register")){
+    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search") || rootUrl.startsWith("/api") || rootUrl.startsWith("/login") || rootUrl.startsWith("/register") || rootUrl.startsWith("/openapi")){
       return false;
     } else {
       return true;

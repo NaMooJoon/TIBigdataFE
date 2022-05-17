@@ -5,5 +5,5 @@ export enum SearchMode {
   INST,
   FILTER,
   TOPIC,
-  DICTIONARY
+  LIBRARY
 }
