@@ -61,7 +61,7 @@ async function uploadDict(req, res) {
         return res
           .status(200)
           .json(
-            new Res(false, "no saved dict", null)
+            new Res(true, "no saved dict", null)
           );
       }
     }).catch((err) => {
