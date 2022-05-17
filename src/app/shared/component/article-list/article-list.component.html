@@ -44,13 +44,13 @@
       *ngFor="let articleSource of articleSources; index as i"
       class="article"
       [ngStyle]="{
-        'background': articleSource['_source']['doc_type'] != 'paper' ? '#f2f2f2' : 'transparent',
-        'border-radius': articleSource['_source']['doc_type'] != 'paper' ? '15px' : '0px'
+        'background': articleSource['_source']['doc_type'] == 'news' ? '#f2f2f2' : 'transparent',
+        'border-radius': articleSource['_source']['doc_type'] == 'news' ? '15px' : '0px'
       }"
     >
       <label>
         <input
-          *ngIf="isLoggedIn && (articleSource['_source']['doc_type'] == 'paper')"
+          *ngIf="isLoggedIn"
           class="article-checkbox"
           type="checkbox"
           [(checked)]="articleSource.isSelected"
@@ -60,7 +60,6 @@
         />
       </label>
       <div class="article-info-container">
-<!--        <a *ngIf="articleSource['_source']['doc_type'] != 'paper'" href="{{ articleSource['_source']['original_url'] }}" >{{ articleSource['_source']['post_title'] }}</a>-->
         <app-article-details
           class="article-component"
           [article]="articleSource"
@@ -79,7 +78,7 @@
             *ngFor="let rcmd of relatedDocs[i]; index as r"
           >
             <a *ngIf="articleSource['_source']['doc_type'] == 'paper'" (click)="openSelectedDoc(i, r)">{{ rcmd["title"] }}</a>
-            <a *ngIf="articleSource['_source']['doc_type'] != 'paper'" href="{{ articleSource['_source']['original_url'] }}" target='_blank'>{{ rcmd["title"] }}</a>
+            <a *ngIf="articleSource['_source']['doc_type'] == 'news'" href="{{ articleSource['_source']['original_url'] }}" target='_blank'>{{ rcmd["title"] }}</a>
           </div>
         </div>
         <hr *ngIf="i !== pageSize - 1" class="sep"/>

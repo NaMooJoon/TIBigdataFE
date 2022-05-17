@@ -265,8 +265,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (isCheckAll) {
       this.toggle_all = true;
       for (let i = 0; i < this.articleSources.length; i++) {
-        if(this.articleSources[i]["_source"]["doc_type"] == 'paper')
-          checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
+        checkArray.push(new FormControl(this.articleSources[i]["_source"]["hash_key"]));
       }
     } else {
       this.toggle_all = false;
