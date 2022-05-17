@@ -509,7 +509,6 @@ export class ElasticsearchService {
   }
 
   getDoctypeQuery(){
-    console.log(this.doctype)
     if(this.doctype == null){
       return {
         regexp: {
@@ -606,6 +605,36 @@ export class ElasticsearchService {
             query: this.keyword,
             fields: ["post_title", "file_extracted_content", "post_body"],
           },
+        },
+      },
+    });
+  }
+
+  async getDoctypeWithTextSearch(): Promise<any> {
+    return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      body: {
+        aggs: {
+          count: {
+            terms: {
+              field: "doc_type.keyword",
+            } },
+        },
+        query: {
+          bool: {
+            must : this.getKeywordQuery(),
+            filter: {
+              bool: {
+                must: [
+                  this.getHashKeyQuery(),
+                  this.getInstQuery(),
+                  this.getDateQuery(),
+                  this.getKeywordOption(),
+                  this.getDoctypeQuery(),
+                ]
+              }
+            }
+          }
         },
       },
     });
@@ -761,6 +790,10 @@ export class ElasticsearchService {
 
   setDoctype(doctype: string){
     this.doctype = doctype;
+  }
+
+  getDoctype(): string{
+    return this.doctype;
   }
 
   searchByDateComplete(startIndex?: number) {

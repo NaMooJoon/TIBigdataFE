@@ -43,6 +43,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   private _totalPages: number = 1;
   private _totalDocs: number;
   private _pageSize: number = 10;
+  private _searchPaperResultNum: string = "0";
+  private _searchNewsResultNum: string = "0";
 
   private _checkArray: FormArray = null;
   private _toggle_all : boolean = false;
@@ -67,7 +69,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
     });
-
     // Check if it is still searching
     this.searchStatusChange$.subscribe((status) => {
       this.isSearchDone = status;
@@ -164,6 +165,17 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.pageSize
     );
     this.setPageInfo(pageInfo);
+
+    let res = this.elasticsearchService.getDoctypeWithTextSearch();
+    res.then((count)=>{
+      for(let name of count["aggregations"]["count"]["buckets"]){
+        if(name.key === 'paper') {
+          this.searchPaperResultNum = name.doc_count;
+        }else if(name.key === 'news'){
+          this.searchNewsResultNum = name.doc_count;
+        }
+      }
+    })
   }
 
   /**
@@ -356,10 +368,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("search/read");
   }
 
-  docBackgroundStyle(): void {
-
-  }
-
   // getters and setters
   public get form(): FormGroup {
     return this._form;
@@ -447,6 +455,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   public set searchResultNum(value: string) {
     this._searchResultNum = value;
   }
+
+  public get searchPaperResultNum(): string {
+    return this._searchPaperResultNum;
+  }
+  public set searchPaperResultNum(value: string) {
+    this._searchPaperResultNum = value;
+  }
+  public get searchNewsResultNum(): string {
+    return this._searchNewsResultNum;
+  }
+  public set searchNewsResultNum(value: string) {
+    this._searchNewsResultNum = value;
+  }
   public get searchKeyword(): string {
     return this._searchKeyword;
   }
@@ -501,5 +522,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
   public set toggle_all(value: boolean) {
     this._toggle_all = value;
+  }
+  public get selectedDoctype(): string {
+    return this.elasticsearchService.getDoctype();
   }
 }

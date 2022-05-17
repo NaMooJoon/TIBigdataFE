@@ -346,7 +346,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    console.log(this.selectedDoctype)
     //set user options
     this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
     this.elasticsearchService.setSelectedInst(this.selectedInst);
