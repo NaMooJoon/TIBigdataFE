@@ -5,13 +5,14 @@
     <span class="section-header">{{'open-api.활용관리'|translate}}</span>
     <span class="section-info">{{'open-api.활용관리line'|translate}}</span>
     <hr>
-    <p>
+    <!-- <p>
       {{name}} {{'open-api.greeting'|translate}}
       <br>
       {{'open-api.howManyCalls1'|translate}}{{count}}{{'open-api.howManyCalls2'|translate}}
-    </p>
-      <button (click)=toRegister()>{{'open-api.callRequest'|translate}}</button>
-
+    </p> -->
+    <div style="float:right">
+      <button (click)=toRegister() class="api-register">{{'open-api.callRequest'|translate}}</button>
+    </div>
     <table>
       <thead>
         <tr>
@@ -36,7 +37,7 @@
           <td class="text-center">{{ info['expiration_date'] }}</td>
           <td class="text-center">{{ info['traffic'] }}</td>
           <td class="text-center">
-            <button>수정</button>
+            <!-- <button>수정</button> -->
             <button (click)="reissue(info['_id'])">{{'open-api.reissueAuthenticationKey'|translate}}</button>
             <button (click)="delete(info['_id'])">{{'삭제'|translate}}</button>
           </td>
