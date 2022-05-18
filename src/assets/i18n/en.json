@@ -340,6 +340,9 @@
     "rmAccountInfo": "After removing your account, all your personal information and service records will be deleted",
     "surermAccount": "Are you sure you want to remove your account?"
   },
+  "alerts": {
+    "abnormalAccess": "Access Denied. Please Log in first."
+  },
   "공지:": "Announcements",
   "다운로드": "Download",
   "미리보기": "preview",

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: "app-analysis-menu",
@@ -9,7 +10,8 @@ import { Router } from "@angular/router";
 export class AnalysisMenuComponent implements OnInit {
   private _title: string = "";
   private _currentMenu: string = "";
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private translate: TranslateService) { }
 
   ngOnInit(): void {
     let url = this.router.url.split("/");
@@ -49,9 +51,9 @@ export class AnalysisMenuComponent implements OnInit {
    * @param currentAddress
    */
   setTitle(currentAddress: string) {
-    if (currentAddress === "manual") this.title = "매뉴얼";
-    if (currentAddress === "preprocessing") this.title = "전처리";
-    if (currentAddress === "analysis") this.title = "자료분석";
+    if (currentAddress === "manual") this.title = this.translate.instant('메뉴얼');
+    if (currentAddress === "preprocessing") this.title = this.translate.instant('전처리');
+    if (currentAddress === "analysis") this.title = this.translate.instant('자료분석');
   }
 
   toManual() {

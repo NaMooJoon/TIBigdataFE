@@ -108,7 +108,7 @@
           <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
-               class="dropdown-userpage">마이페이지</a>
+               class="dropdown-userpage">{{'navbar.myPage'|translate}}</a>
 <!--            {{'navbar.myPage' | translate}}-->
             <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
               <li><a
@@ -155,7 +155,7 @@
     <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
     <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
 <!--      {{'navbar.myPage' | translate}}-->
-      <a (click)="toUserPage()">{{'마이페이지'|translate}}</a>
+      <a (click)="toUserPage()">{{'navbar.register'|translate}}</a>
     </li>
     <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
   </ul>
