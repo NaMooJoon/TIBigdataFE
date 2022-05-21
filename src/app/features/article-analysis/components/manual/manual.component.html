@@ -1,100 +1,97 @@
 <header>
 
-<div class="content-container">
-  <app-analysis-menu></app-analysis-menu>
+  <div class="content-container">
+    <app-analysis-menu></app-analysis-menu>
+  
+    <section class="content">
+      <span class="section-header">{{'analysis.manual.process'|translate}}</span>
+      <span class="section-info">{{'analysis.manual.explain'|translate}}</span>
+      <hr>
+      <pre class="manual-info">
+        <div class="l1">{{'analysis.manual.explain1'|translate}}</div>
+        <div class="l1">{{'analysis.manual.explain2'|translate}}</div>
+        <div class="l1">{{'analysis.manual.explain3'|translate}}</div>
+        <br>
+        <div class="l2">{{'analysis.manual.explain3-1'|translate}}</div>
+        <div class="l2">{{'analysis.manual.explain3-1-1'|translate}}</div>
+        <div class="l3">{{'analysis.manual.explain3-1-2'|translate}}</div>
+        <br>
+        <div class="l2">{{'analysis.manual.explain3-2'|translate}}</div>
+      
+        <div class="l3">{{'analysis.manual.explain3-2-1'|translate}}</div>
 
-  <section class="content">
-    <span class="section-header">{{'analysis.manual.process'|translate}}</span>
-    <span class="section-info">{{'analysis.manual.explain'|translate}}</span>
-    <hr>
-    <pre class="manual-info">
-      {{'analysis.manual.explain1'|translate}}
-      <br><br>
-      {{'analysis.manual.explain2'|translate}}
-      <br>
-      {{'analysis.manual.explain3'|translate}}
-      <br>
-      {{'analysis.manual.explain3-1'|translate}}
-      <br>
-      {{'analysis.manual.explain3-1-1'|translate}}
-      <br>
-      {{'analysis.manual.explain3-1-2'|translate}}
-      <br>
-      {{'analysis.manual.explain3-2'|translate}}
-      <br>
-      {{'analysis.manual.explain3-2-1'|translate}}
-      <br>
-      {{'analysis.manual.explain3-3'|translate}}
-      <br>
-      {{'analysis.manual.explain3-3-1'|translate}}
-      <br>
-<!--      -내 보관함: 검색한 키워드에 따라 수집된 문서들이 저장되며, 키워드에 따라 선택하여 분석을 진행할 수 있습니다.-->
-
-<!--      -사용자 사전: 불용어, 유의어, 복합어-->
-<!--      -품사 선택:-->
-<!--      1. 유의어사전: 같은 의미의 다른 표현들을 대표단어로 변경합니다.-->
-<!--      제일 첫번째로 작성한 단어가 대표어가 됩니다.-->
-<!--      ex) 김정은 위원장, 김정은, 김위원장 → 첫번째 단어인 김정은 위원장으로 단어가 변경됩니다.-->
-<!--      2. 불용어사전: 의미 없는 단어들을 불용어 사전에 등록해, 그 단어는 분석에서 제외할 수 있습니다.-->
-<!--      ex) 결국, 이것, 첨부-->
-<!--      3. 복합어사전: 신조어를 사용자 사전으로 등록하고 싶을 때 사용합니다.-->
-<!--      ex) 김정은 위원장, 김정은 체제, 코로나-->
-
-    </pre>
-
-    <div id="popupmenu-wrapper">
-      <div id="popupmenu-header"></div>
-      <ul id="popupmenu">
-          <li class="popupmenu-item">
+        <div class="l2">{{'analysis.manual.explain3-3'|translate}}</div>
+   
+        <div class="l3">{{'analysis.manual.explain3-3-1'|translate}}</div>
+   
+  <!--      -내 보관함: 검색한 키워드에 따라 수집된 문서들이 저장되며, 키워드에 따라 선택하여 분석을 진행할 수 있습니다.-->
+  
+  <!--      -사용자 사전: 불용어, 유의어, 복합어-->
+  <!--      -품사 선택:-->
+  <!--      1. 유의어사전: 같은 의미의 다른 표현들을 대표단어로 변경합니다.-->
+  <!--      제일 첫번째로 작성한 단어가 대표어가 됩니다.-->
+  <!--      ex) 김정은 위원장, 김정은, 김위원장 → 첫번째 단어인 김정은 위원장으로 단어가 변경됩니다.-->
+  <!--      2. 불용어사전: 의미 없는 단어들을 불용어 사전에 등록해, 그 단어는 분석에서 제외할 수 있습니다.-->
+  <!--      ex) 결국, 이것, 첨부-->
+  <!--      3. 복합어사전: 신조어를 사용자 사전으로 등록하고 싶을 때 사용합니다.-->
+  <!--      ex) 김정은 위원장, 김정은 체제, 코로나-->
+  
+      </pre>
+  
+      <div id="popupmenu-wrapper">
+        <div id="popupmenu-header"></div>
+        <ul id="popupmenu">
+            <li class="popupmenu-item">
+                <ul class="popupmenu-menu">
+                  {{'analysis.manual.frequencyAnalysis'|translate}}
+                </ul>
+                <span class="popupmenu-title">{{'analysis.frequencyAnalysis'|translate}}</span> </li>
+            <li class="popupmenu-item">
+                <ul class="popupmenu-menu">
+                  {{'analysis.manual.TFIDF'|translate}}
+                </ul>
+                <span class="popupmenu-title-eng">TFIDF</span> </li>
+            <li class="popupmenu-item">
               <ul class="popupmenu-menu">
-                {{'analysis.manual.frequencyAnalysis'|translate}}
+                {{'analysis.manual.N-gram'|translate}}
               </ul>
-              <span class="popupmenu-title">{{'analysis.frequencyAnalysis'|translate}}</span> </li>
-          <li class="popupmenu-item">
+              <span class="popupmenu-title-eng">N-gram</span> </li>
+            <li class="popupmenu-item">
               <ul class="popupmenu-menu">
-                {{'analysis.manual.TFIDF'|translate}}
+                {{'analysis.manual.synonymsAnalysis'|translate}}
               </ul>
-              <span class="popupmenu-title-eng">TFIDF</span> </li>
-          <li class="popupmenu-item">
-            <ul class="popupmenu-menu">
-              {{'analysis.manual.N-gram'|translate}}
-            </ul>
-            <span class="popupmenu-title-eng">N-gram</span> </li>
-          <li class="popupmenu-item">
-            <ul class="popupmenu-menu">
-              {{'analysis.manual.synonymsAnalysis'|translate}}
-            </ul>
-            <span class="popupmenu-title">{{'analysis.synonymsAnalysis'|translate}}</span> </li>
-          <li class="popupmenu-item">
-            <ul class="popupmenu-menu">
-              {{'analysis.manual.clusterAnalysis'|translate}}
-            </ul>
-            <span class="popupmenu-title">{{'analysis.clusterAnalysis'|translate}}</span> </li>
-          <li class="popupmenu-item">
-            <ul class="popupmenu-menu">
-              {{'analysis.manual.semanticNetworkAnalysis'|translate}}
-            </ul>
-            <span class="popupmenu-title">{{'analysis.semanticNetworkAnalysis'|translate}}</span> </li>
-
-          <li class="popupmenu-item">
-            <ul class="popupmenu-menu">
-              {{'analysis.manual.named-entityRecognition'|translate}}
-            </ul>
-            <span class="popupmenu-title">{{'analysis.named-entityRecognition'|translate}}</span> </li>
-          <li class="popupmenu-item">
+              <span class="popupmenu-title">{{'analysis.synonymsAnalysis'|translate}}</span> </li>
+            <li class="popupmenu-item">
               <ul class="popupmenu-menu">
-                {{'analysis.manual.topicModeling'|translate}}
+                {{'analysis.manual.clusterAnalysis'|translate}}
               </ul>
-              <span class="popupmenu-title">{{'analysis.topicModeling'|translate}}</span> </li>
-      </ul>
+              <span class="popupmenu-title">{{'analysis.clusterAnalysis'|translate}}</span> </li>
+            <li class="popupmenu-item">
+              <ul class="popupmenu-menu">
+                {{'analysis.manual.semanticNetworkAnalysis'|translate}}
+              </ul>
+              <span class="popupmenu-title">{{'analysis.semanticNetworkAnalysis'|translate}}</span> </li>
+  
+            <li class="popupmenu-item">
+              <ul class="popupmenu-menu">
+                {{'analysis.manual.named-entityRecognition'|translate}}
+              </ul>
+              <span class="popupmenu-title">{{'analysis.named-entityRecognition'|translate}}</span> </li>
+            <li class="popupmenu-item">
+                <ul class="popupmenu-menu">
+                  {{'analysis.manual.topicModeling'|translate}}
+                </ul>
+                <span class="popupmenu-title">{{'analysis.topicModeling'|translate}}</span> </li>
+        </ul>
+    </div>
+    </section>
   </div>
-  </section>
-</div>
-
-<a href="assets/manual.pdf" target="_blank">
-  <button class="float-right">
-    {{'analysis.manual.manualDownload'|translate}}
-  </button>
-</a>
-
-</header>
+  
+  <a href="assets/manual.pdf" target="_blank">
+    <button class="float-right">
+      {{'analysis.manual.manualDownload'|translate}}
+    </button>
+  </a>
+  
+  </header>
+  
