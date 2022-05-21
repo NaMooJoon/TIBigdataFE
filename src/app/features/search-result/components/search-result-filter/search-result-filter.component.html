@@ -101,8 +101,11 @@
             [ngStyle]="selectedStyleObject(selectedDate === '확인')"
             class = datepicker-btn
             type="reset"
-            onclick="document.getElementById('startPicker').value = '';document.getElementById('endPicker').value = ''"
-          > {{'확인'|translate}} </button>
+            onclick="
+              document.getElementById('mustKeyword').value = '';
+              document.getElementById('mustNotKeyword').value = '';
+              document.getElementById('startPicker').value = '';
+              document.getElementById('endPicker').value = '';"          > {{'확인'|translate}} </button>
           </p>
           <input id="startPicker" type="date" value="startDate" (change)="setDatePickerStartDate($event)"/>
           <input id="endPicker"  type="date" value="endDate" (change)="setDatePickerEndDate($event)"/>
@@ -144,6 +147,11 @@
           class="cancel-btn"
           id="cancel"
           (click) = "resetFilters()"
+          onclick="
+            document.getElementById('mustKeyword').value = '';
+            document.getElementById('mustNotKeyword').value = '';
+            document.getElementById('startPicker').value = '';
+            document.getElementById('endPicker').value = '';"
         >{{'취소'|translate}}</button>
       </div>
       <a
