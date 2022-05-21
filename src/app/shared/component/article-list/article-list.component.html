@@ -2,10 +2,10 @@
   <!-- Show number of result -->
   <div *ngIf="isResultFound && isMainSearch" class="result-count">
     <a>"{{ searchKeyword }}"에 대한 검색 결과는 </a>
-    <a *ngIf="this.searchPaperResultNum != '0'" >문서 {{searchPaperResultNum}}건 </a>
-    <a *ngIf="this.searchNewsResultNum != '0'" >기사 {{searchNewsResultNum}}건 </a>
-    <a>입니다.</a>
-<!--    {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}-->
+    <button *ngIf="this.searchPaperResultNum != '0'" value="paper" (click) = "searchByDoctype($event)">문서 {{searchPaperResultNum}}건 </button>
+    <button *ngIf="this.searchNewsResultNum != '0'" value="news" (click) = "searchByDoctype($event)" >기사 {{searchNewsResultNum}}건 </button>
+    <a>입니다. </a>
+    <button *ngIf="(this.searchNewsResultNum == '0')||(this.searchPaperResultNum == '0')" id="all" (click) = "searchByDoctype($event)" >전체 결과</button>
   </div>
 
   <div *ngIf="isResultFound" class="dropdown-menus">
@@ -30,7 +30,11 @@
 </div>
 
 <div *ngIf="isResultFound && isMainSearch" class="result-count-tablet">
-  {{'article-list.searchResult1'|translate}}"{{ searchKeyword }}"{{'article-list.searchResult2'|translate}}{{ searchResultNum }}{{'article-list.searchResult3'|translate}}
+  <a>"{{ searchKeyword }}"에 대한 검색 결과는 </a>
+  <button *ngIf="this.searchPaperResultNum != '0'" value="paper" (click) = "searchByDoctype($event)">문서 {{searchPaperResultNum}}건 </button>
+  <button *ngIf="this.searchNewsResultNum != '0'" value="news" (click) = "searchByDoctype($event)" >기사 {{searchNewsResultNum}}건 </button>
+  <a>입니다. </a>
+  <button *ngIf="(this.searchNewsResultNum == '0')||(this.searchPaperResultNum == '0')" id="all" (click) = "searchByDoctype($event)" >전체 결과</button>
 </div>
 
 <div *ngIf="isResultFound && isSearchDone" class="result-body">
