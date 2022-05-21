@@ -31,8 +31,8 @@ export class ElasticsearchService {
   private currentSearchingPage: number = 1;
 
   //new
-  private startTime: string = "0001-01-01";
-  private endTime: string = "9000-12-31";
+  private startDate: string = "0001-01-01";
+  private endDate: string = "9000-12-31";
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
@@ -44,9 +44,14 @@ export class ElasticsearchService {
     private ipSvc: IpService,
     private esQueryModel: ElasticSearchQueryModel
   ) {
+    this.resetSearchFilterValue();
     if (!this.client) {
       this._connect();
     }
+  }
+
+  resetSearchFilterValue() {
+
   }
 
   /**
@@ -72,7 +77,6 @@ export class ElasticsearchService {
    * @param searchMode
    */
   setSearchMode(searchMode: SearchMode): void {
-    console.log("SearchMode : ",searchMode);
     this.searchMode = searchMode;
   }
 
@@ -202,7 +206,6 @@ export class ElasticsearchService {
    * @param docSize Number of articles to search at one time.
    */
   searchByText(startIndex?: number, docSize?: number): Promise<any> {
-    console.log("trigger 1")
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
 
@@ -281,6 +284,12 @@ export class ElasticsearchService {
   }
 
   countByFilterComplete(): void {
+    this.countByFilter().then((articleNum) =>
+      this.articleNum.next(articleNum.count)
+    );
+  }
+
+  countByBarComplete(): void {
     this.countByFilter().then((articleNum) =>
       this.articleNum.next(articleNum.count)
     );
@@ -428,21 +437,25 @@ export class ElasticsearchService {
   }
 
   triggerSearchFilter(selectedPageNum: number): void {
-    console.log("--------es---------")
-    console.log(this.startTime)
-    console.log(this.endTime)
-    console.log(this.selectedInst)
-    console.log(this.hashKeys.length)
-    console.log(this.mustKeyword)
-    console.log(this.mustNotKeyword)
-    console.log(this.keyword)
-    console.log("--------es---------")
+    // console.log("--------es start---------")
+    // console.log(this.startDate)
+    // console.log(this.endDate)
+    // console.log(this.selectedInst)
+    // console.log(this.hashKeys.length)
+    // console.log(this.mustKeyword)
+    // console.log(this.mustNotKeyword)
+    // console.log(this.keyword)
+    // console.log(this.doctype)
+    // console.log("--------es end---------")
 
     let startIndex = selectedPageNum - 1;
     let docSize = this.numDocsPerPage;
 
     if (!startIndex) startIndex = 0;
     this.setCurrentSearchingPage(selectedPageNum);
+
+    if (!startIndex) startIndex = 0;
+    if (!docSize) docSize = this.numDocsPerPage;
 
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
@@ -545,7 +558,7 @@ export class ElasticsearchService {
   }
 
   getDoctypeQuery(){
-    if(this.doctype == null){
+    if(this.doctype == null || this.doctype == ""){
       return {
         regexp: {
           doc_type : ".*"
@@ -567,8 +580,8 @@ export class ElasticsearchService {
           {
             range: {
               post_date: {
-                gte: this.startTime,
-                lt: this.endTime,
+                gte: this.startDate,
+                lt: this.endDate,
                 format: "yyyy-MM-dd"
               }
             },
@@ -840,8 +853,8 @@ export class ElasticsearchService {
 
   //new
   setSelectedDate(startTime: string, endTime: string) {
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.startDate = startTime;
+    this.endDate = endTime;
   }
 
   setDoctype(doctype: string){
@@ -865,8 +878,8 @@ export class ElasticsearchService {
         query: {
           range: {
             post_date: {
-              gt: this.startTime,
-              lt: this.endTime,
+              gt: this.startDate,
+              lt: this.endDate,
               format: "yyyy-MM-dd"
             }
           },
@@ -930,6 +943,5 @@ export class ElasticsearchService {
   setTopicHashKeys(hashKeys: string[]): void {
     this.topicHashKeys = hashKeys;
   }
-
 }
 

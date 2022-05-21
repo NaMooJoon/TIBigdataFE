@@ -137,7 +137,6 @@ export class ArticleLibraryComponent implements OnInit {
 
       case "inst": {
         this.cat_button_choice[2] = ct;
-        console.log(doc);
         this.selectInstitution(doc);
         break;
       }

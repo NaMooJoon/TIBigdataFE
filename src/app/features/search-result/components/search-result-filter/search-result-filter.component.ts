@@ -351,13 +351,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.elasticsearchService.setTopicHashKeys(ids);
     this.elasticsearchService.setDoctype(doctype);
 
-    // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
-    // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
-    // console.log("startTime : ", this.elasticsearchService.getStartTime);
-    // console.log("endTime : ", this.elasticsearchService.getEndTime);
-    // console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
-    // console.log("selectedTp : ",this.selectedTp);
-
     this.elasticsearchService.setSearchMode(SearchMode.FILTER);
     this.elasticsearchService.triggerSearch(1);
     this.elasticsearchService.searchBySearchFilterComplete(1);
