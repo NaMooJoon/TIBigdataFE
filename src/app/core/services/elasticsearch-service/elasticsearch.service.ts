@@ -59,7 +59,7 @@ export class ElasticsearchService {
    * @param keyword
    */
   searchKeyword(keyword: string): void {
-    this.searchMode = SearchMode.FILTER;
+    this.searchMode = SearchMode.KEYWORD;
     this.setKeyword(keyword);
     this.triggerSearch(1);
   }
