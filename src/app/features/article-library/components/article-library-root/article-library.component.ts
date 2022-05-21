@@ -64,6 +64,9 @@ export class ArticleLibraryComponent implements OnInit {
   ngOnInit() {
     this.elasticsearchService.setSearchMode(SearchMode.ALL);
     this.elasticsearchService.setCurrentSearchingPage(1);
+    this.elasticsearchService.setFirstChar("");
+    this.elasticsearchService.setSelectedInst("");
+    this.elasticsearchService.setTopicHashKeys([]);
     this.loadInstitutions();
   }
 
@@ -137,7 +140,6 @@ export class ArticleLibraryComponent implements OnInit {
 
       case "inst": {
         this.cat_button_choice[2] = ct;
-        console.log(doc);
         this.selectInstitution(doc);
         break;
       }

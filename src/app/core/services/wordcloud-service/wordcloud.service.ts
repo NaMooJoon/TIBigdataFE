@@ -16,7 +16,6 @@ export class WordcloudService {
     let cloudData = new Array<CloudData>();
     let data = await this.db.getCountVal(hash_key, 15, true);
     let countData = data[0] as [];
-    console.log(countData);
     let countVal = countData["count"] as [];
     countVal.map((v) => {
       cloudData.push({

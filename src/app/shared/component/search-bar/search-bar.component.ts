@@ -238,7 +238,7 @@ export class SearchBarComponent implements OnInit {
       this.elasticsearchService.setTopicHashKeys(ids);
     }
 
-    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    this.elasticsearchService.setSearchMode(SearchMode.SEARCHBAR);
     this.elasticsearchService.setSearchStatus(false);
     this.elasticsearchService.searchKeyword(this.searchKeyword);
     this.elasticsearchService.setCurrentSearchingPage(1);

@@ -23,92 +23,92 @@
     (keyup.enter)="search()"
     value="{{ searchKeyword }}"
   />
-  <div class="search-filter-container">
-    <div class="reset-filter">
-      <span>{{'search-bar.searchFilter'|translate}}</span>
-      <img
-        (click)="resetFilters()"
-        class="reset-btn"
-        src="../../../../assets/icons/reset-filter.png"
-        alt="filter-reset"
-      />
-    </div>
-    <button [ngStyle]="selectedStyleObject(isDateSelected)"
-            type="button">
-      {{ selectedDate |translate}}
-    </button>
-    <div uk-dropdown="pos: bottom-justify">
-      <ul class="uk-nav uk-dropdown-nav">
-        <li *ngFor="let date of dateList" class = "date-list">
-          <a
-            class = "a-date"
-            [ngStyle]="selectedStyleObject(selectedDate === date)"
-            (click)="selectDate(translate.instant(date))"
-          >{{ date |translate}}</a>
-        </li>
-      </ul>
-    </div>
-
-    <button
-      [ngStyle]="selectedStyleObject(isInstSelected)"
-      type="button">{{'search-bar.filter-org'|translate}}</button>
-    <div uk-dropdown="pos: bottom-justify; boundary: '#inst';" class = "inst-dropdown">
-      <ul class="uk-nav uk-dropdown-nav">
-        <li>
-          <a *ngFor="let inst of institutionList"
-         [ngStyle]="selectedStyleObject(selectedInst === inst.key)"
-         id="inst"
-         (click)="selectInst(inst)"
-        >{{ inst["key"] }} {{ inst["doc_count"] }}</a>
-        </li>
-      </ul>
-    </div>
-
-    <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">
-      {{ selectedTopic |translate}}
-    </button>
-    <div uk-dropdown="pos: bottom-justify">
-      <ul class="uk-nav uk-dropdown-nav">
-        <li *ngFor="let topic of topicList">
-          <a
-            [ngStyle]="selectedStyleObject(selectedTopic === topic)"
-            (click)="selectTopic(translate.instant(topic))"
-            id="topic"
-          >{{ topic |translate }}</a>
-        </li>
-      </ul>
-    </div>
-<!--    <div class="search-helper">-->
-<!--      <span>{{'search-bar.help'|translate}}</span>-->
-<!--      <a href="#pop01">-->
-<!--        <img-->
-<!--          src="../../../../assets/icons/help-gray.png"-->
-<!--          alt="filter-reset"-->
-<!--        />-->
-<!--      </a>-->
+<!--  <div class="search-filter-container">-->
+<!--    <div class="reset-filter">-->
+<!--      <span>{{'search-bar.searchFilter'|translate}}</span>-->
+<!--      <img-->
+<!--        (click)="resetFilters()"-->
+<!--        class="reset-btn"-->
+<!--        src="../../../../assets/icons/reset-filter.png"-->
+<!--        alt="filter-reset"-->
+<!--      />-->
+<!--    </div>-->
+<!--    <button [ngStyle]="selectedStyleObject(isDateSelected)"-->
+<!--            type="button">-->
+<!--      {{ selectedDate |translate}}-->
+<!--    </button>-->
+<!--    <div uk-dropdown="pos: bottom-justify">-->
+<!--      <ul class="uk-nav uk-dropdown-nav">-->
+<!--        <li *ngFor="let date of dateList" class = "date-list">-->
+<!--          <a-->
+<!--            class = "a-date"-->
+<!--            [ngStyle]="selectedStyleObject(selectedDate === date)"-->
+<!--            (click)="selectDate(translate.instant(date))"-->
+<!--          >{{ date |translate}}</a>-->
+<!--        </li>-->
+<!--      </ul>-->
 <!--    </div>-->
 
-    <div id="pop01" class="overlay">
-      <div class="popup">
-        <a href="#none" class="close">&times;</a>
-        <b>{{'search-bar.help'|translate}}</b><br>
-        <hr>
-        <b>{{'search-bar.howToUse'|translate}}</b><br>
-        {{'search-bar.howToUse1'|translate}}<br>
-        {{'search-bar.howToUse1-1'|translate}}<br>
-        <br>
-        <b>{{'search-bar.howToUse2'|translate}}</b><br>
-        {{'search-bar.howToUse2-1'|translate}}<br>
-        <br>
-        <b>{{'search-bar.howToUse3'|translate}}</b><br>
-        {{'search-bar.howToUse3-1'|translate}}<br>
-        <br>
-        <b>{{'search-bar.howToUse4'|translate}}</b><br>
-        {{'search-bar.howToUse4-1'|translate}}<br>
-      </div>
-    </div>
+<!--    <button-->
+<!--      [ngStyle]="selectedStyleObject(isInstSelected)"-->
+<!--      type="button">{{'search-bar.filter-org'|translate}}</button>-->
+<!--    <div uk-dropdown="pos: bottom-justify; boundary: '#inst';" class = "inst-dropdown">-->
+<!--      <ul class="uk-nav uk-dropdown-nav">-->
+<!--        <li>-->
+<!--          <a *ngFor="let inst of institutionList"-->
+<!--         [ngStyle]="selectedStyleObject(selectedInst === inst.key)"-->
+<!--         id="inst"-->
+<!--         (click)="selectInst(inst)"-->
+<!--        >{{ inst["key"] }} {{ inst["doc_count"] }}</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
 
-  </div>
+<!--    <button [ngStyle]="selectedStyleObject(isTopicSelected)" type="button">-->
+<!--      {{ selectedTopic |translate}}-->
+<!--    </button>-->
+<!--    <div uk-dropdown="pos: bottom-justify">-->
+<!--      <ul class="uk-nav uk-dropdown-nav">-->
+<!--        <li *ngFor="let topic of topicList">-->
+<!--          <a-->
+<!--            [ngStyle]="selectedStyleObject(selectedTopic === topic)"-->
+<!--            (click)="selectTopic(translate.instant(topic))"-->
+<!--            id="topic"-->
+<!--          >{{ topic |translate }}</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--&lt;!&ndash;    <div class="search-helper">&ndash;&gt;-->
+<!--&lt;!&ndash;      <span>{{'search-bar.help'|translate}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      <a href="#pop01">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img&ndash;&gt;-->
+<!--&lt;!&ndash;          src="../../../../assets/icons/help-gray.png"&ndash;&gt;-->
+<!--&lt;!&ndash;          alt="filter-reset"&ndash;&gt;-->
+<!--&lt;!&ndash;        />&ndash;&gt;-->
+<!--&lt;!&ndash;      </a>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <div id="pop01" class="overlay">-->
+<!--      <div class="popup">-->
+<!--        <a href="#none" class="close">&times;</a>-->
+<!--        <b>{{'search-bar.help'|translate}}</b><br>-->
+<!--        <hr>-->
+<!--        <b>{{'search-bar.howToUse'|translate}}</b><br>-->
+<!--        {{'search-bar.howToUse1'|translate}}<br>-->
+<!--        {{'search-bar.howToUse1-1'|translate}}<br>-->
+<!--        <br>-->
+<!--        <b>{{'search-bar.howToUse2'|translate}}</b><br>-->
+<!--        {{'search-bar.howToUse2-1'|translate}}<br>-->
+<!--        <br>-->
+<!--        <b>{{'search-bar.howToUse3'|translate}}</b><br>-->
+<!--        {{'search-bar.howToUse3-1'|translate}}<br>-->
+<!--        <br>-->
+<!--        <b>{{'search-bar.howToUse4'|translate}}</b><br>-->
+<!--        {{'search-bar.howToUse4-1'|translate}}<br>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
 
   <div
     *ngIf="isKeyLoaded && relatedKeywords.length != 0"
