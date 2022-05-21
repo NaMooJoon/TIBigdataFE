@@ -436,7 +436,7 @@ export class ElasticsearchService {
     this.saveSearchResult(this.triggerSearchFilter(startIndex));
   }
 
-  triggerSearchFilter(selectedPageNum: number): void {
+  triggerSearchFilter(startIndex?: number, docSize?: number): void {
     // console.log("--------es start---------")
     // console.log(this.startDate)
     // console.log(this.endDate)
@@ -447,12 +447,6 @@ export class ElasticsearchService {
     // console.log(this.keyword)
     // console.log(this.doctype)
     // console.log("--------es end---------")
-
-    let startIndex = selectedPageNum - 1;
-    let docSize = this.numDocsPerPage;
-
-    if (!startIndex) startIndex = 0;
-    this.setCurrentSearchingPage(selectedPageNum);
 
     if (!startIndex) startIndex = 0;
     if (!docSize) docSize = this.numDocsPerPage;
@@ -745,6 +739,8 @@ export class ElasticsearchService {
   }
 
   searchByLibrary(startIndex?: number, docSize?: number): Promise<any> {
+    if (!startIndex) startIndex = 0;
+
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
