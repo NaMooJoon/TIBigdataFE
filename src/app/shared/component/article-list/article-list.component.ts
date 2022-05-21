@@ -10,6 +10,7 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import {SearchMode} from '../../../core/enums/search-mode';
 
 @Component({
   selector: "app-article-list",
@@ -368,6 +369,17 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   navToDocDetail(): void {
     this.router.navigateByUrl("search/read");
+  }
+
+  async searchByDoctype(e){
+    console.log(e.target.value);
+    if(e.target.id === 'all'){
+      this.elasticsearchService.setDoctype("");
+    }else{
+      this.elasticsearchService.setDoctype(e.target.value);
+    }
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    this.elasticsearchService.triggerSearch(1)
   }
 
   // getters and setters

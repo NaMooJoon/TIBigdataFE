@@ -352,7 +352,6 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this.elasticsearchService.setDoctype(doctype);
 
     this.elasticsearchService.setSearchMode(SearchMode.FILTER);
-    this.elasticsearchService.triggerSearch(1);
-    this.elasticsearchService.searchBySearchFilterComplete(1);
+    this.elasticsearchService.triggerSearch(1)
   }
 }
