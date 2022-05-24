@@ -1215,7 +1215,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     const svg = d3.select("svg#svgstart");
     if(!this.analysisedData || !svg) return alert("분석이 완료되지 않았거나 문제가 발생했습니다.\n잠시후 다시 시도해주세요");
 
-    svgAsPngUri(svg.node(),{scale:0.5, backgroundColor: "white", excludeUnusedCss:true},).then(uri => {
+    svgAsPngUri(svg.node(),{scale:0.2, backgroundColor: "white", excludeUnusedCss:true},).then(uri => {
       //save uri to mongo DB
       
       let data = JSON.stringify({
