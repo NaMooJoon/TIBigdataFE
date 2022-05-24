@@ -368,6 +368,9 @@
       "ngrams" : "Intensity of connection: "
     }
   },
+  "alerts": {
+    "abnormalAccess": "Access Denied. Please Log in first."
+  },
   "공지:": "Announcements",
   "다운로드": "Download",
   "미리보기": "preview",
@@ -435,6 +438,7 @@
   "연구원": "researcher",
   "기타": "others",
   "최신순": "Newest",
-  "과거순": "Oldest"
-
+  "과거순": "Oldest",
+  "마이페이지": "MyPage",
+  "회원정책": "Policy"
 }

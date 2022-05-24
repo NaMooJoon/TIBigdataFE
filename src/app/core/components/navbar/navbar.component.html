@@ -11,11 +11,11 @@
             [ngStyle]="selectedStyleObject(getSelectedMenu() == 'library')">
             <a i18n="library" (click)="navigateLibrary()">{{ 'navbar.library' | translate }}</a>
           </li>
-          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.analysis')">
+          <li [ngStyle]="selectedStyleObject(getSelectedMenu() == 'analysis-menu')">
             <a (click)="navigateSpecials()">{{'navbar.analysis' | translate}}</a>
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'navbar.community')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() == 'community')"
             class="community-menu"
           >
 <!--common-->
@@ -47,7 +47,7 @@
 
           </li>
           <li
-            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'navbar.about')"
+            [ngStyle]="selectedStyleObject(getSelectedMenu() === 'about')"
             class="about-menu"
           >
             <!--common-->
@@ -57,7 +57,7 @@
                 <li><a (click)="toSiteIntro()">{{'navbar.introduction'|translate}}</a></li>
                 <li><a (click)="toServiceGuide()">{{'navbar.guide'|translate}}</a></li>
                 <li><a (click)="toCollectedInfo()">{{'navbar.privacy'|translate}}</a></li>
-                <li><a (click)="toMemberPolicy()">{{'navbar.accountPolicy'|translate}}</a></li>
+                <li><a (click)="toMemberPolicy()">{{'회원정책'|translate}}</a></li>
               </ul>
             </div>
             <!--tablet and mobile-->
@@ -77,7 +77,7 @@
                   (click)="toCollectedInfo()">{{'navbar.infoPolicy'|translate}}</a></li>
                 <li><a
                   [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-policy')"
-                  (click)="toMemberPolicy()">{{'navbar.privacyPolicy'|translate}}</a></li>
+                  (click)="toMemberPolicy()">{{'회원정책'|translate}}</a></li>
               </ul>
             </div>
           </li>
@@ -108,7 +108,7 @@
           <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
-               class="dropdown-userpage">마이페이지</a>
+               class="dropdown-userpage">{{'마이페이지'|translate}}</a>
 <!--            {{'navbar.myPage' | translate}}-->
             <ul [ngClass]="isDropDownUserpage ? 'about-dropdown-menu-tablet' : 'about-dropdown-menu-tablet no'">
               <li><a
@@ -121,14 +121,11 @@
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'member-info')"
                 (click)="toMemberInfo()">{{'navbar.privacy'|translate}}</a></li>
               <li><a
-                [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'api-register')"
-                (click)="toOpenAPI()">Open API</a></li>
-              <li><a
                 [ngStyle]="selectedStyleObject(getSelectedSubMenu() === 'secession')"
                 (click)="toSecession()">{{'navbar.rmAccount'|translate}}</a></li>
             </ul>
           </li>
-          <li><a (click)="logOut()">{{'signOut'|translate}}</a></li>
+          <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
         </ul>
 
       </nav>

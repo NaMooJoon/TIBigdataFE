@@ -10,6 +10,7 @@ import { AuthenticationService } from "src/app/core/services/authentication-serv
 import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
 import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import {SearchMode} from '../../../core/enums/search-mode';
 
 @Component({
   selector: "app-article-list",
@@ -43,6 +44,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   private _totalPages: number = 1;
   private _totalDocs: number;
   private _pageSize: number = 10;
+  private _searchPaperResultNum: string = "0";
+  private _searchNewsResultNum: string = "0";
 
   private _checkArray: FormArray = null;
   private _toggle_all : boolean = false;
@@ -67,7 +70,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.isResultFound = (articles !== null);
       this.elasticsearchService.setSearchStatus(true);
     });
-
     // Check if it is still searching
     this.searchStatusChange$.subscribe((status) => {
       this.isSearchDone = status;
@@ -164,6 +166,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
       this.pageSize
     );
     this.setPageInfo(pageInfo);
+
+    this.searchPaperResultNum = "0";
+    this.searchNewsResultNum = "0";
+    let res = this.elasticsearchService.getDoctypeWithTextSearch();
+    res.then((count)=>{
+      for(let name of count["aggregations"]["count"]["buckets"]){
+        if(name.key === 'paper') {
+          this.searchPaperResultNum = name.doc_count;
+        }else if(name.key === 'news'){
+          this.searchNewsResultNum = name.doc_count;
+        }
+      }
+    })
   }
 
   /**
@@ -356,8 +371,14 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("search/read");
   }
 
-  docBackgroundStyle(): void {
-
+  async searchByDoctype(e){
+    if(e.target.id === 'all'){
+      this.elasticsearchService.setDoctype("");
+    }else{
+      this.elasticsearchService.setDoctype(e.target.value);
+    }
+    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    this.elasticsearchService.triggerSearch(1)
   }
 
   // getters and setters
@@ -447,6 +468,19 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   public set searchResultNum(value: string) {
     this._searchResultNum = value;
   }
+
+  public get searchPaperResultNum(): string {
+    return this._searchPaperResultNum;
+  }
+  public set searchPaperResultNum(value: string) {
+    this._searchPaperResultNum = value;
+  }
+  public get searchNewsResultNum(): string {
+    return this._searchNewsResultNum;
+  }
+  public set searchNewsResultNum(value: string) {
+    this._searchNewsResultNum = value;
+  }
   public get searchKeyword(): string {
     return this._searchKeyword;
   }
@@ -501,5 +535,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
   public set toggle_all(value: boolean) {
     this._toggle_all = value;
+  }
+  public get selectedDoctype(): string {
+    return this.elasticsearchService.getDoctype();
   }
 }

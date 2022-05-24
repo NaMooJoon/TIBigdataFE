@@ -28,10 +28,10 @@ export class SearchBarComponent implements OnInit {
   public relatedKeywords_mobile = [];
   private searchStatusChange$: Observable<boolean> = this.elasticsearchService.getSearchStatus();
   private _institutionList: Array<Object>;
-  private articleSubscriber: Subscription;
+  private _startDate: string = "0001-01-01";
+  private _endDate: string = "9000-12-31";
 
   private _dateList: Array<String> = [
-    '전체',
     "1일",
     "1주일",
     "1개월",
@@ -72,17 +72,10 @@ export class SearchBarComponent implements OnInit {
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
     private analysisDatabaseService: AnalysisDatabaseService,
-    // private searchResultFilterComponent: SearchResultFilterComponent,
   ) {
     this.searchStatusChange$.subscribe((status) => {
       if (status === true) this.setRelatedKeywords();
     });
-
-    // this.articleSubscriber = this.elasticsearchService
-    //   .getArticleChange()
-    //   .subscribe(() => {
-    //     this.loadInstitutions();
-    //   });
 
     this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -114,25 +107,89 @@ export class SearchBarComponent implements OnInit {
    * @description Update filter value.
    * @param date User selected value from filter.
    */
-  updateDate(date: string): void {
-    this.selectedDate = date;
+  selectDate(selectDate: string): void {
+    this.selectedDate = selectDate;
     this.isDateSelected = true;
+    let startTime: Date;
+    let endTime: Date;
+    let date = new Date();
+
+    switch (this.selectedDate) {
+      case "1일": {
+        endTime = new Date()
+        startTime = new Date(date.setDate(date.getDate() - 1));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      case "1주": {
+        endTime = new Date()
+        startTime = new Date(date.setDate(date.getDate() - 7));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      case "1개월": {
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth() - 1));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      case "3개월": {
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth() - 3));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      case "6개월": {
+        endTime = new Date()
+        startTime = new Date(date.setMonth(date.getMonth() - 6));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      case "1년": {
+        endTime = new Date()
+        startTime = new Date(date.setFullYear(date.getFullYear() - 1));
+
+        this._startDate = toStringByFormatting(startTime);
+        this._endDate = toStringByFormatting(endTime);
+        break;
+      }
+
+      function toStringByFormatting(source, delimiter = '-') {
+        const year = source.getFullYear();
+        const month = leftPad(source.getMonth() + 1);
+        const day = leftPad(source.getDate());
+        return [year, month, day].join(delimiter);
+      }
+
+      function leftPad(value) {
+        if (value >= 10) {
+          return value;
+        }
+        return `0${value}`;
+      }
+    }
   }
 
   /**
    * @description Update filter value.
    * @param date User selected value from filter.
    */
-  updateInst(inst: string): void {
-    this.selectedInst = inst;
-    this.isInstSelected = true;
-  }
-
-  /**
-   * @description Update filter value.
-   * @param date User selected value from filter.
-   */
-  updateTopic(topic: string): void {
+  selectTopic(topic: string): void {
     this.selectedTopic = topic;
     this.isTopicSelected = true;
   }
@@ -149,6 +206,16 @@ export class SearchBarComponent implements OnInit {
    * @description Reset filter selection by reloading component.
    */
   resetFilters(): void {
+    this._startDate = "0001-01-01";
+    this._endDate = "9000-12-31";
+    this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+
+    this.selectedInst = "";
+    this.elasticsearchService.setSelectedInst(this.selectedInst);
+
+    this.selectedTopic = "false";
+    this.elasticsearchService.setTopicHashKeys([]);
+
     this.ngOnInit();
   }
 
@@ -156,11 +223,30 @@ export class SearchBarComponent implements OnInit {
    * @description set search configuration and navigate to search result page.
    */
   async search(): Promise<void> {
-    this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+
+    if(this.isDateSelected == true)
+      this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
+    if(this.isInstSelected == true)
+      this.elasticsearchService.setSelectedInst(this.selectedInst);
+    if(this.isTopicSelected == true){
+      this.articleService.clearList();
+      let hashKeys = await this.getDocIDsFromTopic(this.selectedTopic);
+      let ids: string[] = [];
+      hashKeys.map((e) =>
+        ids.push(e["hash_key"])
+      );
+      this.elasticsearchService.setTopicHashKeys(ids);
+    }
+
+    this.elasticsearchService.setSearchMode(SearchMode.KEYWORD);
     this.elasticsearchService.setSearchStatus(false);
     this.elasticsearchService.searchKeyword(this.searchKeyword);
     this.elasticsearchService.setCurrentSearchingPage(1);
     this._router.navigateByUrl("/search/result");
+  }
+
+  async getDocIDsFromTopic(category) {
+    return (await this.analysisDatabaseService.getOneTopicDocs(category)) as [];
   }
 
   gotoMain(): void {
@@ -316,12 +402,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   selectInst(inst: { key: string; doc_num: number }) {
-    // this.searchResultFilterComponent.selectInst(inst);
+    this.selectedInst = inst.key;
+    this.isInstSelected = true;
   }
-
-  async selectDate(e) {
-    // await this.searchResultFilterComponent.selectDate(e);
-  }
-
 
 }

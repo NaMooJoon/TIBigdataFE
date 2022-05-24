@@ -25,11 +25,12 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
   private _selectedDate: string;
 
   private _selectedTp: string;
-  private _startDate: string;
-  private _endDate: string;
+  private _startDate: string = "0001-01-01";
+  private _endDate: string = "9000-12-31";
   private _mustKeyword: string;
   private _mustNotKeyword: string;
 
+  private _selectedDoctype: string;
 
   public _topics = [
     "정치",
@@ -117,6 +118,9 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedTp = "false";
     this.elasticsearchService.setTopicHashKeys([]);
 
+    this.selectedDoctype = null;
+    this.elasticsearchService.setDoctype(null);
+
     this.ngOnInit();
   }
 
@@ -153,7 +157,18 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
     this._selectedInst = value;
   }
 
-  //new
+  public get selectedDoctype(): string {
+    return this._selectedDoctype;
+  }
+
+  public set selectedDoctype(value: string) {
+    this._selectedDoctype = value;
+  }
+
+  async selectDoc(e) {
+    this.selectedDoctype = e.target.innerText.toString();
+  }
+
   async selectDate(e) {
     this.selectedDate = e.target.innerText.toString();
     let startTime: Date;
@@ -318,21 +333,25 @@ export class SearchResultFilterComponent implements OnInit, OnDestroy {
       ids.push(e["hash_key"])
     );
 
+    let doctype;
+    switch (this.selectedDoctype){
+      case '문서': {
+        doctype = 'paper'
+        break;
+      }
+      case '기사': {
+        doctype = 'news'
+        break;
+      }
+    }
     //set user options
     this.elasticsearchService.setSelectedDate(this._startDate, this._endDate);
     this.elasticsearchService.setSelectedInst(this.selectedInst);
     this.elasticsearchService.setSelectedKeyword(this._mustKeyword,this._mustNotKeyword);
     this.elasticsearchService.setTopicHashKeys(ids);
-
-    // console.log("mustKeyword : ", this.elasticsearchService.getMustKeyword);
-    // console.log("mustNotKeyword : ", this.elasticsearchService.getMustNotKeyword);
-    // console.log("startTime : ", this.elasticsearchService.getStartTime);
-    // console.log("endTime : ", this.elasticsearchService.getEndTime);
-    // console.log("selectedInst : ", this.elasticsearchService.getSelectedInst);
-    // console.log("selectedTp : ",this.selectedTp);
+    this.elasticsearchService.setDoctype(doctype);
 
     this.elasticsearchService.setSearchMode(SearchMode.FILTER);
-    this.elasticsearchService.triggerSearch(1);
-    this.elasticsearchService.searchBySearchFilterComplete(1);
+    this.elasticsearchService.triggerSearch(1)
   }
 }

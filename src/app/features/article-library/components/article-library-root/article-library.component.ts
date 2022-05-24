@@ -64,6 +64,9 @@ export class ArticleLibraryComponent implements OnInit {
   ngOnInit() {
     this.elasticsearchService.setSearchMode(SearchMode.ALL);
     this.elasticsearchService.setCurrentSearchingPage(1);
+    this.elasticsearchService.setFirstChar("");
+    this.elasticsearchService.setSelectedInst("");
+    this.elasticsearchService.setTopicHashKeys([]);
     this.loadInstitutions();
   }
 
@@ -137,7 +140,6 @@ export class ArticleLibraryComponent implements OnInit {
 
       case "inst": {
         this.cat_button_choice[2] = ct;
-        console.log(doc);
         this.selectInstitution(doc);
         break;
       }
@@ -159,15 +161,14 @@ export class ArticleLibraryComponent implements OnInit {
    */
   async selectInstitution(institution: { key: string; doc_count: number }) {
     if (institution === null || this.selectedInst === institution.key) {
-      this.elasticsearchService.setSearchMode(SearchMode.ALL);
       this.selectedInst = "전체";
-      this.elasticsearchService.triggerSearch(1);
+      this.elasticsearchService.setSelectedInst("");
     } else {
       this.selectedInst = institution.key;
-      this.elasticsearchService.setSearchMode(SearchMode.INST);
       this.elasticsearchService.setSelectedInst(institution.key);
-      this.elasticsearchService.triggerSearch(1);
     }
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+    this.elasticsearchService.triggerSearch(1);
   }
 
   get_chosen_category() {
@@ -290,42 +291,30 @@ export class ArticleLibraryComponent implements OnInit {
     this.selectedTp = tp;
 
     if(this.selectedTp === "전체"){
-      this.elasticsearchService.setSearchMode(SearchMode.ALL);
-      this.elasticsearchService.triggerSearch(1);
+      this.elasticsearchService.setTopicHashKeys([]);
     }
     else {
-      let hashKeys = await this.getDocIDsFromTopic(tp);
-      hashKeys.map((e) => this.articleService.addHashKey(e));
-
-      let partialIDs: Object[] = this.articleService
-        .getList()
-        .slice(0, this.elasticsearchService.getNumDocsPerPage());
-
-      const ids: string[] = [];
-
-      for (let i = 0; i < partialIDs.length; i++) {
-        ids.push(partialIDs[i]["hash_key"]);
-      }
-
-      this.elasticsearchService.setKeyword(tp);
-      this.elasticsearchService.setSearchMode(SearchMode.HASHKEYS);
-      this.elasticsearchService.setArticleNumChange(hashKeys.length);
-      this.elasticsearchService.setHashKeys(ids);
-      this.elasticsearchService.triggerSearch(1);
+      this.articleService.clearList();
+      let hashKeys = await this.getDocIDsFromTopic(this.selectedTp);
+      let ids: string[] = [];
+      hashKeys.map((e) =>
+        ids.push(e["hash_key"])
+      );
+      this.elasticsearchService.setTopicHashKeys(ids);
     }
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+    this.elasticsearchService.triggerSearch(1);
   }
 
   async selectDictionary(dict: string) {
     this.selectedDict = dict;
 
     if(this.selectedDict === "전체"){
-      this.elasticsearchService.setSearchMode(SearchMode.ALL);
-      this.elasticsearchService.triggerSearch(1);
-    }
-    else {
+      this.elasticsearchService.setFirstChar("");
+    } else {
       this.elasticsearchService.setFirstChar(DictionaryOption[this.selectedDict]);
-      this.elasticsearchService.setSearchMode(SearchMode.DICTIONARY);
-      this.elasticsearchService.triggerSearch(1);
     }
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+    this.elasticsearchService.triggerSearch(1);
   }
 }

@@ -62,14 +62,7 @@ export class NavbarComponent implements OnInit {
         this.selectedSubMenu = event.url.split("/")[2];
       }
     });
-    // this.resizeObservable$ = fromEvent(window, 'resize')
-    // this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
-    //   if(matchMedia("(max-width: 768px)").matches) {
-    //     console.log('hihi');
-    //   }
-    //   console.log('event: ', evt);
-    // });
-    // this.checkRouterIsMain();
+
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
@@ -101,7 +94,6 @@ export class NavbarComponent implements OnInit {
   }
 
   disableObject(flag: boolean): Object {
-    // console.log("main : ",flag);
     if(flag){
       return {
         "display" : "block"
@@ -318,7 +310,7 @@ export class NavbarComponent implements OnInit {
   public get isMain(): boolean {
     let rootUrl = this.router.routerState.snapshot.url;
 
-    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search") || rootUrl.startsWith("/api") || rootUrl.startsWith("/login") || rootUrl.startsWith("/register")){
+    if(rootUrl.startsWith("/library") || rootUrl.startsWith("/analysis") || rootUrl.startsWith("/community") || rootUrl.startsWith("/about") || rootUrl.startsWith("/userpage") || rootUrl.startsWith("/search") || rootUrl.startsWith("/api") || rootUrl.startsWith("/login") || rootUrl.startsWith("/register") || rootUrl.startsWith("/openapi")){
       return false;
     } else {
       return true;
