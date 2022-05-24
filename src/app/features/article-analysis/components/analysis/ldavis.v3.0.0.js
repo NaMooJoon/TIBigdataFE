@@ -264,8 +264,8 @@ var LDAvis = function(to_select, data_or_file_name, color1, color2) {
 
         // Create new svg element (that will contain everything):
         var svg = d3.select(to_select).append("svg")
-            .attr("width", mdswidth + barwidth + margin.left + termwidth + margin.right)
-            .attr("height", mdsheight + 2 * margin.top + margin.bottom + 2 * rMax);
+            .attr("id","svgstart")
+            .attr("viewBox", "0, 0," +  (mdswidth + barwidth + margin.left + termwidth + margin.right) + "," +  (mdsheight + 2 * margin.top + margin.bottom + 2 * rMax))
 
         // Create a group for the mds plot
         var mdsplot = svg.append("g")
