@@ -522,8 +522,12 @@ export class ElasticsearchService {
   getInstQuery(){
     if(this.selectedInst == "" || this.selectedInst == null){
       return {
-        regexp: {
-          published_institution : ".*"
+        bool: {
+          must: {
+            exists: {
+              field: "published_institution"
+            }
+          }
         }
       };
     }else{
@@ -538,8 +542,12 @@ export class ElasticsearchService {
   getHashKeyQuery(){
     if(this.topicHashKeys.length == 0){
       return {
-        regexp: {
-          hash_key : ".*"
+        bool: {
+          must: {
+            exists: {
+              field: "hash_key"
+            }
+          }
         }
       };
     }else{
@@ -554,8 +562,12 @@ export class ElasticsearchService {
   getDoctypeQuery(){
     if(this.doctype == null || this.doctype == ""){
       return {
-        regexp: {
-          doc_type : ".*"
+        bool: {
+          must: {
+            exists: {
+              field: "doc_type"
+            }
+          }
         }
       };
     }else{
@@ -725,8 +737,12 @@ export class ElasticsearchService {
   getDictionaryQuery(){
     if(this.firstChar == "" || this.firstChar == null){
       return {
-        regexp: {
-          first_char_title : ".*"
+        bool: {
+          must: {
+            exists: {
+              field: "first_char_title"
+            }
+          }
         }
       };
     }else{
