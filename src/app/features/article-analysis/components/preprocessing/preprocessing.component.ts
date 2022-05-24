@@ -39,6 +39,8 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
 
   ngOnInit(): void {
     this.getUserDictInfo();
+    document.getElementById("download-dict").style.visibility='hidden';
+
   }
 
   async getUserDictInfo() : Promise<void>{
@@ -351,6 +353,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
           tr.append("td").text(data.compound[keys[i]]);
         }
     }
+    document.getElementById("download-dict").style.visibility='visible';
     document.getElementById("download-dict").style.display='inline';
     document.getElementById("download-dict").style.float='right';
   }

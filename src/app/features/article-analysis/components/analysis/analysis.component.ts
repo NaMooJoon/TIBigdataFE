@@ -1,9 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Injectable, OnInit } from "@angular/core";
 import { abstractAnalysis } from "../abstractAnalysisPage";
 import * as d3 from 'd3';
 import { Tooltip } from "chart.js";
 import * as lda from "./ldavis.v3.0.0.js";
 import { svgAsPngUri, saveSvgAsPng } from "save-svg-as-png";
+// import { Router } from "@angular/router";
+
+// @Injectable({
+//   providedIn: "root",
+// })
 
 @Component({
   selector: "app-analysis",
@@ -22,6 +27,15 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   public optionValue1: string;
   public optionValue2: string;
   public optionValue3: string;
+
+  
+  // constructor(
+  //   _middlewareService, 
+  //   _userSavedDocumentService, 
+  //   private router: Router) {
+  //     super(_middlewareService,
+  //       _userSavedDocumentService);
+  //  }
 
   ngOnInit(): void {}
 
@@ -286,6 +300,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     const svg = d3.select("figure#bar")
       .append("svg")
+      .attr("id","svgstart")
       .attr("viewBox", "0, 0," + width+","+ height)
       .call(zoom);
 
@@ -385,6 +400,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     const svg = d3.select("figure#scatter")
       .append("svg")
+      .attr("id","svgstart")
         // .attr("width", width + margin.left + margin.right)
         // .attr("height", height + margin.top + margin.bottom)
         .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
@@ -558,7 +574,8 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     const svg = d3.select("figure#scatter")
       .append("svg")
-        .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
+      .attr("id","svgstart")
+      .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
         // .attr("width", width + margin.left + margin.right)
         // .attr("height", height + margin.top + margin.bottom)
         .call(zoom)
@@ -705,6 +722,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
     // append the svg object to the body of the page
     const svg = d3.select("figure#network")
     .append("svg")
+    .attr("id","svgstart")
       // .attr("width", width + margin.left + margin.right)
       // .attr("height", height + margin.top + margin.bottom)
       .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
@@ -884,6 +902,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 	//Create an SVG element and append it to the DOM
 	var svg = d3.select("figure#network")
     .append("svg")
+    .attr("id","svgstart")
       .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
       .call(d3.zoom()
       //   .extent([[0, 0], [width, height]])
@@ -942,7 +961,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 					.data(links)
 					.enter()
 					.append("line")
-            .style("stroke-width", function(d){ return d['weight']/100 < 1 ? 1 :(d['weight']/100>5?5:d['weight']); })
+            .style("stroke-width", function(d){ return d['weight']/100 < 1 ? 1 :(d['weight']/100>5?5:d['weight']/100); })
             .attr("class", "link")
             .style("stroke", "#C4DDFF")
     
@@ -1018,6 +1037,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
     const svg = d3.select("figure#tree")
       .append("svg")
+      .attr("id","svgstart")
         .attr("viewBox", [-margin.left, -margin.top, width, dx].join())
         .style("font", "10px sans-serif")
         .style("user-select", "none");
@@ -1192,10 +1212,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
    */
 
   async saveSvg(): Promise<void>{
-    const svg = d3.select("svg");
+    const svg = d3.select("svg#svgstart");
     if(!this.analysisedData || !svg) return alert("분석이 완료되지 않았거나 문제가 발생했습니다.\n잠시후 다시 시도해주세요");
 
-    svgAsPngUri(svg.node(),{scale:0.5}).then(uri => {
+    svgAsPngUri(svg.node(),{scale:0.2, backgroundColor: "white", excludeUnusedCss:true},).then(uri => {
       //save uri to mongo DB
       
       let data = JSON.stringify({
@@ -1212,15 +1232,23 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       });
 
       // console.log(data);
-      this.middlewareService.postDataToFEDB('/textmining/uploadChart', data).then( res=>{});
+      this.middlewareService.postDataToFEDB('/textmining/uploadChart', data).then( res=>{
+        alert("선택하신 차트가 내 분석함에 저장되었습니다.");
+      //   let move = confirm("선택하신 차트가 내 분석함에 저장되었습니다. 내 분석함으로 이동하시겠습니까?");
+      //   if(move){
+      //     this.router.navigateByUrl("/userpage/my-analysis");
+      //     this.ngOnInit();
+      //   }
+      });
+      
     });
 
   }
 
   downloadPng(){
-    const svg = d3.select("svg");
-    saveSvgAsPng(svg.node(), "chart.png");
-}
+    const svg = d3.select("svg#svgstart");
+    saveSvgAsPng(svg.node(), "chart.png", {backgroundColor: "white"});
+  }
 
   public get isDataAnalysised(): boolean {
     return this._isDataAnalysised;

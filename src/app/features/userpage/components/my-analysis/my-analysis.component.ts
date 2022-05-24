@@ -27,13 +27,9 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   private _keyword : string;
   private _savedDate : string;
 
-  chartData : any;
-
+  private _chartData : any;
+  private _isDownloadable : boolean;
   private _form : FormGroup;
-
-  private _option1 : boolean = false;
-  private _option2 : boolean = false;
-  private _option3 : boolean = false;
   
   private _activity : string; 
   
@@ -69,6 +65,7 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
     }
     this.getCharts(this.savedKeywords[0].keyword, this.savedKeywords[0].savedDate);
     this.keyword = this.savedKeywords[0].keyword;
+    console.log(this.keyword);
   }
 
   currentKeywordAndDate(selectedKeyword: string, savedDate: string){
@@ -111,157 +108,14 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
     let data = JSON.stringify({
       'userEmail': chart.userEmail,
       'keyword': chart.keyword,
-      'activity': chart.activity,
-      'analysisDate' : parsedDate,
+      'activity': chart.activity,             
+      'analysisDate' : parsedDate         
     });
          
-    this.chartData = await this.middlewareService.postDataToFEDB('/textMining/getChartData', data);
-    return this.chartData;
+    let chartData = await this.middlewareService.postDataToFEDB('/textMining/getChartData', data);
+    return chartData; 
   }
 
-  //show detail
-  async openModal(chart: any){
-    this.clearResult();
-    this.activity = chart.activity;
-    this.chartData = await this.getChartData(chart);
-    if(!this.chartData){
-      alert("데이터 로딩 실패");
-      return;
-    }
-
-    this.modalService.open('result');
-
-   if(chart.activity == 'count'){
-      this.drawTable('count', this.chartData.result_graph);
-      this.drawBarChart(this.chartData.result_graph);
-    } 
-    else if(chart.activity == 'tfidf'){
-      this.drawTable('tfidf', JSON.stringify(this.chartData.result_graph));
-      this.drawBarChart(JSON.stringify(this.chartData.result_graph));
-    }
-    else if(chart.activity == 'network'){
-      this.drawTable('network', JSON.stringify(this.chartData.resultCenJson));
-      this.drawNetworkChart(JSON.stringify(this.chartData.resultGraphJson));
-    }
-    else if(chart.activity == 'ngrams'){
-      this.drawNetworkChart(JSON.stringify(this.chartData.result));
-    }
-    else if(chart.activity == 'kmeans'){
-      this.drawTable('kmeans',JSON.stringify(this.chartData.resultPCAList));
-      this.drawScatterChart(JSON.stringify(this.chartData.resultPCAList));
-    }
-    else if(chart.activity == 'hcluster'){
-      this.drawTreeChart(JSON.stringify(this.chartData.result));
-    }
-    else if(chart.activity == 'word2vec'){
-    }
-    else if(chart.activity == 'topicLDA'){
-      this.drawTopicModeling(JSON.stringify(this.chartData.result_graph));
-    }
-  }
-
-  closeModal(id: string){
-    this.modalService.close(id);
-  }
-
-
-  //thumbnail info
-  activityInfo(chart: any): String {
-  if(chart.activity === 'count' ){ 
-    this.option1 = true;
-    this.option2 = false;
-    this.option3 = false;
-    return '빈도수분석'
-  }
-  else if( chart.activity === 'tfidf' ){ 
-    this.option1 = true;
-    this.option2 = false;
-    this.option3 = false;
-    return 'TFIDF'
-  }
-  else if( chart.activity === 'kmeans' ){ 
-    this.option1 = true;
-    this.option2 = false;
-    this.option3 = false;
-    return '분할군집분석'
-  }
-  else if( chart.activity === 'network' ){ 
-    this.option1 = true;
-    this.option2 = true;
-    this.option3 = false;
-    return '의미연결망'
-  }
-  else if( chart.activity === 'hcluster' ){ 
-    this.option1 = false;
-    this.option2 = false;
-    this.option3 = false;
-    return '계층군집분석'
-  }
-  else if( chart.activity === 'ngrams' ){ 
-    this.option1 = true;
-    this.option2 = true;
-    this.option3 = true;
-    return 'N-gram'
-  }
-  else if( chart.activity === 'word2vec' ){ 
-    this.option1 = true;
-    this.option2 = false;
-    this.option3 = false;
-    return '유의어분석'
-  }
-  else if( chart.activity === 'topicLDA' ){ 
-    this.option1 = true;
-    this.option2 = false;
-    this.option3 = false;
-    return '토픽모델링'
-  }
-  }
-
-  option1Info(chart: any): String{
-    if(chart.activity == 'count'){
-      return '분석한 단어 수: ' + chart.option1;
-    }
-    else if(chart.activity == 'tfidf'){
-      
-      return '분석한 단어 수: ' + chart.option1;
-    }
-    else if(chart.activity == 'kmeans'){
-      return '군집 개수: ' + chart.option1;
-    }
-    else if(chart.activity == 'network'){
-      return '분석한 단어 수: ' + chart.option1;
-    }
-    else if(chart.activity == 'ngrams'){
-      return '분석한 ngram 수: ' + chart.option1;
-    }
-    else if(chart.activity == 'word2vec'){
-      return '분석한 단어 수: ' + chart.option1;
-    }
-    else if(chart.activity == 'topicLDA'){
-      return '분석한 단어 수: ' + chart.option1;
-    }
-  }
-
-  option2Info(chart: any): String{
-    if(chart.activity == 'network'){
-      return '연결 강도: ' + chart.option2;
-    }
-    else if(chart.activity == 'ngrams'){
-      return '분석한 단어 수: ' + chart.option2;
-    }
-  }
-
-  option3Info(chart: any): String{
-    if(chart.activity == 'ngrams'){
-      return '연결 강도: ' + chart.option3;
-    }
-  }
-
-  clearResult(){
-    d3.selectAll('figure > *').remove();
-  }
-
-  
   parsingDate(analysisDate: string){
     let date = new Date(analysisDate);
     let year = date.getFullYear();
@@ -313,7 +167,65 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
 
     return result;
   }
-  
+
+  //show detail
+  async openModal(chart: any){
+    this.clearResult();
+    this.activity = chart.activity;
+    this.chartData = await this.getChartData(chart);
+    if(!this.chartData){
+      alert("데이터 로딩 실패");
+      return;
+    }
+    
+    this.modalService.open('result');
+
+    if(chart.activity == 'count'){ 
+      this.drawTable('count', this.chartData.result_graph);
+      this.drawBarChart(this.chartData.result_graph);
+      this.isDownloadable = true;
+    } 
+    else if(chart.activity == 'tfidf'){
+      this.drawTable('tfidf', JSON.stringify(this.chartData.result_graph));
+      this.drawBarChart(JSON.stringify(this.chartData.result_graph));
+      this.isDownloadable = true;
+    }
+    else if(chart.activity == 'network'){
+      this.drawTable('network', JSON.stringify(this.chartData.resultCenJson));
+      this.drawNetworkChart(JSON.stringify(this.chartData.resultGraphJson));
+      this.isDownloadable = true;
+    }
+    else if(chart.activity == 'ngrams'){
+      this.drawNetworkChart(JSON.stringify(this.chartData.result));
+      this.isDownloadable = false;
+    }
+    else if(chart.activity == 'kmeans'){
+      this.drawTable('kmeans',JSON.stringify(this.chartData.resultPCAList));
+      this.drawScatterChart(JSON.stringify(this.chartData.resultPCAList));
+      this.isDownloadable = true;
+    }
+    else if(chart.activity == 'hcluster'){
+      this.drawTreeChart(JSON.stringify(this.chartData.result));
+      this.isDownloadable = false;
+    }
+    else if(chart.activity == 'word2vec'){
+      this.drawScatterWordChart(this.chartData.result_graph);
+      this.isDownloadable = true;
+    }
+    else if(chart.activity == 'topicLDA'){
+      this.drawTopicModeling(this.chartData.result_graph);
+      this.isDownloadable = false;
+    }
+  }
+
+  closeModal(id: string){
+    this.modalService.close(id);
+  }
+
+  clearResult(){
+    d3.selectAll('figure > *').remove();
+  }
+
   async deleteSelectedCharts() : Promise<void>{
     let frmArray = this.form.get("checkArray") as FormArray;
     if(frmArray.value.length == 0){
@@ -326,12 +238,13 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
             'userEmail' : this.userProfile.email,
             'analysisDate': frmArray.value[i]
           });
-          await this.middlewareService.postDataToFEDB('/textMining/deleteCharts',data);
-          frmArray.clear(); 
+          await this.middlewareService.postDataToFEDB('/textMining/deleteCharts',data); 
         }
+        frmArray.clear();
       } else{
         frmArray.clear();
       } 
+    //this.currentKeywordAndDate(this.keyword, this.savedDate);
     this.getCharts(this.keyword, this.savedDate);
    }
   }
@@ -369,7 +282,6 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
         checkArray.controls.forEach((item: FormControl) => {
           if (item.value == e.target.value) {
             checkArray.removeAt(i);
-            console.log(checkArray);
             return;
           }
           i++;
@@ -377,11 +289,9 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
       }
     }
   }
-
+  
   downloadCSV(){
     let data : any;
-    console.log(this.activity);
-    console.log(this.chartData);
     if(this.activity == 'count'){
       data = this.chartData.result_graph;
     }
@@ -406,6 +316,13 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   }
   public set charts(value : any){
     this._charts = value;
+  }
+
+  public get chartData() : any{
+    return this._chartData;
+  }
+  public set chartData(value : any){
+    this._chartData = value;
   }
 
   public get userProfile(): UserProfile {
@@ -457,6 +374,13 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
     this._isSavedChartsLoaded = value;
   }
 
+  public get isDownloadable(): boolean {
+    return this._isDownloadable;
+  }
+  public set isDownloadable(value: boolean){
+    this._isDownloadable = value;
+  }
+
   public get keyword() : string {
     return this._keyword;
   }
@@ -469,27 +393,6 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   }
   public set savedDate(value: string) {
     this._savedDate = value;
-  }
-
-  public get option1(): boolean {
-    return this._option1;
-  }
-  public set option1(value: boolean){
-    this._option1 = value;
-  }
-
-  public get option2(): boolean {
-    return this._option2;
-  }
-  public set option2(value: boolean){
-    this._option2 = value;
-  }
-
-  public get option3(): boolean {
-    return this._option3;
-  }
-  public set option3(value: boolean){
-    this._option3 = value;
   }
 
   public get activity(): string {
