@@ -56,11 +56,11 @@
 <jw-modal id="result" >
   <button (click)="closeModal('result')">Close</button><br>
   <figure id="table"></figure>
+  <button *ngIf="isDownloadable" (click)="downloadCSV()">{{ 'userpage.downloadCSV' | translate }}</button>
   <figure id="bar"></figure>
   <figure id="scatter"></figure>
   <figure id="network"></figure>
   <figure id="tree"></figure>
   <figure id="ldavis"></figure>
   <button (click)="downloadPng()">{{ 'userpage.downloadChart' | translate }}</button>
-  <button *ngIf="isDownloadable" (click)="downloadCSV()">{{ 'userpage.downloadCSV' | translate }}</button>
 </jw-modal>
