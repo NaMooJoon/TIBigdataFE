@@ -42,11 +42,11 @@
     <button (click)="openModal(chart)">
       <img [src]="chart.chartImg">
       <div>
-        {{'userpage.TypeOfAnalysis'|translate}}{{ activityInfo(chart) }}<br>
-        <span *ngIf="option1">{{ option1Info(chart) }}<br></span>
-        <span *ngIf="option2">{{ option2Info(chart) }}<br></span>
-        <span *ngIf="option3">{{ option3Info(chart) }}<br></span>
-        {{'userpage.DateOfAnalysis'|translate}}{{ chart.analysisDate | date:'YYYY-M-d HH:mm:ss'}}
+        <span>{{ 'userpage.type' | translate }} {{ 'userpage.activity.' + chart.activity | translate }}<br></span>
+        <span *ngIf="chart.option1">{{ 'userpage.option1.' + chart.activity | translate }} {{ chart.option1 }}<br></span>
+        <span *ngIf="chart.option2">{{ 'userpage.option2.' + chart.activity | translate }} {{ chart.option2 }}<br></span>
+        <span *ngIf="chart.option3">{{ 'userpage.option3.' + chart.activity | translate }} {{ chart.option3 }}<br></span>
+        <span>{{'userpage.analysisDate'|translate}}{{ chart.analysisDate | date:'YYYY-M-d HH:mm:ss'}}</span>
       </div>
     </button>
   </div>
@@ -60,6 +60,7 @@
   <figure id="scatter"></figure>
   <figure id="network"></figure>
   <figure id="tree"></figure>
-  <button (click)="downloadPng()">{{'userpage.DownloadChart'}}</button>
-  <button (click)="downloadCSV()">csv 다운로드</button>
+  <figure id="ldavis"></figure>
+  <button (click)="downloadPng()">{{ 'userpage.downloadChart' | translate }}</button>
+  <button *ngIf="isDownloadable" (click)="downloadCSV()">{{ 'userpage.downloadCSV' | translate }}</button>
 </jw-modal>
