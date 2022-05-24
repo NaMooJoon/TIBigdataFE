@@ -372,7 +372,6 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   async searchByDoctype(e){
-    console.log(e.target.value);
     if(e.target.id === 'all'){
       this.elasticsearchService.setDoctype("");
     }else{
