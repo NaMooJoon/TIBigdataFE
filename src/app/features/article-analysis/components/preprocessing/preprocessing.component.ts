@@ -263,7 +263,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   }
   
   showDictData( dictType: string, data : any ){
-    d3.selectAll('figure > *').remove();
+    d3.selectAll('.show-dict > *').remove();
     let text : string;
     if(data.userEmail == 'default'){
       text = "기본 사전: ";
@@ -292,7 +292,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     document.getElementById("title").innerHTML=text;
 
     const table = d3.select("figure#table")
-      .attr('class','result-pretable')
+      .attr('class','show-dict')
       .append("table")
       .attr('width','100%')
       //.attr('height','200px')
