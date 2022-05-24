@@ -253,6 +253,8 @@
       "defaultDictionary": "기본 사전 사용",
       "myDictionary": "내 사전 사용",
       "uploadMyDictionary": "내 사전 업로드",
+      "previewDictionary": "사전 미리보기",
+      "downloadDictionary": "사전 다운로드",
       "불용어": "불용어",
       "복합어": "복합어",
       "partOfSpeech": "품사선택",

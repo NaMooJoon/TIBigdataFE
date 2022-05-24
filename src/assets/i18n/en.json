@@ -252,6 +252,8 @@
       "defaultDictionary": "Use the default dictionary",
       "myDictionary": "Use my dictionary",
       "uploadMyDictionary": "Upload my dictionary",
+      "previewDictionary": "Show dictionary",
+      "downloadDictionary": "Download dictionary",
       "불용어": "Stopwords",
       "복합어": "Compound words",
       "partOfSpeech": "Part of speech",
@@ -342,14 +344,14 @@
     "downloadChart" : "Download Chart Image",
     "downloadCSV" : "Download Result in CSV",
     "activity" : {
-      "count" : "Frequency Anaylsis",
+      "count" : "Frequency",
       "tfidf" : "TFIDF",
-      "network" : "Sementic Network Analysis",
-      "hcluster" : "Hierarchical Cluster Analysis",
-      "kmeans" : "k-Means Cluster Analysis",
-      "word2vec" : "Synonyms Analysis",
+      "network" : "Sementic Network",
+      "hcluster" : "Hierarchical Cluster",
+      "kmeans" : "k-Means Cluster",
+      "word2vec" : "Synonyms",
       "topicLDA" : "Topic Modeling",
-      "ngrams" : "Cluster Analysis"
+      "ngrams" : "Cluster"
     },
     "option1" : {
       "count" : "Number of words for analysis: ",

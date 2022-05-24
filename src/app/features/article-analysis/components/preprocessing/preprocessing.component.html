@@ -31,7 +31,7 @@
           <label class="upload-but" for="upload-synonym">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
         </button>
         <button class="upload-dict" (click)="previewDict('synonym')">
-          <label class="upload-but" for="upload-stopword">사전 미리보기</label>
+          <label class="upload-but" for="upload-stopword">{{'analysis.preprocessing.previewDictionary'|translate}}</label>
         </button>
       </li>
       <li class="option-dict">
@@ -50,7 +50,7 @@
           <label class="upload-but" for="upload-stopword">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
         </button>
         <button class="upload-dict" (click)="previewDict('stopword')">
-          <label class="upload-but" for="upload-stopword">사전 미리보기</label>
+          <label class="upload-but" for="upload-stopword">{{'analysis.preprocessing.previewDictionary'|translate}}</label>
         </button>
       </li>
 
@@ -70,14 +70,15 @@
             <label class="upload-but" for="upload-compound">{{'analysis.preprocessing.uploadMyDictionary'|translate}}</label>
           </button>
           <button class="upload-dict" (click)="previewDict('compound')">
-            <label class="upload-but" for="upload-stopword">사전 미리보기</label>
+            <label class="upload-but" for="upload-stopword">{{'analysis.preprocessing.previewDictionary'|translate}}</label>
           </button>
       </li>
     </div>
     <br><br><br><br>
     <strong id="title"></strong>
     <figure id="table"></figure>
-    <button class="download-dict" id="download-dict" (click)="downloadDict()">사전 다운로드</button>
+    <button class="download-dict" id="download-dict" (click)="downloadDict()">{{'analysis.preprocessing.downloadDictionary'|translate}}</button>
+
 
 
     <!-- <button *ngIf="isSynonymLoaded" (click)="preview('synonym')">미리보기</button> -->
