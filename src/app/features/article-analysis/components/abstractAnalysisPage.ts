@@ -69,7 +69,6 @@ export abstract class abstractAnalysis{
         //this.LoadingWithMask();
 
         let result = await this.middlewareService.postDataToFEDB('/textmining/getPreprocessedData', data);
-        this.clearResult();
         let tokens = Object.values(result.tokenList);
         let tokenData = new Array;
        
@@ -174,9 +173,9 @@ export abstract class abstractAnalysis{
      */
     drawPreTable(dataArray:any, activity: string){
         let data:Array<string>;
-
+        d3.selectAll(".result-pretable > *").remove();
         const figure = d3.select("figure#pretable")
-            // .attr('class','result-pretable');
+            .attr('class','result-pretable');
         if(activity=="preview"){
             //data= dataArray['tokenList'][0];
 
