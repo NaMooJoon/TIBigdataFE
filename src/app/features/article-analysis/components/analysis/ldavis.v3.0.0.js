@@ -424,17 +424,17 @@ var LDAvis = function(to_select, data_or_file_name, color1, color2) {
             .attr("id", function(d) {
                 return (topicID + d.topics);
             })
-            .on("mouseover", function(d) {
+            .on("mouseover", function(e, d) {
                 var old_topic = topicID + vis_state.topic;
                 if (vis_state.topic > 0 && old_topic != this.id) {
                     topic_off(document.getElementById(old_topic));
                 }
                 topic_on(this);
             })
-            .on("click", function(d) {
+            .on("click", function(e,d) {
                 // prevent click event defined on the div container from firing
                 // http://bl.ocks.org/jasondavies/3186840
-                d3.event.stopPropagation();
+                e.stopPropagation();
                 var old_topic = topicID + vis_state.topic;
                 if (vis_state.topic > 0 && old_topic != this.id) {
                     topic_off(document.getElementById(old_topic));
@@ -444,7 +444,7 @@ var LDAvis = function(to_select, data_or_file_name, color1, color2) {
                 state_save(true);
                 topic_on(this);
             })
-            .on("mouseout", function(d) {
+            .on("mouseout", function(e, d) {
                 if (vis_state.topic != d.topics) topic_off(this);
                 if (vis_state.topic > 0) topic_on(document.getElementById(topicID + vis_state.topic));
             });
@@ -640,6 +640,18 @@ var LDAvis = function(to_select, data_or_file_name, color1, color2) {
             clear.setAttribute("style", "margin-left: 5px;font-size:12px");
             clear.innerHTML = "Clear Topic";
             topicDiv.appendChild(clear);
+
+            var termElem = document.getElementById(termID + vis_state.term);
+            if (termElem !== undefined) term_off(termElem);
+            vis_state.term = "";
+            var value_old = document.getElementById(topicID).value;
+            var value_new = Math.min(K, +value_old + 1).toFixed(0);
+            // increment the value in the input box
+            document.getElementById(topicID).value = value_new;
+            topic_off(document.getElementById(topicID + value_old));
+            topic_on(document.getElementById(topicID + value_new));
+            vis_state.topic = value_new;
+            state_save(true);
 
             // lambda inputs
             var lambdaDivWidth = barwidth;
