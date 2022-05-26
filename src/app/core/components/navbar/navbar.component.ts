@@ -6,6 +6,8 @@ import { IpService } from "src/app/core/services/ip-service/ip.service";
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import { AppComponent } from '../../../features/app.component';
 import { ArticleLibraryComponent } from '../../../features/article-library/components/article-library-root/article-library.component';
+import {SearchMode} from '../../enums/search-mode';
+import {ElasticsearchService} from '../../services/elasticsearch-service/elasticsearch.service';
 
 @Component({
   selector: "app-nav",
@@ -34,6 +36,7 @@ export class NavbarComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private appcomponent: AppComponent,
     private articleLibrary: ArticleLibraryComponent,
+    private elasticsearchService: ElasticsearchService,
   ) {
     // subscriber to get user infomation
     this.authService.getCurrentUserChange().subscribe((user) => {
@@ -133,6 +136,11 @@ export class NavbarComponent implements OnInit {
 
   navigateLibrary(): void {
     this.isHamburger = false;
+    this.elasticsearchService.setSearchMode(SearchMode.ALL);
+    this.elasticsearchService.setCurrentSearchingPage(1);
+    this.elasticsearchService.setFirstChar("");
+    this.elasticsearchService.setSelectedInst("");
+    this.elasticsearchService.setTopicHashKeys([]);
     this.router.navigateByUrl("/library");
   }
 
