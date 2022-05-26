@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import * as elasticsearch from "elasticsearch-browser";
-import { Client } from "elasticsearch-browser";
-import { BehaviorSubject, Observable } from "rxjs";
-import { SearchMode } from "src/app/core/enums/search-mode";
-import { SortOption } from "src/app/core/enums/serch-result-sort-option";
-import { ArticleSource } from "src/app/core/models/article.model";
-import { IpService } from "src/app/core/services/ip-service/ip.service";
-import { ElasticSearchQueryModel } from "../../models/elasticsearch.service.query.model";
+import {Injectable} from '@angular/core';
+import * as elasticsearch from 'elasticsearch-browser';
+import {Client} from 'elasticsearch-browser';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {SearchMode} from 'src/app/core/enums/search-mode';
+import {SortOption} from 'src/app/core/enums/serch-result-sort-option';
+import {ArticleSource} from 'src/app/core/models/article.model';
+import {IpService} from 'src/app/core/services/ip-service/ip.service';
+import {ElasticSearchQueryModel} from '../../models/elasticsearch.service.query.model';
 
 @Injectable({
   providedIn: "root",
@@ -253,7 +253,7 @@ export class ElasticsearchService {
   countByFilter(): Promise<any> {
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
-      body: this.getSearchFilterQuery(),
+      body: this.getSearchCountFilterQuery(),
     });
   }
 
@@ -461,6 +461,27 @@ export class ElasticsearchService {
     });
   }
 
+  getSearchCountFilterQuery(){
+    return {
+      query: {
+        bool: {
+          must : this.getKeywordQuery(),
+          filter: {
+            bool: {
+              must: [
+                this.getHashKeyQuery(),
+                this.getInstQuery(),
+                this.getDateQuery(),
+                this.getKeywordOption(),
+                this.getDoctypeQuery(),
+              ]
+            }
+          }
+        }
+      },
+    };
+  }
+
   getSearchFilterQuery(){
     return {
       query: {
@@ -479,6 +500,7 @@ export class ElasticsearchService {
           }
         }
       },
+      sort: [this.esQueryModel.getSortOption()],
     };
   }
 
@@ -756,7 +778,6 @@ export class ElasticsearchService {
 
   searchByLibrary(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
-
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -771,6 +792,7 @@ export class ElasticsearchService {
             ]
           }
         },
+        sort: [this.esQueryModel.getSortOption()],
       },
       _source: this.esQueryModel.getSearchSource(),
     });

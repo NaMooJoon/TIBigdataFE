@@ -10,8 +10,8 @@
 
   <div *ngIf="isResultFound" class="dropdown-menus">
     <!-- Set Sort Order -->
-    <select class="order-drop" id="order" name="order">
-      <option *ngFor="let ord of orders" [value]="ord">{{ ord |translate}}</option>
+    <select class="order-drop" id="order" name="order" (change)="saveSortOption($event.target.value)">
+      <option *ngFor="let ord of orders" [value]="ord" >{{ ord |translate}}</option>
     </select>
 
     <!-- Set number of doc per page -->

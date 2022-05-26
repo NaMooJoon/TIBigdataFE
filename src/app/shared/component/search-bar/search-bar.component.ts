@@ -1,11 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
-import {Observable, Subscription} from 'rxjs';
-import { SearchMode } from "src/app/core/enums/search-mode";
-import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
-import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {SearchMode} from 'src/app/core/enums/search-mode';
+import {AnalysisDatabaseService} from 'src/app/core/services/analysis-database-service/analysis.database.service';
+import {ArticleService} from 'src/app/core/services/article-service/article.service';
+import {ElasticsearchService} from 'src/app/core/services/elasticsearch-service/elasticsearch.service';
+import {TranslateService} from '@ngx-translate/core';
+import {SortOption} from '../../../core/enums/serch-result-sort-option';
+
 // import { SearchResultFilterComponent } from '../../../features/search-result/components/search-result-filter/search-result-filter.component';
 
 @Component({
