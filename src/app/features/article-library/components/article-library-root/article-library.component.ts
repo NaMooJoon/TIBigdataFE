@@ -19,7 +19,9 @@ export class ArticleLibraryComponent implements OnInit {
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
     public _router: Router
-  ) { }
+  ) {
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+  }
 
   //new
   private _totalSavedDocsNum: number;
@@ -62,11 +64,6 @@ export class ArticleLibraryComponent implements OnInit {
 
 
   ngOnInit() {
-    this.elasticsearchService.setSearchMode(SearchMode.ALL);
-    this.elasticsearchService.setCurrentSearchingPage(1);
-    this.elasticsearchService.setFirstChar("");
-    this.elasticsearchService.setSelectedInst("");
-    this.elasticsearchService.setTopicHashKeys([]);
     this.loadInstitutions();
   }
 
