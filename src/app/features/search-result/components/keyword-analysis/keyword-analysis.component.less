@@ -39,7 +39,13 @@
 
 .inputs{
   display: flex;
-  justify-content: center;
+  padding-left: 19.8%;
+  padding-bottom: 1%;
+  padding-top: 0.6%;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
   .input_month{
     margin: 5px;
   }
@@ -81,11 +87,9 @@
  .message{
       visibility: visible;
       display: inline;
-      font-size: 15px;
+      font-size: 1.0rem;
       color: black;
       text-align: center;
-      border-radius: 18px;
-      padding: 10px 10px;
       position: relative;
       z-index: 1;
     }
@@ -105,7 +109,6 @@
 h1 {
   font-size  : 20px;
   font-weight: 700;
-  margin     : 20px 0;
   color      : #52b9ff;
 }
 
@@ -127,10 +130,7 @@ h1 {
 }
 
 .header {
-  display        : flex;
-  justify-content: space-between;
-  align-items    : center;
-  margin         : 0 15%;
+  margin         : 0 20%;
 }
 
 @media all and (min-width: 426px) and (max-width: 768px){
@@ -168,6 +168,7 @@ h1 {
     gap                  : 20px 20px;
     grid-template-areas  : " body body body body body body body body body body body body body  ";
     height               : 100%;
+
   }
 
   .chart-wrapper {
