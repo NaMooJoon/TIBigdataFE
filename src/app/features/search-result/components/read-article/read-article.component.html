@@ -69,7 +69,12 @@
         {{'search-result.underAnalysis'|translate}}
       </p>
       <div class="detail-body wordcloud" *ngIf="0 < isCloudLoaded">
-        <angular-tag-cloud [data]="cloudData" [step]="5"> </angular-tag-cloud>
+        <angular-tag-cloud
+          [data]="cloudData"
+          [step]="5"
+          [realignOnResize] = "true"
+          [randomizeAngle] = "true"
+        > </angular-tag-cloud>
       </div>
     </section>
   </div>
