@@ -68,11 +68,14 @@
       <p class="detail-body" *ngIf="0 === isCloudLoaded">
         {{'search-result.underAnalysis'|translate}}
       </p>
-      <div class="detail-body wordcloud" *ngIf="0 < isCloudLoaded">
+      <div class="wordcloud" *ngIf="0 < isCloudLoaded">
         <angular-tag-cloud
+          [realignOnResize] = "true"
+          [width] ="0"
+          [height]="0"
           [data]="cloudData"
           [step]="5"
-          [realignOnResize] = "true"
+          [overflow] = "false"
           [randomizeAngle] = "true"
         > </angular-tag-cloud>
       </div>

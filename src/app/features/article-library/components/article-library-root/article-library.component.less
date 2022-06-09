@@ -146,6 +146,11 @@ h2 {
     z-index: 1;
   }
 
+  .selection-container.doctype>p{
+    margin-top: 5px;
+    margin-bottom: 80px;
+  }
+
   .selection-container.topic-container>p{
     margin-top: 5px;
     margin-bottom: 140px;
@@ -176,11 +181,13 @@ h2 {
 
   .selection-container>topic-container,
   .selection-container>dict-container,
-  .selection-container>inst-container{
+  .selection-container>inst-container,
+  .selection-container>doctype{
     position : relative;
     z-index: 3;
   }
 
+  .selection-container.doctype-container>div.selection-buttons,
   .selection-container.topic-container>div.selection-buttons,
   .selection-container.dict-container>div.selection-buttons,
   .selection-container.inst-container>div.selection-buttons{
@@ -206,6 +213,7 @@ h2 {
   .selection-buttons>button {
     font-size  : 1.4rem;
   }
+  .selection-container.doctype-container>div.selection-buttons,
   .selection-container.topic-container>div.selection-buttons,
   .selection-container.dict-container>div.selection-buttons,
   .selection-container.inst-container>div.selection-buttons{
