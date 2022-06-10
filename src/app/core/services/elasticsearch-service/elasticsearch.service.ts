@@ -36,6 +36,7 @@ export class ElasticsearchService {
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
+  private topic:string = "";
   private topicHashKeys : string[] = [];
   private doctype: string = null;
 
@@ -849,6 +850,10 @@ export class ElasticsearchService {
     this.selectedInst = inst;
   }
 
+  getSelectedInst():string{
+    return this.selectedInst;
+  }
+
   /**
    * @description create connection of client and Elasticsearch in backend server.
    */
@@ -929,6 +934,10 @@ export class ElasticsearchService {
     this.mustNotKeyword = mustNotKeyword;
   }
 
+  getSelectedKeyword(){
+    return this.mustKeyword, this.mustNotKeyword;
+  }
+
   fullTextOptionSearchComplete(startIndex?: number, docSize?: number): void {
     if (startIndex < 0) startIndex = 0;
     this.saveSearchResult(this.searchByTextOption(startIndex, docSize));
@@ -971,12 +980,24 @@ export class ElasticsearchService {
     this.firstChar = firstChar;
   }
 
+  getFirstChar():string{
+    return this.firstChar;
+  }
+
   searchByLibraryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByLibrary(startIndex));
   }
 
   setTopicHashKeys(hashKeys: string[]): void {
     this.topicHashKeys = hashKeys;
+  }
+
+  setTopic(topic: string){
+    this.topic = topic;
+  }
+
+  getTopic():string{
+    return this.topic
   }
 }
 

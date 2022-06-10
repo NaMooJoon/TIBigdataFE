@@ -6,8 +6,6 @@ import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import {DictionaryOption} from '../../../../core/enums/dictionary-option';
 
-
-
 @Component({
   selector: "app-category-library",
   templateUrl: "./article-library.component.html",
@@ -20,6 +18,10 @@ export class ArticleLibraryComponent implements OnInit {
     private articleService: ArticleService,
     public _router: Router
   ) {
+    this.selectedDoctype = this.parsingDocString(this.elasticsearchService.getDoctype());
+    this.selectedTp = this.elasticsearchService.getTopic();
+    this.selectedDict = this.parsingDict(this.elasticsearchService.getFirstChar());
+    this.selectedInst = this.elasticsearchService.getSelectedInst();
     this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
   }
 
@@ -330,6 +332,7 @@ export class ArticleLibraryComponent implements OnInit {
         ids.push(e["hash_key"])
       );
       this.elasticsearchService.setTopicHashKeys(ids);
+      this.elasticsearchService.setTopic(this.selectedTp);
     }
     this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
     this.elasticsearchService.triggerSearch(1);
@@ -345,5 +348,24 @@ export class ArticleLibraryComponent implements OnInit {
     }
     this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
     this.elasticsearchService.triggerSearch(1);
+  }
+
+  private parsingDocString(doctype: string) {
+    switch (doctype){
+      case 'paper': {
+        return '문서';
+      }
+      case 'news': {
+        return '기사';
+      }
+    }
+  }
+
+  private parsingDict(firstChar: string) {
+    for (let item in DictionaryOption) {
+      if (DictionaryOption[item] === firstChar) {
+        return item
+      }
+    }
   }
 }
