@@ -29,7 +29,7 @@
 
     <div class="selection-container topic-container">
       <p>{{'article-library.byTopic'|translate}}</p>
-      <div class="selection-buttons">
+      <div class="selection-buttons topic">
         <button
           *ngFor="let cat of categories; let i = index"
           [ngStyle]="selectedStyleObject(selectedTp === cat)"
