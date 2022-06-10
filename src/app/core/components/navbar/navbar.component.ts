@@ -140,6 +140,7 @@ export class NavbarComponent implements OnInit {
     this.elasticsearchService.setCurrentSearchingPage(1);
     this.elasticsearchService.setFirstChar("");
     this.elasticsearchService.setSelectedInst("");
+    this.elasticsearchService.setDoctype("");
     this.elasticsearchService.setTopicHashKeys([]);
     this.router.navigateByUrl("/library");
   }
