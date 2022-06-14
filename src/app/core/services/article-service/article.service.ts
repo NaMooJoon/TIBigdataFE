@@ -19,6 +19,7 @@ export class ArticleService {
    */
   async convertDocHashKeysToTitles(hashKeys: string[]): Promise<string[]> {
     let docTitles: Array<string> = new Array<string>(hashKeys.length);
+
     this.elasticsearchService.setHashKeys(hashKeys);
     await this.elasticsearchService.searchByManyHashKey().then((res) => {
       let articles: {}[] = res["hits"]["hits"];
@@ -28,6 +29,7 @@ export class ArticleService {
         docTitles[idx] = extractedTitle.trim();
       }
     });
+
     docTitles = Array.from(docTitles, item => typeof item === 'undefined' ? "(삭제된 문서입니다.)" : item);
     return docTitles;
   }
@@ -43,6 +45,7 @@ export class ArticleService {
         doctype[idx] = extractedDoctype.trim();
       }
     });
+
     return doctype;
   }
 
