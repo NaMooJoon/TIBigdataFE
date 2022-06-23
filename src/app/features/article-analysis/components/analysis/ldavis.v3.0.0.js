@@ -560,6 +560,7 @@ var LDAvis = function(to_select, data_or_file_name, color1, color2) {
                 return (termID + d.Term);
             })
             .style("text-anchor", "end") // right align text - use 'middle' for center alignment
+            .style("text-size", "11px")
             .text(function(d) {
                 return d.Term;
             })
