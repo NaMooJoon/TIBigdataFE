@@ -264,23 +264,23 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   
   showDictData( dictType: string, data : any ){
     d3.selectAll('.show-dict > *').remove();
-    let text : string;
+    let title : string;
     if(data.userEmail == 'default'){
-      text = "기본 사전: ";
+      title = "기본 사전: ";
       if(dictType == 'synonym')
-        text += "유의어";
+        title += "유의어";
       else if(dictType == 'stopword')
-        text += "불용어";
+        title += "불용어";
       else if(dictType == 'compound')
-        text += "복합어";
+        title += "복합어";
     }else{
-      text = "내 사전: ";
+      title = "내 사전: ";
       if(dictType == 'synonym')
-        text += "유의어";
+        title += "유의어";
       else if(dictType == 'stopword')
-        text += "불용어";
+        title += "불용어";
       else if(dictType == 'compound')
-        text += "복합어";
+        title += "복합어";
     }
     /*
     let obj = document.getElementById("table");
@@ -289,7 +289,7 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     obj.appendChild(title);
     */
     
-    document.getElementById("title").innerHTML=text;
+    document.getElementById("title").innerHTML=title;
 
     const table = d3.select("figure#table")
       .attr('class','show-dict')
@@ -297,6 +297,8 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
       .attr('width','100%')
       //.attr('height','200px')
     
+    table.style('font-size','14px')
+
     const th = table.append("tr")
         .style('padding','15px 0px')
         .style('font-weight','500')
