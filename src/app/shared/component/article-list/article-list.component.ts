@@ -1,16 +1,17 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
-import { ArticleSource } from "src/app/core/models/article.model";
-import { PaginationModel } from "src/app/core/models/pagination.model";
-import { AnalysisDatabaseService } from "src/app/core/services/analysis-database-service/analysis.database.service";
-import { ArticleService } from "src/app/core/services/article-service/article.service";
-import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
-import { ElasticsearchService } from "src/app/core/services/elasticsearch-service/elasticsearch.service";
-import { PaginationService } from "src/app/core/services/pagination-service/pagination.service";
-import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
+import {Observable, Subscription} from 'rxjs';
+import {ArticleSource} from 'src/app/core/models/article.model';
+import {PaginationModel} from 'src/app/core/models/pagination.model';
+import {AnalysisDatabaseService} from 'src/app/core/services/analysis-database-service/analysis.database.service';
+import {ArticleService} from 'src/app/core/services/article-service/article.service';
+import {AuthenticationService} from 'src/app/core/services/authentication-service/authentication.service';
+import {ElasticsearchService} from 'src/app/core/services/elasticsearch-service/elasticsearch.service';
+import {PaginationService} from 'src/app/core/services/pagination-service/pagination.service';
+import {UserSavedDocumentService} from 'src/app/core/services/user-saved-document-service/user-saved-document.service';
 import {SearchMode} from '../../../core/enums/search-mode';
+import {SortOption} from '../../../core/enums/serch-result-sort-option';
 
 @Component({
   selector: "app-article-list",
@@ -18,7 +19,7 @@ import {SearchMode} from '../../../core/enums/search-mode';
   styleUrls: ["./article-list.component.less"],
 })
 export class ArticleListComponent implements OnInit, OnDestroy {
-  public orders = ["최신순", "과거순"];
+  public orders = ["정확도순", "최신순", "과거순"];
   public amounts = [10, 30, 50];
   private _form: FormGroup;
 
@@ -381,6 +382,28 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.elasticsearchService.triggerSearch(1)
   }
 
+  saveSortOption(ord: string){
+    switch (ord){
+      case '정확도순':
+        this.elasticsearchService.setSortOption(SortOption.SCORE);
+        break;
+      case '최신순':
+        this.elasticsearchService.setSortOption(SortOption.DATE_DESC);
+        break;
+      case '과거순':
+        this.elasticsearchService.setSortOption(SortOption.DATE_ASC);
+        break;
+    }
+    let rootUrl = this.router.routerState.snapshot.url;
+
+    if(rootUrl.startsWith('/library')){
+      this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+    }else{
+      this.elasticsearchService.setSearchMode(SearchMode.FILTER);
+    }
+    this.elasticsearchService.triggerSearch(1);
+  }
+
   // getters and setters
   public get form(): FormGroup {
     return this._form;
@@ -539,4 +562,5 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   public get selectedDoctype(): string {
     return this.elasticsearchService.getDoctype();
   }
+
 }

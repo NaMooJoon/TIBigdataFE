@@ -53,7 +53,7 @@ function getKeyVal(req, res) {
       {
         $project: {
           count: {
-            $slice: ["$count", num, num], //3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
+            $slice: [ "$count", { $min: [ { $size: "$count" }, num ] } ], //3번째 elemnt(왼쪽 param)까지 3개만큼(right param)
           },
         },
       },

@@ -93,19 +93,19 @@
           </ul>
 
         <ul *ngIf="!getIsSignedIn()" class="login-menu-tablet">
-          <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
-          <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'login')">
             <a (click)="toLogin()">{{'navbar.signIn'|translate}}</a>
           </li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'register')">
             <a (click)="toRegister()">{{'navbar.register'|translate}}</a>
           </li>
+          <ul class="language_tablet">
+            <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
+            <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
+          </ul>
         </ul>
 
         <ul *ngIf="getIsSignedIn()" class="user-menu-tablet">
-          <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
-          <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
           <li [ngStyle]="selectedStyleObject(getSelectedMenu() === 'userpage')">
             <a (click)="clickDropDownUserpage()"
                class="dropdown-userpage">{{'마이페이지'|translate}}</a>
@@ -126,6 +126,10 @@
             </ul>
           </li>
           <li><a (click)="logOut()">{{'navbar.signOut'|translate}}</a></li>
+          <ul class="language_tablet">
+            <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('ko')" class="word"><img src="../../../../assets/icons/kor_word.png"></a></li>
+            <li><a [ngStyle]="disableObject(isMain)" (click)="useLanguage('en')" class="word"><img src="../../../../assets/icons/eng_word.png"></a></li>
+          </ul>
         </ul>
 
       </nav>

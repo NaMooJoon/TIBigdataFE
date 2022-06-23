@@ -45,11 +45,13 @@ export class ResearchStatusComponent implements OnInit {
 
     // append the svg object to the div called 'my_dataviz'
     const svg = d3.select("#pie_chart")
-                  .append("svg")
-                  .attr("width", width)
-                  .attr("height", height)
-                  .append("g")
-                  .attr("transform", `translate(${width/2},${height/2})`);
+      .classed("chart-wrapper", true)
+      .append("svg")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 450 450")
+      .classed("svg-content-responsive", true)
+      .append("g")
+      .attr("transform", `translate(${width/2},${height/2})`);
 
     // add circle in the middle of the doughnut graph
     svg.append("svg:circle")

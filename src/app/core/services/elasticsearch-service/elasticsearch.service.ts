@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import * as elasticsearch from "elasticsearch-browser";
-import { Client } from "elasticsearch-browser";
-import { BehaviorSubject, Observable } from "rxjs";
-import { SearchMode } from "src/app/core/enums/search-mode";
-import { SortOption } from "src/app/core/enums/serch-result-sort-option";
-import { ArticleSource } from "src/app/core/models/article.model";
-import { IpService } from "src/app/core/services/ip-service/ip.service";
-import { ElasticSearchQueryModel } from "../../models/elasticsearch.service.query.model";
+import {Injectable} from '@angular/core';
+import * as elasticsearch from 'elasticsearch-browser';
+import {Client} from 'elasticsearch-browser';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {SearchMode} from 'src/app/core/enums/search-mode';
+import {SortOption} from 'src/app/core/enums/serch-result-sort-option';
+import {ArticleSource} from 'src/app/core/models/article.model';
+import {IpService} from 'src/app/core/services/ip-service/ip.service';
+import {ElasticSearchQueryModel} from '../../models/elasticsearch.service.query.model';
 
 @Injectable({
   providedIn: "root",
@@ -36,6 +36,7 @@ export class ElasticsearchService {
   private mustKeyword: string = "";
   private mustNotKeyword: string = "";
   private firstChar = "";
+  private topic:string = "";
   private topicHashKeys : string[] = [];
   private doctype: string = null;
 
@@ -253,7 +254,7 @@ export class ElasticsearchService {
   countByFilter(): Promise<any> {
     return this.client.count({
       index: this.ipSvc.ES_INDEX,
-      body: this.getSearchFilterQuery(),
+      body: this.getSearchCountFilterQuery(),
     });
   }
 
@@ -461,6 +462,27 @@ export class ElasticsearchService {
     });
   }
 
+  getSearchCountFilterQuery(){
+    return {
+      query: {
+        bool: {
+          must : this.getKeywordQuery(),
+          filter: {
+            bool: {
+              must: [
+                this.getHashKeyQuery(),
+                this.getInstQuery(),
+                this.getDateQuery(),
+                this.getKeywordOption(),
+                this.getDoctypeQuery(),
+              ]
+            }
+          }
+        }
+      },
+    };
+  }
+
   getSearchFilterQuery(){
     return {
       query: {
@@ -479,6 +501,7 @@ export class ElasticsearchService {
           }
         }
       },
+      sort: [this.esQueryModel.getSortOption()],
     };
   }
 
@@ -756,7 +779,6 @@ export class ElasticsearchService {
 
   searchByLibrary(startIndex?: number, docSize?: number): Promise<any> {
     if (!startIndex) startIndex = 0;
-
     return this.client.search({
       index: this.ipSvc.ES_INDEX,
       from: startIndex,
@@ -765,12 +787,14 @@ export class ElasticsearchService {
         query: {
           bool: {
             must: [
+              this.getDoctypeQuery(),
               this.getHashKeyQuery(),
               this.getInstQuery(),
               this.getDictionaryQuery(),
             ]
           }
         },
+        sort: [this.esQueryModel.getSortOption()],
       },
       _source: this.esQueryModel.getSearchSource(),
     });
@@ -824,6 +848,10 @@ export class ElasticsearchService {
    */
   setSelectedInst(inst: string) {
     this.selectedInst = inst;
+  }
+
+  getSelectedInst():string{
+    return this.selectedInst;
   }
 
   /**
@@ -906,6 +934,10 @@ export class ElasticsearchService {
     this.mustNotKeyword = mustNotKeyword;
   }
 
+  getSelectedKeyword(){
+    return this.mustKeyword, this.mustNotKeyword;
+  }
+
   fullTextOptionSearchComplete(startIndex?: number, docSize?: number): void {
     if (startIndex < 0) startIndex = 0;
     this.saveSearchResult(this.searchByTextOption(startIndex, docSize));
@@ -948,12 +980,24 @@ export class ElasticsearchService {
     this.firstChar = firstChar;
   }
 
+  getFirstChar():string{
+    return this.firstChar;
+  }
+
   searchByLibraryComplete(startIndex?: number) {
     this.saveSearchResult(this.searchByLibrary(startIndex));
   }
 
   setTopicHashKeys(hashKeys: string[]): void {
     this.topicHashKeys = hashKeys;
+  }
+
+  setTopic(topic: string){
+    this.topic = topic;
+  }
+
+  getTopic():string{
+    return this.topic
   }
 }
 

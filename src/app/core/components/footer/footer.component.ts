@@ -23,4 +23,7 @@ export class FooterComponent implements OnInit {
     this.router.navigateByUrl("/about/member-policy");
   }
 
+  toServiceGuide(): void {
+    this.router.navigateByUrl("/about/service-guide");
+  }
 }

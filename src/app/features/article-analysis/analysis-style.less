@@ -286,7 +286,7 @@ td {
         padding-top : 3.0em;
         padding-left: 1.6em;
         padding-right: 1.6em;
-        padding-bottom: 3.0em; 
+        padding-bottom: 3.0em;
     }
 
     input[type="radio"] + label {
@@ -490,6 +490,7 @@ td {
 
 
 @media (max-width :768px){
+
   .popupmenu-item ul.popupmenu-menu
   {
     width: 50%;
@@ -519,7 +520,7 @@ td {
   }
 
   .pop-head{
-    font-size: 0.1rem;
+    font-size: 2vw;
     margin:2px;
     background-color: white;
     border: 1px solid lightgrey;
@@ -533,6 +534,15 @@ td {
     width:25%;
     margin: 10px;
     flex: 1 1 32%;
+  }
+
+  .pop-container{
+    margin: 10px;
+    background-color: white;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
   }
 
   .radio-items {
@@ -608,7 +618,7 @@ td {
     width: 36%;
     font-size: 1.5rem;
   }
-  
+
   .popupmenu-wrapper{
     width: 100%;
   }
@@ -616,7 +626,7 @@ td {
     width : 75%;
   }
   .pop-head{
-    font-size: 0.1rem;
+    font-size: 4vw;
     margin:2px;
     background-color: white;
     border: 1px solid lightgrey;
@@ -624,12 +634,12 @@ td {
     justify-content: center;
     align-items: center;
     text-align: center;
-  
+
   }
 
   .pop-block{
     width:25%;
-    margin: 10px;
+    margin: 5px 10px;
     flex: 1 1 27%;
   }
 
@@ -679,10 +689,7 @@ td {
   }
 
   .col-3 {width: 33%;}
- 
 }
-
-
 
 // Frame
   .content-container {
@@ -727,6 +734,11 @@ td {
     border-radius: 22.5px;
     color: #52B9FF;
   }
+@media all and (max-width: 410px){
+  .pop-container{
+    margin : 0px;
+  }
+}
 
   @media all and (max-width: 425px){
     .content-container {

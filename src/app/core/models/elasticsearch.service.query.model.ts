@@ -112,4 +112,8 @@ export class ElasticSearchQueryModel {
     if (op === 1) this.sortOption = this.sortByDateDesc;
     if (op === 2) this.sortOption = this.sortByScoreDesc;
   }
+
+  public getSortOption(){
+    return this.sortOption;
+  }
 }

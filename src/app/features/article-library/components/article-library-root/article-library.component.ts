@@ -6,8 +6,6 @@ import { SearchMode } from "src/app/core/enums/search-mode";
 import { ArticleService } from "src/app/core/services/article-service/article.service";
 import {DictionaryOption} from '../../../../core/enums/dictionary-option';
 
-
-
 @Component({
   selector: "app-category-library",
   templateUrl: "./article-library.component.html",
@@ -19,12 +17,19 @@ export class ArticleLibraryComponent implements OnInit {
     private elasticsearchService: ElasticsearchService,
     private articleService: ArticleService,
     public _router: Router
-  ) { }
+  ) {
+    this.selectedDoctype = this.parsingDocString(this.elasticsearchService.getDoctype());
+    this.selectedTp = this.elasticsearchService.getTopic();
+    this.selectedDict = this.parsingDict(this.elasticsearchService.getFirstChar());
+    this.selectedInst = this.elasticsearchService.getSelectedInst();
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+  }
 
   //new
   private _totalSavedDocsNum: number;
   private _selectedTp: string;
   private _selectedDict: string;
+  private _selectedDoctype: string;
 
   private _toggleTopics: boolean[];
   private _institutionList: string[];
@@ -62,11 +67,6 @@ export class ArticleLibraryComponent implements OnInit {
 
 
   ngOnInit() {
-    this.elasticsearchService.setSearchMode(SearchMode.ALL);
-    this.elasticsearchService.setCurrentSearchingPage(1);
-    this.elasticsearchService.setFirstChar("");
-    this.elasticsearchService.setSelectedInst("");
-    this.elasticsearchService.setTopicHashKeys([]);
     this.loadInstitutions();
   }
 
@@ -283,6 +283,37 @@ export class ArticleLibraryComponent implements OnInit {
     this._selectedDict = value;
   }
 
+  async selectDoc(e) {
+    this.selectedDoctype = e.target.innerText.toString();
+
+    if(this.selectedDoctype === "전체"){
+      this.elasticsearchService.setDoctype("");
+    } else {
+      let doctype;
+      switch (this.selectedDoctype){
+        case '문서': {
+          doctype = 'paper'
+          break;
+        }
+        case '기사': {
+          doctype = 'news'
+          break;
+        }
+      }
+      this.elasticsearchService.setDoctype(doctype);
+    }
+    this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
+    this.elasticsearchService.triggerSearch(1);
+  }
+
+  public get selectedDoctype(): string {
+    return this._selectedDoctype;
+  }
+
+  public set selectedDoctype(value: string) {
+    this._selectedDoctype = value;
+  }
+
   /**
    * @description Select institutions and set search mode as selected
    * @param institution
@@ -301,6 +332,7 @@ export class ArticleLibraryComponent implements OnInit {
         ids.push(e["hash_key"])
       );
       this.elasticsearchService.setTopicHashKeys(ids);
+      this.elasticsearchService.setTopic(this.selectedTp);
     }
     this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
     this.elasticsearchService.triggerSearch(1);
@@ -316,5 +348,24 @@ export class ArticleLibraryComponent implements OnInit {
     }
     this.elasticsearchService.setSearchMode(SearchMode.LIBRARY);
     this.elasticsearchService.triggerSearch(1);
+  }
+
+  private parsingDocString(doctype: string) {
+    switch (doctype){
+      case 'paper': {
+        return '문서';
+      }
+      case 'news': {
+        return '기사';
+      }
+    }
+  }
+
+  private parsingDict(firstChar: string) {
+    for (let item in DictionaryOption) {
+      if (DictionaryOption[item] === firstChar) {
+        return item
+      }
+    }
   }
 }
