@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import { Tooltip } from "chart.js";
 import * as lda from "./ldavis.v3.0.0.js";
 import { svgAsPngUri, saveSvgAsPng } from "save-svg-as-png";
-// import { Router } from "@angular/router";
+import { Router } from "@angular/router";
 
 // @Injectable({
 //   providedIn: "root",
@@ -878,10 +878,29 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   //       "degree_cen":number,
   //       "eigenvector_cen":number,
   //       "id":number,
-  //       "name":string}>
+  //       "name":string,
+  //       "count":number}>
   // }
   = JSON.parse(data_str);
-    	//Set margins and sizes
+    
+  // normalize count
+  const normCount = d3.scaleLinear()
+        .domain(d3.extent(data['nodes'], d=> +d['count']))
+        .range([0,1])
+  
+  const normWeight = d3.scaleLinear()
+        .domain(d3.extent(data['links'], d=> +d['weight']))
+        .range([0,1])
+  
+  // test
+  // console.log(d3.extent(data['nodes'], d=>+d['count']));
+  // console.log(data['nodes'])
+
+  // for(let d of data['nodes']){
+  //   console.log(d['count'],normCount(d['count']))
+  // }
+  
+  //Set margins and sizes
 	var margin = {
 		top: 20,
 		bottom: 50,
@@ -948,7 +967,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .transition()
         .duration(200)
         .style("fill", "#7FB5FF")
-        .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
+        .attr("r", function(d){ return normCount(d['count'])*7 < 1 ? 1: normCount(d['count']*7) })
 
       d3.selectAll(".dottext")
         .style("opacity", 1)
@@ -961,7 +980,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 					.data(links)
 					.enter()
 					.append("line")
-            .style("stroke-width", function(d){ return d['weight']/100 < 1 ? 1 :(d['weight']/100>5?5:d['weight']/100); })
+            .style("stroke-width", function(d){ return normWeight(d['weight'])*5 < 1 ? 1 :normWeight(d['weight'])*5 })
             .attr("class", "link")
             .style("stroke", "#C4DDFF")
     
@@ -977,12 +996,12 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 		var label = node.append("text")
 						.attr("dx", 12)
 						.attr("dy", "0.35em")
-						.attr("font-size", function(d){ return d['count']/300>9? d['count']/300: 9; })
+						.attr("font-size",function(d){ return normCount(d['count'])*12 < 1 ? 9: normCount(d['count'])*12 })
 						.text(function(d){ return d['name']; });
 
 		//Add circles to each node
 		var circle = node.append("circle")
-      .attr("r", function(d){ return d['count']/300 < 5 ? 5: (d['count']/300>7 ? 7 :d['count']/300); })
+      .attr("r", function(d){ return normCount(d['count'])*7 < 1 ? 1: normCount(d['count'])*7 })
       .attr("fill", "#7FB5FF")
       // .attr("fill", function(d){ return color(d['id']); })
       .attr("class", function (d) { return "dot type" + d['id']} )
@@ -1233,12 +1252,9 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
 
       // console.log(data);
       this.middlewareService.postDataToFEDB('/textmining/uploadChart', data).then( res=>{
-        alert("선택하신 차트가 내 분석함에 저장되었습니다.");
-      //   let move = confirm("선택하신 차트가 내 분석함에 저장되었습니다. 내 분석함으로 이동하시겠습니까?");
-      //   if(move){
-      //     this.router.navigateByUrl("/userpage/my-analysis");
-      //     this.ngOnInit();
-      //   }
+        // alert("선택하신 차트가 내 분석함에 저장되었습니다.");
+        if(confirm("선택하신 차트가 내 분석함에 저장되었습니다. 내 분석함 페이지로 이동하시겠습니까?")) 
+          this.toMyAnalysis();
       });
       
     });

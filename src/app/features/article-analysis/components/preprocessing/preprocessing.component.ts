@@ -5,7 +5,7 @@ import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-m
 import { AuthenticationService } from "src/app/core/services/authentication-service/authentication.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 import { CSVDownloadService } from "src/app/core/services/csv-download-service/csv-download.service";
-
+import { Router } from "@angular/router";
 @Component({
   selector: "app-preprocessing",
   templateUrl: "./preprocessing.component.html",
@@ -30,10 +30,11 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
   constructor(
     _middlewareService : AnalysisOnMiddlewareService,
     _userSavedDocumentService : UserSavedDocumentService,
+    _router:  Router,
     private authService : AuthenticationService,
     private csvDownload : CSVDownloadService,
   ){
-    super(_middlewareService, _userSavedDocumentService); //Analysis Component로부터 상속
+    super(_middlewareService, _userSavedDocumentService,_router); //Analysis Component로부터 상속
     this.userProfile = this.authService.getCurrentUser();
   }
 
@@ -218,7 +219,9 @@ export class PreprocessingComponent extends abstractAnalysis implements OnInit {
     console.log("preview", this.preprocessedData);
     this.clearResult();
     this.drawPreTable(this.preprocessedData, "runProcessing");
-    alert("전처리 완료되었습니다");
+
+    if(confirm("전처리가 완료되었습니다.\n자료분석 페이지로 이동하시겠습니까?")) 
+      this.toAnalysis();
   }
 
   async previewDict(dictType : string) : Promise<void>{

@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { AnalysisOnMiddlewareService } from "src/app/core/services/analysis-on-middleware-service/analysis.on.middleware.service";
 import { UserSavedDocumentService } from "src/app/core/services/user-saved-document-service/user-saved-document.service";
 import $ from "jquery";
+import { Router } from "@angular/router";
 
 @Injectable({
     providedIn: "root",
@@ -26,7 +27,20 @@ export abstract class abstractAnalysis{
     constructor(
         private _middlewareService: AnalysisOnMiddlewareService,
         private _userSavedDocumentService: UserSavedDocumentService,
+        private router: Router
       ){};
+
+    toPreprocessing() {
+        this.router.navigateByUrl("/analysis-menu/preprocessing");
+    }
+
+    toAnalysis() {
+        this.router.navigateByUrl("/analysis-menu/analysis");
+    }
+
+    toMyAnalysis(){
+        this.router.navigateByUrl("/userpage/my-analysis");
+    }
 
     onMessage(event){
         let data = JSON.parse(event);
