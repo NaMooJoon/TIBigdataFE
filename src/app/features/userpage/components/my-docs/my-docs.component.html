@@ -5,7 +5,10 @@
       <button
         class="scroll"
         id = "scroll-width"
-        (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ parsingSavedDate(key.savedDate) }}</button>
+        [ngStyle]="{
+          'background-color': ((this.keyword === key.keyword)&&(this.savedDate === key.savedDate)) ? '#52b9ff' : 'transparent',
+          color: ((this.keyword === key.keyword)&&(this.savedDate === key.savedDate)) ? 'white': '#7A7A7A'}"
+        (click)="currentKeywordAndDate(key.keyword,key.savedDate)">{{ key.keyword }} {{ key.savedDate | date:'YYYY-M-d H:m:s' }}</button>
     </div>
     <div class="folder-menu">
       <button
@@ -15,7 +18,6 @@
       >{{'userpage.EditFolder'|translate}}</button>
     </div>
   </section>
-
 </form>
 
 <div class="outline">
@@ -58,38 +60,7 @@
   </section>
 </form>
 
-<!--<div *ngIf="isSavedDocsLoaded && !isSavedDocsEmpty" class="page-numbers">-->
-<!--  <button-->
-<!--    id="page-multiprev"-->
-<!--    *ngIf="currentPage > 1"-->
-<!--    (click)="loadSavedDocs(pageInfo.currentPage - 10)"-->
-<!--  ></button>-->
-<!--  <button-->
-<!--    id="page-prev"-->
-<!--    *ngIf="currentPage > 1"-->
-<!--    (click)="loadSavedDocs(currentPage - 1)"-->
-<!--  ></button>-->
-<!--  <button-->
-<!--    [ngStyle]="{-->
-<!--      'background-color': currentPage == i ? '#52b9ff' : 'transparent',-->
-<!--      color: currentPage == i ? 'white' : 'black'-->
-<!--    }"-->
-<!--    (click)="loadSavedDocs(i)"-->
-<!--    *ngFor="let i of pages"-->
-<!--  >-->
-<!--    {{ i }}-->
-<!--  </button>-->
-<!--  <button-->
-<!--    id="page-next"-->
-<!--    *ngIf="currentPage < pageInfo.endPage"-->
-<!--    (click)="loadSavedDocs(pageInfo.currentPage + 1)"-->
-<!--  ></button>-->
-<!--  <button-->
-<!--    id="page-multinext"-->
-<!--    *ngIf="currentPage != pageInfo.endPage"-->
-<!--    (click)="loadSavedDocs(pageInfo.currentPage + 10)"-->
-<!--  ></button>-->
-<!--</div>-->
+
 
 <p class="no-saved-doc" *ngIf="isSavedDocsEmpty" > 저장된 문서가 없습니다.</p>
 </div>
