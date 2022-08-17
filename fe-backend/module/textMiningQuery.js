@@ -77,7 +77,7 @@ async function uploadDict(req, res) {
   async function getPreprocessedData(req, res) {
     let userEmail = req.body.userEmail;
     let savedDate = req.body.savedDate;
-    
+
     preprocessing
       .findOne(
         { $and : [ { 'userEmail' : userEmail }, { 'savedDate' : savedDate }] }
@@ -107,7 +107,7 @@ async function uploadDict(req, res) {
           .status(400)
           .json(new Res(false, "successfully saved doc HashKeys", null));
       });
-      
+
     /*
     preprocessing
       .findOne(
@@ -144,11 +144,11 @@ async function uploadDict(req, res) {
   }
 
   async function uploadChart(req, res) {
-    if(req.body.userEmail == null  || req.body.chartImg == null) 
+    if(req.body.userEmail == null  || req.body.chartImg == null)
     return res.status(400).json(
       new Res(false, "Request body does not exist",null)
     );
-  
+
     // console.log('req',req);
     // let doc = {
     //   'userEmail': req.body.userEmail,
@@ -196,7 +196,7 @@ async function getCharts(req, res) {
           new Res(true, "successfully loaded", result)
         );
     }else{
-      return res 
+      return res
         .status(400)
         .json(
           new Res(false, "no saved chart",null)
@@ -243,7 +243,7 @@ async function deleteCharts(req, res){
 async function getChartData(req, res){
   if(req.body.activity === 'tfidf'){
     tfidf.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
     ).then((result) => {
       if(result){
         return res
@@ -268,7 +268,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "count"){
     count.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -294,7 +294,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "kmeans"){
     kmeans.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -320,7 +320,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "network"){
     network.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -346,7 +346,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "ngrams"){
     ngrams.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -372,7 +372,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "hcluster"){
     hcluster.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -398,7 +398,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "word2vec"){
     word2vec.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -424,7 +424,7 @@ async function getChartData(req, res){
     });
   }else if(req.body.activity === "topicLDA"){
     topicLDA.findOne(
-      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] } 
+      { $and: [{ userEmail: req.body.userEmail }, { analysisDate: req.body.analysisDate}] }
 
     ).then((result) => {
       if(result){
@@ -451,6 +451,191 @@ async function getChartData(req, res){
   }
 }
 
+router.post("/deleteCount", (req, res) => {
+  let userEmail = req.body.email;
+  count.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteHcluster", (req, res) => {
+  let userEmail = req.body.email;
+  hcluster.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteKmeans", (req, res) => {
+  let userEmail = req.body.email;
+  kmeans.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteMyAnalysis", (req, res) => {
+  let userEmail = req.body.email;
+  myAnalysis.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteNetwork", (req, res) => {
+  let userEmail = req.body.email;
+  network.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteNgrams", (req, res) => {
+  let userEmail = req.body.email;
+  ngrams.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deletePreprocessing", (req, res) => {
+  let userEmail = req.body.email;
+  preprocessing.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteTfidf", (req, res) => {
+  let userEmail = req.body.email;
+  tfidf.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteTopicLDA", (req, res) => {
+  let userEmail = req.body.email;
+  topicLDA.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteUserDic", (req, res) => {
+  let userEmail = req.body.email;
+  usersDict.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
+router.post("/deleteWord2vec", (req, res) => {
+  let userEmail = req.body.email;
+  word2vec.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
 
 module.exports = router;
-  

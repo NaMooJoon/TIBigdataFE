@@ -2,9 +2,17 @@
   <div>
     <h1>{{'userpage.guideForrmAccount'|translate}}</h1>
     <br />
-    <p>{{'userpage.rmAccountInfo'|translate}}</p>
-    <p>{{'userpage.surermAccount'|translate}}</p>
-
-    <button class="button" (click)="secession()">{{'navbar.rmAccount' | translate}}</button>
+<!--    <p>{{'userpage.rmAccountInfo'|translate}}</p>-->
+    <p>{{'userpage.rmAccountInfo'|translate}}<br>
+      {{'userpage.rmAccountInfo-1'|translate}}<br><br>
+      ॰ {{'userpage.rmAccountInfo-2'|translate}} <br>
+      ॰ {{'userpage.rmAccountInfo-3'|translate}} <br>
+      ॰ {{'userpage.rmAccountInfo-4'|translate}} <br>
+      ॰ {{'userpage.rmAccountInfo-5'|translate}} <br>
+      ॰ {{'userpage.rmAccountInfo-6'|translate}}  <br>
+    </p>
+    <a class="btn-container">
+      <button class="button" (click)="deleteUser()">{{'navbar.rmAccount' | translate}}</button>
+    </a>
   </div>
 </div>

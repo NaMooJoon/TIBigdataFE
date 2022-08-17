@@ -206,4 +206,22 @@ router.post("/getMyKeyword", (req, res) => {
     });
 });
 
+
+router.post("/deleteUser", (req, res) => {
+  let userEmail = req.body.email;
+  myDoc.deleteMany(
+    { userEmail: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+});
+
 module.exports = router;
