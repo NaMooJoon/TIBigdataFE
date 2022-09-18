@@ -116,40 +116,6 @@ async function getUserInfo(req, res) {
   });
 }
 
-async function deleteUser(req, res) {
-  let userEmail = req.body.email;
-  let userId;
-  console.log("email", userEmail);
-  User.findOne({ email: userEmail })
-    .then((result) => {
-      userId = result["_id"];
-      if (result) {
-        User.deleteOne({ email: userEmail }).then((deleteResult) => {
-          if (deleteResult) {
-            UserStatus.updateOne(
-              { userId: userId },
-              {
-                modifiedDate: moment(),
-                isActive: false,
-              }
-            )
-              .then((result) => {
-                console.log(result);
-                return res.status(200).json(new Res(true, "deletion succ"));
-              })
-              .catch((err) => {
-                console.log(err);
-                return res.status(400).json(new Res(false, "deletion Failed"));
-              });
-          }
-        });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
 router.post("/apiRegister", (req, res) => {
   let userEmail = req.body.payload;
 
@@ -170,5 +136,22 @@ router.post("/apiRegister", (req, res) => {
     }
   );
 });
+
+async function deleteUser(req, res) {
+  let userEmail = req.body.email;
+  User.deleteMany(
+    { email: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+}
 
 module.exports = router;

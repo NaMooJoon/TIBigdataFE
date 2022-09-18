@@ -222,19 +222,121 @@ export class AuthenticationService {
    * @returns Deleting result.
    */
   async deleteUser(): Promise<boolean> {
+    let email = this.currentUser.email;
+    console.log('remove this user : ',email);
+    //delete user information - DB : user, collection : users
     let userDeleteRes: QueryResponse = await this.httpClient
       .post<any>(`${this.API_URL}/users/deleteUser`, {
-        email: this.currentUser.email,
+        email: email,
       })
       .toPromise();
-    let myDocDeleteRes: QueryResponse = await this.httpClient
-      .post<any>(`${this.API_URL}/myDoc/deleteAllMyDocs`, {
-        userEmail: this.currentUser.email,
+
+    //delete api user information - DB : user, collection : apiUser
+    let apiUserDeleteRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/api/deleteUser`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete mydocs information - DB : user, collection : mydocs
+    let keepMydocsDeleteRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/myDoc/deleteUser`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : myAnalysis
+    let textMiningDeleteMyAnalysisRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteMyAnalysis`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : count
+    let textMiningDeleteCountRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteCount`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Hcluster
+    let textMiningDeleteHclusterRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteHcluster`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Kmeans
+    let textMiningDeleteKmeansRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteKmeans`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Network
+    let textMiningDeleteNetworkRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteNetwork`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Ngrams
+    let textMiningDeleteNgramsRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteNgrams`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Preprocessing
+    let textMiningDeletePreprocessingRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deletePreprocessing`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Tfidf
+    let textMiningDeleteTfidfRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteTfidf`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : TopicLDA
+    let textMiningDeleteTopicLDARes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteTopicLDA`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : UserDic
+    let textMiningDeleteUserDicRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteUserDic`, {
+        email: email,
+      })
+      .toPromise();
+
+    //delete user's analysis data  - DB : textMining, collection : Word2vec
+    let textMiningDeleteWord2vecRes: QueryResponse = await this.httpClient
+      .post<any>(`${this.API_URL}/textmining/deleteWord2vec`, {
+        email: email,
       })
       .toPromise();
 
     return (
-      userDeleteRes.isSuccess === true && myDocDeleteRes.isSuccess === true
+      userDeleteRes.isSuccess === true &&
+      keepMydocsDeleteRes.isSuccess === true &&
+      textMiningDeleteMyAnalysisRes.isSuccess === true &&
+      textMiningDeleteCountRes.isSuccess === true &&
+      apiUserDeleteRes.isSuccess === true &&
+      textMiningDeleteHclusterRes.isSuccess === true &&
+      textMiningDeleteKmeansRes.isSuccess === true &&
+      textMiningDeleteNetworkRes.isSuccess === true &&
+      textMiningDeleteNgramsRes.isSuccess === true &&
+      textMiningDeletePreprocessingRes.isSuccess === true &&
+      textMiningDeleteTfidfRes.isSuccess === true &&
+      textMiningDeleteTopicLDARes.isSuccess === true &&
+      textMiningDeleteUserDicRes.isSuccess === true &&
+      textMiningDeleteWord2vecRes.isSuccess === true
     );
   }
 }

@@ -14,6 +14,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private searchSubscriber: Subscription;
   private searchKeyword: string;
   private currentYearMonth: string;
+  private beforeSizYearMonth: string;
   private startYearMonth: string;
   private endYearMonth: string;
   private per: string;
@@ -59,12 +60,23 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var current = new Date();
     var year = current.getFullYear();
     var c_month = current.getMonth() + 1;
+
+    var beforeSix = new Date(current.setMonth(current.getMonth() -6));
+    var beforeSixyear = beforeSix.getFullYear();
+    var beforeSix_month = beforeSix.getMonth() +2;
+
     if(c_month < 10) {
       this.currentYearMonth = "" + year + "-0" +  c_month;
+      this.beforeSizYearMonth = "" + beforeSixyear + "-0" +  beforeSix_month;
     }
     else {
       this.currentYearMonth = "" + year + "-" +  c_month;
+      this.beforeSizYearMonth = "" + beforeSixyear + "-" +  beforeSix_month;
     }
+
+    this.startYearMonth = this.beforeSizYearMonth;
+    this.endYearMonth = this.currentYearMonth;
+
   }
 
   year_clicked() {
@@ -73,8 +85,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     yb.style.background="lightgrey";
     mb.style.background="transparent";
 
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "year";
   }
 
@@ -84,8 +94,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     mb.style.background="lightgrey";
     yb.style.background="transparent";
 
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "month";
   }
 
@@ -108,13 +116,20 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
         tmpYear = year;
       }
     }
-    console.log(yearData)
     return yearData;
   }
 
+  setDatePickerStartYearMonth(e) {
+    this.startYearMonth = e.target.value;
+  }
+
+  setDatePickerEndYearMonth(e) {
+    this.endYearMonth = e.target.value;
+  }
+
   async updateChart(){
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
+    // console.log('update chart startYearMonth : '+this.startYearMonth);
+    // console.log('update chart endYearMonth : '+this.endYearMonth);
 
 //     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
     var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
@@ -216,33 +231,45 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   }
 
   async updateData(start, end) {
-    var searchHistory = [];
-    var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
-    var cnt = [];
-    var s_idx = -1;
-    var e_idx = -1;
-    for(var i = 5 ; i < 17; i++){
-      if(month[i] == +start.split("-")[1]) {
-        s_idx = i;
-      }
-      if(month[i] == +end.split("-")[1]) {
-        e_idx = i;
-      }
+    var startDate = new Date(start);
+    var endDate = new Date(end);
+    if(startDate > endDate){
+      console.log("DATE_ERROR");
     }
-    if(s_idx == -1 || e_idx == -1){
-      console.log("IDX_ERROR");
-    }
-    for(var i = s_idx; i <= e_idx; i ++){
-      var m;
-      var y = start.split("-")[0];
 
-      if(month[i] < 10){
-        m = "0" + month[i];
+    var monthDifference = -1;
+    var month = []
+    var year = []
+
+    var interval = endDate.valueOf() - startDate.valueOf();
+    var monthValue = 1000*60*60*24*30;
+    var monthDifference = Math.floor(interval/monthValue) + 1;
+
+    var startYear = +start.split("-")[0]
+    var startMonth = +start.split("-")[1]
+
+    for(i = monthDifference; i > 0; i--){
+      if(startMonth == 13){
+        startYear++;
+        startMonth = 1;
+      }
+      year.push(startYear);
+      month.push(startMonth++);
+    }
+
+    var searchHistory = [];
+
+    for(var i = 0; i < month.length; i++){
+      var y = year[i];
+      var m = month[i];
+
+      if(m < 10){
+        m = "0" + m;
       }
       else {
-        m = "" + month[i];
+        m = "" + m;
       }
-      //search_log-<year>.<month>
+
       var index = "search_log-" + y + "." + m;
       var count;
       try {
@@ -255,13 +282,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
         const hist = {date: "" + y + "." + m, freq: 0};
         searchHistory.push(hist);
       }
-
-      if(month[i] > month[i - 1]){
-              y = +y;
-              y = y + 1;
-      }
     }
-    console.log("search history");
+
     return searchHistory;
   }
 
@@ -271,6 +293,10 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   public get getCurrentYearMonth(): string {
       return this.currentYearMonth;
+  }
+
+  public get getBeforeSixMonthYearMonth(): string {
+    return this.beforeSizYearMonth;
   }
 }
 

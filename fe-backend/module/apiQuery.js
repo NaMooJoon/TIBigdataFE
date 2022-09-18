@@ -10,7 +10,7 @@ const router = express.Router();
 // router.post("/registerUser", registerUser);
 router.post("/getApiInfo", getApiInfo);
 // router.post("/verifyToken", verifyToken);
-// router.post("/deleteUser", deleteUser);
+router.post("/deleteUser", deleteUser);
 
 async function getApiInfo(req, res) {
     let userEmail = req.body.email;
@@ -24,7 +24,7 @@ async function getApiInfo(req, res) {
             for (let item of result){
                 delete item.veri_code;
             }
-            
+
           return res
             .status(200)
             .json(
@@ -58,7 +58,24 @@ async function getApiInfo(req, res) {
     //       })
     //     );
     // });
-  }
+}
 
-  
+async function deleteUser(req, res) {
+  let userEmail = req.body.email;
+  apiuser.deleteMany(
+    { user_email: userEmail },
+    (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (!result) {
+          res.json(new Res(false, "can't remove"));
+        }
+        res.json(new Res(true, "success remove"));
+      }
+    }
+  );
+}
+
+
 module.exports = router;
