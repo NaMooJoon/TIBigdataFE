@@ -14,6 +14,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   private searchSubscriber: Subscription;
   private searchKeyword: string;
   private currentYearMonth: string;
+  private beforeSizYearMonth: string;
   private startYearMonth: string;
   private endYearMonth: string;
   private per: string;
@@ -59,12 +60,23 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var current = new Date();
     var year = current.getFullYear();
     var c_month = current.getMonth() + 1;
+
+    var beforeSix = new Date(current.setMonth(current.getMonth() -6));
+    var beforeSixyear = beforeSix.getFullYear();
+    var beforeSix_month = beforeSix.getMonth() + 1;
+
     if(c_month < 10) {
       this.currentYearMonth = "" + year + "-0" +  c_month;
+      this.beforeSizYearMonth = "" + beforeSixyear + "-0" +  beforeSix_month;
     }
     else {
       this.currentYearMonth = "" + year + "-" +  c_month;
+      this.beforeSizYearMonth = "" + beforeSixyear + "-" +  beforeSix_month;
     }
+
+    this.startYearMonth = this.currentYearMonth;
+    this.endYearMonth = this.beforeSizYearMonth;
+
   }
 
   year_clicked() {
@@ -73,8 +85,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     yb.style.background="lightgrey";
     mb.style.background="transparent";
 
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "year";
   }
 
@@ -84,8 +94,6 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     mb.style.background="lightgrey";
     yb.style.background="transparent";
 
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
     this.per = "month";
   }
 
@@ -112,9 +120,19 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     return yearData;
   }
 
+  setDatePickerStartYearMonth(e) {
+    console.log("StartYear : ",e.target.value)
+    this.startYearMonth = e.target.value;
+  }
+
+  setDatePickerEndYearMonth(e) {
+    console.log("EndYear : ",e.target.value)
+    this.endYearMonth = e.target.value;
+  }
+
   async updateChart(){
-    this.startYearMonth = (<HTMLInputElement>document.getElementById("start_month")).value;
-    this.endYearMonth = (<HTMLInputElement>document.getElementById("end_month")).value;
+    console.log('startYearMonth : '+this.startYearMonth);
+    console.log('endYearMonth : '+this.endYearMonth);
 
 //     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
     var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
@@ -271,6 +289,10 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
   public get getCurrentYearMonth(): string {
       return this.currentYearMonth;
+  }
+
+  public get getBeforeSixMonthYearMonth(): string {
+    return this.beforeSizYearMonth;
   }
 }
 
