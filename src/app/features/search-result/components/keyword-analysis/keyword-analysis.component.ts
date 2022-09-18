@@ -63,7 +63,7 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
 
     var beforeSix = new Date(current.setMonth(current.getMonth() -6));
     var beforeSixyear = beforeSix.getFullYear();
-    var beforeSix_month = beforeSix.getMonth() + 1;
+    var beforeSix_month = beforeSix.getMonth() +2;
 
     if(c_month < 10) {
       this.currentYearMonth = "" + year + "-0" +  c_month;
@@ -74,8 +74,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
       this.beforeSizYearMonth = "" + beforeSixyear + "-" +  beforeSix_month;
     }
 
-    this.startYearMonth = this.currentYearMonth;
-    this.endYearMonth = this.beforeSizYearMonth;
+    this.startYearMonth = this.beforeSizYearMonth;
+    this.endYearMonth = this.currentYearMonth;
 
   }
 
@@ -116,23 +116,20 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
         tmpYear = year;
       }
     }
-    console.log(yearData)
     return yearData;
   }
 
   setDatePickerStartYearMonth(e) {
-    console.log("StartYear : ",e.target.value)
     this.startYearMonth = e.target.value;
   }
 
   setDatePickerEndYearMonth(e) {
-    console.log("EndYear : ",e.target.value)
     this.endYearMonth = e.target.value;
   }
 
   async updateChart(){
-    console.log('startYearMonth : '+this.startYearMonth);
-    console.log('endYearMonth : '+this.endYearMonth);
+    // console.log('update chart startYearMonth : '+this.startYearMonth);
+    // console.log('update chart endYearMonth : '+this.endYearMonth);
 
 //     var dataPerYear = await this.updateData(this.startYearMonth, this.endYearMonth);
     var dataPerMonth = await this.updateData(this.startYearMonth, this.endYearMonth);
@@ -234,33 +231,45 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
   }
 
   async updateData(start, end) {
-    var searchHistory = [];
-    var month = [3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7];
-    var cnt = [];
-    var s_idx = -1;
-    var e_idx = -1;
-    for(var i = 5 ; i < 17; i++){
-      if(month[i] == +start.split("-")[1]) {
-        s_idx = i;
-      }
-      if(month[i] == +end.split("-")[1]) {
-        e_idx = i;
-      }
+    var startDate = new Date(start);
+    var endDate = new Date(end);
+    if(startDate > endDate){
+      console.log("DATE_ERROR");
     }
-    if(s_idx == -1 || e_idx == -1){
-      console.log("IDX_ERROR");
-    }
-    for(var i = s_idx; i <= e_idx; i ++){
-      var m;
-      var y = start.split("-")[0];
 
-      if(month[i] < 10){
-        m = "0" + month[i];
+    var monthDifference = -1;
+    var month = []
+    var year = []
+
+    var interval = endDate.valueOf() - startDate.valueOf();
+    var monthValue = 1000*60*60*24*30;
+    var monthDifference = Math.floor(interval/monthValue) + 1;
+
+    var startYear = +start.split("-")[0]
+    var startMonth = +start.split("-")[1]
+
+    for(i = monthDifference; i > 0; i--){
+      if(startMonth == 13){
+        startYear++;
+        startMonth = 1;
+      }
+      year.push(startYear);
+      month.push(startMonth++);
+    }
+
+    var searchHistory = [];
+
+    for(var i = 0; i < month.length; i++){
+      var y = year[i];
+      var m = month[i];
+
+      if(m < 10){
+        m = "0" + m;
       }
       else {
-        m = "" + month[i];
+        m = "" + m;
       }
-      //search_log-<year>.<month>
+
       var index = "search_log-" + y + "." + m;
       var count;
       try {
@@ -273,13 +282,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
         const hist = {date: "" + y + "." + m, freq: 0};
         searchHistory.push(hist);
       }
-
-      if(month[i] > month[i - 1]){
-              y = +y;
-              y = y + 1;
-      }
     }
-    console.log("search history");
+
     return searchHistory;
   }
 
