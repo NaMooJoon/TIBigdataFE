@@ -7,9 +7,9 @@
       <div class="save-graph-button"></div>
     </div>
     <span class ="inputs">
-      <input class="input_month" type="month" id="startMonth" max="{{ getCurrentYearMonth }}" value="{{ getBeforeSixMonthYearMonth }}" (change)="setDatePickerStartYearMonth($event)">
+      <input class="input_month" type="month" id="startMonth" min="2022-01" max="{{ getCurrentYearMonth }}" value="{{ getBeforeSixMonthYearMonth }}" (change)="setDatePickerStartYearMonth($event)">
       <span class = "from-to"> ~ </span>
-      <input class="input_month" type="month" id="endMonth" max="{{ getCurrentYearMonth }}" value="{{ getCurrentYearMonth }}" (change)="setDatePickerEndYearMonth($event)">
+      <input class="input_month" type="month" id="endMonth" min="2022-01" max="{{ getCurrentYearMonth }}" value="{{ getCurrentYearMonth }}" (change)="setDatePickerEndYearMonth($event)">
       <button class="_button" id="year_button" (click)="year_clicked()">{{'search-result.yearly'|translate}}</button>
       <button class="_button" id="month_button" (click)="month_clicked()" autofocus>{{'search-result.monthly'|translate}}</button>
       <button class="analysis_button" (click)="updateChart()">{{'analysis.startAnalysis'|translate}}</button>

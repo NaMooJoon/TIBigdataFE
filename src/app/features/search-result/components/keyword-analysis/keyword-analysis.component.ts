@@ -235,6 +235,10 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var endDate = new Date(end);
     if(startDate > endDate){
       console.log("DATE_ERROR");
+      alert("날짜 범위 설정이 잘못되었습니다. 다시 확인해주세요.");
+      this.setMinMaxDate();
+      this.updateChart();
+      return;
     }
 
     var monthDifference = -1;
