@@ -52,6 +52,7 @@ export class ArticleCardViewComponent implements OnInit {
    * @description Load list of top keywords of current article
    */
   loadTopKeywords(): void {
+
     this.db.getCountVal(this.docHashKey).then((res) => {
       let data = res as [];
       if(data != null){
