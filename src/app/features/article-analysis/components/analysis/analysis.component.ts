@@ -539,6 +539,10 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
           "wcount": number
       }>= JSON.parse(data_str);
 
+    const normWcount = d3.scaleLinear()
+      .domain(d3.extent(data, d=> +d['wcount']))
+      .range([1,2])
+
     let margin = {top: 10, right: 30, bottom: 30, left: 60},
       width = 750 - margin.left - margin.right,
       height = 750 - margin.top - margin.bottom;
@@ -614,13 +618,13 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .transition()
         .duration(200)
         .style("fill", "lightgrey")
-        .attr("r", d=> 3*(d['wcount']+1))
+        .attr("r", d=> 15*(normWcount(d['wcount'])))
 
       d3.selectAll(".type" + d.word)
         .transition()
         .duration(200)
         .style("fill", "red")
-        .attr("r", d=> 7*(d['wcount']+1))
+        .attr("r", d=> 35*(normWcount(d['wcount'])))
 
       tooltip
         .html("Word: "+d.word +"<br>x: " + d.x + "<br>y: " + d.y)
@@ -636,7 +640,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
         .transition()
         .duration(200)
         .style("fill", "lightgrey")
-        .attr("r", d=>5*(d['wcount']+1))
+        .attr("r", d=>5*(normWcount(d['wcount'])))
 
       tooltip
       .style("opacity", 0)
@@ -657,7 +661,7 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
       .attr("class", function (d) { return "dot type" + d.word} )
       .attr("cx", function (d) { return x(d.x); } )
       .attr("cy", function (d) { return y(d.y); } )
-      .attr("r", d=> 5*(d['wcount']+1))
+      .attr("r", d=> 5*(normWcount(d['wcount'])))
       .style("fill", "black")
     .on("mouseover", highlight)
     .on("mouseout", doNotHighlight )
@@ -693,173 +697,173 @@ export class AnalysisComponent extends abstractAnalysis implements OnInit  {
   }
 
 
-  /**
-   * @description draw a network chart using the data using d3
-   */
+  // /**
+  //  * @description draw a network chart using the data using d3
+  //  */
 
-  drawOldNetworkChart(data_str:string){
-    let data:any
-  //   {
-  //     "links" : Array<
-  //       {"source":number,
-  //       "target":number,
-  //       "weight":number}>,
-  //     "nodes" :  Array<{
-  //       "between_cen":number,
-  //       "closeness_cen":number,
-  //       "degree_cen":number,
-  //       "eigenvector_cen":number,
-  //       "id":number,
-  //       "name":string}>
-  // }
-  = JSON.parse(data_str);
+  // drawOldNetworkChart(data_str:string){
+  //   let data:any
+  // //   {
+  // //     "links" : Array<
+  // //       {"source":number,
+  // //       "target":number,
+  // //       "weight":number}>,
+  // //     "nodes" :  Array<{
+  // //       "between_cen":number,
+  // //       "closeness_cen":number,
+  // //       "degree_cen":number,
+  // //       "eigenvector_cen":number,
+  // //       "id":number,
+  // //       "name":string}>
+  // // }
+  // = JSON.parse(data_str);
 
-    // console.log(data);
-    const margin = {top: 10, right: 30, bottom: 30, left: 40},
-    width = 1000 - margin.left - margin.right,
-    height = 1000 - margin.top - margin.bottom;
+  //   // console.log(data);
+  //   const margin = {top: 10, right: 30, bottom: 30, left: 40},
+  //   width = 1000 - margin.left - margin.right,
+  //   height = 1000 - margin.top - margin.bottom;
 
-    // append the svg object to the body of the page
-    const svg = d3.select("figure#network")
-    .append("svg")
-    .attr("id","svgstart")
-      // .attr("width", width + margin.left + margin.right)
-      // .attr("height", height + margin.top + margin.bottom)
-      .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
-      .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+  //   // append the svg object to the body of the page
+  //   const svg = d3.select("figure#network")
+  //   .append("svg")
+  //   .attr("id","svgstart")
+  //     // .attr("width", width + margin.left + margin.right)
+  //     // .attr("height", height + margin.top + margin.bottom)
+  //     .attr("viewBox", "0, 0," + (width + margin.left + margin.right)+","+  (height + margin.top + margin.bottom))
+  //     .append("g")
+  //     .attr("transform",
+  //           "translate(" + margin.left + "," + margin.top + ")");
 
 
-    // Highlight the specie that is hovered
-    const highlight = function(e,d){
+  //   // Highlight the specie that is hovered
+  //   const highlight = function(e,d){
 
-      d3.selectAll(".dot")
-        .transition()
-        .duration(200)
-        .style("fill", "lightgrey")
-        .attr("r", 3)
+  //     d3.selectAll(".dot")
+  //       .transition()
+  //       .duration(200)
+  //       .style("fill", "lightgrey")
+  //       .attr("r", 3)
 
-      d3.selectAll(".type" + d.id)
-        .transition()
-        .duration(200)
-        .style("fill", "red")
-        .attr("r", 7)
+  //     d3.selectAll(".type" + d.id)
+  //       .transition()
+  //       .duration(200)
+  //       .style("fill", "red")
+  //       .attr("r", 7)
 
-      tooltip
-        .html(d.name)
-        .style("opacity", 1)
-    }
+  //     tooltip
+  //       .html(d.name)
+  //       .style("opacity", 1)
+  //   }
 
-    // Highlight the specie that is hovered
-    const doNotHighlight = function(e,d){
-      d3.selectAll(".dot")
-        .transition()
-        .duration(200)
-        .style("fill", "lightgrey")
-        .attr("r", 5)
+  //   // Highlight the specie that is hovered
+  //   const doNotHighlight = function(e,d){
+  //     d3.selectAll(".dot")
+  //       .transition()
+  //       .duration(200)
+  //       .style("fill", "lightgrey")
+  //       .attr("r", 5)
 
-      tooltip
-      .style("opacity", 0)
-      .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-      .style("top", "0px");
+  //     tooltip
+  //     .style("opacity", 0)
+  //     .style("left",  "0px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+  //     .style("top", "0px");
 
-      d3.selectAll(".dottext")
-        .style("opacity", 1)
-    }
+  //     d3.selectAll(".dottext")
+  //       .style("opacity", 1)
+  //   }
 
-    // Initialize the links
-    let link = svg
-    .selectAll("line")
-    .data(data.links)
-    .enter()
-    .append("line")
-      .style("stroke", "#aaa")
-      .style("stroke-width", 5);
-      // .style("stroke-width", d=>d['weight']/10);
+  //   // Initialize the links
+  //   let link = svg
+  //   .selectAll("line")
+  //   .data(data.links)
+  //   .enter()
+  //   .append("line")
+  //     .style("stroke", "#aaa")
+  //     .style("stroke-width", 5);
+  //     // .style("stroke-width", d=>d['weight']/10);
 
-    // Initialize the nodes
-    let node = svg
-      .selectAll("circle")
-      .data(data.nodes)
-      .enter()
-      .append("circle")
-        .attr("class", function (d) { return "dot type" + d['id']} )
-        .attr("r", 7)
-        .style("fill", "#69b3a2")
-      .on("mouseover", highlight)
-      .on("mouseout", doNotHighlight )
-      .on("mousemove", function(e) {
-        tooltip
-        .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-        .style("top", (e.pageY) + "px");
-      });
+  //   // Initialize the nodes
+  //   let node = svg
+  //     .selectAll("circle")
+  //     .data(data.nodes)
+  //     .enter()
+  //     .append("circle")
+  //       .attr("class", function (d) { return "dot type" + d['id']} )
+  //       .attr("r", 7)
+  //       .style("fill", "#69b3a2")
+  //     .on("mouseover", highlight)
+  //     .on("mouseout", doNotHighlight )
+  //     .on("mousemove", function(e) {
+  //       tooltip
+  //       .style("left", (e.pageX+20) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+  //       .style("top", (e.pageY) + "px");
+  //     });
 
       
-      const dataon = function(e,d){
-        console.log("mouse on",d);
-        svg
-        .selectAll("circle")
-        .attr("r", d.between_cen);
-      }
+  //     const dataon = function(e,d){
+  //       console.log("mouse on",d);
+  //       svg
+  //       .selectAll("circle")
+  //       .attr("r", d.between_cen);
+  //     }
 
-      const dataoff = function(e,d){
-        svg
-        .selectAll("circle")
-        .attr("r", 7);
-      }
+  //     const dataoff = function(e,d){
+  //       svg
+  //       .selectAll("circle")
+  //       .attr("r", 7);
+  //     }
 
-      // let buttons = d3.select("figure#network")
-      // .append("button")
-      // .data(data.nodes)
-      // .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
-      // .on("mouseover",dataon)
-      // .on("mouseout",dataoff);
+  //     // let buttons = d3.select("figure#network")
+  //     // .append("button")
+  //     // .data(data.nodes)
+  //     // .text('사이중심성') //['사이중심성','근접중심성','빈도수','연결중심성','eigen value']
+  //     // .on("mouseover",dataon)
+  //     // .on("mouseout",dataoff);
 
 
 
-    // d3.select("svg")
-    svg.append("g")
-      .selectAll('label')
-      .append("text")
-      .data(data.nodes)
-        .attr("dx", function(d){return -7})
-        .text(d=> d['name'])
+  //   // d3.select("svg")
+  //   svg.append("g")
+  //     .selectAll('label')
+  //     .append("text")
+  //     .data(data.nodes)
+  //       .attr("dx", function(d){return -7})
+  //       .text(d=> d['name'])
 
-    // Let's list the force we wanna apply on the network
-    let simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
-    .force("link", d3.forceLink()                               // This force provides links between nodes
-          .id(function(d) { return d['id']; })                     // This provide  the id of a node
-          .links(data.links)                                    // and this the list of links
-    )
-    .force("charge", d3.forceManyBody().strength(-40))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-    .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
-    .on("end", ticked);
+  //   // Let's list the force we wanna apply on the network
+  //   let simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
+  //   .force("link", d3.forceLink()                               // This force provides links between nodes
+  //         .id(function(d) { return d['id']; })                     // This provide  the id of a node
+  //         .links(data.links)                                    // and this the list of links
+  //   )
+  //   .force("charge", d3.forceManyBody().strength(-40))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+  //   .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+  //   .on("end", ticked);
 
-    // This function is run at each iteration of the force algorithm, updating the nodes position.
-    function ticked() {
-    link
-      .attr("x1", function(d) { return d['source']['x']; })
-      .attr("y1", function(d) { return d['source']['y']; })
-      .attr("x2", function(d) { return d['target']['x']; })
-      .attr("y2", function(d) { return d['target']['y']; });
+  //   // This function is run at each iteration of the force algorithm, updating the nodes position.
+  //   function ticked() {
+  //   link
+  //     .attr("x1", function(d) { return d['source']['x']; })
+  //     .attr("y1", function(d) { return d['source']['y']; })
+  //     .attr("x2", function(d) { return d['target']['x']; })
+  //     .attr("y2", function(d) { return d['target']['y']; });
 
-    node
-      .attr("cx", function (d) { return d['x']; })
-      .attr("cy", function(d) { return d['y']; });
-    }
+  //   node
+  //     .attr("cx", function (d) { return d['x']; })
+  //     .attr("cy", function(d) { return d['y']; });
+  //   }
 
-    // Draw a tooltip
-    const tooltip = d3.select("figure#network")
-      .append("div")
-      .style("opacity", 0)
-      .style("position","absolute")
-      .style("background-color", "white")
-      .style("border", "solid")
-      .style("border-width", "1px")
-      .style("border-radius", "5px")
-      .style("padding", "10px");
-  };
+  //   // Draw a tooltip
+  //   const tooltip = d3.select("figure#network")
+  //     .append("div")
+  //     .style("opacity", 0)
+  //     .style("position","absolute")
+  //     .style("background-color", "white")
+  //     .style("border", "solid")
+  //     .style("border-width", "1px")
+  //     .style("border-radius", "5px")
+  //     .style("padding", "10px");
+  // };
 
   /**
    * @description draw a network chart using the data using d3

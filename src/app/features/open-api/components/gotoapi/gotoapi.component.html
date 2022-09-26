@@ -12,610 +12,1351 @@
 
   
   <span class="downloadbuttons" style="float:right">
-    <a href="assets/APIManual.ipynb" target="_blank" download><button class="float-right">예제 다운로드(주피터)</button></a><br>
-    <a href="assets/sample_client.py" target="_blank" download><button class="float-right">예제 다운로드(파이썬)</button></a>
+    <a href="assets/open-api-assets/APIManual.ipynb" target="_blank" download><button class="float-right">예제 다운로드(주피터)</button></a><br>
+    <a href="assets/open-api-assets/sample_client.py" target="_blank" download><button class="float-right">예제 다운로드(파이썬)</button></a>
   </span>
   <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-    <!-- <h1 id="KUBiC-Open-API-&#49324;&#50857;&#51088;&#50857;-&#47588;&#45684;&#50620;">KUBiC Open API &#49324;&#50857;&#51088;&#50857; &#47588;&#45684;&#50620;<a class="anchor-link" href="#KUBiC-Open-API-&#49324;&#50857;&#51088;&#50857;-&#47588;&#45684;&#50620;">&#182;</a></h1><h4 id="&#51089;&#49457;&#51088;-:-&#54620;&#46041;-&#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552;-&#51088;&#47308;&#54016;-&#49888;&#51648;&#50689;-RA-(21800409@handong.edu)">&#51089;&#49457;&#51088; : &#54620;&#46041; &#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552; &#51088;&#47308;&#54016; &#49888;&#51648;&#50689; RA (21800409@handong.edu)<a class="anchor-link" href="#&#51089;&#49457;&#51088;-:-&#54620;&#46041;-&#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552;-&#51088;&#47308;&#54016;-&#49888;&#51648;&#50689;-RA-(21800409@handong.edu)">&#182;</a></h4> -->
-    </div>
-    </div>
-    <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-
-    <h1 id="Open-API-&#51228;&#44277;-&#45936;&#51060;&#53552;-&#48143;-&#49436;&#48708;&#49828;">Open API &#51228;&#44277; &#45936;&#51060;&#53552; &#48143; &#49436;&#48708;&#49828;
-      <!-- <a class="anchor-link" href="#Open-API-&#51228;&#44277;-&#45936;&#51060;&#53552;-&#48143;-&#49436;&#48708;&#49828;">&#182;</a> -->
-    </h1>
-    
-    <ul>
-    <li>단순 검색(simple_search)</li>
-    <li>상세 검색(detailed_search)</li>
-    <li>내 보관함 내 검색(my_doc)</li>
-    </ul>
-    
-    </div>
-    </div>
-    <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-    <h1 id="&#50836;&#52397;-&#48320;&#49688;-&#47785;&#47197;">&#50836;&#52397; &#48320;&#49688; &#47785;&#47197;
-      <!-- <a class="anchor-link" href="#&#50836;&#52397;-&#48320;&#49688;-&#47785;&#47197;">&#182;</a> -->
-    </h1><ul>
-    <li>단순 검색(simple_search)</li>
-    </ul>
-    <table class="table table-hover">
-    <thead><tr>
-    <th style="text-align:center">변수명(영문)</th>
-    <th style="text-align:center">변수명(국문)</th>
-    <th style="text-align:center">필수 여부</th>
-    <th style="text-align:center">형식</th>
-    <th style="text-align:center">샘플데이터</th>
-    <th style="text-align:center">Default값(생략시)</th>
-    </tr>
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="KUBiC-Open-API-&#49324;&#50857;&#51088;&#50857;-&#47588;&#45684;&#50620;">KUBiC Open API &#49324;&#50857;&#51088;&#50857; &#47588;&#45684;&#50620;<a class="anchor-link" href="#KUBiC-Open-API-&#49324;&#50857;&#51088;&#50857;-&#47588;&#45684;&#50620;">&#182;</a></h1><h4 id="&#51089;&#49457;&#51088;-:-&#54620;&#46041;-&#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552;-&#51088;&#47308;&#54016;-&#49888;&#51648;&#50689;-RA-(21800409@handong.edu)">&#51089;&#49457;&#51088; : &#54620;&#46041; &#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552; &#51088;&#47308;&#54016; &#49888;&#51648;&#50689; RA (elecindy@handong.ac.kr)<a class="anchor-link" href="#&#51089;&#49457;&#51088;-:-&#54620;&#46041;-&#53685;&#51068;&#48709;&#45936;&#51060;&#53552;&#49468;&#53552;-&#51088;&#47308;&#54016;-&#49888;&#51648;&#50689;-RA-(21800409@handong.edu)">&#182;</a></h4>
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="KUBiC-Open-API&#46976;?">KUBiC Open API&#46976;?<a class="anchor-link" href="#KUBiC-Open-API&#46976;?">&#182;</a></h1><p>KUBiC Open API란 외부 개발자나 이용자가 KUBiC의 데이터에 접근할 수 있도록 정보의 연결고리 역할을 하는 서비스입니다. 저희 Open API는 KUBiC 웹 사이트에서 제공하고 있는 문서 데이터를 HTTP(GET)를 통해 이용할 수 있도록 하였습니다. 아래는 저희가 제공하는 데이터 및 서비스의 종류와 이용 방법입니다.</p>
+  <h1 id="Open-API-&#51228;&#44277;-&#45936;&#51060;&#53552;-&#48143;-&#49436;&#48708;&#49828;">Open API &#51228;&#44277; &#45936;&#51060;&#53552; &#48143; &#49436;&#48708;&#49828;<a class="anchor-link" href="#Open-API-&#51228;&#44277;-&#45936;&#51060;&#53552;-&#48143;-&#49436;&#48708;&#49828;">&#182;</a></h1><ul>
+  <li>단순 검색(simple_search)<ul>
+  <li>키워드만으로 원하는 문서를 검색합니다. 해당 키워드를 문서 제목, 문서 내용, 문서 파일 내용에서 검색하여 결과를 모두 출력합니다.</li>
+  </ul>
+  </li>
+  <li>상세 검색(detailed_search)<ul>
+  <li>문서 제목, 문서 내용, 작성일, 기관명, 분류 등에서 조건을 세워 검색할 수 있습니다.</li>
+  </ul>
+  </li>
+  <li>내 보관함 내 검색(my_doc)<ul>
+  <li>내 보관함에 담아온 문서 중에서 상세 검색을 실행할 수 있습니다.</li>
+  </ul>
+  </li>
+  </ul>
+  
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#51060;&#50857;-&#48169;&#48277;">&#51060;&#50857; &#48169;&#48277;<a class="anchor-link" href="#&#51060;&#50857;-&#48169;&#48277;">&#182;</a></h1><ol>
+  <li>KUBiC(<a href="https://kubic.handong.edu)의">https://kubic.handong.edu)의</a> Open API 메뉴에서 활용을 신청하고 인증키(serviceKey)를 발급 받습니다.</li>
+  <li>원하는 조건에 맞는 URL을 아래와 같이 생성합니다.</li>
+  <li>URL에 GET 요청을 보내 json data를 받아옵니다.</li>
+  <li>받아온 json data를 이용하시면 됩니다.</li>
+  </ol>
+  
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#49345;&#49464;-&#44160;&#49353;&#51012;-&#51060;&#50857;&#54616;&#45716;-&#50836;&#52397;&amp;&#51025;&#45813;-&#50696;&#49884;">&#49345;&#49464; &#44160;&#49353;&#51012; &#51060;&#50857;&#54616;&#45716; &#50836;&#52397;&amp;&#51025;&#45813; &#50696;&#49884;<a class="anchor-link" href="#&#49345;&#49464;-&#44160;&#49353;&#51012;-&#51060;&#50857;&#54616;&#45716;-&#50836;&#52397;&amp;&#51025;&#45813;-&#50696;&#49884;">&#182;</a></h1><p><img src="assets/open-api-assets/KUBiC_OpenAPI.jpg" alt="Image"></p>
+  
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#50836;&#52397;-&#48320;&#49688;-&#47785;&#47197;">&#50836;&#52397; &#48320;&#49688; &#47785;&#47197;<a class="anchor-link" href="#&#50836;&#52397;-&#48320;&#49688;-&#47785;&#47197;">&#182;</a></h1><ul>
+  <li>단순 검색(simple_search)</li>
+  </ul>
+  <table>
+  <thead><tr>
+  <th style="text-align:center">변수명(영문)</th>
+  <th style="text-align:center">변수명(국문)</th>
+  <th style="text-align:center">필수 여부</th>
+  <th style="text-align:center">형식</th>
+  <th style="text-align:center">샘플데이터</th>
+  <th style="text-align:center">Default값(생략시)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="text-align:center">serviceKey</td>
+  <td style="text-align:center">인증키</td>
+  <td style="text-align:center">Y</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">pP5JG2d-TZohr1sWMRVIwg</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">numOfCnt</td>
+  <td style="text-align:center">검색할 최대 개수</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">int</td>
+  <td style="text-align:center">500</td>
+  <td style="text-align:center">100</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">rank</td>
+  <td style="text-align:center">정렬기준</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">int</td>
+  <td style="text-align:center">2(최신순)</td>
+  <td style="text-align:center">1(정확도순)</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">keyword</td>
+  <td style="text-align:center">검색할 키워드</td>
+  <td style="text-align:center">Y</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">북한</td>
+  <td style="text-align:center">--</td>
+  </tr>
+  </tbody>
+  </table>
+  <ul>
+  <li>상세 검색(detailed_search) 또는 내 보관함 내 검색(my_doc)</li>
+  </ul>
+  <table>
+  <thead><tr>
+  <th style="text-align:center">변수명(영문)</th>
+  <th style="text-align:center">변수명(국문)</th>
+  <th style="text-align:center">필수 여부</th>
+  <th style="text-align:center">형식</th>
+  <th style="text-align:center">샘플데이터</th>
+  <th style="text-align:center">Default값(생략시)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="text-align:center">serviceKey</td>
+  <td style="text-align:center">인증키</td>
+  <td style="text-align:center">Y</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">pP5JG2d-TZohr1sWMRVIwg</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">numOfCnt</td>
+  <td style="text-align:center">검색할 최대 개수</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">int</td>
+  <td style="text-align:center">500</td>
+  <td style="text-align:center">100</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">rank</td>
+  <td style="text-align:center">정렬기준</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">int</td>
+  <td style="text-align:center">2(최신순)</td>
+  <td style="text-align:center">1(정확도순)</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">keyword</td>
+  <td style="text-align:center">검색할 키워드</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">북한</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">keyInTitle</td>
+  <td style="text-align:center">제목 내 검색할 키워드</td>
+  <td style="text-align:center">Y</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">북한</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">keyInBody</td>
+  <td style="text-align:center">내용 내 검색할 키워드</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">정치</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">writer</td>
+  <td style="text-align:center">작성자 검색</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">홍길동</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">startDate</td>
+  <td style="text-align:center">작성일 기간시작점</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">YYYY-MM-DD</td>
+  <td style="text-align:center">2018-09-17</td>
+  <td style="text-align:center">현재로부터 2년 전</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">endDate</td>
+  <td style="text-align:center">작성일 기간끝점</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">YYYY-MM-DD</td>
+  <td style="text-align:center">2020-09-17</td>
+  <td style="text-align:center">현재 날짜</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">institution</td>
+  <td style="text-align:center">발행한 기관명</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">북한연구소</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">category</td>
+  <td style="text-align:center">분류</td>
+  <td style="text-align:center">N</td>
+  <td style="text-align:center">string</td>
+  <td style="text-align:center">정치</td>
+  <td style="text-align:center">-</td>
+  </tr>
+  </tbody>
+  </table>
+  
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#51025;&#45813;-&#48320;&#49688;-&#47785;&#47197;">&#51025;&#45813; &#48320;&#49688; &#47785;&#47197;<a class="anchor-link" href="#&#51025;&#45813;-&#48320;&#49688;-&#47785;&#47197;">&#182;</a></h1><table>
+  <thead><tr>
+  <th style="text-align:center">변수명(영문)</th>
+  <th style="text-align:center">변수명(국문)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="text-align:center">resultCode</td>
+  <td style="text-align:center">결과 코드</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">resultMSG</td>
+  <td style="text-align:center">결과 메시지</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">numOfContents</td>
+  <td style="text-align:center">검색하려고 한 최대 개수</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">totalCount</td>
+  <td style="text-align:center">검색된 자료 개수</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">rank</td>
+  <td style="text-align:center">정렬 기준</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">title</td>
+  <td style="text-align:center">제목</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">body</td>
+  <td style="text-align:center">내용</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">writer</td>
+  <td style="text-align:center">작성자</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">date</td>
+  <td style="text-align:center">작성일</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">originalURL</td>
+  <td style="text-align:center">원본 문서 링크</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">institution</td>
+  <td style="text-align:center">발행 기관명</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">institutionURL</td>
+  <td style="text-align:center">발행 기관 링크</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">category</td>
+  <td style="text-align:center">분류</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">fileName</td>
+  <td style="text-align:center">파일 이름</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">fileURL</td>
+  <td style="text-align:center">첨부된 파일 링크</td>
+  </tr>
+  <tr>
+  <td style="text-align:center">fileContent</td>
+  <td style="text-align:center">파일 문서 내용</td>
+  </tr>
+  </tbody>
+  </table>
+  
+  </div>
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#50696;&#51228;-&#53076;&#46300;">&#50696;&#51228; &#53076;&#46300;<a class="anchor-link" href="#&#50696;&#51228;-&#53076;&#46300;">&#182;</a></h1><h2 id="&#50896;&#54616;&#45716;-&#47928;&#49436;&#46308;&#51012;-&#48520;&#47084;&#50752;&#49436;-data-frame&#50640;-&#46916;&#50864;&#44592;">&#50896;&#54616;&#45716; &#47928;&#49436;&#46308;&#51012; &#48520;&#47084;&#50752;&#49436; data frame&#50640; &#46916;&#50864;&#44592;<a class="anchor-link" href="#&#50896;&#54616;&#45716;-&#47928;&#49436;&#46308;&#51012;-&#48520;&#47084;&#50752;&#49436;-data-frame&#50640;-&#46916;&#50864;&#44592;">&#182;</a></h2>
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip3 install pandas
+  
+  <span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">r</span>
+  <span class="kn">import</span> <span class="nn">urllib.parse</span> <span class="k">as</span> <span class="nn">p</span>
+  <span class="kn">import</span> <span class="nn">json</span>
+  <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+  
+  <span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;https://kubic.handong.edu:15000/&quot;</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  <div class="jp-Cell-outputWrapper">
+  
+  
+  <div class="jp-OutputArea jp-Cell-outputArea">
+  
+  <div class="jp-OutputArea-child">
+  
+      
+      <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+  
+  
+  <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+  <pre>Collecting pandas
+    Using cached https://files.pythonhosted.org/packages/c3/e2/00cacecafbab071c787019f00ad84ca3185952f6bb9bca9550ed83870d4d/pandas-1.1.5-cp36-cp36m-manylinux1_x86_64.whl
+  Collecting numpy&gt;=1.15.4 (from pandas)
+    Using cached https://files.pythonhosted.org/packages/45/b2/6c7545bb7a38754d63048c7696804a0d947328125d81bf12beaa692c3ae3/numpy-1.19.5-cp36-cp36m-manylinux1_x86_64.whl
+  Collecting python-dateutil&gt;=2.7.3 (from pandas)
+    Using cached https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl
+  Collecting pytz&gt;=2017.2 (from pandas)
+    Using cached https://files.pythonhosted.org/packages/d5/50/54451e88e3da4616286029a3a17fc377de817f66a0f50e1faaee90161724/pytz-2022.2.1-py2.py3-none-any.whl
+  Collecting six&gt;=1.5 (from python-dateutil&gt;=2.7.3-&gt;pandas)
+    Using cached https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl
+  Installing collected packages: numpy, six, python-dateutil, pytz, pandas
+  Successfully installed numpy-1.19.5 pandas-1.1.5 python-dateutil-2.8.2 pytz-2022.2.1 six-1.16.0
+  </pre>
+  </div>
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h3 id="&#49324;&#50857;&#51088;&#50640;-&#47582;&#44172;-&#49688;&#51221;&#54624;-&#48512;&#48516;">&#49324;&#50857;&#51088;&#50640; &#47582;&#44172; &#49688;&#51221;&#54624; &#48512;&#48516;<a class="anchor-link" href="#&#49324;&#50857;&#51088;&#50640;-&#47582;&#44172;-&#49688;&#51221;&#54624;-&#48512;&#48516;">&#182;</a></h3>
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래 부분 수정해주세요!</span>
+  <span class="c1"># 검색 옵션을 입력해주세요</span>
+  <span class="c1">## 단순검색=simple_search</span>
+  <span class="c1">## 상세검색=detailed_search</span>
+  <span class="c1">## 내 보관함 검색=my_doc</span>
+  
+  <span class="n">search_option</span><span class="o">=</span><span class="s2">&quot;simple_search&quot;</span> <span class="c1">#detailed_search #my_doc</span>
+  
+  <span class="c1"># 인증키를 입력해주세요</span>
+  <span class="n">serviceKey</span> <span class="o">=</span> <span class="s2">&quot;(serviceKey)&quot;</span>
+  
+  <span class="c1"># 한 번에 출력할 문서 개수를 입력해주세요</span>
+  <span class="n">numOfCnt</span> <span class="o">=</span> <span class="mi">20</span>
+  
+  <span class="c1"># 검색할 키워드를 입력해주세요</span>
+  <span class="n">keyword</span><span class="o">=</span><span class="s2">&quot;북한&quot;</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h3 id="API&#50640;-&#44050;-&#50836;&#52397;-&#48143;-&#51025;&#45813;">API&#50640; &#44050; &#50836;&#52397; &#48143; &#51025;&#45813;<a class="anchor-link" href="#API&#50640;-&#44050;-&#50836;&#52397;-&#48143;-&#51025;&#45813;">&#182;</a></h3>
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">ssl</span>
+  
+  <span class="n">loginKey</span> <span class="o">=</span> <span class="s2">&quot;serviceKey=&quot;</span><span class="o">+</span><span class="n">serviceKey</span>
+  <span class="n">request</span> <span class="o">=</span> <span class="s2">&quot;&amp;numOfCnt=&quot;</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">numOfCnt</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;&amp;keyword=&quot;</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">keyword</span><span class="p">))</span>
+  <span class="n">URL_full</span> <span class="o">=</span> <span class="n">URL</span> <span class="o">+</span> <span class="n">search_option</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="n">loginKey</span> <span class="o">+</span> <span class="n">request</span>
+  
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;URL_full&gt; &quot;</span> <span class="o">+</span> <span class="n">URL_full</span><span class="p">)</span>
+  <span class="n">context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span><span class="p">()</span> <span class="c1"># certificate error 뜨는 경우</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">URL_full</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+  
+  <span class="n">jsonArray</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+  
+  <span class="k">if</span> <span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resultCode&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error!!!&quot;</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">))</span>
+      <span class="n">quit</span><span class="p">()</span>
+  
+  <span class="n">items</span> <span class="o">=</span><span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contents&quot;</span><span class="p">)</span>
+  <span class="c1"># print(&quot;items&gt;&quot;, items)</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  <div class="jp-Cell-outputWrapper">
+  
+  
+  <div class="jp-OutputArea jp-Cell-outputArea">
+  
+  <div class="jp-OutputArea-child">
+  
+      
+      <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+  
+  
+  <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+  <pre>URL_full&gt; https://kubic.handong.edu:15000/simple_search?serviceKey=handonglove123private&amp;numOfCnt=20&amp;keyword=%EB%B6%81%ED%95%9C
+  </pre>
+  </div>
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#45936;&#51060;&#53552;-&#51204;&#52404;-&#54869;&#51064;">&#45936;&#51060;&#53552; &#51204;&#52404; &#54869;&#51064;<a class="anchor-link" href="#&#45936;&#51060;&#53552;-&#51204;&#52404;-&#54869;&#51064;">&#182;</a></h1>
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+      <span class="n">dft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dft</span><span class="p">,</span><span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">df</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  <div class="jp-Cell-outputWrapper">
+  
+  
+  <div class="jp-OutputArea jp-Cell-outputArea">
+  
+  <div class="jp-OutputArea-child">
+  
+      
+      <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+  
+  
+  
+  <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+  <div>
+  <style scoped>
+      .dataframe tbody tr th:only-of-type {
+          vertical-align: middle;
+      }
+  
+      .dataframe tbody tr th {
+          vertical-align: top;
+      }
+  
+      .dataframe thead th {
+          text-align: right;
+      }
+  </style>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th></th>
+        <th>title</th>
+        <th>writer</th>
+        <th>originalURL</th>
+        <th>institution</th>
+        <th>institutionURL</th>
+        <th>category</th>
+        <th>fileURL</th>
+        <th>fileName</th>
+        <th>fileContent</th>
+        <th>body</th>
+        <th>date</th>
+      </tr>
     </thead>
     <tbody>
-    <tr>
-    <td style="text-align:center">serviceKey</td>
-    <td style="text-align:center">인증키</td>
-    <td style="text-align:center">Y</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">pP5JG2d-TZohr1sWMRVIwg</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">numOfCnt</td>
-    <td style="text-align:center">검색할 최대 개수</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">int</td>
-    <td style="text-align:center">500</td>
-    <td style="text-align:center">100</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">rank</td>
-    <td style="text-align:center">정렬기준</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">int</td>
-    <td style="text-align:center">2(최신순)</td>
-    <td style="text-align:center">1(정확도순)</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">keyword</td>
-    <td style="text-align:center">검색할 키워드</td>
-    <td style="text-align:center">Y</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">북한</td>
-    <td style="text-align:center">--</td>
-    </tr>
+      <tr>
+        <th>0</th>
+        <td>북한 사람이 들려주는 북한 이야기</td>
+        <td>장진성 저</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>북한 사람이 들려주는 북한 이야기</td>
+        <td>주제가 있는통일 강 좌 36장진성 (뉴포커스 대표) 북한 사람이 들려주는 북한 이야...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>변하는 북한 변하지 않는 북한</td>
+        <td>고정식 저</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>변하는 북한 변하지 않는 북한</td>
+        <td>주 제 가있 는통 일강 좌30변 하 는 북 한 변 하 지 않 는 북 한 주제가 있는...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>2</th>
+        <td>북한 주요인사 인물정보 2017 =북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>북한 주요인사 인물정보 2017 =북한 주요인물</td>
+        <td>2017인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>3</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>통일연구원 편</td>
+        <td>http://www.kinu.or.kr/www/jsp/prg/api/dlV.jsp?...</td>
+        <td>통일연구원</td>
+        <td>https://www.kinu.or.kr/main/kinuM</td>
+        <td>연구보고서-기타연구보고서</td>
+        <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>프로그램09:00～09:30 등록09:30～10:00 개회식개회사 : 서재진 통일연...</td>
+        <td>제1세션: 대북정책 회고와 과제ㅇ 6.15 남북공동선언 어떻게 볼 것인가?/ 김영호...</td>
+        <td>2009</td>
+      </tr>
+      <tr>
+        <th>4</th>
+        <td>북한 주요인사 인물정보 2012 =북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>북한 주요인사 인물정보 2012 =북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과 서울특별시 종로구 세종대로 209 정부중앙청사 41...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>5</th>
+        <td>북한 주요인사 인물정보 2015 = 북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과</td>
+        <td>http://www.kinu.or.kr/brd/board/726/L/menu/382...</td>
+        <td>통일연구원</td>
+        <td>https://www.kinu.or.kr/main/kinuM</td>
+        <td>통일부 발간자료</td>
+        <td>http://www.kinu.or.kr/com/file/filedown?_ci=23...</td>
+        <td>북한 주요인사 인물정보 2015 = 북한 주요인물</td>
+        <td>2015인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>NaN</td>
+        <td>2015-01-01</td>
+      </tr>
+      <tr>
+        <th>6</th>
+        <td>북한 주요인사 인물정보 2014 =북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>북한 주요인사 인물정보 2014 =북한 주요인물</td>
+        <td>2014인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>7</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>통일연구원</td>
+        <td>https://unibook.unikorea.go.kr/board/view?boar...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일문제 이해</td>
+        <td>https://unibook.unikorea.go.kr/files/32f6ca04-...</td>
+        <td>북한 핵실험 이후 북한 문제 해법.pdf</td>
+        <td>프로그램09:00～09:30 등록09:30～10:00 개회식개회사 : 서재진 통일연...</td>
+        <td>NaN</td>
+        <td>2009</td>
+      </tr>
+      <tr>
+        <th>8</th>
+        <td>북한 신년공동사설</td>
+        <td>DPRK</td>
+        <td>http://knsi.org/knsi/kor/center/view.php?no=94...</td>
+        <td>코리아정책연구원</td>
+        <td>http://knsi.org/knsi/kor/index</td>
+        <td>정부자료</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>원대한 포부와 신심에 넘쳐 더 높이 비약하자 오늘 우리는 선군의 기치밑에 우리 식 ...</td>
+        <td>2006-01-01</td>
+      </tr>
+      <tr>
+        <th>9</th>
+        <td>북한 정치범수용소</td>
+        <td>이금순,김수암,이규창,홍예선,김경란.</td>
+        <td>http://www.kinu.or.kr/www/jsp/prg/api/dlV.jsp?...</td>
+        <td>통일연구원</td>
+        <td>https://www.kinu.or.kr/main/kinuM</td>
+        <td>연구보고서-기타연구보고서</td>
+        <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
+        <td>북한 정치범수용소</td>
+        <td>(세원)통일연구원-정치범수용소.hwp 북한 정치범수용소인 쇄 2013년 1월발 행 ...</td>
+        <td>Ⅰ. 서론 1. 발간목적 2. 자료수집 방법 개요Ⅱ. 북한체제와 정치범수용소 1. ...</td>
+        <td>2013</td>
+      </tr>
+      <tr>
+        <th>10</th>
+        <td>북한 교화소</td>
+        <td>한동호,도경옥,이우태,임예준</td>
+        <td>http://www.kinu.or.kr/www/jsp/prg/api/dlV.jsp?...</td>
+        <td>통일연구원</td>
+        <td>https://www.kinu.or.kr/main/kinuM</td>
+        <td>연구보고서-기타연구보고서</td>
+        <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
+        <td>북한 교화소</td>
+        <td>북한 교화소북한 교화소www.kinu.or.kr한동호 ·도경옥 ·이우태 ·임예준북한...</td>
+        <td>Ⅰ. 서 론 ·· 1Ⅱ. 북한 교화소 개관 ·· 31. 교화소 개요 ·· 32. 교...</td>
+        <td>2015</td>
+      </tr>
+      <tr>
+        <th>11</th>
+        <td>북한 교화소</td>
+        <td>한동호, 도경옥, 이우태, 임예준</td>
+        <td>https://unibook.unikorea.go.kr/board/view?boar...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>북한동향</td>
+        <td>https://unibook.unikorea.go.kr/files/bbs_kinu_...</td>
+        <td>북한 교화소.pdf</td>
+        <td>북한 교화소북한 교화소www.kinu.or.kr한동호 ·도경옥 ·이우태 ·임예준북한...</td>
+        <td>NaN</td>
+        <td>2015</td>
+      </tr>
+      <tr>
+        <th>12</th>
+        <td>북한 정치범수용소</td>
+        <td>이금순</td>
+        <td>https://unibook.unikorea.go.kr/board/view?boar...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>북한동향</td>
+        <td>https://unibook.unikorea.go.kr/files/5a14c601-...</td>
+        <td>북한 정치범수용소.pdf</td>
+        <td>(세원)통일연구원-정치범수용소.hwp 북한 정치범수용소인 쇄 2013년 1월발 행 ...</td>
+        <td>NaN</td>
+        <td>2013</td>
+      </tr>
+      <tr>
+        <th>13</th>
+        <td>북한 보건경영학연구소</td>
+        <td>연합뉴스</td>
+        <td>http://www.nkhealth.net/board.php?var=view&amp;cod...</td>
+        <td>북한보건의료네트워크</td>
+        <td>http://www.nkhealth.net/</td>
+        <td>기타자료</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>(서울=연합뉴스) 최척호 기자= 북한 보건경영학연구소(소장 리봉훈)는 주민들의 건강...</td>
+        <td>2004-06-13</td>
+      </tr>
+      <tr>
+        <th>14</th>
+        <td>북한 속담</td>
+        <td>관리자</td>
+        <td>http://sharing.net/post/324?&amp;amp;page=2</td>
+        <td>남북나눔운동</td>
+        <td>http://sharing.net/</td>
+        <td>북한 알아가기</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>북한속담1 같은 한국말이지만 우리에겐 생소한 북한 단어가 많죠.그래서그런지 속담도 ...</td>
+        <td>2022-08-22</td>
+      </tr>
+      <tr>
+        <th>15</th>
+        <td>중소분쟁과 북한</td>
+        <td>관리자</td>
+        <td>https://office.kbs.co.kr/tongil/archives/35309</td>
+        <td>KBS 통일방송연구</td>
+        <td>https://office.kbs.co.kr/tongil/</td>
+        <td>역사</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>1960년대는 북한역사에서 대외적 상황이 국가가 나아가는 길에 커다란 영향을 끼친 ...</td>
+        <td>2006-03-19</td>
+      </tr>
+      <tr>
+        <th>16</th>
+        <td>북한 주요기관ㆍ단체 인명록 (2013) =북한 기관ㆍ단체별 인명집</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
+        <td>북한 주요기관ㆍ단체 인명록 (2013) =북한 기관ㆍ단체별 인명집</td>
+        <td>2013인 명 록북한 주요기관 · 단체[ ]1 7 9 9 9 991010121215...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>17</th>
+        <td>북한 주요 인물정보 2021 = 북한 주요인사 인물정보</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/2021...</td>
+        <td>북한 주요 인물정보 2021 = 북한 주요인사 인물정보</td>
+        <td>2021� � � � � � � � � � � � � � � � ������� ��...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>18</th>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁</td>
+        <td>대한무역투자진흥공사</td>
+        <td>https://www.kinu.or.kr/brd/board/634/L/menu/37...</td>
+        <td>통일연구원</td>
+        <td>http://www.kinu.or.kr</td>
+        <td>전체자료</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁 - 뤼디거 프랑크 교수, 북한 여행...</td>
+        <td>2018-08-29</td>
+      </tr>
+      <tr>
+        <th>19</th>
+        <td>북한 주요 인물정보 2019 = 북한 주요인사 인물정보</td>
+        <td>통일부 정세분석국 정치군사분석과 편</td>
+        <td>https://unibook.unikorea.go.kr/material/list?m...</td>
+        <td>통일부</td>
+        <td>https://unibook.unikorea.go.kr/</td>
+        <td>통일부 발간물</td>
+        <td>http://unibook.unikorea.go.kr/libeka/elec/2018...</td>
+        <td>북한 주요 인물정보 2019 = 북한 주요인사 인물정보</td>
+        <td>2019북한 주요 인물정보 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행물 등 공...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
     </tbody>
-    </table>
-    <ul>
-    <li>상세 검색(detailed_search) 또는 내 보관함 내 검색(my_doc)</li>
-    </ul>
-    <table class="table table-hover">
-    <thead><tr>
-    <th style="text-align:center">변수명(영문)</th>
-    <th style="text-align:center">변수명(국문)</th>
-    <th style="text-align:center">필수 여부</th>
-    <th style="text-align:center">형식</th>
-    <th style="text-align:center">샘플데이터</th>
-    <th style="text-align:center">Default값(생략시)</th>
-    </tr>
+  </table>
+  </div>
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#48512;&#44032;&#44592;&#45733;1">&#48512;&#44032;&#44592;&#45733;1<a class="anchor-link" href="#&#48512;&#44032;&#44592;&#45733;1">&#182;</a></h1><p>Body와 FileContent의 길이를 확인할 수 있습니다.</p>
+  
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">countLength</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+      <span class="n">dft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;body&#39;</span><span class="p">,</span><span class="s1">&#39;fileName&#39;</span><span class="p">,</span><span class="s1">&#39;fileContent&#39;</span><span class="p">])</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dft</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+          <span class="n">dft</span><span class="p">[</span><span class="s1">&#39;bodyCount&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dft</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dft</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">==</span><span class="nb">str</span> <span class="k">else</span> <span class="mi">0</span>
+          <span class="n">dft</span><span class="p">[</span><span class="s1">&#39;fileCount&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dft</span><span class="p">[</span><span class="s1">&#39;fileContent&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dft</span><span class="p">[</span><span class="s1">&#39;fileContent&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="o">==</span><span class="nb">str</span> <span class="k">else</span> <span class="mi">0</span>
+      <span class="k">return</span> <span class="n">dft</span>
+  <span class="n">countLength</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  <div class="jp-Cell-outputWrapper">
+  
+  
+  <div class="jp-OutputArea jp-Cell-outputArea">
+  
+  <div class="jp-OutputArea-child">
+  
+      
+      <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+  
+  
+  
+  <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+  <div>
+  <style scoped>
+      .dataframe tbody tr th:only-of-type {
+          vertical-align: middle;
+      }
+  
+      .dataframe tbody tr th {
+          vertical-align: top;
+      }
+  
+      .dataframe thead th {
+          text-align: right;
+      }
+  </style>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th></th>
+        <th>title</th>
+        <th>body</th>
+        <th>fileName</th>
+        <th>fileContent</th>
+        <th>bodyCount</th>
+        <th>fileCount</th>
+      </tr>
     </thead>
     <tbody>
-    <tr>
-    <td style="text-align:center">serviceKey</td>
-    <td style="text-align:center">인증키</td>
-    <td style="text-align:center">Y</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">pP5JG2d-TZohr1sWMRVIwg</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">numOfCnt</td>
-    <td style="text-align:center">검색할 최대 개수</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">int</td>
-    <td style="text-align:center">500</td>
-    <td style="text-align:center">100</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">rank</td>
-    <td style="text-align:center">정렬기준</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">int</td>
-    <td style="text-align:center">2(최신순)</td>
-    <td style="text-align:center">1(정확도순)</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">keyword</td>
-    <td style="text-align:center">검색할 키워드</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">북한</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">keyInTitle</td>
-    <td style="text-align:center">제목 내 검색할 키워드</td>
-    <td style="text-align:center">Y</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">북한</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">keyInBody</td>
-    <td style="text-align:center">내용 내 검색할 키워드</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">정치</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">writer</td>
-    <td style="text-align:center">작성자 검색</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">홍길동</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">startDate</td>
-    <td style="text-align:center">작성일 기간시작점</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">YYYY-MM-DD</td>
-    <td style="text-align:center">2018-09-17</td>
-    <td style="text-align:center">현재로부터 2년 전</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">endDate</td>
-    <td style="text-align:center">작성일 기간끝점</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">YYYY-MM-DD</td>
-    <td style="text-align:center">2020-09-17</td>
-    <td style="text-align:center">현재 날짜</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">institution</td>
-    <td style="text-align:center">발행한 기관명</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">북한연구소</td>
-    <td style="text-align:center">-</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">category</td>
-    <td style="text-align:center">분류</td>
-    <td style="text-align:center">N</td>
-    <td style="text-align:center">string</td>
-    <td style="text-align:center">정치</td>
-    <td style="text-align:center">-</td>
-    </tr>
+      <tr>
+        <th>0</th>
+        <td>북한 사람이 들려주는 북한 이야기</td>
+        <td>NaN</td>
+        <td>북한 사람이 들려주는 북한 이야기</td>
+        <td>주제가 있는통일 강 좌 36장진성 (뉴포커스 대표) 북한 사람이 들려주는 북한 이야...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>변하는 북한 변하지 않는 북한</td>
+        <td>NaN</td>
+        <td>변하는 북한 변하지 않는 북한</td>
+        <td>주 제 가있 는통 일강 좌30변 하 는 북 한 변 하 지 않 는 북 한 주제가 있는...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>2</th>
+        <td>북한 주요인사 인물정보 2017 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>북한 주요인사 인물정보 2017 =북한 주요인물</td>
+        <td>2017인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>3</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>제1세션: 대북정책 회고와 과제ㅇ 6.15 남북공동선언 어떻게 볼 것인가?/ 김영호...</td>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>프로그램09:00～09:30 등록09:30～10:00 개회식개회사 : 서재진 통일연...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>4</th>
+        <td>북한 주요인사 인물정보 2012 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>북한 주요인사 인물정보 2012 =북한 주요인물</td>
+        <td>통일부 정세분석국 정치군사분석과 서울특별시 종로구 세종대로 209 정부중앙청사 41...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>5</th>
+        <td>북한 주요인사 인물정보 2015 = 북한 주요인물</td>
+        <td>NaN</td>
+        <td>북한 주요인사 인물정보 2015 = 북한 주요인물</td>
+        <td>2015인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>6</th>
+        <td>북한 주요인사 인물정보 2014 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>북한 주요인사 인물정보 2014 =북한 주요인물</td>
+        <td>2014인 물 정 보 북한 주요인사 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>7</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>NaN</td>
+        <td>북한 핵실험 이후 북한 문제 해법.pdf</td>
+        <td>프로그램09:00～09:30 등록09:30～10:00 개회식개회사 : 서재진 통일연...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>8</th>
+        <td>북한 신년공동사설</td>
+        <td>원대한 포부와 신심에 넘쳐 더 높이 비약하자 오늘 우리는 선군의 기치밑에 우리 식 ...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>9</th>
+        <td>북한 정치범수용소</td>
+        <td>Ⅰ. 서론 1. 발간목적 2. 자료수집 방법 개요Ⅱ. 북한체제와 정치범수용소 1. ...</td>
+        <td>북한 정치범수용소</td>
+        <td>(세원)통일연구원-정치범수용소.hwp 북한 정치범수용소인 쇄 2013년 1월발 행 ...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>10</th>
+        <td>북한 교화소</td>
+        <td>Ⅰ. 서 론 ·· 1Ⅱ. 북한 교화소 개관 ·· 31. 교화소 개요 ·· 32. 교...</td>
+        <td>북한 교화소</td>
+        <td>북한 교화소북한 교화소www.kinu.or.kr한동호 ·도경옥 ·이우태 ·임예준북한...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>11</th>
+        <td>북한 교화소</td>
+        <td>NaN</td>
+        <td>북한 교화소.pdf</td>
+        <td>북한 교화소북한 교화소www.kinu.or.kr한동호 ·도경옥 ·이우태 ·임예준북한...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>12</th>
+        <td>북한 정치범수용소</td>
+        <td>NaN</td>
+        <td>북한 정치범수용소.pdf</td>
+        <td>(세원)통일연구원-정치범수용소.hwp 북한 정치범수용소인 쇄 2013년 1월발 행 ...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>13</th>
+        <td>북한 보건경영학연구소</td>
+        <td>(서울=연합뉴스) 최척호 기자= 북한 보건경영학연구소(소장 리봉훈)는 주민들의 건강...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>14</th>
+        <td>북한 속담</td>
+        <td>북한속담1 같은 한국말이지만 우리에겐 생소한 북한 단어가 많죠.그래서그런지 속담도 ...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>15</th>
+        <td>중소분쟁과 북한</td>
+        <td>1960년대는 북한역사에서 대외적 상황이 국가가 나아가는 길에 커다란 영향을 끼친 ...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>16</th>
+        <td>북한 주요기관ㆍ단체 인명록 (2013) =북한 기관ㆍ단체별 인명집</td>
+        <td>NaN</td>
+        <td>북한 주요기관ㆍ단체 인명록 (2013) =북한 기관ㆍ단체별 인명집</td>
+        <td>2013인 명 록북한 주요기관 · 단체[ ]1 7 9 9 9 991010121215...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>17</th>
+        <td>북한 주요 인물정보 2021 = 북한 주요인사 인물정보</td>
+        <td>NaN</td>
+        <td>북한 주요 인물정보 2021 = 북한 주요인사 인물정보</td>
+        <td>2021� � � � � � � � � � � � � � � � ������� ��...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>18</th>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁</td>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁 - 뤼디거 프랑크 교수, 북한 여행...</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <th>19</th>
+        <td>북한 주요 인물정보 2019 = 북한 주요인사 인물정보</td>
+        <td>NaN</td>
+        <td>북한 주요 인물정보 2019 = 북한 주요인사 인물정보</td>
+        <td>2019북한 주요 인물정보 [ 일러두기 ] ￮ 이 책은 북한의 보도나 간행물 등 공...</td>
+        <td>0</td>
+        <td>200</td>
+      </tr>
     </tbody>
-    </table>
-    
-    </div>
-    </div>
-    <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-    <h1 id="&#51025;&#45813;-&#48320;&#49688;-&#47785;&#47197;">&#51025;&#45813; &#48320;&#49688; &#47785;&#47197;
-      <!-- <a class="anchor-link" href="#&#51025;&#45813;-&#48320;&#49688;-&#47785;&#47197;">&#182;</a> -->
-    </h1><table class="table table-hover">
-    <thead><tr>
-    <th style="text-align:center">변수명(영문)</th>
-    <th style="text-align:center">변수명(국문)</th>
-    </tr>
+  </table>
+  </div>
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+  </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+  <h1 id="&#48512;&#44032;&#44592;&#45733;2">&#48512;&#44032;&#44592;&#45733;2<a class="anchor-link" href="#&#48512;&#44032;&#44592;&#45733;2">&#182;</a></h1><p>제공된 URL을 통해 전체 내용을 불러올 수 있습니다.
+  리눅스 환경에서 지원 가능합니다.</p>
+  
+  </div>
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># !pip3 install tika</span>
+  <span class="kn">from</span> <span class="nn">tika</span> <span class="kn">import</span> <span class="n">parser</span>
+  
+  <span class="k">def</span> <span class="nf">readFileFromUrl</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+      <span class="n">savename</span> <span class="o">=</span> <span class="s1">&#39;temp.pdf&#39;</span>
+      <span class="n">mem</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+      
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+          <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mem</span><span class="p">)</span>
+  
+      <span class="n">raw_data</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">savename</span><span class="p">)</span> 
+      <span class="n">response</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+      <span class="k">return</span> <span class="n">response</span>
+  
+  <span class="c1"># test</span>
+  <span class="c1">#response = readFileFromUrl(&#39;http://unibook.unikorea.go.kr/libeka/elec/WebBook_data1/00222050/ebook/media/src.pdf&#39;)</span>
+  <span class="c1">#response</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+  <div class="jp-Cell-inputWrapper">
+  <div class="jp-InputArea jp-Cell-inputArea">
+  <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+  <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+       <div class="CodeMirror cm-s-jupyter">
+  <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+  
+  <span class="k">def</span> <span class="nf">addFileContent2df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">column_name</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">column_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;fileContent&#39;</span><span class="p">]:</span>
+          <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;no column&#39;</span><span class="p">)</span>
+          <span class="k">return</span> <span class="n">df</span>
+  
+  <span class="c1">#     column_name warning 추가</span>
+      <span class="n">dft</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;body&#39;</span><span class="p">,</span><span class="s1">&#39;fileContent&#39;</span><span class="p">,</span><span class="s1">&#39;fileURL&#39;</span><span class="p">])</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+          <span class="k">try</span><span class="p">:</span>
+              <span class="n">url</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;fileURL&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">column_name</span> <span class="o">==</span> <span class="s1">&#39;fileContent&#39;</span> <span class="k">else</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;originalURL&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+              <span class="n">dft</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">readFileFromUrl</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+          <span class="k">except</span><span class="p">:</span> <span class="k">continue</span>
+      <span class="k">return</span> <span class="n">dft</span>
+  
+  <span class="n">df</span> <span class="o">=</span> <span class="n">addFileContent2df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;fileContent&#39;</span><span class="p">)</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">addFileContent2df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;body&#39;</span><span class="p">)</span>
+  <span class="n">df</span> <span class="o">=</span> <span class="n">countLength</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+  <span class="n">df</span>
+  </pre></div>
+  
+       </div>
+  </div>
+  </div>
+  </div>
+  
+  <div class="jp-Cell-outputWrapper">
+  
+  
+  <div class="jp-OutputArea jp-Cell-outputArea">
+  
+  <div class="jp-OutputArea-child">
+  
+      
+      <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+  
+  
+  
+  <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+  <div>
+  <style scoped>
+      .dataframe tbody tr th:only-of-type {
+          vertical-align: middle;
+      }
+  
+      .dataframe tbody tr th {
+          vertical-align: top;
+      }
+  
+      .dataframe thead th {
+          text-align: right;
+      }
+  </style>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th></th>
+        <th>title</th>
+        <th>body</th>
+        <th>fileName</th>
+        <th>fileContent</th>
+        <th>bodyCount</th>
+        <th>fileCount</th>
+      </tr>
     </thead>
     <tbody>
-    <tr>
-    <td style="text-align:center">resultCode</td>
-    <td style="text-align:center">결과 코드</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">resultMSG</td>
-    <td style="text-align:center">결과 메시지</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">numOfContents</td>
-    <td style="text-align:center">검색하려고 한 최대 개수</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">totalCount</td>
-    <td style="text-align:center">검색된 자료 개수</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">rank</td>
-    <td style="text-align:center">정렬 기준</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">title</td>
-    <td style="text-align:center">제목</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">body</td>
-    <td style="text-align:center">내용</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">writer</td>
-    <td style="text-align:center">작성자</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">date</td>
-    <td style="text-align:center">작성일</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">originalURL</td>
-    <td style="text-align:center">원본 문서 링크</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">institution</td>
-    <td style="text-align:center">발행 기관명</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">institutionURL</td>
-    <td style="text-align:center">발행 기관 링크</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">category</td>
-    <td style="text-align:center">분류</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">fileName</td>
-    <td style="text-align:center">파일 이름</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">fileURL</td>
-    <td style="text-align:center">첨부된 파일 링크</td>
-    </tr>
-    <tr>
-    <td style="text-align:center">fileContent</td>
-    <td style="text-align:center">파일 문서 내용</td>
-    </tr>
+      <tr>
+        <th>0</th>
+        <td>북한 사람이 들려주는 북한 이야기</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>변하는 북한 변하지 않는 북한</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>2</th>
+        <td>북한 주요인사 인물정보 2017 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>3</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>제1세션: 대북정책 회고와 과제ㅇ 6.15 남북공동선언 어떻게 볼 것인가?/ 김영호...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>4</th>
+        <td>북한 주요인사 인물정보 2012 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>5</th>
+        <td>북한 주요인사 인물정보 2015 = 북한 주요인물</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>6</th>
+        <td>북한 주요인사 인물정보 2014 =북한 주요인물</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>7</th>
+        <td>북한 핵실험 이후 북한 문제 해법</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>8</th>
+        <td>북한 신년공동사설</td>
+        <td>원대한 포부와 신심에 넘쳐 더 높이 비약하자 오늘 우리는 선군의 기치밑에 우리 식 ...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>9</th>
+        <td>북한 정치범수용소</td>
+        <td>Ⅰ. 서론 1. 발간목적 2. 자료수집 방법 개요Ⅱ. 북한체제와 정치범수용소 1. ...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>10</th>
+        <td>북한 교화소</td>
+        <td>Ⅰ. 서 론 ·· 1Ⅱ. 북한 교화소 개관 ·· 31. 교화소 개요 ·· 32. 교...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>11</th>
+        <td>북한 교화소</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>12</th>
+        <td>북한 정치범수용소</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>13</th>
+        <td>북한 보건경영학연구소</td>
+        <td>(서울=연합뉴스) 최척호 기자= 북한 보건경영학연구소(소장 리봉훈)는 주민들의 건강...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>14</th>
+        <td>북한 속담</td>
+        <td>북한속담1 같은 한국말이지만 우리에겐 생소한 북한 단어가 많죠.그래서그런지 속담도 ...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>15</th>
+        <td>중소분쟁과 북한</td>
+        <td>1960년대는 북한역사에서 대외적 상황이 국가가 나아가는 길에 커다란 영향을 끼친 ...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>16</th>
+        <td>북한 주요기관ㆍ단체 인명록 (2013) =북한 기관ㆍ단체별 인명집</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>17</th>
+        <td>북한 주요 인물정보 2021 = 북한 주요인사 인물정보</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>18</th>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁</td>
+        <td>오스트리아, 북한 전문가가 전하는 북한 여행 팁 - 뤼디거 프랑크 교수, 북한 여행...</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
+      <tr>
+        <th>19</th>
+        <td>북한 주요 인물정보 2019 = 북한 주요인사 인물정보</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>&lt;3230313920C0CEB9B0C1A4BAB828C3D6C1BE295F31383...</td>
+        <td>0</td>
+        <td>676935</td>
+      </tr>
     </tbody>
-    </table>
-    
-    </div>
-    </div>
-    <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-    <h1 id="&#50696;&#51228;-&#53076;&#46300;">&#50696;&#51228; &#53076;&#46300;
-      <!-- <a class="anchor-link" href="#&#50696;&#51228;-&#53076;&#46300;">&#182;</a> -->
-    </h1><h2 id="&#50896;&#54616;&#45716;-&#47928;&#49436;&#46308;&#51012;-&#48520;&#47084;&#50752;&#49436;-data-frame&#50640;-&#46916;&#50864;&#44592;">&#50896;&#54616;&#45716; &#47928;&#49436;&#46308;&#51012; &#48520;&#47084;&#50752;&#49436; data frame&#50640; &#46916;&#50864;&#44592;
-      <!-- <a class="anchor-link" href="#&#50896;&#54616;&#45716;-&#47928;&#49436;&#46308;&#51012;-&#48520;&#47084;&#50752;&#49436;-data-frame&#50640;-&#46916;&#50864;&#44592;">&#182;</a> -->
-    </h2>
-    </div>
-    </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-    <div class="jp-Cell-inputWrapper">
-    <div class="jp-InputArea jp-Cell-inputArea">
-    <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-    <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-         <div class="CodeMirror cm-s-jupyter">
-    <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">r</span>
-    <span class="kn">import</span> <span class="nn">urllib.parse</span> <span class="k">as</span> <span class="nn">p</span>
-    <span class="kn">import</span> <span class="nn">json</span>
-    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    
-    <span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;https://kubic.handong.edu:15000/&quot;</span>
-    </pre></div>
-    
-         </div>
-    </div>
-    </div>
-    </div>
-    
-    </div>
-    <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-    </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-    <h3 id="&#49324;&#50857;&#51088;&#50640;-&#47582;&#44172;-&#49688;&#51221;&#54624;-&#48512;&#48516;">&#49324;&#50857;&#51088;&#50640; &#47582;&#44172; &#49688;&#51221;&#54624; &#48512;&#48516;
-      <!-- <a class="anchor-link" href="#&#49324;&#50857;&#51088;&#50640;-&#47582;&#44172;-&#49688;&#51221;&#54624;-&#48512;&#48516;">&#182;</a> -->
-    </h3>
-    </div>
-    </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-    <div class="jp-Cell-inputWrapper">
-    <div class="jp-InputArea jp-Cell-inputArea">
-    <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-    <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-         <div class="CodeMirror cm-s-jupyter">
-    <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래 부분 수정해주세요!</span>
-    <span class="c1"># 검색 옵션을 입력해주세요</span>
-    <span class="c1">## 단순검색=simple_search</span>
-    <span class="c1">## 상세검색=detailed_search</span>
-    <span class="c1">## 내 보관함 검색=my_doc</span>
-    <span class="n">search_option</span><span class="o">=</span><span class="s2">&quot;simple_search&quot;</span> <span class="c1">#detailed_search #my_doc</span>
-    
-    <span class="c1"># 인증키를 입력해주세요</span>
-    <span class="n">serviceKey</span> <span class="o">=</span> <span class="s2">&quot;pP5JG2d-TZohr1sWMRVIwg&quot;</span>
-    
-    <span class="c1"># 한 번에 출력할 문서 개수를 입력해주세요</span>
-    <span class="n">numOfCnt</span> <span class="o">=</span> <span class="mi">200</span>
-    
-    <span class="c1"># 검색할 키워드를 입력해주세요</span>
-    <span class="n">keyword</span><span class="o">=</span><span class="s2">&quot;북한&quot;</span>
-    </pre></div>
-    
-         </div>
-    </div>
-    </div>
-    </div>
-    
-    </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-    <div class="jp-Cell-inputWrapper">
-    <div class="jp-InputArea jp-Cell-inputArea">
-    <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-    <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-         <div class="CodeMirror cm-s-jupyter">
-    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">loginKey</span> <span class="o">=</span> <span class="s2">&quot;serviceKey=&quot;</span><span class="o">+</span><span class="n">serviceKey</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="s2">&quot;&amp;numOfCnt=&quot;</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">numOfCnt</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;&amp;keyword=&quot;</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">keyword</span><span class="p">))</span>
-    <span class="n">URL_full</span> <span class="o">=</span> <span class="n">URL</span> <span class="o">+</span> <span class="n">search_option</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="n">loginKey</span> <span class="o">+</span> <span class="n">request</span>
-    
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;URL_full&gt;&quot;</span> <span class="o">+</span> <span class="n">URL_full</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">URL_full</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-    
-    <span class="n">jsonArray</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resultCode&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error!!!&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">))</span>
-        <span class="n">quit</span><span class="p">()</span>
-    
-    <span class="n">items</span> <span class="o">=</span><span class="n">jsonArray</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contents&quot;</span><span class="p">)</span>
-    <span class="c1"># print(&quot;items&gt;&quot;, items)</span>
-    </pre></div>
-    
-         </div>
-    </div>
-    </div>
-    </div>
-    
-    <div class="jp-Cell-outputWrapper">
-    
-    
-    <div class="jp-OutputArea jp-Cell-outputArea">
-    
-    <div class="jp-OutputArea-child">
-    
-        
-        <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-    
-    
-    <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-    <pre>URL&gt;https://kubic.handong.edu:15000/simple_search?serviceKey=pP5JG2d-TZohr1sWMRVIwg&amp;numOfCnt=200&amp;keyword=%EB%B6%81%ED%95%9C
-    </pre>
-    </div>
-    </div>
-    
-    </div>
-    
-    </div>
-    
-    </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-    <div class="jp-Cell-inputWrapper">
-    <div class="jp-InputArea jp-Cell-inputArea">
-    <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-    <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-         <div class="CodeMirror cm-s-jupyter">
-    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="s1">&#39;body&#39;</span><span class="p">,</span><span class="s1">&#39;writer&#39;</span><span class="p">,</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;category&#39;</span><span class="p">,</span><span class="s1">&#39;institution&#39;</span><span class="p">,</span><span class="s1">&#39;file&#39;</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="c1"># print(df)</span>
-    </pre></div>
-    
-         </div>
-    </div>
-    </div>
-    </div>
-    
-    </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-    <div class="jp-Cell-inputWrapper">
-    <div class="jp-InputArea jp-Cell-inputArea">
-    <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-    <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-         <div class="CodeMirror cm-s-jupyter">
-    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span>
-    </pre></div>
-    
-         </div>
-    </div>
-    </div>
-    </div>
-    
-    <div class="jp-Cell-outputWrapper">
-    
-    
-    <div class="jp-OutputArea jp-Cell-outputArea">
-    
-    <div class="jp-OutputArea-child">
-    
-        
-        <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
-    
-    
-    
-    <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
-    
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
-    
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe table table-hover">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>title</th>
-          <th>body</th>
-          <th>writer</th>
-          <th>date</th>
-          <th>category</th>
-          <th>institution</th>
-          <th>file</th>
-          <th>fileName</th>
-          <th>fileURL</th>
-          <th>institutionURL</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>\r\n\t\t\t\t\t변하는 북한 변하지 않는 북한\r\n\t\t\t\t</td>
-          <td>None</td>
-          <td>고정식 저</td>
-          <td>None</td>
-          <td>통일부 발간물</td>
-          <td>통일부</td>
-          <td>NaN</td>
-          <td>\r\n\t\t\t\t\t변하는 북한 변하지 않는 북한\r\n\t\t\t\t</td>
-          <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
-          <td>https://unibook.unikorea.go.kr/</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>\r\n\t\t\t\t\t북한 사람이 들려주는 북한 이야기\r\n\t\t\t\t</td>
-          <td>None</td>
-          <td>장진성 저</td>
-          <td>None</td>
-          <td>통일부 발간물</td>
-          <td>통일부</td>
-          <td>NaN</td>
-          <td>\r\n\t\t\t\t\t북한 사람이 들려주는 북한 이야기\r\n\t\t\t\t</td>
-          <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
-          <td>https://unibook.unikorea.go.kr/</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>\r\n\t\t\t\t\t북한 주요인사 인물정보 2012 =북한 주요인물\r\n\t...</td>
-          <td>None</td>
-          <td>통일부 정세분석국 정치군사분석과 편</td>
-          <td>None</td>
-          <td>통일부 발간물</td>
-          <td>통일부</td>
-          <td>NaN</td>
-          <td>\r\n\t\t\t\t\t북한 주요인사 인물정보 2012 =북한 주요인물\r\n\t...</td>
-          <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
-          <td>https://unibook.unikorea.go.kr/</td>
-        </tr>
-        <tr>
-          <th>3</th>
-          <td>\r\n\t\t\t\t\t북한 주요인사 인물정보 2014 =북한 주요인물\r\n\t...</td>
-          <td>None</td>
-          <td>통일부 정세분석국 정치군사분석과 편</td>
-          <td>None</td>
-          <td>통일부 발간물</td>
-          <td>통일부</td>
-          <td>NaN</td>
-          <td>\r\n\t\t\t\t\t북한 주요인사 인물정보 2014 =북한 주요인물\r\n\t...</td>
-          <td>http://unibook.unikorea.go.kr/libeka/elec/WebB...</td>
-          <td>https://unibook.unikorea.go.kr/</td>
-        </tr>
-        <tr>
-          <th>4</th>
-          <td>북한 핵실험 이후 북한 문제 해법</td>
-          <td>제1세션: 대북정책 회고와 과제ㅇ 6.15 남북공동선언 어떻게 볼 것인가?/ 김영호...</td>
-          <td>통일연구원 편</td>
-          <td>2009</td>
-          <td>\r\n\t\t연구보고서-기타연구보고서\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>북한 핵실험 이후 북한 문제 해법</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-        <tr>
-          <th>...</th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-        </tr>
-        <tr>
-          <th>195</th>
-          <td>남북한 경제통합과 북한 경제개발계획</td>
-          <td>None</td>
-          <td>이석기</td>
-          <td>2006</td>
-          <td>\r\n\t\t현안분석-온라인시리즈\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>남북한 경제통합과 북한 경제개발계획</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-        <tr>
-          <th>196</th>
-          <td>북한 권력세습의 안정성 전망</td>
-          <td>지난 9월 28일 북한 노동당대표자회는 김정은 후계구도가 공식화되는 자리였다. 이례...</td>
-          <td>김진하</td>
-          <td>2010-10-27</td>
-          <td>\r\n\t\t현안분석-온라인시리즈\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>북한 권력세습의 안정성 전망</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-        <tr>
-          <th>197</th>
-          <td>2015년 북한 신년사 분석</td>
-          <td>Ⅰ. 전반적 특징 ····································...</td>
-          <td>북한연구센터 신년사 분석팀</td>
-          <td>2015</td>
-          <td>\r\n\t\t현안분석-KINU Insight\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>2015년 북한 신년사 분석</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-        <tr>
-          <th>198</th>
-          <td>북한 핵실험과 동북아 전략구도</td>
-          <td>None</td>
-          <td>조민</td>
-          <td>2009</td>
-          <td>\r\n\t\t현안분석-온라인시리즈\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>북한 핵실험과 동북아 전략구도</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-        <tr>
-          <th>199</th>
-          <td>2016년 북한 신년사 분석</td>
-          <td>I. 전반적 특징 Ⅱ. 2015년도 평가 1. 총평2. 정치3. 경제4. 사회5. ...</td>
-          <td>김갑식 외</td>
-          <td>2016</td>
-          <td>\r\n\t\t현안분석-KINU Insight\n</td>
-          <td>통일연구원</td>
-          <td>NaN</td>
-          <td>2016년 북한 신년사 분석</td>
-          <td>http://www.kinu.or.kr/pyxis-api/1/digital-file...</td>
-          <td>http://www.kinu.or.kr/www/jsp/prg/</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>200 rows × 10 columns</p>
-    </div>
-    </div>
-    
-    </div>
-    
-    </div>
-    
-    </div>
-    
-    </div>
-  </section>
-</div>
+  </table>
+  </div>
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  
+  </div>
+  

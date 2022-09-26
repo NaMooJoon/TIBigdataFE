@@ -151,10 +151,10 @@
   <figure id="tree"></figure>
   <figure id="ldavis"></figure>
 
-  <button (click)="saveSvg()" *ngIf="isDataAnalysised">{{'analysis.save2myAnalysis'|translate}}</button>
-  <button (click)="downloadPng()" *ngIf="isDataAnalysised">{{'analysis.downloadChartImage'|translate}}</button>
+  <button (click)="saveSvg()" class="run" *ngIf="isDataAnalysised">{{'analysis.save2myAnalysis'|translate}}</button>
+  <button (click)="downloadPng()" class="run" *ngIf="isDataAnalysised">{{'analysis.downloadChartImage'|translate}}</button>
   
-  <button (click)="toMyAnalysis()" class="run" *ngIf="isDataAnalysised">내 분석함 이동</button>
+  <!-- <button (click)="toMyAnalysis()" class="run" *ngIf="isDataAnalysised">내 분석함 이동</button> -->
 
 </section>
 
