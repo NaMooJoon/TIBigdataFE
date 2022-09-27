@@ -8,6 +8,7 @@ import { AnalysisComponent } from 'src/app/features/article-analysis/components/
 import { ModalService } from './modal/modal.service';
 import * as d3 from 'd3';
 import { CSVDownloadService } from 'src/app/core/services/csv-download-service/csv-download.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-my-analysis',
@@ -36,12 +37,13 @@ export class MyAnalysisComponent extends AnalysisComponent implements OnInit {
   constructor(
     _middlewareService : AnalysisOnMiddlewareService,
     _userSavedDocumentService : UserSavedDocumentService,
+    _router: Router,
     private authService : AuthenticationService,
     private formBuilder : FormBuilder,
     private modalService : ModalService,
     private csvDownloadService : CSVDownloadService
   ){
-    super(_middlewareService, _userSavedDocumentService); //Analysis Component로부터 상속
+    super(_middlewareService, _userSavedDocumentService, _router); //Analysis Component로부터 상속
     this.userProfile = this.authService.getCurrentUser();
     this.form = this.formBuilder.group({
       checkArray : this.formBuilder.array([])

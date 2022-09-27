@@ -150,6 +150,8 @@
     <span class="section-info" *ngIf="isDataPreview">{{'analysis.preprocessing.previewResult'|translate}}</span>
     <hr *ngIf="isDataPreview">
     <figure id='pretable'></figure>
+
+    <button (click)="toAnalysis()" class="run" *ngIf="isDataPreprocessed">자료분석 이동</button>
   </section>
   </section>
 </div>

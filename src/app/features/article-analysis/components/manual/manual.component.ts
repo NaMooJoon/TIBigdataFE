@@ -6,9 +6,11 @@ import { Router } from "@angular/router";
   templateUrl: "./manual.component.html",
   styleUrls: ["../../analysis-style.less"],
 })
-export class ManualComponent implements OnInit {
+export class ManualComponent{
   constructor(public router: Router) {}
 
-  ngOnInit() {}
+  toPreprocessing() {
+    this.router.navigateByUrl("/analysis-menu/preprocessing");
+}
 
 }
