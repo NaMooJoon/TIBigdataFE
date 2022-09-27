@@ -10,6 +10,7 @@ import {QueryResponse} from '../../models/query.response.model';
 export class AnalysisDatabaseService {
   private URL = this.ipService.getFrontDBServerIp();
   private GET_KEYWORDS_URL = this.URL + "/keyword/getKeyVal";
+  private GET_TOPKEYWORDS_URL = this.URL + "/keyword/getTopKeywords";
   private GET_RCMD_URL = this.URL + "/rcmd/getRcmdTbl";
   private GET_TOPIC_URL = this.URL + "/topic/getTopicTbl";
   private GET_TOPIC_plain_URL = this.URL + "/topic/getTopicTblPlain";
@@ -51,6 +52,16 @@ export class AnalysisDatabaseService {
     return new Promise((resolve) => {
       this.http
         .post<any>(this.GET_KEYWORDS_URL, { id: ids, num: num, isVal: isVal })
+        .subscribe((res) => {
+          resolve(res);
+        });
+    });
+  }
+
+  async getTopKeywords(ids: string | string[], num?: number, isVal?: boolean) {
+    return new Promise((resolve) => {
+      this.http
+        .post<any>(this.GET_TOPKEYWORDS_URL, { id: ids, num: num, isVal: isVal })
         .subscribe((res) => {
           resolve(res);
         });

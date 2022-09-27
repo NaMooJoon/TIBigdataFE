@@ -295,26 +295,32 @@ export class SearchBarComponent implements OnInit {
     this.isKeyLoaded = false;
     this.relatedKeywords = [];
     this.relatedKeywords_mobile = [];
+
     await this.analysisDatabaseService
-      .getCountVal(this.articleService.getList())
+      .getTopKeywords(this.articleService.getList(),1)
       .then((res) => {
-        let data = res as [];
-        for (let n = 0; n < data.length; n++) {
-          let coVal = data[n]["count"];
+        let data = res[0]["count"];
+
+        for(let n = 0; n < data.length; n++){
+          let key = data[n];
           if (
             this.relatedKeywords.length < 6 &&
-            coVal[0] !== this.searchKeyword &&
-            !this.relatedKeywords.includes(coVal[0])
+            key !== this.searchKeyword &&
+            !this.relatedKeywords.includes(key)
           )
-            this.relatedKeywords.push(coVal[0]);
+            this.relatedKeywords.push(key);
+
           /*mobile relatedKeywords_mobile*/
           if (
             this.relatedKeywords_mobile.length < 4 &&
-            coVal[0] !== this.searchKeyword &&
-            !this.relatedKeywords_mobile.includes(coVal[0])
+            key !== this.searchKeyword &&
+            !this.relatedKeywords_mobile.includes(key)
           )
-            this.relatedKeywords_mobile.push(coVal[0]);
+            this.relatedKeywords_mobile.push(key);
         }
+
+        this.relatedKeywords.sort();
+        this.relatedKeywords_mobile.sort();
       });
     this.isKeyLoaded = true;
   }
