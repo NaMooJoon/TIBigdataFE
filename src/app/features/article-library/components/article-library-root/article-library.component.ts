@@ -91,7 +91,8 @@ export class ArticleLibraryComponent implements OnInit {
    */
   //new
   async loadInstitutions() {
-    let res = await this.elasticsearchService.getInstitutions();
+    let numInstit = await this.elasticsearchService.getInstitutionsNum();
+    let res = await this.elasticsearchService.getInstitutions(numInstit['aggregations']['unique_institutions']['value']);
     let numRes = await this.elasticsearchService.countAllDocs();
     this.institutionList = res["aggregations"]["count"]["buckets"];
     this.totalSavedDocsNum = numRes["count"];

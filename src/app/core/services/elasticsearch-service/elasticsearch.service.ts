@@ -718,11 +718,27 @@ export class ElasticsearchService {
     });
   }
 
+  async getInstitutionsNum() {
+    return await this.client.search({
+      index: this.ipSvc.ES_INDEX,
+      body: {
+        size: 0,
+        aggs: {
+          unique_institutions: {
+            cardinality: {
+              field: "published_institution.keyword",
+            }
+          },
+        },
+      },
+    });
+  }
+
   /**
    * @description Send query of getting all published_institution field value and number of articles for each of the value.
    * @returns query response
    */
-  async getInstitutions(): Promise<any> {
+  async getInstitutions(numInstit?: number): Promise<any> {
     return await this.client.search({
       index: this.ipSvc.ES_INDEX,
       body: {
@@ -730,7 +746,7 @@ export class ElasticsearchService {
         aggs: {
           count: { terms: {
             field: "published_institution.keyword",
-            size: 20
+            size: numInstit
           } },
         },
       },
