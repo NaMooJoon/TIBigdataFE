@@ -153,6 +153,8 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     var height = this.height;
     var width = this.width;
 
+    console.log("height: " , height, "width:", width);
+
     function update(data) {
       // Update the X axis
       x.domain(data.map(d => d["date"]))
@@ -204,14 +206,15 @@ export class KeywordAnalysisComponent implements OnInit, OnDestroy {
     //related to drawing chart
     // set the dimensions and margins of the graph
     this.margin = {top: 30, right: 30, bottom: 30, left: 60};
-    this.width = 460 - this.margin.left - this.margin.right;
-    this.height = 400 - this.margin.top - this.margin.bottom;
+    this.width = 460 - this.margin.left - this.margin.right; //460
+    this.height = 400 - this.margin.top - this.margin.bottom; // 400
 
     // append the svg object to the body of the page
     this.svg = d3.select("#keyword_analysis")
                  .append("svg")
                  .attr("width", this.width + this.margin.left + this.margin.right)
                  .attr("height", this.height + this.margin.top + this.margin.bottom)
+                 .attr("viewBox", `0, 0, ${this.width + this.margin.left + this.margin.right}, ${this.height + this.margin.top + this.margin.bottom}`)
                  .append("g")
                  .attr("transform",
                        "translate(" + this.margin.left + "," + this.margin.top + ")");
