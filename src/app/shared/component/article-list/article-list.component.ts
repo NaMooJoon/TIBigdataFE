@@ -95,6 +95,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log("ngOnInit!!!!!");
     this.resetSearchOptions();
     this.beginSearch(this.currentPage);
   }
@@ -108,6 +109,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     if (this.currentPage === null) this.currentPage = 1;
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
     if (this.currentPage < 1) this.currentPage = 1;
+
+    console.log("beginSearch!!!!!");
 
     this.elasticsearchService.triggerSearch(this.currentPage);
   }
