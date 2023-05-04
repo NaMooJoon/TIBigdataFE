@@ -138,7 +138,7 @@ div>ul>li>a {
 }
 
 /*tablet, mobile*/
-@media (max-width: 768px) {
+@media (max-width: 860px) { // max-width: 768px
 
   .login-menu,
   .user-menu{
@@ -354,11 +354,22 @@ div>ul>li>a {
 }
 
 /*tablet*/
-@media (min-width: 426px) and (max-width: 768px){
+@media (min-width: 875px) and (max-width: 1040px){ // max-width: 768px
+  .login-menu,
+  .common-menu,
+  .user-menu{
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  display: none;
+}
+
+/*tablet*/
+@media (min-width: 426px) and (max-width: 875px){ // max-width: 768px
   .login-menu,
   .user-menu{
-    font-size: 19px;
-    margin-right: 10px;
+    font-size: 14px;
+    margin-right: 8px;
   }
 }
 

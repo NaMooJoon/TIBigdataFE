@@ -70,7 +70,7 @@ export class NavbarComponent implements OnInit {
   }
 
   selectedStyleObject(flag: boolean): Object {
-    if(matchMedia("(max-width: 768px)").matches) {
+    if(matchMedia("(max-width: 860px)").matches) { // 기존 768px
       if (flag) {
         return {
           color: "#0FBAFF",
